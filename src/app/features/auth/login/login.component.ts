@@ -1,6 +1,13 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, NonNullableFormBuilder } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  Validators,
+  FormGroup, // Explicitly import FormGroup
+  FormControl, // Explicitly import FormControl
+  NonNullableFormBuilder, // Using NonNullableFormBuilder
+  AbstractControl // Import if needed, though direct control access is often typed
+} from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -11,7 +18,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 
-import { ThemeService } from '../../../core/services/theme.service'; // Adjusted path
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-login',
@@ -32,17 +39,18 @@ import { ThemeService } from '../../../core/services/theme.service'; // Adjusted
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  private readonly fb = inject(NonNullableFormBuilder);
+  private readonly fb = inject(NonNullableFormBuilder); // Using NonNullableFormBuilder
   private readonly matIconRegistry = inject(MatIconRegistry);
   private readonly domSanitizer = inject(DomSanitizer);
-  public readonly themeService = inject(ThemeService); // Made public for template access
+  public readonly themeService = inject(ThemeService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly platformId = inject(PLATFORM_ID);
 
-  loginForm!: FormGroup<{
-    email: NonNullableFormBuilder['control']<string>;
-    password: NonNullableFormBuilder['control']<string>;
-    rememberMe: NonNullableFormBuilder['control']<boolean>;
+  // Explicitly type loginForm as per requirements
+  loginForm: FormGroup<{
+    email: FormControl<string>;
+    password: FormControl<string>;
+    rememberMe: FormControl<boolean>;
   }>;
 
   hidePassword = true;
@@ -53,7 +61,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   private themeSubscription!: Subscription;
   private carouselIntervalId: any;
 
-  readonly LOGO_PATH = 'assets/images/logo.png'; // Not used in .ts but good for consistency
   readonly GALLERY_IMAGE_PATHS: readonly string[] = [
     'assets/images/gallery1.png',
     'assets/images/gallery2.png',
@@ -65,24 +72,27 @@ export class LoginComponent implements OnInit, OnDestroy {
   currentImageIndex = 0;
 
   constructor() {
+    // Initialize the form using NonNullableFormBuilder.
+    // The return type of this.fb.group should align with the explicit type of loginForm.
+    this.loginForm = this.fb.group({
+      email: this.fb.control('', [Validators.required, Validators.email]),
+      password: this.fb.control('', [Validators.required]),
+      rememberMe: this.fb.control(false), // NonNullableFormBuilder ensures this is FormControl<boolean>
+    });
+    // No cast needed here because NonNullableFormBuilder's group method with NonNullableControls
+    // will produce a FormGroup whose controls are non-nullable and match the types specified
+    // (string for empty string initial value, boolean for boolean initial value).
+
     this.registerSvgIcons();
   }
 
   ngOnInit(): void {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]],
-      rememberMe: [false],
-    });
-
     this.themeSubscription = this.themeService.isDarkMode$.subscribe(isDark => {
       this.isDarkMode = isDark;
-      this.cdr.markForCheck(); // Ensure view updates on theme change
+      this.cdr.markForCheck();
     });
 
-    // Initialize isDarkMode from service synchronously for initial render
     this.isDarkMode = this.themeService.getIsDarkMode();
-
 
     if (isPlatformBrowser(this.platformId)) {
       this.startCarousel();
@@ -105,12 +115,22 @@ export class LoginComponent implements OnInit, OnDestroy {
     );
   }
 
-  get email() {
+  // Typed get accessor for email
+  get email(): FormControl<string> {
+    // When loginForm is explicitly typed as FormGroup<{ email: FormControl<string>; ... }>,
+    // this.loginForm.controls.email is already correctly typed as FormControl<string>.
+    // A cast via .get('email') as FormControl<string> would also work but is less direct.
     return this.loginForm.controls.email;
   }
 
-  get password() {
+  // Typed get accessor for password
+  get password(): FormControl<string> {
     return this.loginForm.controls.password;
+  }
+
+  // Optional: Typed get accessor for rememberMe
+  get rememberMe(): FormControl<boolean> {
+    return this.loginForm.controls.rememberMe;
   }
 
   clearEmail(): void {
@@ -138,7 +158,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       } else {
         // Simulate success
         console.log('Login successful:', this.loginForm.value);
-        // Navigate to dashboard or home page here
       }
       this.cdr.markForCheck(); // Needed due to setTimeout
     }, 1500);
@@ -152,7 +171,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.galleryImages.length > 0) {
       this.carouselIntervalId = setInterval(() => {
         this.currentImageIndex = (this.currentImageIndex + 1) % this.galleryImages.length;
-        this.cdr.markForCheck(); // Needed as setInterval is outside Angular zone
+        this.cdr.markForCheck();
       }, this.CAROUSEL_INTERVAL_MS);
     }
   }
