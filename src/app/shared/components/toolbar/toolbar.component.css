@@ -1,0 +1,206 @@
+:host {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Ensure toolbar is on top */
+}
+
+.app-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 16px;
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  background-color: rgba(255, 255, 255, 0.9); /* Light mode default with transparency */
+  color: #333; /* Light mode text */
+  height: 64px; /* Standard Material toolbar height */
+}
+
+.app-toolbar.toolbar-hidden {
+  transform: translateY(-100%);
+}
+
+/* Theme specific styles */
+.app-toolbar.dark-mode-toolbar {
+  background-color: rgba(30, 30, 30, 0.9); /* Dark mode background with transparency */
+  color: #f0f0f0; /* Dark mode text */
+}
+
+.app-toolbar.dark-mode-toolbar .mat-button,
+.app-toolbar.dark-mode-toolbar .mat-icon-button,
+.app-toolbar.dark-mode-toolbar .mat-icon {
+  color: #f0f0f0; /* Ensure buttons and icons adapt */
+}
+
+.app-toolbar.dark-mode-toolbar .get-started-button {
+    color: #000; /* Text color on accent button in dark mode */
+}
+
+
+/* Toolbar Sections */
+.toolbar-section {
+  display: flex;
+  align-items: center;
+}
+
+.left-section {
+  flex-shrink: 0;
+}
+
+.middle-section {
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.middle-section .mat-button {
+  margin: 0 8px;
+}
+
+.right-section {
+  flex-shrink: 0;
+}
+
+.right-section .mat-button,
+.right-section .mat-icon-button {
+  margin-left: 8px;
+}
+
+/* Logo */
+.company-logo-button {
+  padding: 0; /* Remove padding if icon is the button */
+  width: 40px;
+  height: 40px;
+}
+.company-logo-icon {
+  width: 32px; /* Adjust size as needed */
+  height: 32px; /* Adjust size as needed */
+  vertical-align: middle;
+}
+
+/* Get Started Button */
+.get-started-button .mat-icon {
+  margin-left: 8px;
+  font-size: 20px; /* Ensure icon size is appropriate */
+  width: 20px;
+  height: 20px;
+}
+
+/* Theme Toggle Icon */
+.theme-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
+
+/* Hamburger menu button - initially hidden on larger screens */
+.mobile-menu-button {
+  display: none;
+}
+
+/* Mobile Menu Overlay */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(255, 255, 255, 0.98); /* Light mode overlay */
+  z-index: 1001; /* Above toolbar if toolbar is partially transparent */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px; /* Space from top */
+  transition: background-color 0.3s ease-in-out;
+}
+
+.mobile-menu-overlay.dark-mode-overlay {
+  background-color: rgba(18, 18, 18, 0.98); /* Dark mode overlay */
+}
+
+.mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 16px;
+    height: 64px; /* Match toolbar height */
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.mobile-menu-overlay.dark-mode-overlay .mobile-menu-header {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+
+.company-logo-button-mobile .company-logo-icon-mobile {
+    width: 32px;
+    height: 32px;
+}
+
+.mobile-menu-overlay.dark-mode-overlay .mat-icon-button,
+.mobile-menu-overlay.dark-mode-overlay .mat-button {
+    color: #f0f0f0;
+}
+.mobile-menu-overlay.dark-mode-overlay .company-logo-icon-mobile {
+    /* If logo needs specific color filtering for dark mode */
+}
+
+
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.mobile-nav-button {
+  width: 80%;
+  padding: 15px 0;
+  text-align: center;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.close-mobile-menu-button {
+    /* Styles for the close button in mobile menu */
+}
+
+
+/* Responsive Design - Adjust breakpoint as needed (e.g., 768px or 960px) */
+@media (max-width: 960px) {
+  .middle-section {
+    display: none; /* Hide middle navigation buttons */
+  }
+
+  .mobile-menu-button {
+    display: inline-flex; /* Show hamburger menu button */
+    margin-left: 8px; /* Optional: space between logo and hamburger */
+  }
+
+  .left-section {
+      /* Ensure logo and hamburger are spaced if needed */
+  }
+
+  .app-toolbar {
+    justify-content: space-between; /* Ensure remaining items space out */
+  }
+}
+
+@media (max-width: 480px) {
+  .app-toolbar {
+    padding: 0 8px; /* Less padding on very small screens */
+  }
+
+  .right-section .login-button {
+    display: none; /* Optionally hide login on very small screens if too crowded */
+  }
+
+  .get-started-button span {
+    /* display: none; Optionally hide text and only show icon */
+  }
+  .get-started-button .mat-icon {
+    /* margin-left: 0; */
+  }
+}

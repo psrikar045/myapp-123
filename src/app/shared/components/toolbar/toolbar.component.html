@@ -1,0 +1,53 @@
+<mat-toolbar
+  class="app-toolbar"
+  [class.toolbar-hidden]="!isVisible"
+  [class.dark-mode-toolbar]="isDarkMode"
+  color="primary">
+
+  <div class="toolbar-section left-section">
+    <button mat-icon-button class="company-logo-button" (click)="scrollToSection('home')" aria-label="Company Logo">
+      <mat-icon svgIcon="company-logo" class="company-logo-icon"></mat-icon>
+    </button>
+    <button mat-icon-button class="mobile-menu-button" (click)="toggleMobileMenu()" aria-label="Toggle Menu">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+
+  <div class="toolbar-section middle-section">
+    <button mat-button (click)="scrollToSection('home')">Home</button>
+    <button mat-button (click)="scrollToSection('features')">Features</button>
+    <button mat-button (click)="scrollToSection('developers')">Developers</button>
+    <button mat-button (click)="scrollToSection('pricing')">Pricing</button>
+    <button mat-button (click)="scrollToSection('about')">About</button>
+  </div>
+
+  <div class="toolbar-section right-section">
+    <button mat-icon-button (click)="toggleDarkMode()" class="theme-toggle-button" [attr.aria-label]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+      <mat-icon [svgIcon]="isDarkMode ? 'cloud' : 'sun'" class="theme-icon"></mat-icon>
+    </button>
+    <button mat-button class="login-button" (click)="scrollToSection('login')">Login</button>
+    <button mat-flat-button color="accent" class="get-started-button" (click)="scrollToSection('get-started')">
+      <span>Get Started</span>
+      <mat-icon svgIcon="arrow-forward" class="get-started-icon"></mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+
+<!-- Mobile Menu Overlay -->
+<div class="mobile-menu-overlay" *ngIf="isMobileMenuOpen" [class.dark-mode-overlay]="isDarkMode">
+  <div class="mobile-menu-header">
+    <button mat-icon-button class="company-logo-button-mobile" (click)="scrollToSection('home'); toggleMobileMenu();" aria-label="Company Logo">
+        <mat-icon svgIcon="company-logo" class="company-logo-icon-mobile"></mat-icon>
+    </button>
+    <button mat-icon-button (click)="toggleMobileMenu()" class="close-mobile-menu-button" aria-label="Close Menu">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <nav class="mobile-nav">
+    <button mat-button class="mobile-nav-button" (click)="scrollToSection('home')">Home</button>
+    <button mat-button class="mobile-nav-button" (click)="scrollToSection('features')">Features</button>
+    <button mat-button class="mobile-nav-button" (click)="scrollToSection('developers')">Developers</button>
+    <button mat-button class="mobile-nav-button" (click)="scrollToSection('pricing')">Pricing</button>
+    <button mat-button class="mobile-nav-button" (click)="scrollToSection('about')">About</button>
+  </nav>
+</div>
