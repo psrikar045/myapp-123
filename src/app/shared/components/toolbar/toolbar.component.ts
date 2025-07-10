@@ -5,8 +5,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subject, Subscription, fromEvent } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, startWith, takeUntil, filter } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, startWith, takeUntil } from 'rxjs/operators';
 import { ThemeService } from '../../../core/services/theme.service';
+// import { trigger, state, style, animate, transition } from '@angular/animations'; // For Angular animations
 
 @Component({
   selector: 'app-toolbar',
@@ -19,12 +20,12 @@ import { ThemeService } from '../../../core/services/theme.service';
   ],
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.css']
-  // If Angular animations were to be used for mobile menu:
+  // Example for Angular animations if mobile menu needs it:
   // animations: [
   //   trigger('mobileMenuOverlayAnimation', [
-  //     state('void', style({ transform: 'translateX(100%)', opacity: 0 })),
-  //     state('*', style({ transform: 'translateX(0)', opacity: 1 })),
-  //     transition('void <=> *', animate('300ms ease-in-out'))
+  //     state('open', style({ transform: 'translateX(0)', opacity: 1 })),
+  //     state('closed', style({ transform: 'translateX(100%)', opacity: 0 })),
+  //     transition('closed <=> open', animate('300ms ease-in-out'))
   //   ])
   // ]
 })
@@ -48,62 +49,46 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   // Mobile menu
   isMobileMenuOpen: boolean = false;
+  // public mobileMenuState: 'open' | 'closed' = 'closed'; // For Angular animations
 
   // Subscriptions
   private destroy$ = new Subject<void>();
   private themeSubscription!: Subscription;
   private scrollSubscription!: Subscription;
-  private resizeSubscription!: Subscription;
+  // private resizeSubscription!: Subscription; // Replaced by @HostListener as per previous iteration
 
   // Icon paths
   private logoPath = 'assets/images/logo.svg';
   private sunIconPath = 'assets/icons/sun.svg';
   private cloudIconPath = 'assets/icons/cloud.svg';
   private arrowForwardIconPath = 'assets/icons/arrow_forward.svg';
-  private menuIconPath = 'assets/icons/menu.svg'; // For custom hamburger icon
+  private menuIconPath = 'assets/icons/menu.svg';
 
   constructor() {
     this.registerIcons();
   }
 
   ngOnInit(): void {
-    // Subscribe to theme changes
-    // Ensure themeService.isDarkMode$ is a BehaviorSubject or ReplaySubject(1) in ThemeService
-    // or that it otherwise provides the current value upon subscription.
     this.themeSubscription = this.themeService.isDarkMode$.pipe(
-      startWith(this.themeService.isDarkMode$.getValue()), // Assumes getValue() exists for BehaviorSubject
+      // Ensure isDarkMode$ in ThemeService is BehaviorSubject or similar to get current value
+      startWith(this.themeService.isDarkMode$.getValue()),
       takeUntil(this.destroy$)
     ).subscribe(isDark => {
       this.isDarkMode = isDark;
     });
 
     if (isPlatformBrowser(this.platformId)) {
-      // Initial check for scroll and resize, only in browser
       this.checkScrollPosition();
       this.checkScreenSize(); // Initial check for mobile view
 
-      // Scroll handling
       this.scrollSubscription = fromEvent(window, 'scroll').pipe(
         debounceTime(50),
         distinctUntilChanged(),
         takeUntil(this.destroy$)
       ).subscribe(() => this.handleScroll());
 
-      // Resize handling - This is one way to handle resize.
-      // @HostListener below is another. Choose one or ensure they don't conflict.
-      // For this iteration, @HostListener is explicitly requested by the prompt.
-      // So, this fromEvent based resize listener could be removed if @HostListener is preferred.
-      // However, fromEvent offers more explicit control over debouncing and unsubscription.
-      // Let's keep the @HostListener as per prompt and remove this one to avoid duplication.
-      // If this fromEvent was kept, @HostListener('window:resize') would be redundant.
-      // For now, I will comment out this fromEvent based resize listener to ensure clarity with the prompt's @HostListener requirement.
-      /*
-      this.resizeSubscription = fromEvent(window, 'resize').pipe(
-        debounceTime(100),
-        distinctUntilChanged(),
-        takeUntil(this.destroy$)
-      ).subscribe(() => this.checkScreenSize());
-      */
+      // @HostListener('window:resize') is used for resize handling as per previous steps.
+      // If fromEvent were preferred for resize, it would be set up here similarly to scroll.
     }
   }
 
@@ -144,24 +129,22 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     }
   }
 
-  // This method is called by the @HostListener('window:resize')
   private checkScreenSize(): void {
     if (isPlatformBrowser(this.platformId)) {
       const wasMobile = this.isMobileView;
       this.isMobileView = window.innerWidth < this.mobileBreakpoint;
 
-      // If screen size changes from mobile to desktop and mobile menu is open, close it.
       if (wasMobile && !this.isMobileView && this.isMobileMenuOpen) {
         this.isMobileMenuOpen = false;
+        // this.mobileMenuState = 'closed'; // For Angular animations
       }
     }
   }
 
   @HostListener('window:resize', ['$event'])
   onWindowResize(event?: Event): void {
-    // Debouncing here can be tricky with HostListener directly.
-    // For more complex scenarios or explicit debounce, 'fromEvent(window, 'resize')' in ngOnInit is better.
-    // However, for simple updates, this is fine.
+    // Debouncing can be added here if performance issues arise from frequent resize events,
+    // though typically direct calls are fine for updating a boolean.
     this.checkScreenSize();
   }
 
@@ -178,6 +161,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    // if (this.isMobileMenuOpen) { // For Angular animations
+    //   this.mobileMenuState = 'open';
+    // } else {
+    //   this.mobileMenuState = 'closed';
+    // }
   }
 
   ngOnDestroy(): void {

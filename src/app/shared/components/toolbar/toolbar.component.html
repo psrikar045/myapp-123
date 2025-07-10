@@ -1,7 +1,7 @@
 <mat-toolbar
   class="app-toolbar"
   [class.toolbar-hidden]="!isVisible"
-  [class.dark-mode-toolbar]="isDarkMode"
+  [ngClass]="{'dark-mode-toolbar': isDarkMode}"
   color="primary">
 
   <div class="toolbar-section left-section">
@@ -19,16 +19,16 @@
   </div>
 
   <div class="toolbar-section right-section">
-    <!-- Hamburger Menu Button - Shown only on mobile view -->
     <button mat-icon-button *ngIf="isMobileView" (click)="toggleMobileMenu()" class="mobile-menu-trigger-button" aria-label="Open navigation menu">
-      <mat-icon svgIcon="custom-menu"></mat-icon> <!-- Using custom SVG icon -->
+      <mat-icon svgIcon="custom-menu"></mat-icon>
     </button>
 
-    <!-- Actions - always visible on desktop, hamburger on mobile controls their visibility in overlay -->
     <button mat-icon-button (click)="toggleDarkMode()" class="theme-toggle-button" [attr.aria-label]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
       <mat-icon [svgIcon]="isDarkMode ? 'cloud' : 'sun'" class="theme-icon"></mat-icon>
     </button>
+
     <button mat-button class="login-button" (click)="scrollToSection('login')">Login</button>
+
     <button mat-flat-button class="get-started-button" (click)="scrollToSection('get-started')">
       <span>Get Started</span>
       <mat-icon svgIcon="arrow-forward" class="get-started-icon"></mat-icon>
@@ -37,7 +37,13 @@
 </mat-toolbar>
 
 <!-- Mobile Menu Overlay -->
-<div class="mobile-menu-overlay" *ngIf="isMobileMenuOpen" [class.dark-mode-overlay]="isDarkMode" @mobileMenuOverlayAnimation>
+<div
+  class="mobile-menu-overlay"
+  *ngIf="isMobileMenuOpen"
+  [ngClass]="{'dark-mode-overlay': isDarkMode}"
+  @mobileMenuOverlayAnimation>
+  <!-- The @mobileMenuOverlayAnimation is a placeholder if Angular animations are used; CSS transitions are primary for now -->
+
   <div class="mobile-menu-header">
     <button mat-icon-button class="company-logo-button-mobile" (click)="scrollToSection('home');" aria-label="Company Logo">
         <mat-icon svgIcon="company-logo" class="company-logo-icon-mobile"></mat-icon>
@@ -46,6 +52,7 @@
       <mat-icon>close</mat-icon>
     </button>
   </div>
+
   <nav class="mobile-nav">
     <button mat-button class="mobile-nav-button" (click)="scrollToSection('home')">Home</button>
     <button mat-button class="mobile-nav-button" (click)="scrollToSection('features')">Features</button>
@@ -53,12 +60,13 @@
     <button mat-button class="mobile-nav-button" (click)="scrollToSection('pricing')">Pricing</button>
     <button mat-button class="mobile-nav-button" (click)="scrollToSection('about')">About</button>
   </nav>
+
   <div class="mobile-menu-actions">
-    <button mat-icon-button (click)="toggleDarkMode();" class="theme-toggle-button-mobile" [attr.aria-label]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+    <button mat-icon-button (click)="toggleDarkMode();" class="theme-toggle-button theme-toggle-button-mobile" [attr.aria-label]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
         <mat-icon [svgIcon]="isDarkMode ? 'cloud' : 'sun'" class="theme-icon"></mat-icon>
     </button>
-    <button mat-button class="login-button-mobile" (click)="scrollToSection('login')">Login</button>
-    <button mat-flat-button class="get-started-button-mobile" (click)="scrollToSection('get-started')">
+    <button mat-button class="login-button login-button-mobile" (click)="scrollToSection('login')">Login</button>
+    <button mat-flat-button class="get-started-button get-started-button-mobile" (click)="scrollToSection('get-started')">
         <span>Get Started</span>
         <mat-icon svgIcon="arrow-forward" class="get-started-icon"></mat-icon>
     </button>
