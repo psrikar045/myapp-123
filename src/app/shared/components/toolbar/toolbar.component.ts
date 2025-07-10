@@ -1,12 +1,12 @@
-import { Component, HostListener, OnDestroy, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, HostListener, OnDestroy, OnInit, inject, PLATFORM_ID, Inject } from '@angular/core';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, startWith, takeUntil } from 'rxjs/operators';
-import { ThemeService } from '../../../core/services/theme.service'; // Adjusted import
+import { Subject, Subscription, fromEvent } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map, startWith, takeUntil, filter } from 'rxjs/operators';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -22,9 +22,10 @@ import { ThemeService } from '../../../core/services/theme.service'; // Adjusted
 })
 export class ToolbarComponent implements OnInit, OnDestroy {
   // Injections
-  private themeService = inject(ThemeService); // Using actual ThemeService
+  private themeService = inject(ThemeService);
   private iconRegistry = inject(MatIconRegistry);
   private sanitizer = inject(DomSanitizer);
+  @Inject(PLATFORM_ID) private platformId: Object;
 
   // Theme properties
   isDarkMode: boolean = false;
@@ -32,7 +33,10 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   // Scroll properties
   isVisible: boolean = true;
   private lastScrollY: number = 0;
-  private scrollSubject = new Subject<void>();
+
+  // Resize properties
+  isMobileView: boolean = false;
+  private mobileBreakpoint: number = 960; // Breakpoint for mobile view
 
   // Mobile menu
   isMobileMenuOpen: boolean = false;
@@ -41,92 +45,106 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private themeSubscription!: Subscription;
   private scrollSubscription!: Subscription;
+  private resizeSubscription!: Subscription;
 
-  // Icon paths
-  private logoPath = 'images/logo.svg'; // Updated path
-  private sunIconPath = 'icons/sun.svg'; // Updated path
-  private cloudIconPath = 'icons/cloud.svg'; // Updated path
-  private arrowForwardIconPath = 'icons/arrow_forward.svg'; // Updated path
+  // Icon paths - now prefixed with assets/
+  private logoPath = 'assets/images/logo.svg';
+  private sunIconPath = 'assets/icons/sun.svg';
+  private cloudIconPath = 'assets/icons/cloud.svg';
+  private arrowForwardIconPath = 'assets/icons/arrow_forward.svg';
+  private menuIconPath = 'assets/icons/menu.svg'; // For custom hamburger icon
 
   constructor() {
     this.registerIcons();
   }
 
   ngOnInit(): void {
-    // Initialize with current theme state
     this.themeSubscription = this.themeService.isDarkMode$.pipe(
-        startWith(this.isDarkMode), // Emit initial value
-        takeUntil(this.destroy$)
+      startWith(this.themeService.isDarkMode$.getValue()), // Ensure initial value
+      takeUntil(this.destroy$)
     ).subscribe(isDark => {
       this.isDarkMode = isDark;
-      console.log('ToolbarComponent: Dark mode is now', this.isDarkMode);
     });
 
-    // Emit initial value for isDarkMode$ if it's a BehaviorSubject or ReplaySubject(1)
-    // For a simple Subject, we might need to push an initial value in the service itself.
-    // For the mock, let's ensure it has a starting value.
-    if (! (this.themeService.isDarkMode$ as any)._value) {
-         (this.themeService.isDarkMode$ as any)._value = false; // Default to light mode
+    if (isPlatformBrowser(this.platformId)) {
+      // Initial check for scroll and resize, only in browser
+      this.checkScrollPosition();
+      this.checkScreenSize();
+
+      // Scroll handling
+      this.scrollSubscription = fromEvent(window, 'scroll').pipe(
+        debounceTime(50), // Debounce scroll events
+        distinctUntilChanged(), // Only emit if value has changed (though scrollY always changes, good practice)
+        takeUntil(this.destroy$)
+      ).subscribe(() => this.handleScroll());
+
+      // Resize handling
+      this.resizeSubscription = fromEvent(window, 'resize').pipe(
+        debounceTime(100), // Debounce resize events
+        distinctUntilChanged(),
+        takeUntil(this.destroy$)
+      ).subscribe(() => this.checkScreenSize());
     }
-
-
-    // Scroll handling
-    this.scrollSubscription = this.scrollSubject.pipe(
-      debounceTime(50), // Debounce scroll events by 50ms
-      takeUntil(this.destroy$)
-    ).subscribe(() => this.handleScroll());
-
-    // Initial check for scroll position
-    this.checkScrollPosition();
   }
 
   private registerIcons(): void {
-    this.iconRegistry.addSvgIcon(
-      'company-logo',
-      this.sanitizer.bypassSecurityTrustResourceUrl(this.logoPath)
-    );
-    this.iconRegistry.addSvgIcon(
-      'sun',
-      this.sanitizer.bypassSecurityTrustResourceUrl(this.sunIconPath)
-    );
-    this.iconRegistry.addSvgIcon(
-      'cloud',
-      this.sanitizer.bypassSecurityTrustResourceUrl(this.cloudIconPath)
-    );
-    this.iconRegistry.addSvgIcon(
-      'arrow-forward',
-      this.sanitizer.bypassSecurityTrustResourceUrl(this.arrowForwardIconPath)
-    );
-    console.log('ToolbarComponent: Registered SVG icons');
+    const icons = [
+      { name: 'company-logo', path: this.logoPath },
+      { name: 'sun', path: this.sunIconPath },
+      { name: 'cloud', path: this.cloudIconPath },
+      { name: 'arrow-forward', path: this.arrowForwardIconPath },
+      { name: 'custom-menu', path: this.menuIconPath } // Register custom menu icon
+    ];
+    icons.forEach(icon => {
+      this.iconRegistry.addSvgIcon(
+        icon.name,
+        this.sanitizer.bypassSecurityTrustResourceUrl(icon.path)
+      );
+    });
+    console.log('ToolbarComponent: Registered SVG icons with assets/ prefix.');
   }
 
-  @HostListener('window:scroll', [])
-  onWindowScroll(): void {
-    this.scrollSubject.next();
-  }
+  // No HostListener for scroll, using fromEvent in ngOnInit for better control and SSR safety
+  // No HostListener for resize, using fromEvent in ngOnInit
 
   private checkScrollPosition(): void {
-    if (typeof window !== 'undefined') {
-        this.handleScroll(); // Call immediately to set initial state
+    if (isPlatformBrowser(this.platformId)) {
+      this.lastScrollY = window.scrollY; // Initialize lastScrollY
+      this.handleScroll(); // Call immediately to set initial state
     }
   }
 
   private handleScroll(): void {
-    if (typeof window !== 'undefined') {
+    if (isPlatformBrowser(this.platformId)) {
       const currentScrollY = window.scrollY;
       if (currentScrollY === 0) {
         this.isVisible = true;
       } else if (currentScrollY > this.lastScrollY) {
-        // Scrolling down
-        this.isVisible = false;
+        this.isVisible = false; // Scrolling down
       } else {
-        // Scrolling up
-        this.isVisible = true;
+        this.isVisible = true; // Scrolling up
       }
-      this.lastScrollY = currentScrollY;
-      // console.log('ToolbarComponent: isVisible =', this.isVisible, 'scrollY =', currentScrollY);
+      this.lastScrollY = currentScrollY < 0 ? 0 : currentScrollY; // Ensure lastScrollY isn't negative
     }
   }
+
+  private checkScreenSize(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobileView = window.innerWidth < this.mobileBreakpoint;
+      // If resizing to desktop view and mobile menu is open, close it
+      if (!this.isMobileView && this.isMobileMenuOpen) {
+        this.isMobileMenuOpen = false;
+      }
+    }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event?: Event): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.checkScreenSize();
+    }
+  }
+
 
   toggleDarkMode(): void {
     this.themeService.toggleDarkMode();
@@ -141,7 +159,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
-    console.log('ToolbarComponent: Mobile menu toggled to', this.isMobileMenuOpen);
   }
 
   ngOnDestroy(): void {
@@ -150,34 +167,3 @@ export class ToolbarComponent implements OnInit, OnDestroy {
     console.log('ToolbarComponent: Unsubscribed from all observables.');
   }
 }
-
-// Placeholder for actual ThemeService - this should be in its own file (e.g., theme.service.ts)
-// For the purpose of this task, we'll assume it exists and can be imported.
-// If it doesn't exist, you'd typically create it like this:
-/*
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-
-@Injectable({
-  providedIn: 'root'
-})
-export class ThemeService {
-  private _isDarkMode = new BehaviorSubject<boolean>(false);
-  isDarkMode$ = this._isDarkMode.asObservable();
-
-  constructor() {
-    // Optional: Load theme preference from localStorage
-    const storedPreference = localStorage.getItem('isDarkMode');
-    if (storedPreference) {
-      this._isDarkMode.next(JSON.parse(storedPreference));
-    }
-  }
-
-  toggleDarkMode(): void {
-    const newValue = !this._isDarkMode.value;
-    this._isDarkMode.next(newValue);
-    // Optional: Save theme preference to localStorage
-    localStorage.setItem('isDarkMode', JSON.stringify(newValue));
-  }
-}
-*/

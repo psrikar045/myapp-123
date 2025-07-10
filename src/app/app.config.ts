@@ -9,7 +9,7 @@ import { RoleGuard } from './core/guards/role.guard';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { ErrorHandler } from '@angular/core';
 import { GlobalErrorHandler } from './core/handlers/global-error-handler';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http'; // Import withFetch
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
@@ -17,7 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(),
-    provideHttpClient(withInterceptors([authInterceptor])), // Provide HttpClient with interceptor
+    provideHttpClient(withInterceptors([authInterceptor]), withFetch()), // Added withFetch()
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000'
