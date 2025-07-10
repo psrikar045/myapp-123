@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit, inject, PLATFORM_ID, Inject } from '@angular/core';
-import { isPlatformBrowser, CommonModule } from '@angular/common';
+import { isPlatformBrowser, CommonModule } from '@angular/common'; // Import isPlatformBrowser
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -34,7 +34,7 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   private themeService = inject(ThemeService);
   private iconRegistry = inject(MatIconRegistry);
   private sanitizer = inject(DomSanitizer);
-  @Inject(PLATFORM_ID) private platformId: Object;
+  @Inject(PLATFORM_ID) private platformId: Object; // Inject PLATFORM_ID
 
   // Theme properties
   isDarkMode: boolean = false;
@@ -55,7 +55,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private themeSubscription!: Subscription;
   private scrollSubscription!: Subscription;
-  // private resizeSubscription!: Subscription; // Replaced by @HostListener as per previous iteration
 
   // Icon paths
   private logoPath = 'assets/images/logo.svg';
@@ -70,7 +69,6 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.themeSubscription = this.themeService.isDarkMode$.pipe(
-      // Ensure isDarkMode$ in ThemeService is BehaviorSubject or similar to get current value
       startWith(this.themeService.isDarkMode$.getValue()),
       takeUntil(this.destroy$)
     ).subscribe(isDark => {
@@ -79,16 +77,13 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
     if (isPlatformBrowser(this.platformId)) {
       this.checkScrollPosition();
-      this.checkScreenSize(); // Initial check for mobile view
+      this.checkScreenSize();
 
       this.scrollSubscription = fromEvent(window, 'scroll').pipe(
         debounceTime(50),
         distinctUntilChanged(),
         takeUntil(this.destroy$)
       ).subscribe(() => this.handleScroll());
-
-      // @HostListener('window:resize') is used for resize handling as per previous steps.
-      // If fromEvent were preferred for resize, it would be set up here similarly to scroll.
     }
   }
 
@@ -136,15 +131,12 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
       if (wasMobile && !this.isMobileView && this.isMobileMenuOpen) {
         this.isMobileMenuOpen = false;
-        // this.mobileMenuState = 'closed'; // For Angular animations
       }
     }
   }
 
   @HostListener('window:resize', ['$event'])
   onWindowResize(event?: Event): void {
-    // Debouncing can be added here if performance issues arise from frequent resize events,
-    // though typically direct calls are fine for updating a boolean.
     this.checkScreenSize();
   }
 
@@ -153,19 +145,38 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   }
 
   scrollToSection(sectionId: string): void {
-    console.log(`ToolbarComponent: Scrolling to section: ${sectionId}`);
+    console.log(`ToolbarComponent: Attempting to scroll to section: ${sectionId}`);
+
     if (this.isMobileMenuOpen) {
       this.toggleMobileMenu();
+    }
+
+    // Ensure scrolling logic only runs in the browser
+    if (isPlatformBrowser(this.platformId)) {
+      // The 'login' case might be handled by a different method (MapsToLogin) as per assumption.
+      // This check remains as a safeguard or for other potential uses of scrollToSection('login').
+      if (sectionId === 'login') {
+        // Potentially navigate to a login page/route or open a modal.
+        // This specific action is assumed to be handled by MapsToLogin() if called directly by the login button.
+        console.log('Login section scroll/navigation triggered.');
+        // Example: this.router.navigate(['/login']);
+        return;
+      }
+
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
+        console.log(`ToolbarComponent: Successfully scrolled to section: ${sectionId}`);
+      } else {
+        console.warn(`ToolbarComponent: Element with ID '${sectionId}' not found. Cannot scroll.`);
+      }
+    } else {
+      console.log(`ToolbarComponent: Skipping scroll for section '${sectionId}' (not in browser environment).`);
     }
   }
 
   toggleMobileMenu(): void {
     this.isMobileMenuOpen = !this.isMobileMenuOpen;
-    // if (this.isMobileMenuOpen) { // For Angular animations
-    //   this.mobileMenuState = 'open';
-    // } else {
-    //   this.mobileMenuState = 'closed';
-    // }
   }
 
   ngOnDestroy(): void {
