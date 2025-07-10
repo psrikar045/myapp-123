@@ -34,7 +34,9 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   private themeService = inject(ThemeService);
   private iconRegistry = inject(MatIconRegistry);
   private sanitizer = inject(DomSanitizer);
-  @Inject(PLATFORM_ID) private platformId: Object; // Inject PLATFORM_ID
+
+  @Inject(PLATFORM_ID) private platformId!: Object;
+
 
   // Theme properties
   isDarkMode: boolean = false;
@@ -57,11 +59,11 @@ export class ToolbarComponent implements OnInit, OnDestroy {
   private scrollSubscription!: Subscription;
 
   // Icon paths
-  private logoPath = 'assets/images/logo.svg';
-  private sunIconPath = 'assets/icons/sun.svg';
-  private cloudIconPath = 'assets/icons/cloud.svg';
-  private arrowForwardIconPath = 'assets/icons/arrow_forward.svg';
-  private menuIconPath = 'assets/icons/menu.svg';
+  private logoPath = 'images/logo.svg';
+  private sunIconPath = 'icons/sun.svg';
+  private cloudIconPath = 'icons/cloud.svg';
+  private arrowForwardIconPath = 'icons/arrow_forward.svg';
+  private menuIconPath = 'icons/menu.svg';
 
   constructor() {
     this.registerIcons();
@@ -69,7 +71,8 @@ export class ToolbarComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.themeSubscription = this.themeService.isDarkMode$.pipe(
-      startWith(this.themeService.isDarkMode$.getValue()),
+      // Ensure isDarkMode$ in ThemeService is BehaviorSubject or similar to get current value
+      // startWith(this.themeService.isDarkMode$.getValue()),
       takeUntil(this.destroy$)
     ).subscribe(isDark => {
       this.isDarkMode = isDark;
