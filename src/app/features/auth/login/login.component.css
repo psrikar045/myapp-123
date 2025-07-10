@@ -1,0 +1,388 @@
+/* General Page Styles */
+:host {
+  display: block; /* Ensures the component takes up block space */
+}
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  background-color: #f5f5f5; /* Light gray background for viewport */
+  font-family: "Poppins", "Roboto", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+/* Left Section: Login Form Area */
+.login-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.login-panel {
+  background-color: #ffffff; /* White card background */
+  padding: 2.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px; /* Max width for the form panel */
+  text-align: center;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.logo {
+  width: 120px; /* Adjusted logo size */
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+/* Form Elements */
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  margin-bottom: 1rem; /* Spacing between form fields */
+}
+
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.forgot-password-link {
+  color: #4A50E0; /* Primary color */
+  text-decoration: none;
+  font-weight: 500;
+}
+.forgot-password-link:hover {
+  text-decoration: underline;
+}
+
+.login-button {
+  padding: 0.8rem 0;
+  font-size: 1rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  height: auto; /* Ensure spinner fits */
+  line-height: normal; /* Ensure spinner fits */
+}
+
+.button-spinner {
+  display: inline-block; /* Make spinner align with text if text were present */
+  vertical-align: middle;
+}
+
+.error-message {
+  background-color: #ffebee; /* Light red background for errors */
+  color: #c62828; /* Darker red text for errors */
+  padding: 0.8rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+/* Sign Up Link */
+.signup-link {
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.signup-link a {
+  color: #4A50E0; /* Primary color */
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 0.3rem;
+}
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+/* Divider "Or login with" */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #aaa;
+  margin: 2rem 0;
+  font-size: 0.85rem;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.divider:not(:empty)::before {
+  margin-right: .5em;
+}
+
+.divider:not(:empty)::after {
+  margin-left: .5em;
+}
+
+/* Social Login Buttons */
+.social-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem; /* Space between buttons */
+  margin-bottom: 1.5rem;
+}
+
+.social-button {
+  border-radius: 50% !important; /* Circular shape */
+  width: 44px !important; /* Fixed width */
+  height: 44px !important; /* Fixed height */
+  padding: 0 !important; /* Remove padding to center icon */
+  min-width: auto !important; /* Override Material's min-width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.social-button mat-icon {
+  /* Ensure SVG icons scale correctly if needed */
+  width: 24px;
+  height: 24px;
+}
+
+/* Dark Mode Toggle */
+.dark-mode-toggle-container {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Right Section: Image Gallery / Carousel */
+.login-right {
+  flex: 1;
+  background-color: #eef2f7; /* Slightly different background for gallery */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  overflow: hidden; /* Hide parts of non-active images */
+  position: relative; /* For absolute positioning of images if needed */
+  transition: background-color 0.3s ease;
+}
+
+.carousel-container {
+  width: 100%;
+  max-width: 500px; /* Max width of the carousel content */
+  height: auto; /* Adjust as needed, or fixed height */
+  position: relative; /* For image positioning */
+}
+
+.carousel-image {
+  width: 100%;
+  height: auto; /* Maintain aspect ratio */
+  max-height: 400px; /* Max height for the images */
+  object-fit: contain; /* Show entire image, may leave empty space */
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  display: none; /* Hide all images by default */
+  transition: opacity 0.5s ease-in-out; /* Smooth transition */
+}
+
+.carousel-image.active {
+  display: block; /* Show only the active image */
+  opacity: 1;
+}
+
+
+/* --- Dark Theme Styles --- */
+.login-container.dark-theme {
+  background-color: #121212; /* Dark background for viewport */
+}
+
+.dark-theme .login-panel {
+  background-color: #1e1e1e; /* Darker card background */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme h2 {
+  color: #e0e0e0; /* Lighter text for dark theme */
+}
+
+.dark-theme .subtitle {
+  color: #b0b0b0; /* Lighter subtitle text */
+}
+
+.dark-theme .error-message {
+  background-color: #4a1c1c; /* Darker red for errors */
+  color: #ffcdd2; /* Lighter error text */
+}
+
+.dark-theme .signup-link {
+  color: #b0b0b0;
+}
+
+.dark-theme .signup-link a,
+.dark-theme .forgot-password-link {
+  color: #8c9eff; /* Lighter primary for links */
+}
+
+.dark-theme .divider {
+  color: #777;
+}
+
+.dark-theme .divider::before,
+.dark-theme .divider::after {
+  border-bottom: 1px solid #444;
+}
+
+/* Dark theme for Material components (using !important cautiously) */
+/* Form Fields */
+.dark-theme .mat-mdc-form-field .mdc-text-field--filled,
+.dark-theme .mat-mdc-form-field .mdc-text-field--outlined {
+  background-color: transparent !important; /* Remove default background fill for dark mode */
+}
+
+.dark-theme .mat-mdc-form-field .mdc-notched-outline__leading,
+.dark-theme .mat-mdc-form-field .mdc-notched-outline__notch,
+.dark-theme .mat-mdc-form-field .mdc-notched-outline__trailing {
+  border-color: rgba(255, 255, 255, 0.3) !important; /* Lighter border for outline */
+}
+
+.dark-theme .mat-mdc-form-field:not(.mat-form-field-disabled) .mdc-floating-label {
+  color: rgba(255, 255, 255, 0.6) !important; /* Lighter label color */
+}
+
+.dark-theme .mat-mdc-input-element {
+  caret-color: #8c9eff !important; /* Lighter caret */
+  color: #e0e0e0 !important; /* Lighter input text */
+}
+
+.dark-theme .mat-mdc-form-field.mat-focused .mdc-floating-label,
+.dark-theme .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+.dark-theme .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+.dark-theme .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  color: #8c9eff !important; /* Primary color for focused elements */
+  border-color: #8c9eff !important;
+}
+
+.dark-theme .mat-mdc-form-field .mat-mdc-select-arrow,
+.dark-theme .mat-mdc-form-field .mat-icon {
+  color: rgba(255, 255, 255, 0.7) !important; /* Lighter icons in form fields */
+}
+
+/* Checkbox */
+.dark-theme .mat-mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate) ~ .mdc-checkbox__background {
+  border-color: rgba(255, 255, 255, 0.7) !important; /* Lighter checkbox border */
+}
+.dark-theme .mat-mdc-checkbox .mdc-checkbox__checkmark {
+  fill: #1e1e1e !important; /* Checkmark color against primary background */
+}
+.dark-theme .mat-mdc-checkbox label {
+  color: #e0e0e0 !important;
+}
+
+
+/* Slide Toggle */
+.dark-theme .mat-mdc-slide-toggle .mdc-switch__track::after,
+.dark-theme .mat-mdc-slide-toggle .mdc-switch__track::before {
+  background-color: #525252 !important; /* Darker track */
+}
+.dark-theme .mat-mdc-slide-toggle .mdc-switch.mdc-switch--selected .mdc-switch__track::after,
+.dark-theme .mat-mdc-slide-toggle .mdc-switch.mdc-switch--selected .mdc-switch__track::before {
+    background-color: #8c9eff !important; /* Primary color for selected track */
+    opacity: 0.5;
+}
+.dark-theme .mat-mdc-slide-toggle .mdc-switch.mdc-switch--selected .mdc-switch__handle::after,
+.dark-theme .mat-mdc-slide-toggle .mdc-switch.mdc-switch--selected .mdc-switch__handle::before {
+    background-color: #8c9eff !important; /* Primary color for selected handle */
+}
+.dark-theme .mat-mdc-slide-toggle label {
+  color: #e0e0e0 !important;
+}
+
+
+/* Stroked buttons (social) */
+.dark-theme .mat-mdc-stroked-button:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.dark-theme .mat-mdc-stroked-button:not(:disabled) .mat-icon {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+
+/* Right section dark theme */
+.dark-theme .login-right {
+  background-color: #2a2a2a; /* Dark background for gallery area */
+}
+
+.dark-theme .carousel-image {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Darker shadow for images */
+}
+
+
+/* Responsiveness */
+@media (max-width: 960px) {
+  .login-right {
+    display: none; /* Hide image gallery on smaller screens */
+  }
+  .login-left {
+    padding: 1.5rem; /* Adjust padding for smaller screens */
+  }
+  .login-panel {
+    padding: 2rem; /* Adjust panel padding */
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.6rem;
+  }
+  .subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  .login-panel {
+    padding: 1.5rem;
+    margin: 1rem; /* Add margin to panel itself on very small screens */
+  }
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem; /* Space between checkbox and link when stacked */
+  }
+  .forgot-password-link {
+    align-self: flex-start; /* Align link to start when stacked */
+  }
+  .social-buttons {
+    gap: 0.8rem;
+  }
+  .social-button {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  .social-button mat-icon {
+    width: 20px;
+    height: 20px;
+  }
+}

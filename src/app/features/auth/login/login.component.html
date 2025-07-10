@@ -1,0 +1,98 @@
+<div class="login-container" [class.dark-theme]="isDarkMode" mat-typography>
+  <!-- Left Section: Login Form -->
+  <div class="login-left">
+    <div class="login-panel">
+      <img src="assets/images/logo.png" alt="TravelWise Logo" class="logo" i18n-alt="@@logoAltText">
+
+      <h2 i18n="@@loginTitle">Login</h2>
+      <p class="subtitle" i18n="@@loginSubtitle">Login to access your travelwise account</p>
+
+      <div *ngIf="errorMessage" class="error-message" role="alert">
+        {{ errorMessage }}
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <!-- Email Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label i18n="@@emailLabel">Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="your.email@example.com" i18n-placeholder="@@emailPlaceholder" required autofocus>
+          <button mat-icon-button matSuffix *ngIf="email.value" (click)="clearEmail()" type="button" aria-label="Clear email" i18n-aria-label="@@clearEmailAriaLabel">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-error *ngIf="email.hasError('required')" i18n="@@emailRequiredError">
+            Email is required.
+          </mat-error>
+          <mat-error *ngIf="email.hasError('email')" i18n="@@emailInvalidError">
+            A valid email is required.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Password Field -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label i18n="@@passwordLabel">Password</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Enter your password" i18n-placeholder="@@passwordPlaceholder" required>
+          <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button" [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'" [attr.i18n-aria-label]="hidePassword ? '@@showPasswordAriaLabel' : '@@hidePasswordAriaLabel'">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="password.hasError('required')" i18n="@@passwordRequiredError">
+            Password is required.
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Form Options -->
+        <div class="form-options">
+          <mat-checkbox formControlName="rememberMe" i18n="@@rememberMeLabel">Remember me</mat-checkbox>
+          <a href="#" class="forgot-password-link" i18n="@@forgotPasswordLink">Forgot Password?</a>
+        </div>
+
+        <!-- Login Button -->
+        <button mat-raised-button color="primary" type="submit" class="full-width login-button" [disabled]="loginForm.invalid || isLoading">
+          <span *ngIf="!isLoading" i18n="@@loginButtonText">Login</span>
+          <mat-spinner *ngIf="isLoading" diameter="24" class="button-spinner"></mat-spinner>
+        </button>
+      </form>
+
+      <!-- Sign Up Link -->
+      <div class="signup-link">
+        <span i18n="@@dontHaveAccountPrompt">Don't have an account?</span>
+        <a href="#" i18n="@@signUpLink">Sign up</a>
+      </div>
+
+      <!-- Divider -->
+      <div class="divider">
+        <span i18n="@@orLoginWithDivider">Or login with</span>
+      </div>
+
+      <!-- Social Login Buttons -->
+      <div class="social-buttons">
+        <button mat-stroked-button class="social-button" aria-label="Login with Google" i18n-aria-label="@@loginWithGoogleAriaLabel">
+          <mat-icon svgIcon="google"></mat-icon>
+        </button>
+        <button mat-stroked-button class="social-button" aria-label="Login with Facebook" i18n-aria-label="@@loginWithFacebookAriaLabel">
+          <mat-icon svgIcon="facebook"></mat-icon>
+        </button>
+        <button mat-stroked-button class="social-button" aria-label="Login with Apple" i18n-aria-label="@@loginWithAppleAriaLabel">
+          <mat-icon svgIcon="apple"></mat-icon>
+        </button>
+      </div>
+
+      <!-- Dark Mode Toggle -->
+      <div class="dark-mode-toggle-container">
+         <mat-slide-toggle [checked]="(themeService.isDarkMode$ | async)!" (change)="toggleDarkMode()" i18n="@@darkModeLabel">Dark Mode</mat-slide-toggle>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Right Section: Image Gallery / Carousel -->
+  <div class="login-right">
+    <div class="carousel-container">
+      <img *ngFor="let image of galleryImages; let i = index"
+           [src]="image"
+           alt="Gallery image {{i + 1}}"
+           i18n-alt="@@galleryImageAltText"
+           class="carousel-image"
+           [class.active]="i === currentImageIndex">
+    </div>
+  </div>
+</div>
