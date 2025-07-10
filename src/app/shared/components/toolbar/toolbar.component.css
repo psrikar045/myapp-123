@@ -1,10 +1,10 @@
 :host {
   /* Define CSS variables for theming within the component's scope */
   --primary-blue: #4A50E0;
-  --primary-orange-accent: #FF7800; /* For dark mode theme toggle */
+  --primary-orange-accent: #FF7800;
 
   --light-text: #333333; /* Clear dark gray for light theme text */
-  --light-background-rgb: 255, 255, 255; /* For use in rgba */
+  --light-background-rgb: 255, 255, 255;
   --light-background-opacity: rgba(var(--light-background-rgb), 0.95);
 
   --dark-text: #EEEEEE; /* Clear light gray for dark theme text */
@@ -13,6 +13,7 @@
 
   --dark-overlay-bg-rgb: 25, 25, 25;
 
+  /* Theme Toggle Button Specific Variables */
   --theme-toggle-light-border-color: var(--primary-blue);
   --theme-toggle-light-bg-color: #FFFFFF;
   --theme-toggle-light-icon-color: var(--primary-blue); /* Icon color for light theme toggle */
@@ -41,7 +42,7 @@
   padding: 0 var(--toolbar-padding-x);
   height: var(--toolbar-height);
   background-color: var(--light-background-opacity);
-  color: var(--light-text); /* CRITICAL FIX: Default text color for light theme */
+  color: var(--light-text); /* CRITICAL: Base text color for light theme */
   box-shadow: var(--toolbar-shadow-light);
   transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease-in-out, box-shadow 0.3s ease;
   position: fixed;
@@ -53,20 +54,20 @@
 
 .app-toolbar.dark-mode-toolbar {
   background-color: var(--dark-background-opacity);
-  color: var(--dark-text); /* Default text color for dark theme */
+  color: var(--dark-text); /* CRITICAL: Base text color for dark theme */
   box-shadow: var(--toolbar-shadow-dark);
 }
 
 /* Ensure all direct text and icons within toolbar inherit themed color */
+/* These rules ensure that elements not specifically styled otherwise get the correct theme color */
 .app-toolbar .mat-button,
 .app-toolbar .mat-icon,
-.app-toolbar .mat-icon-button .mat-icon, /* For icons inside icon buttons NOT specially themed */
-.app-toolbar span { /* For any direct span elements if they exist */
-  color: inherit; /* Inherits from .app-toolbar or .dark-mode-toolbar */
-}
-/* Company logo icon should also inherit color if it's a single-color SVG designed for it */
-.app-toolbar .company-logo-icon {
-    color: inherit;
+.app-toolbar .mat-icon-button .mat-icon, /* For icons inside generic icon buttons */
+.app-toolbar span, /* For any direct span elements */
+.app-toolbar .company-logo-icon, /* Ensure logo icon inherits */
+.app-toolbar .mobile-menu-trigger-button .mat-icon /* Ensure hamburger icon inherits */ {
+  color: inherit !important; /* Use !important here carefully if Material styles are too strong */
+                             /* Prefer more specific selectors if possible, but for broad override this might be needed */
 }
 
 
@@ -90,12 +91,7 @@
   width: auto;
   height: 48px;
   vertical-align: middle;
-  /* color: var(--light-text); /* Explicitly set if 'inherit' is not sufficient due to SVG structure */
 }
-/* .app-toolbar.dark-mode-toolbar .company-logo-icon {
-  color: var(--dark-text); /* Explicitly set if 'inherit' is not sufficient */
-/* } */
-
 
 /* Middle Navigation Links */
 .middle-section .mat-button {
@@ -105,14 +101,14 @@
   padding: 6px 8px;
   border-radius: 4px;
   transition: color 0.2s ease, background-color 0.2s ease;
-  /* Color is inherited from .app-toolbar */
+  /* color: inherit; /* Already handled by the broader .app-toolbar .mat-button rule */
 }
 .middle-section .mat-button:hover {
-  color: var(--primary-blue);
+  color: var(--primary-blue); /* Hover color for light theme */
   background-color: rgba(var(--primary-blue-rgb), 0.08);
 }
 .app-toolbar.dark-mode-toolbar .middle-section .mat-button:hover {
-  color: #8a8eff;
+  color: #8a8eff; /* Hover color for dark theme */
   background-color: rgba(var(--primary-blue-rgb), 0.15);
 }
 
@@ -121,7 +117,7 @@
   font-size: 30px;
   width: 30px;
   height: 30px;
-  color: inherit; /* Ensure it inherits toolbar color */
+  /* color: inherit; /* Already handled by broader rule */
 }
 
 /* Theme Toggle Button Styling - ENHANCED */
@@ -134,23 +130,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--theme-toggle-light-bg-color); /* White background for light theme */
-  border: 1px solid var(--theme-toggle-light-border-color); /* Blue border for light theme */
-  transition: all 0.3s ease-in-out; /* Smooth transition for all properties */
+  background-color: var(--theme-toggle-light-bg-color);
+  border: 1px solid var(--theme-toggle-light-border-color);
+  transition: all 0.3s ease-in-out;
 }
-.theme-toggle-button .theme-icon {
+.theme-toggle-button .theme-icon { /* Icon styling for light theme state */
   font-size: 20px;
   width: 20px;
   height: 20px;
-  color: var(--theme-toggle-light-icon-color); /* Blue icon for light theme */
+  color: var(--theme-toggle-light-icon-color); /* Blue icon */
 }
 
-.app-toolbar.dark-mode-toolbar .theme-toggle-button {
-  background-color: var(--theme-toggle-dark-bg-color); /* Transparent orange for dark theme */
-  border: 1px solid var(--theme-toggle-dark-border-color); /* Orange border for dark theme */
+.app-toolbar.dark-mode-toolbar .theme-toggle-button { /* Dark theme state styling */
+  background-color: var(--theme-toggle-dark-bg-color);
+  border: 1px solid var(--theme-toggle-dark-border-color);
 }
-.app-toolbar.dark-mode-toolbar .theme-toggle-button .theme-icon {
-  color: var(--theme-toggle-dark-icon-color); /* Orange icon for dark theme */
+.app-toolbar.dark-mode-toolbar .theme-toggle-button .theme-icon { /* Icon styling for dark theme state */
+  color: var(--theme-toggle-dark-icon-color); /* Orange icon */
 }
 
 .theme-toggle-button:hover {
@@ -161,7 +157,7 @@
 /* Login Button Styling */
 .login-button {
   background-color: var(--primary-blue);
-  color: white !important;
+  color: white; /* Removed !important, relying on color="primary" removal */
   border-radius: var(--button-pill-radius);
   padding: var(--button-padding);
   font-weight: var(--button-font-weight);
@@ -178,7 +174,7 @@
 /* Get Started Button Styling */
 .get-started-button {
   background-color: var(--primary-blue);
-  color: white !important;
+  color: white; /* Removed !important */
   border-radius: var(--button-pill-radius);
   padding: var(--button-padding);
   font-weight: var(--button-font-weight);
@@ -222,11 +218,11 @@
   transform: translateX(100%);
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
   box-sizing: border-box;
-  color: var(--light-text); /* Default text color for mobile menu */
+  color: var(--light-text);
 }
 .mobile-menu-overlay.dark-mode-overlay {
   background-color: rgba(var(--dark-overlay-bg-rgb), 0.98);
-  color: var(--dark-text); /* Default text color for dark mobile menu */
+  color: var(--dark-text);
 }
 .mobile-menu-overlay:where(*ngIf) {
   opacity: 1;
@@ -243,18 +239,14 @@
   border-bottom: 1px solid rgba(0,0,0,0.08);
   flex-shrink: 0;
   box-sizing: border-box;
-  /* color is inherited from .mobile-menu-overlay */
 }
 .mobile-menu-overlay.dark-mode-overlay .mobile-menu-header {
   border-bottom: 1px solid rgba(255,255,255,0.12);
 }
-.mobile-menu-header .mat-icon-button .mat-icon {
-    color: inherit;
-}
+.mobile-menu-header .mat-icon-button .mat-icon,
 .mobile-menu-header .company-logo-icon-mobile {
-    color: inherit; /* Ensure logo icon also inherits color */
+    color: inherit !important; /* Ensure these inherit color from mobile menu overlay */
 }
-
 
 .company-logo-button-mobile .company-logo-icon-mobile {
   width: auto;
@@ -282,7 +274,7 @@
   margin-bottom: 16px;
   border-radius: 8px;
   transition: background-color 0.2s ease, color 0.2s ease;
-  color: inherit; /* Inherit text color from overlay */
+  color: inherit;
 }
 .mobile-menu-overlay .mobile-nav-button:hover {
   background-color: rgba(var(--primary-blue-rgb), 0.1);
@@ -307,8 +299,6 @@
 .mobile-menu-overlay.dark-mode-overlay .mobile-menu-actions {
   border-top: 1px solid rgba(255,255,255,0.12);
 }
-/* Mobile action buttons will inherit from their main classes (.theme-toggle-button, .login-button, etc.) */
-/* Add -mobile suffix class for any specific overrides if needed */
 .mobile-menu-actions .theme-toggle-button-mobile {
     /* Styles are inherited from .theme-toggle-button */
 }
@@ -357,21 +347,15 @@
   .mobile-menu-actions { padding: 16px; gap: 12px; }
 }
 
-/* Ensure Material Design Component focus outlines are styled appropriately or removed if custom focus is handled */
-:host ::ng-deep .mat-mdc-button-persistent-ripple {
-  /* Customizations for ripple if needed */
-}
-
-/* Ensure button label colors are correctly applied */
+/* Remove !important from ::ng-deep if possible, relying on specificity or direct styling */
 :host ::ng-deep .login-button .mdc-button__label,
 :host ::ng-deep .get-started-button .mdc-button__label,
 :host ::ng-deep .login-button-mobile .mdc-button__label,
 :host ::ng-deep .get-started-button-mobile .mdc-button__label {
-  color: white; /* Ensures text on themed buttons is white */
+  color: white;
 }
-/* For default nav buttons and other text buttons, ensure they inherit toolbar color */
 :host ::ng-deep .middle-section .mat-button .mdc-button__label,
 :host ::ng-deep .mobile-nav-button .mdc-button__label {
-  color: inherit;
+  /* color: inherit; /* Let the button itself or its parent define this */
 }
 ```
