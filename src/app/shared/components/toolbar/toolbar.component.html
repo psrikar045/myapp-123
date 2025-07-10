@@ -1,8 +1,7 @@
 <mat-toolbar
   class="app-toolbar"
   [class.toolbar-hidden]="!isVisible"
-  [ngClass]="{'dark-mode-toolbar': isDarkMode}"
-  color="primary">
+  [ngClass]="{'dark-mode-toolbar': isDarkMode}">
 
   <div class="toolbar-section left-section">
     <button mat-icon-button class="company-logo-button" (click)="scrollToSection('home')" aria-label="Company Logo">
