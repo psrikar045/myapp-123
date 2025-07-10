@@ -22,15 +22,14 @@
     <!-- Hamburger Menu Button - Shown only on mobile view -->
     <button mat-icon-button *ngIf="isMobileView" (click)="toggleMobileMenu()" class="mobile-menu-trigger-button" aria-label="Open navigation menu">
       <mat-icon svgIcon="custom-menu"></mat-icon> <!-- Using custom SVG icon -->
-      <!-- Or use built-in Material icon: <mat-icon>menu</mat-icon> -->
     </button>
 
-    <!-- Actions - always visible, but layout might change with CSS -->
+    <!-- Actions - always visible on desktop, hamburger on mobile controls their visibility in overlay -->
     <button mat-icon-button (click)="toggleDarkMode()" class="theme-toggle-button" [attr.aria-label]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
       <mat-icon [svgIcon]="isDarkMode ? 'cloud' : 'sun'" class="theme-icon"></mat-icon>
     </button>
     <button mat-button class="login-button" (click)="scrollToSection('login')">Login</button>
-    <button mat-flat-button color="accent" class="get-started-button" (click)="scrollToSection('get-started')">
+    <button mat-flat-button class="get-started-button" (click)="scrollToSection('get-started')">
       <span>Get Started</span>
       <mat-icon svgIcon="arrow-forward" class="get-started-icon"></mat-icon>
     </button>
@@ -44,7 +43,7 @@
         <mat-icon svgIcon="company-logo" class="company-logo-icon-mobile"></mat-icon>
     </button>
     <button mat-icon-button (click)="toggleMobileMenu()" class="close-mobile-menu-button" aria-label="Close Menu">
-      <mat-icon>close</mat-icon> <!-- Using Material built-in close icon -->
+      <mat-icon>close</mat-icon>
     </button>
   </div>
   <nav class="mobile-nav">
@@ -55,12 +54,11 @@
     <button mat-button class="mobile-nav-button" (click)="scrollToSection('about')">About</button>
   </nav>
   <div class="mobile-menu-actions">
-    <!-- Optional: Replicate some actions in mobile menu for easier access -->
     <button mat-icon-button (click)="toggleDarkMode();" class="theme-toggle-button-mobile" [attr.aria-label]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
         <mat-icon [svgIcon]="isDarkMode ? 'cloud' : 'sun'" class="theme-icon"></mat-icon>
     </button>
     <button mat-button class="login-button-mobile" (click)="scrollToSection('login')">Login</button>
-    <button mat-flat-button color="accent" class="get-started-button-mobile" (click)="scrollToSection('get-started')">
+    <button mat-flat-button class="get-started-button-mobile" (click)="scrollToSection('get-started')">
         <span>Get Started</span>
         <mat-icon svgIcon="arrow-forward" class="get-started-icon"></mat-icon>
     </button>
