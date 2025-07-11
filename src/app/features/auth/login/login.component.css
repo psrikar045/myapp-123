@@ -419,9 +419,9 @@ mat-form-field {
 
 
 /* --- Dark Theme Styles (largely unchanged, ensure variables from :host or global are used if possible) --- */
-.login-page-wrapper.dark-theme {
-  background-color: #121212;
-}
+/* The body.dark-theme rule in styles.css will handle the page background. */
+/* .login-page-wrapper.dark-theme { background-color: #121212; } */ /* This rule was ineffective and is now handled globally */
+
 .dark-theme .login-container,
 .dark-theme .login-left,
 .dark-theme .login-panel,

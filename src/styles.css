@@ -73,3 +73,25 @@ a {
   white-space: nowrap;
   border-width: 0;
 }
+
+/* Dark Theme Styles */
+body.dark-theme {
+  background-color: #121212; /* A common dark background color */
+  color: #e0e0e0; /* A light text color for readability */
+}
+
+/* Ensure Material components have a contrasting background when body is dark.
+   This is a general approach. Specific components might need more targetted rules
+   if a full Material dark theme isn't used. */
+body.dark-theme .mat-mdc-card,
+body.dark-theme .mat-mdc-dialog-container,
+body.dark-theme .mat-mdc-snack-bar-container {
+  background-color: #2a2a2a; /* Slightly lighter than body for cards/dialogs */
+  color: #e0e0e0;
+}
+
+/* Example for input fields if not using a full Material dark theme */
+body.dark-theme .mat-mdc-form-field-focus-overlay,
+body.dark-theme .mat-mdc-form-field-infix {
+  /* Adjust text color for inputs if needed */
+}
