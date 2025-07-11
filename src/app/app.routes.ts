@@ -1,36 +1,58 @@
 import { Routes } from '@angular/router';
-import { roleGuard } from './core/guards/role.guard'; // Import functional roleGuard
+import { roleGuard } from './core/guards/role.guard';
 import { LoginComponent } from './features/auth/login/login.component';
-import { DashboardComponent } from './features/dashboard/dashboard.component'; // Import DashboardComponent
-import { authGuard } from './core/guards/auth.guard'; // Import functional authGuard
+import { DashboardComponent } from './features/dashboard/dashboard.component';
+import { authGuard } from './core/guards/auth.guard';
 import { ResetPasswordComponent } from './features/reset-password/reset-password.component';
+import { LandingPageComponent } from './features/landing/landing-page/landing-page.component'; // Added import
 
 export const routes: Routes = [
+  // 1. Redirect root path '' to '/home'
+  {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
+  },
+
+  // 2. Public Route: Landing Page
+  {
+    path: 'home',
+    component: LandingPageComponent
+  },
+  // Optional: path 'landing' also goes to LandingPageComponent
+  // {
+  //   path: 'landing',
+  //   component: LandingPageComponent
+  // },
+
+  // 3. Public Routes: Login, Forgot Password
   {
     path: 'login',
-    component: LoginComponent // Using direct component since it's likely already loaded or handled by standalone imports
+    component: LoginComponent
   },
   {
     path: 'forgot-password',
     component: ResetPasswordComponent
   },
+
+  // 4. Protected Routes
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [authGuard] // Protect this route with the functional auth guard
+    canActivate: [authGuard]
   },
   {
     path: 'admin',
-    canActivate: [authGuard, roleGuard], // Use functional roleGuard
+    canActivate: [authGuard, roleGuard],
     loadChildren: () => import('./features/admin/admin.module').then((m) => m.AdminModule)
   },
-  {
-    path: '',
-    redirectTo: '/login', // Default route redirects to login
-    pathMatch: 'full'
-  },
+
+  // 5. Wildcard Route (Must be the last route!)
+  //    Redirects any unmatched paths to the landing page.
   {
     path: '**',
-    redirectTo: '/login' // Wildcard route for any other invalid URL
+    redirectTo: '/home'
   }
+  // Or, if you have a 404 Not Found component:
+  // { path: '**', component: NotFoundComponent }
 ];
