@@ -80,21 +80,16 @@ export class LoginComponent implements OnInit, OnDestroy {
   hideRegisterConfirmPassword = true;
 
   // --- Carousel Properties ---
-  // currentImageIndex is used by the original carousel logic if startCarousel() is called
-  // For simple image switching, carouselImage is enough.
-  currentImageIndex = 0;
-  carouselImage: string = 'images/gallery3.png'; // Default for login form
-
-  // readonly GALLERY_IMAGE_PATHS: readonly string[] = [
-  //   'images/gallery1.png', // Example: For step 1 if multi-step within login
-  //   'images/gallery2.png', // For register form
-  //   'images/gallery3.png', // For login form
-  // ];
-  // readonly CAROUSEL_INTERVAL_MS = 3000; // If using interval-based carousel
+  readonly loginCarouselImages: readonly string[] = ['images/gallery3.png', 'images/gallery1.png'];
+  readonly registerFormImage: string = 'images/gallery2.png';
+  currentImageIndex: number = 0; // For login carousel
+  carouselImage: string = ''; // Holds the src for the currently displayed image
+  private carouselIntervalId: any;
+  readonly CAROUSEL_INTERVAL_MS = 3000;
 
   // --- Subscriptions & Timers ---
   private themeSubscription!: Subscription;
-  private carouselIntervalId: any; // Keep if using interval-based carousel logic
+  // private carouselIntervalId: any; // Already declared above
 
   iconsRegistered = false;
 
@@ -131,13 +126,34 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
     this.isDarkMode = this.themeService.getIsDarkMode();
 
-    this.carouselImage = this.showRegisterForm ? 'images/gallery2.png' : 'images/gallery3.png';
+    if (!this.showRegisterForm) {
+      this.startCarousel();
+    } else {
+      this.carouselImage = this.registerFormImage;
+    }
     this.cdr.markForCheck();
+  }
 
-    // Optional: Start interval carousel if needed, and only for login view by default
-    // if (isPlatformBrowser(this.platformId) && !this.showRegisterForm) {
-    //  this.startCarousel();
-    // }
+  startCarousel(): void {
+    this.stopCarousel(); // Clear existing interval first
+    if (isPlatformBrowser(this.platformId) && this.loginCarouselImages.length > 0) {
+      this.currentImageIndex = 0;
+      this.carouselImage = this.loginCarouselImages[this.currentImageIndex];
+      this.cdr.markForCheck();
+
+      this.carouselIntervalId = setInterval(() => {
+        this.currentImageIndex = (this.currentImageIndex + 1) % this.loginCarouselImages.length;
+        this.carouselImage = this.loginCarouselImages[this.currentImageIndex];
+        this.cdr.markForCheck();
+      }, this.CAROUSEL_INTERVAL_MS);
+    }
+  }
+
+  stopCarousel(): void {
+    if (isPlatformBrowser(this.platformId) && this.carouselIntervalId) {
+      clearInterval(this.carouselIntervalId);
+      this.carouselIntervalId = null;
+    }
   }
 
   private registerSvgIcons(): void {
@@ -263,16 +279,15 @@ export class LoginComponent implements OnInit, OnDestroy {
   // --- Methods for Toggling Forms & UI ---
   toggleToRegister(): void {
     this.showRegisterForm = true;
-    this.carouselImage = 'images/gallery2.png';
+    this.stopCarousel();
+    this.carouselImage = this.registerFormImage; // Static image for registration
     this.errorMessage = null; // Clear login error message
-    // this.startOrUpdateCarousel(); // If using interval-based carousel
     this.cdr.markForCheck();
   }
 
   toggleToLogin(): void {
     this.showRegisterForm = false;
-    this.carouselImage = 'images/gallery3.png';
-    // this.startOrUpdateCarousel(); // If using interval-based carousel
+    this.startCarousel(); // This will set the initial login image and start cycling
     this.cdr.markForCheck();
   }
 
@@ -333,9 +348,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.themeSubscription) {
       this.themeSubscription.unsubscribe();
     }
-    if (this.carouselIntervalId && isPlatformBrowser(this.platformId)) {
-      clearInterval(this.carouselIntervalId);
-    }
+    this.stopCarousel(); // Ensure carousel stops on component destruction
   }
 }
 

@@ -188,20 +188,22 @@
 
     <div class="login-right">
       <div class="carousel-container">
-        <!-- Original carousel logic - if keeping interval based changes -->
-        <!-- <img *ngFor="let image of galleryImages; let i = index"
-             [src]="image"
-             alt="Gallery image {{i + 1}}"
-             i18n-alt="@@galleryImageAltText"
-             class="carousel-image"
-             [class.active]="i === currentImageIndex"
-             loading="lazy"> -->
+        <!-- Animated Carousel for Login Form -->
+        <ng-container *ngIf="!showRegisterForm">
+          <img *ngFor="let image of loginCarouselImages; let i = index"
+               [src]="image"
+               alt="Login gallery image {{i + 1}}"
+               i18n-alt="@@loginGalleryImageAltText"
+               class="carousel-image"
+               [class.active]="i === currentImageIndex && !showRegisterForm"
+               loading="lazy">
+        </ng-container>
 
-        <!-- Simplified for single dynamic image based on component state -->
-        <img [src]="carouselImage"
-             *ngIf="carouselImage"
-             alt="Decorative image"
-             i18n-alt="@@authFlowImageAltText"
+        <!-- Static Image for Registration Form -->
+        <img *ngIf="showRegisterForm && carouselImage"
+             [src]="carouselImage"
+             alt="Registration image"
+             i18n-alt="@@registrationImageAltText"
              class="carousel-image active"
              loading="lazy">
       </div>
