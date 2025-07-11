@@ -1,0 +1,39 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f0f2f5; /* Light background for dashboard */
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: #4A50E0; /* Primary brand color */
+  margin-bottom: 15px;
+}
+
+p {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+/* Dark mode styles for dashboard */
+:host-context(.dark-theme) .dashboard-container {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+:host-context(.dark-theme) h1 {
+  color: #8c9eff; /* Lighter primary color for dark theme */
+}
+
+:host-context(.dark-theme) p {
+  color: #b0b0b0;
+}
