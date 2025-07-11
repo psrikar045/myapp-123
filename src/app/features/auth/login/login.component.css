@@ -1,48 +1,66 @@
 /* General Page Styles */
 :host {
-  display: block; /* Ensures the component takes up block space */
+  display: block;
 }
 
-.login-container {
+/* Overall Page Wrapper for central alignment and no background */
+.login-page-wrapper {
   min-height: 100vh;
   display: flex;
-  align-items: stretch; /* Stretch children to be same height */
-  justify-content: center; /* Horizontally center children */
-  padding: 2rem; /* Space from screen edges */
-  box-sizing: border-box; /* Include padding in total width/height */
-  /* background-color: #f5f5f5; */ /* Light gray background for viewport - REMOVED */
+  justify-content: center; /* Centers the login-container horizontally */
+  align-items: center; /* Centers the login-container vertically */
+  background-color: transparent; /* **No background for the entire UI** */
+  padding: 20px; /* Overall padding from screen edges */
+  box-sizing: border-box;
   font-family: "Poppins", "Roboto", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease; /* For dark mode transition */
+}
+
+/* Main Container for Left and Right Sections */
+.login-container {
+  display: flex;
+  max-width: 1200px; /* Adjust max-width for the combined content */
+  width: 100%; /* Ensure it takes available width within wrapper */
+  background-color: transparent; /* **No background for the container holding sections** */
+  overflow: hidden;
+  gap: 80px; /* **Increased gap between left and right sections** */
+  align-items: stretch; /* **CRITICAL: Makes both flex items (.login-left and .login-right) stretch to the same height. This height is dictated by the taller one, which we'll make .login-right.** */
 }
 
 /* Left Section: Login Form Area */
 .login-left {
-  flex: 0 1 auto; /* Allow shrinking, don't grow, base on content size */
+  flex: 1; /* Allows it to take available space */
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start; /* Align logo to the top, panel will be handled by margins */
-  align-items: center; /* Center children (logo, panel) horizontally */
+  flex-direction: column; /* **Stacks logo, spacers, and form vertically** */
+  align-items: center; /* Center logo and form horizontally within this section */
+  padding: 2rem; /* Internal padding for the left section */
   box-sizing: border-box;
-  /* align-self: stretch; -- This is implicit due to login-container's align-items: stretch */
+  background-color: transparent; /* **No background for the left section** */
 }
 
 .logo {
   width: 120px; /* Adjusted logo size */
-  margin-bottom: 1.5rem; /* Space below logo, can be adjusted */
-  /* align-self: center; -- Handled by login-left's align-items: center */
+  /* No margin-bottom here, the spacer below it handles separation */
 }
 
+/* **SPACER STYLES FOR VERTICAL ALIGNMENT OF THE FORM** */
+.login-panel-spacer-top {
+  flex-grow: 1; /* **This spacer pushes the login-panel DOWN from the logo.** It will grow to take available space above the form. */
+}
+.login-panel-spacer-bottom {
+  flex-grow: 1; /* **This spacer balances the top spacer, effectively centering the login-panel within the .login-left's available vertical space.** */
+}
+
+
 .login-panel {
-  /* background-color: #ffffff; */ /* White card background - REMOVED */
-  padding: 2.5rem;
-  border-radius: 8px;
-  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); */ /* REMOVED for flatter look */
+  background-color: transparent; /* **No background for the form panel** */
+  box-shadow: none; /* **No shadow for the form panel** */
+  padding: 0; /* Remove internal padding if login-left padding is sufficient */
   width: 100%;
   max-width: 420px; /* Max width for the form panel */
   text-align: center;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  margin-top: auto; /* These two will center the panel in the available space below logo */
-  margin-bottom: auto;
+  /* Removed margin-top/bottom: auto here; spacers handle alignment */
 }
 
 h2 {
@@ -161,31 +179,31 @@ mat-form-field {
 }
 
 .social-button {
-  border-radius: 4px !important; /* Soften corners slightly for a modern look */
-  width: 48px !important; /* Fixed width */
-  height: 48px !important; /* Fixed height */
-  padding: 0 !important; /* Remove padding to center icon */
-  min-width: 0 !important; /* Override Material's min-width */
-  display: flex; /* Use flexbox for centering content */
-  justify-content: center; /* Horizontally centers the icon */
-  align-items: center; /* Vertically centers the icon */
-  box-sizing: border-box; /* Include padding/border in element's total width/height */
-  border: 1px solid #ccc; /* Example border, adjust as per your design */
-  background-color: white; /* Example background */
+  border-radius: 4px !important;
+  width: 48px !important;
+  height: 48px !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  background-color: white;
   transition: all 0.2s ease-in-out;
 }
 
 .social-button:hover {
-  background-color: #f0f0f0; /* Subtle hover effect */
+  background-color: #f0f0f0;
   border-color: #999;
-  transform: translateY(-2px); /* Slight lift on hover */
+  transform: translateY(-2px);
 }
 
 .social-button mat-icon {
-  font-size: 24px; /* Set the desired size for the SVG icon */
-  width: 24px; /* Set the desired width for the SVG icon */
-  height: 24px; /* Set the desired height for the SVG icon */
-  color: #333; /* Default icon color */
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+  color: #333;
 }
 
 /* ---------------------------------------------------- */
@@ -193,167 +211,168 @@ mat-form-field {
 /* ---------------------------------------------------- */
 .dark-mode-toggle-container {
   margin-top: 1.5rem;
-  display: flex; /* Use flexbox for horizontal alignment */
-  align-items: center; /* Vertically align items */
-  justify-content: center; /* Center the whole group */
-  gap: 8px; /* Space between the toggle, label, and icon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   font-size: 0.95rem;
-  color: #333; /* Default text color for light mode */
+  color: #333;
   transition: color 0.3s ease;
 }
 
-/* No special internal handle hiding needed; Material default is fine here */
-/* .mat-mdc-slide-toggle .mdc-switch__handle::before,
-.mat-mdc-slide-toggle .mdc-switch__handle::after,
-.mat-mdc-slide-toggle .mdc-switch__handle .mdc-switch__ripple {
-  display: none !important;
-} */
-
-/* Adjustments for the mat-slide-toggle component itself within the flex container */
 .dark-mode-toggle-container mat-slide-toggle {
-  /* No special positioning/overflow needed; flexbox handles flow */
   position: static;
-  overflow: visible; /* Ensure label is visible within toggle */
+  overflow: visible;
 }
 
-/* Style the label text inside the mat-slide-toggle */
 .dark-mode-toggle-container mat-slide-toggle label {
-  color: inherit; /* Inherit color from parent container which changes with theme */
-  white-space: nowrap; /* Prevent text from wrapping */
-  /* You might need to adjust margin-left to position the text relative to the toggle */
-  margin-left: 8px; /* Default margin between toggle thumb and label text */
+  color: inherit;
+  white-space: nowrap;
+  margin-left: 8px;
 }
 
-
-/* Styles for the custom icons (sun and moon) */
 .dark-mode-toggle-container .toggle-icon {
-  font-size: 20px; /* Adjust icon size */
+  font-size: 20px;
   width: 20px;
   height: 20px;
-  line-height: 1; /* Helps vertical alignment */
-  transition: opacity 0.3s ease, transform 0.3s ease; /* Smooth fade and slide */
-  flex-shrink: 0; /* Prevent icon from shrinking on smaller screens */
-  position: relative; /* Make it a positioning context */
-  /* Initial state for both: off-screen and invisible */
+  line-height: 1;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  flex-shrink: 0;
+  position: relative;
   opacity: 0;
-  transform: translateX(-5px); /* Start slightly off-left */
+  transform: translateX(-5px);
 }
 
-/* Icon visibility for Light Mode (when .dark-theme is NOT present) */
 .dark-mode-toggle-container:not(.dark-theme) .sun-icon {
-  opacity: 0; /* Hide sun in light mode */
+  opacity: 0;
   transform: translateX(-5px);
 }
 .dark-mode-toggle-container:not(.dark-theme) .moon-icon {
-  opacity: 1; /* Show moon in light mode */
-  transform: translateX(0); /* Slide into view */
-  color: #FF7800; /* Orange color for moon in light mode, as seen in provided images like image_eaa393.png */
+  opacity: 1;
+  transform: translateX(0);
+  color: #FF7800;
 }
 
-/* Icon visibility for Dark Mode (when .dark-theme IS present) */
 .dark-theme .dark-mode-toggle-container .sun-icon {
-  opacity: 1; /* Show sun in dark mode */
-  transform: translateX(0); /* Slide into view */
-  color: #FF7800; /* Example color for sun in dark mode, matching theme accent */
+  opacity: 1;
+  transform: translateX(0);
+  color: #FF7800;
 }
 .dark-theme .dark-mode-toggle-container .moon-icon {
-  opacity: 0; /* Hide moon in dark mode */
-  transform: translateX(5px); /* Slide slightly off-right */
+  opacity: 0;
+  transform: translateX(5px);
 }
 
-/* Adjustments for dark theme on the entire container and text */
 .dark-theme .dark-mode-toggle-container {
-  color: #e0e0e0; /* Lighter text color for dark mode */
+  color: #e0e0e0;
 }
 
-/* Ensure the toggle's track and handle colors are correctly themed for both modes */
 .mat-mdc-slide-toggle .mdc-switch__track {
-    background-color: #ccc !important; /* Default track color light mode */
+    background-color: #ccc !important;
 }
 .mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__track {
-    background-color: #4A50E0 !important; /* Checked track color light mode (your primary color) */
+    background-color: #4A50E0 !important;
 }
 .mat-mdc-slide-toggle .mdc-switch__handle {
-    background-color: white !important; /* Handle color light mode */
+    background-color: white !important;
 }
 
-/* Dark theme specific track and handle colors */
 .dark-theme .mat-mdc-slide-toggle .mdc-switch__track {
-    background-color: #525252 !important; /* Darker track dark mode */
+    background-color: #525252 !important;
 }
 .dark-theme .mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__track {
-    background-color: #8c9eff !important; /* Checked track dark mode (lighter primary) */
+    background-color: #8c9eff !important;
 }
 .dark-theme .mat-mdc-slide-toggle .mdc-switch__handle {
-    background-color: #f0f0f0 !important; /* Lighter handle for unchecked in dark theme */
+    background-color: #f0f0f0 !important;
 }
 
 
 /* Right Section: Image Gallery / Carousel */
-.login-right { /* This is the gallery-wrapper */
-  flex: 0 1 auto; /* Allow shrinking, don't grow, base on content size */
+.login-right {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 2rem; /* Gap between left and right sections. Value can be adjusted. */
-  overflow: hidden;
+  overflow: hidden; /* Crucial: Content overflowing this div will be hidden */
   position: relative;
-  transition: background-color 0.3s ease;
-  min-height: 400px; /* Fixed minimum height for the gallery container */
-  /* Ensure it has no explicit background or box-shadow itself */
+  /* Adjust min-height based on your tallest image and desired presentation.
+     If the images are very tall, this needs to be large enough to give them room. */
+  min-height: 750px; /* **Increased min-height further to accommodate taller images** */
   background-color: transparent !important;
   box-shadow: none !important;
 }
 
 .carousel-container {
   width: 100%;
-  max-width: 500px; /* Max width of the carousel content */
-  /* height: auto; */ /* Let it fill the min-height of parent or its own content */
-  height: 100%; /* Make carousel container fill the .login-right (gallery-wrapper) */
-  display: flex; /* To center image if it's smaller than container */
-  align-items: center; /* To center image if it's smaller than container */
-  justify-content: center; /* To center image if it's smaller than container */
-  position: relative; /* For image positioning */
+  height: 100%; /* Ensures this container takes the full height of .login-right */
+  display: flex;
+  align-items: center; /* Vertically center the image */
+  justify-content: center; /* Horizontally center the image */
+  position: relative;
+  padding: 20px; /* Adjust padding as needed */
+  box-sizing: border-box;
+  overflow: hidden; /* **Added overflow: hidden here as well for good measure** */
 }
 
 .carousel-image {
-  width: 100%;
-  height: auto; /* Maintain aspect ratio */
-  max-height: 400px; /* Max height for the images - should not exceed min-height of .login-right ideally */
-  object-fit: contain; /* Show entire image, may leave empty space */
+  display: none; /* Hidden by default */
+  width: auto; /* Allow natural width */
+  height: auto; /* Allow natural height */
+  max-width: 100%; /* Image will shrink to 100% of container width if wider */
+  max-height: 100%; /* Image will shrink to 100% of container height if taller */
+  
+  /* **CRITICAL ADJUSTMENT for your tall images:**
+     Choose one of the following `object-fit` strategies: */
+
+  /* Option A: If you want the ENTIRE image visible, even if it leaves empty space (letterboxing/pillarboxing).
+     This is what 'contain' does, and it's generally what's desired for "not going beyond".
+     The "UX problem" with this option might be the empty space. */
+  object-fit: contain;
+  object-position: center;
+
+  /* Option B: (Uncomment this and comment out Option A if you prefer to fill the space,
+     even if it means cropping the top/bottom or sides of the image).
+     This might look better if the empty space from 'contain' is undesirable,
+     but it will crop your images. */
+  /* object-fit: cover; */
+  /* object-position: center; */
+
   border-radius: 8px;
-  /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); */ /* REMOVED shadow from images */
-  display: none; /* Hide all images by default */
-  transition: opacity 0.5s ease-in-out; /* Smooth transition */
+  box-shadow: none;
+  transition: opacity 0.5s ease-in-out;
 }
 
 .carousel-image.active {
-  display: block; /* Show only the active image */
+  display: block;
   opacity: 1;
 }
 
 
-/* --- Dark Theme Styles (for overall login page) --- */
-.login-container.dark-theme {
-  /* background-color: #121212; */ /* Dark background for viewport - REMOVED */
+/* --- Dark Theme Styles --- */
+.login-page-wrapper.dark-theme {
+  background-color: #121212; /* Dark background for viewport in dark mode */
 }
-
-.dark-theme .login-panel {
-  /* background-color: #1e1e1e; */ /* Darker card background - REMOVED */
-  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); */ /* REMOVED for flatter look */
+/* Ensure login-container and sections remain transparent in dark mode */
+.dark-theme .login-container,
+.dark-theme .login-left,
+.dark-theme .login-panel,
+.dark-theme .login-right {
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .dark-theme h2 {
-  color: #e0e0e0; /* Lighter text for dark theme */
+  color: #e0e0e0;
 }
 
 .dark-theme .subtitle {
-  color: #b0b0b0; /* Lighter subtitle text */
+  color: #b0b0b0;
 }
 
 .dark-theme .error-message {
-  background-color: #4a1c1c; /* Darker red for errors */
-  color: #ffcdd2; /* Lighter error text */
+  background-color: #4a1c1c;
+  color: #ffcdd2;
 }
 
 .dark-theme .signup-link {
@@ -362,7 +381,7 @@ mat-form-field {
 
 .dark-theme .signup-link a,
 .dark-theme .forgot-password-link {
-  color: #8c9eff; /* Lighter primary for links */
+  color: #8c9eff;
 }
 
 .dark-theme .divider {
@@ -374,53 +393,49 @@ mat-form-field {
   border-bottom: 1px solid #444;
 }
 
-/* Dark theme for Material components (using !important cautiously) */
-/* Form Fields */
 .dark-theme .mat-mdc-form-field .mdc-text-field--filled,
 .dark-theme .mat-mdc-form-field .mdc-text-field--outlined {
-  background-color: transparent !important; /* Remove default background fill for dark mode */
+  background-color: transparent !important;
 }
 
 .dark-theme .mat-mdc-form-field .mdc-notched-outline__leading,
 .dark-theme .mat-mdc-form-field .mdc-notched-outline__notch,
 .dark-theme .mat-mdc-form-field .mdc-notched-outline__trailing {
-  border-color: rgba(255, 255, 255, 0.3) !important; /* Lighter border for outline */
+  border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 .dark-theme .mat-mdc-form-field:not(.mat-form-field-disabled) .mdc-floating-label {
-  color: rgba(255, 255, 255, 0.6) !important; /* Lighter label color */
+  color: rgba(255, 255, 255, 0.6) !important;
 }
 
 .dark-theme .mat-mdc-input-element {
-  caret-color: #8c9eff !important; /* Lighter caret */
-  color: #e0e0e0 !important; /* Lighter input text */
+  caret-color: #8c9eff !important;
+  color: #e0e0e0 !important;
 }
 
 .dark-theme .mat-mdc-form-field.mat-focused .mdc-floating-label,
 .dark-theme .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
 .dark-theme .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
 .dark-theme .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
-  color: #8c9eff !important; /* Primary color for focused elements */
+  color: #8c9eff !important;
   border-color: #8c9eff !important;
 }
 
 .dark-theme .mat-mdc-form-field .mat-mdc-select-arrow,
 .dark-theme .mat-mdc-form-field .mat-icon {
-  color: rgba(255, 255, 255, 0.7) !important; /* Lighter icons in form fields */
+  color: rgba(255, 255, 255, 0.7) !important;
 }
 
-/* Checkbox */
 .dark-theme .mat-mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate) ~ .mdc-checkbox__background {
-  border-color: rgba(255, 255, 255, 0.7) !important; /* Lighter checkbox border */
+  border-color: rgba(255, 255, 255, 0.7) !important;
 }
 .dark-theme .mat-mdc-checkbox .mdc-checkbox__checkmark {
-  fill: #1e1e1e !important; /* Checkmark color against primary background */
+  fill: #1e1e1e !important;
 }
 .dark-theme .mat-mdc-checkbox label {
   color: #e0e0e0 !important;
 }
 
-/* Stroked buttons (social) */
 .dark-theme .mat-mdc-stroked-button:not(:disabled) {
   border-color: rgba(255, 255, 255, 0.3) !important;
   color: rgba(255, 255, 255, 0.7) !important;
@@ -429,14 +444,13 @@ mat-form-field {
   color: rgba(255, 255, 255, 0.7) !important;
 }
 
-/* Dark mode specific social button styles */
 .dark-theme .social-button {
-  background-color: #444; /* Darker background for dark mode */
+  background-color: #444;
   border-color: #666;
 }
 
 .dark-theme .social-button mat-icon {
-  color: #eee; /* Lighter icon color for dark mode */
+  color: #eee;
 }
 
 .dark-theme .social-button:hover {
@@ -445,35 +459,32 @@ mat-form-field {
 }
 
 
-/* Right section dark theme */
-.dark-theme .login-right { /* This is the gallery-wrapper */
-  /* background-color: #2a2a2a; */ /* Dark background for gallery area - REMOVED */
-  /* Ensure it has no explicit background or box-shadow itself */
-  background-color: transparent !important;
-  box-shadow: none !important;
-}
-
-.dark-theme .carousel-image {
-  /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); */ /* REMOVED Darker shadow for images */
-}
-
-
 /* Responsiveness */
 @media (max-width: 960px) {
+  .login-container {
+    flex-direction: column; /* Stack sections vertically */
+    gap: 20px; /* Adjust gap when stacked */
+    align-items: center; /* Center items when stacked */
+  }
   .login-right {
     display: none; /* Hide image gallery on smaller screens */
-    margin-left: 0; /* Remove margin when it's hidden or stacked */
+    min-height: auto; /* Reset min-height when hidden */
   }
   .login-left {
-    /* padding: 1.5rem; */ /* Padding is on login-container, this could be removed or adjusted if specific smaller screen padding for login-left is needed */
-    /* flex-basis: 100%; */ /* Ensure it takes full width if stacking or if it's the only item */
+    width: 100%; /* Take full width */
+    padding: 1.5rem; /* Adjust padding for smaller screens */
   }
-  .login-container {
-    padding: 1rem; /* Optionally adjust container padding for smaller screens */
+  .login-left .login-panel-spacer-top,
+  .login-left .login-panel-spacer-bottom {
+    flex-grow: 0; /* **Remove flex-grow from spacers when stacked as fixed height no longer applies** */
+    height: 0; /* Collapse spacers */
+  }
+  .login-left .logo {
+    margin-bottom: 1.5rem; /* Adjust spacing */
   }
   .login-panel {
-    padding: 2rem; /* Adjust panel padding */
-    /* Potentially add margin here if login-container padding is not enough separation from edges */
+    margin: 0 auto; /* Center form horizontally when stacked */
+    padding: 2rem; /* Add padding to panel if removed above */
   }
 }
 
@@ -487,34 +498,33 @@ mat-form-field {
   }
   .login-panel {
     padding: 1.5rem;
-    margin: 1rem; /* Add margin to panel itself on very small screens */
+    margin: 1rem auto; /* Add margin to panel itself on very small screens and center */
   }
   .form-options {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem; /* Space between checkbox and link when stacked */
+    gap: 0.5rem;
   }
   .forgot-password-link {
-    align-self: flex-start; /* Align link to start when stacked */
+    align-self: flex-start;
   }
   .social-buttons {
     gap: 0.8rem;
   }
   .social-button {
-    width: 40px !important; /* Smaller size for very small screens */
+    width: 40px !important;
     height: 40px !important;
   }
   .social-button mat-icon {
-    width: 20px; /* Smaller icon for very small screens */
+    width: 20px;
     height: 20px;
   }
-  /* Adjustments for the dark mode toggle on very small screens */
   .dark-mode-toggle-container {
-    font-size: 0.85rem; /* Smaller text */
-    gap: 6px; /* Reduced gap */
+    font-size: 0.85rem;
+    gap: 6px;
   }
   .dark-mode-toggle-container .toggle-icon {
-    font-size: 18px; /* Smaller icons */
+    font-size: 18px;
     width: 18px;
     height: 18px;
   }
