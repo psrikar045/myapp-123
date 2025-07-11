@@ -40,8 +40,9 @@
 }
 
 .logo {
-  width: 7.5rem; /* 120px */
+  width: 11.5rem; /* 120px */
   height: auto; /* Maintain aspect ratio */
+  margin-bottom: 3rem;
 }
 
 .login-panel-spacer-top {
@@ -178,9 +179,9 @@ mat-form-field {
 
 .social-button {
   border-radius: 0.25rem !important; /* 4px - !important kept if Material override needed */
-  width: 3rem !important;  /* 48px */
+  width: 9rem !important;  /* 48px */
   height: 3rem !important; /* 48px */
-  padding: 0 !important;
+  padding: 0 0 0 1rem !important;
   min-width: 0 !important;
   display: flex;
   justify-content: center;
