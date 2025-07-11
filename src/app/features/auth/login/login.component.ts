@@ -8,6 +8,7 @@ import {
   NonNullableFormBuilder, // Using NonNullableFormBuilder
   AbstractControl // Import if needed, though direct control access is often typed
 } from '@angular/forms';
+import { emailOrUsernameValidator } from '../../../core/validators/custom-validators'; // Import the custom validator
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -48,7 +49,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // Explicitly type loginForm as per requirements
   loginForm: FormGroup<{
-    email: FormControl<string>;
+    identifier: FormControl<string>; // Changed from email to identifier
     password: FormControl<string>;
     rememberMe: FormControl<boolean>;
   }>;
@@ -75,7 +76,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     // Initialize the form using NonNullableFormBuilder.
     // The return type of this.fb.group should align with the explicit type of loginForm.
     this.loginForm = this.fb.group({
-      email: this.fb.control('', [Validators.required, Validators.email]),
+      identifier: this.fb.control('', [Validators.required, emailOrUsernameValidator()]), // Changed email to identifier and added custom validator
       password: this.fb.control('', [Validators.required]),
       rememberMe: this.fb.control(false), // NonNullableFormBuilder ensures this is FormControl<boolean>
     });
@@ -123,12 +124,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     );
   }
 
-  // Typed get accessor for email
-  get email(): FormControl<string> {
-    // When loginForm is explicitly typed as FormGroup<{ email: FormControl<string>; ... }>,
-    // this.loginForm.controls.email is already correctly typed as FormControl<string>.
-    // A cast via .get('email') as FormControl<string> would also work but is less direct.
-    return this.loginForm.controls.email;
+  // Typed get accessor for identifier (renamed from email)
+  get identifier(): FormControl<string> {
+    // When loginForm is explicitly typed as FormGroup<{ identifier: FormControl<string>; ... }>,
+    // this.loginForm.controls.identifier is already correctly typed as FormControl<string>.
+    return this.loginForm.controls.identifier;
   }
 
   // Typed get accessor for password
@@ -141,8 +141,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     return this.loginForm.controls.rememberMe;
   }
 
-  clearEmail(): void {
-    this.email.setValue('');
+  clearIdentifier(): void { // Renamed from clearEmail
+    this.identifier.setValue('');
   }
 
   togglePasswordVisibility(): void {
@@ -161,8 +161,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.isLoading = false;
       // Simulate a login error for demonstration
-      if (this.email.value === 'error@example.com') {
-        this.errorMessage = 'Invalid email or password. Please try again.';
+      if (this.identifier.value === 'error@example.com' || this.identifier.value === 'erroruser') { // Updated to use identifier
+        this.errorMessage = 'Invalid identifier or password. Please try again.'; // Updated error message
       } else {
         // Simulate success
         console.log('Login successful:', this.loginForm.value);
