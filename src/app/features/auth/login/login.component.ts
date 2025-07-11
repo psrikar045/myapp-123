@@ -77,7 +77,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   galleryImages = this.GALLERY_IMAGE_PATHS;
   currentImageIndex = 0;
-
+iconsRegistered = false;
   constructor() {
     // Initialize the form using NonNullableFormBuilder.
     // The return type of this.fb.group should align with the explicit type of loginForm.
@@ -94,6 +94,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     // This will prevent it from running during SSR
     if (isPlatformBrowser(this.platformId)) { // <-- Add this check
       this.registerSvgIcons();
+      this.iconsRegistered = true;
     }
   }
 
@@ -111,7 +112,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private registerSvgIcons(): void {
-    const iconPath = 'icons/';
+    const iconPath = '/icons/';
     this.matIconRegistry.addSvgIcon(
       'google',
       this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'google.svg')

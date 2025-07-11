@@ -56,7 +56,7 @@
           <span i18n="@@orLoginWithDivider">Or login with</span>
         </div>
 
-        <div class="social-buttons">
+        <div class="social-buttons" *ngIf="iconsRegistered">
           <button mat-stroked-button class="social-button" aria-label="Login with Google" i18n-aria-label="@@loginWithGoogleAriaLabel">
             <mat-icon svgIcon="google"></mat-icon>
           </button>
@@ -68,7 +68,7 @@
           </button>
         </div>
 
-        <div class="dark-mode-toggle-container">
+        <div class="dark-mode-toggle-container" *ngIf="iconsRegistered">
           <mat-slide-toggle [checked]="(themeService.isDarkMode$ | async)!" (change)="toggleDarkMode()" i18n="@@darkModeLabel">
             Dark Mode
           </mat-slide-toggle>
