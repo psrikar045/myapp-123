@@ -12,16 +12,16 @@
 
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label i18n="@@emailLabel">Email</mat-label>
-            <input matInput type="email" formControlName="email" placeholder="your.email@example.com" i18n-placeholder="@@emailPlaceholder" required autofocus>
-            <button mat-icon-button matSuffix *ngIf="email.value" (click)="clearEmail()" type="button" aria-label="Clear email" i18n-aria-label="@@clearEmailAriaLabel">
+            <mat-label i18n="@@identifierLabel">Email or Username</mat-label>
+            <input matInput formControlName="identifier" placeholder="your.email@example.com or username" i18n-placeholder="@@identifierPlaceholder" required autofocus>
+            <button mat-icon-button matSuffix *ngIf="identifier.value" (click)="clearIdentifier()" type="button" aria-label="Clear email or username" i18n-aria-label="@@clearIdentifierAriaLabel">
               <mat-icon>close</mat-icon>
             </button>
-            <mat-error *ngIf="email.hasError('required')" i18n="@@emailRequiredError">
-              Email is required.
+            <mat-error *ngIf="identifier.hasError('required')" i18n="@@identifierRequiredError">
+              Email or Username is required.
             </mat-error>
-            <mat-error *ngIf="email.hasError('email')" i18n="@@emailInvalidError">
-              A valid email is required.
+            <mat-error *ngIf="identifier.hasError('emailOrUsernameInvalid') && !identifier.hasError('required')" i18n="@@identifierInvalidError">
+              Please enter a valid email or username.
             </mat-error>
           </mat-form-field>
 
