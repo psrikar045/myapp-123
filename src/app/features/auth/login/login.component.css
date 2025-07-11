@@ -1,152 +1,148 @@
-/* General Page Styles */
+/* :host uses html base font size (14px on mobile < 600px, 15px on sm, 16px on md+) */
 :host {
   display: block;
-  /* Base font size is 16px, so 1rem = 16px */
 }
 
-/* Overall Page Wrapper for central alignment and no background */
 .login-page-wrapper {
   min-height: 100vh;
   display: flex;
-  justify-content: center; /* Centers the login-container horizontally */
-  align-items: center; /* Centers the login-container vertically */
-  background-color: transparent;
-  padding: 1.25rem; /* 20px */
+  justify-content: center;
+  align-items: center;
+  background-color: transparent; /* Handled by global styles or parent */
+  padding: 1rem; /* Approx 14px. Was 1.25rem (20px) */
   box-sizing: border-box;
   font-family: "Poppins", "Roboto", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  transition: background-color 0.3s ease; /* For dark mode transition */
+  transition: background-color 0.3s ease;
 }
 
-/* Main Container for Left and Right Sections */
 .login-container {
   display: flex;
-  max-width: 75rem; /* 1200px */
+  flex-direction: column; /* Mobile first: stacked */
   width: 100%;
+  max-width: 26.25rem; /* Approx 420px for the form panel itself on mobile */
   background-color: transparent;
   overflow: hidden;
-  gap: 5rem; /* 80px */
-  align-items: stretch;
+  gap: 1.5rem; /* Approx 21px. Was 1.25rem (20px) then 5rem */
+  align-items: center; /* Center login-left when stacked */
 }
 
-/* Left Section: Login Form Area */
 .login-left {
-  flex: 1;
+  flex: 1; /* Takes available space, but constrained by login-container's max-width on mobile */
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem;
+  padding: 1rem; /* Approx 14px. Was 1.5rem then 2rem */
   box-sizing: border-box;
-  background-color: transparent;
+  width: 100%; /* Ensure it takes full width of parent */
 }
 
 .logo {
-  width: 11.5rem; /* 120px */
-  height: auto; /* Maintain aspect ratio */
-  margin-bottom: 3rem;
+  width: 8.5rem; /* Approx 119px. Was 11.5rem (120px) */
+  height: auto;
+  margin-bottom: 1.5rem; /* Approx 21px. Was 1.5rem then 3rem */
 }
 
-.login-panel-spacer-top {
-  flex-grow: 1;
-}
+.login-panel-spacer-top,
 .login-panel-spacer-bottom {
-  flex-grow: 1;
+  flex-grow: 0; /* No space needed on mobile */
+  height: 0;
 }
 
 .login-panel {
   background-color: transparent;
   box-shadow: none;
-  padding: 0;
+  padding: 1rem; /* Approx 14px. Was 1.5rem or 2rem or 0 */
   width: 100%;
-  max-width: 26.25rem; /* 420px */
   text-align: center;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 h2 {
-  font-size: 1.8rem;
+  font-size: 1.6rem; /* Approx 22.4px. Was 1.6rem then 1.8rem */
   font-weight: 600;
-  margin-bottom: 0.5rem;
-  color: #333; /* Will be themed by .dark-theme rules */
+  margin-bottom: 0.5rem; /* Approx 7px */
+  color: var(--text-color, #333); /* Use CSS var if available, fallback */
 }
 
 .subtitle {
-  font-size: 1rem;
-  color: #666; /* Will be themed by .dark-theme rules */
-  margin-bottom: 2rem;
+  font-size: 0.9rem; /* Approx 12.6px. Was 0.9rem then 1rem */
+  color: var(--text-secondary-color, #666);
+  margin-bottom: 1.5rem; /* Approx 21px. Was 1.5rem then 2rem */
 }
 
-/* Form Elements */
 .full-width {
   width: 100%;
 }
 
-/* Shared styles for form rows if any */
 .form-row {
   display: flex;
-  gap: 1rem; /* Space between items in a row */
-  margin-bottom: 0.5rem; /* Reduced margin if fields already have bottom margin */
+  flex-direction: column; /* Stack by default on mobile */
+  gap: 0; /* Rely on mat-form-field margin */
+  margin-bottom: 0; /* Rely on mat-form-field margin */
 }
 
 .half-width {
-  flex: 1; /* Each takes half of the space in a .form-row */
-  min-width: 0; /* Prevents overflow issues with flex items */
+  flex: 1;
+  min-width: 0;
+  width: 100%; /* Take full width when stacked */
 }
 
 mat-form-field {
-  margin-bottom: 1rem;
+  margin-bottom: 1rem; /* Approx 14px */
 }
 
-.form-options { /* For login form: remember me & forgot password */
+.form-options {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
+  flex-direction: column; /* Stack on mobile */
+  align-items: flex-start;
+  gap: 0.75rem; /* Approx 10.5px. Was 0.75rem */
+  margin-bottom: 1.25rem; /* Approx 17.5px. Was 1.5rem */
+  font-size: 0.85rem; /* Approx 12px. Was 0.9rem */
 }
 
 .forgot-password-link {
-  color: #4A50E0;
+  color: var(--primary-color, #4A50E0);
   text-decoration: none;
   font-weight: 500;
+  align-self: flex-start; /* Ensure it stays left when stacked */
 }
 .forgot-password-link:hover {
   text-decoration: underline;
 }
 
-.interactive-link { /* Class for Sign up / Login links */
-  color: #4A50E0;
+.interactive-link {
+  color: var(--primary-color, #4A50E0);
   text-decoration: none;
   font-weight: 600;
   cursor: pointer;
-  margin-left: 0.3rem;
+  margin-left: 0.2rem; /* Approx 3px. Was 0.3rem */
 }
 .interactive-link:hover {
   text-decoration: underline;
 }
 .dark-theme .interactive-link {
-  color: #8c9eff;
+  color: var(--primary-color-dark, #8c9eff);
 }
 
-.interactive-link-inline { /* For terms and privacy policy links */
-  color: #4A50E0;
+.interactive-link-inline {
+  color: var(--primary-color, #4A50E0);
   text-decoration: underline;
-  font-weight: 500; /* Or normal if preferred */
+  font-weight: 500;
   cursor: pointer;
 }
 .interactive-link-inline:hover {
   text-decoration: underline;
 }
 .dark-theme .interactive-link-inline {
-  color: #8c9eff;
+  color: var(--primary-color-dark, #8c9eff);
 }
 
-
 .login-button, .register-button {
-  padding: 0.8rem 0;
-  font-size: 1rem;
+  padding: 0.7rem 0; /* Approx 10px. Was 0.8rem */
+  font-size: 0.9rem; /* Approx 12.6px. Was 1rem */
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.03125rem; /* 0.5px */
+  letter-spacing: 0.03rem; /* Approx 0.4px. Was 0.03125rem */
   height: auto;
   line-height: normal;
 }
@@ -159,228 +155,145 @@ mat-form-field {
 .error-message {
   background-color: #ffebee;
   color: #c62828;
-  padding: 0.8rem;
-  border-radius: 0.25rem; /* 4px */
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
+  padding: 0.7rem; /* Approx 10px. Was 0.8rem */
+  border-radius: 0.25rem; /* Approx 3.5px */
+  margin-bottom: 1.25rem; /* Approx 17.5px. Was 1.5rem */
+  font-size: 0.85rem; /* Approx 12px. Was 0.9rem */
   text-align: left;
 }
 
-/* Sign Up Link */
-.signup-link {
-  margin-top: 2rem;
-  font-size: 0.9rem;
-  color: #555; /* Will be themed by .dark-theme rules */
+.signup-link, .login-link {
+  margin-top: 1.5rem; /* Approx 21px. Was 2rem or 1.5rem */
+  font-size: 0.85rem; /* Approx 12px. Was 0.9rem */
+  color: var(--text-secondary-color, #555);
+}
+.signup-link a, .login-link a { /* Uses .interactive-link now */
+  margin-left: 0.2rem; /* Approx 3px. Was 0.3rem */
 }
 
-.signup-link a {
-  color: #4A50E0;
-  text-decoration: none;
-  font-weight: 600;
-  margin-left: 0.3rem;
-}
-.signup-link a:hover {
-  text-decoration: underline;
-}
-
-/* Login Link (below register form) */
-.login-link {
-  margin-top: 1.5rem; /* Adjusted from signup-link */
-  font-size: 0.9rem;
-  color: #555;
-}
-.dark-theme .login-link {
-  color: #b0b0b0;
-}
-.login-link a { /* Uses .interactive-link now */
-  margin-left: 0.3rem;
-}
-
-
-/* Terms Checkbox Specific Styles */
 .terms-checkbox-container {
-  margin-bottom: 1.5rem; /* Space before the register button */
-  text-align: left; /* Align checkbox and text to the left */
+  margin-bottom: 1.25rem; /* Approx 17.5px. Was 1.5rem */
+  text-align: left;
 }
-
-.terms-checkbox .mat-mdc-checkbox-layout {
-  /* Adjust if needed, but default alignment of checkbox internal elements is usually fine */
-}
-
-.terms-checkbox span { /* The text next to the checkbox */
-  font-size: 0.85rem;
+.terms-checkbox span {
+  font-size: 0.8rem; /* Approx 11.2px. Was 0.85rem */
   line-height: 1.4;
-  color: #555;
+  color: var(--text-secondary-color, #555);
 }
-.dark-theme .terms-checkbox span {
-  color: #b0b0b0;
-}
-
 .terms-error {
-  display: block; /* Make it take its own line */
-  font-size: 0.75rem; /* Standard mat-error font size */
-  color: var(--mat-form-field-error-text-color, #f44336); /* Material error color */
-  margin-top: 0.3rem; /* Space from checkbox */
-}
-.dark-theme .terms-error {
-  color: var(--mat-form-field-error-text-color-dark, #ff9891); /* Dark theme error color */
+  display: block;
+  font-size: 0.75rem; /* Approx 10.5px. Standard mat-error font size */
+  color: var(--mat-form-field-error-text-color, #f44336);
+  margin-top: 0.25rem; /* Approx 3.5px. Was 0.3rem */
 }
 
-
-/* Divider "Or login with" / "Or sign up with" */
 .divider {
   display: flex;
   align-items: center;
   text-align: center;
-  color: #aaa; /* Will be themed by .dark-theme rules */
-  margin: 2rem 0;
-  font-size: 0.85rem;
+  color: #aaa;
+  margin: 1.5rem 0; /* Approx 21px. Was 2rem */
+  font-size: 0.8rem; /* Approx 11.2px. Was 0.85rem */
 }
-
-.divider::before,
-.divider::after {
+.divider::before, .divider::after {
   content: '';
   flex: 1;
-  border-bottom: 1px solid #e0e0e0; /* Will be themed by .dark-theme rules */
+  border-bottom: 1px solid #e0e0e0;
 }
+.divider:not(:empty)::before { margin-right: .5em; }
+.divider:not(:empty)::after { margin-left: .5em; }
 
-.divider:not(:empty)::before {
-  margin-right: .5em;
-}
-
-.divider:not(:empty)::after {
-  margin-left: .5em;
-}
-
-/* Social Login Buttons */
 .social-buttons {
   display: flex;
   justify-content: center;
-  gap: 1rem; /* 16px */
-  margin-bottom: 1.5rem;
-  margin-top: 1.25rem; /* 20px */
+  gap: 0.75rem; /* Approx 10.5px. Was 1rem then 0.75rem */
+  margin-bottom: 1.25rem; /* Approx 17.5px. Was 1.5rem */
+  margin-top: 1rem; /* Approx 14px. Was 1.25rem */
 }
 
 .social-button {
-  border-radius: 0.25rem !important; /* 4px - !important kept if Material override needed */
-  width: 9rem !important;  /* 48px */
-  height: 3rem !important; /* 48px */
-  padding: 0 0 0 1rem !important;
-  min-width: 0 !important;
+  border-radius: 0.25rem !important; /* Approx 3.5px */
+  width: auto !important; /* Let content define width or set specific min-width */
+  min-width: 2.85rem !important; /* Approx 40px. Was 2.5rem (35px) */
+  height: 2.85rem !important; /* Approx 40px. Was 2.5rem (35px) */
+  padding: 0 0.5rem !important; /* Approx 7px. Adjusted from 0 0 0 1rem */
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  border: 1px solid #ccc; /* Will be themed by .dark-theme rules */
-  background-color: white; /* Will be themed by .dark-theme rules */
+  border: 1px solid #ccc;
+  background-color: white;
   transition: all 0.2s ease-in-out;
 }
-
 .social-button:hover {
-  background-color: #f0f0f0; /* Will be themed by .dark-theme rules */
-  border-color: #999; /* Will be themed by .dark-theme rules */
-  transform: translateY(-0.125rem); /* -2px */
+  background-color: #f0f0f0;
+  border-color: #999;
+  transform: translateY(-0.1rem); /* Approx -1.4px. Was -0.125rem */
 }
-
 .social-button mat-icon {
-  font-size: 1.5rem; /* 24px */
-  width: 1.5rem; /* 24px */
-  height: 1.5rem; /* 24px */
-  color: #333; /* Will be themed by .dark-theme rules */
+  font-size: 1.25rem; /* Approx 17.5px. Was 1.25rem then 1.5rem */
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #333;
 }
 
-/* Dark Mode Toggle */
 .dark-mode-toggle-container {
-  margin-top: 1.5rem;
+  margin-top: 1.25rem; /* Approx 17.5px. Was 1.5rem */
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem; /* 8px */
-  font-size: 0.95rem;
-  color: #333; /* Will be themed by .dark-theme rules */
+  gap: 0.375rem; /* Approx 5px. Was 0.5rem then 0.375rem */
+  font-size: 0.85rem; /* Approx 12px. Was 0.85rem then 0.95rem */
+  color: var(--text-color, #333);
   transition: color 0.3s ease;
 }
-
 .dark-mode-toggle-container mat-slide-toggle {
   position: static;
   overflow: visible;
 }
-
 .dark-mode-toggle-container mat-slide-toggle label {
   color: inherit;
   white-space: nowrap;
-  margin-left: 0.5rem; /* 8px */
+  margin-left: 0.375rem; /* Approx 5px. Was 0.5rem */
 }
-
 .dark-mode-toggle-container .toggle-icon {
-  font-size: 1.25rem; /* 20px */
-  width: 1.25rem; /* 20px */
-  height: 1.25rem; /* 20px */
+  font-size: 1.125rem; /* Approx 16px. Was 1.125rem then 1.25rem */
+  width: 1.125rem;
+  height: 1.125rem;
   line-height: 1;
   transition: opacity 0.3s ease, transform 0.3s ease;
   flex-shrink: 0;
   position: relative;
   opacity: 0;
-  transform: translateX(-0.3125rem); /* -5px */
+  transform: translateX(-0.25rem); /* Approx -3.5px. Was -0.3125rem */
 }
-
-/* Default (Light Mode): Moon visible, Sun hidden */
 .login-container .dark-mode-toggle-container .sun-icon {
   opacity: 0;
-  transform: translateX(-0.3125rem); /* -5px */
+  transform: translateX(-0.25rem);
 }
 .login-container .dark-mode-toggle-container .moon-icon {
   opacity: 1;
   transform: translateX(0);
-  color: #FF7800; /* Active icon color */
+  color: #FF7800;
 }
-
-/* Dark Mode: Sun visible, Moon hidden */
 .login-container.dark-theme .dark-mode-toggle-container .sun-icon {
   opacity: 1;
   transform: translateX(0);
-  color: #FF7800; /* Active icon color */
+  color: #FF7800;
 }
 .login-container.dark-theme .dark-mode-toggle-container .moon-icon {
   opacity: 0;
-  transform: translateX(0.3125rem); /* 5px */
+  transform: translateX(0.25rem); /* Approx 3.5px. Was 0.3125rem */
 }
 
-.dark-theme .dark-mode-toggle-container {
-  color: #e0e0e0;
-}
-
-/* Material Slide Toggle Theme Overrides - !important kept as usually necessary */
-.mat-mdc-slide-toggle .mdc-switch__track {
-    background-color: #ccc !important;
-}
-.mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__track {
-    background-color: #4A50E0 !important;
-}
-.mat-mdc-slide-toggle .mdc-switch__handle {
-    background-color: white !important;
-}
-
-.dark-theme .mat-mdc-slide-toggle .mdc-switch__track {
-    background-color: #525252 !important;
-}
-.dark-theme .mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__track {
-    background-color: #8c9eff !important;
-}
-.dark-theme .mat-mdc-slide-toggle .mdc-switch__handle {
-    background-color: #f0f0f0 !important;
-}
-
-
-/* Right Section: Image Gallery / Carousel */
 .login-right {
+  display: none; /* Hidden by default on mobile */
   flex: 1;
-  display: flex;
   justify-content: center;
   align-items: center;
   overflow: hidden;
   position: relative;
-  min-height: 35rem; /* 560px - Adjusted base min-height, will be responsive */
+  min-height: auto; /* Was 30rem or 35rem */
   background-color: transparent !important;
   box-shadow: none !important;
 }
@@ -392,230 +305,158 @@ mat-form-field {
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: 1.25rem; /* 20px */
+  padding: 1rem; /* Approx 14px. Was 1.25rem */
   box-sizing: border-box;
   overflow: hidden;
+  min-height: 20rem; /* Approx 280px. Add min-height for when it's visible */
 }
-
 .carousel-image {
-  position: absolute; /* Stack images */
+  position: absolute;
   top: 0;
   left: 0;
-  width: 100%; /* Cover container */
-  height: 100%; /* Cover container */
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   object-position: center;
-  border-radius: 0.5rem; /* 8px */
+  border-radius: 0.5rem; /* Approx 7px */
   box-shadow: none;
-  opacity: 0; /* Start transparent */
-  transition: opacity 0.5s ease-in-out; /* Fade transition */
-  display: block; /* Keep as block, manage visibility with opacity */
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  display: block;
 }
-
 .carousel-image.active {
-  opacity: 1; /* Fade in */
-  z-index: 1; /* Ensure active image is on top if needed, though opacity should handle it */
+  opacity: 1;
+  z-index: 1;
 }
 
-
-/* --- Dark Theme Styles (largely unchanged, ensure variables from :host or global are used if possible) --- */
-/* The body.dark-theme rule in styles.css will handle the page background. */
-/* .login-page-wrapper.dark-theme { background-color: #121212; } */ /* This rule was ineffective and is now handled globally */
-
+/* Dark Theme Overrides (mostly unchanged, ensure variables are used) */
 .dark-theme .login-container,
 .dark-theme .login-left,
 .dark-theme .login-panel,
 .dark-theme .login-right {
-  background-color: transparent !important;
-  box-shadow: none !important;
+  background-color: transparent !important; /* Kept from original */
+  box-shadow: none !important; /* Kept from original */
 }
+.dark-theme h2 { color: var(--dark-theme-text-color, #e0e0e0); }
+.dark-theme .subtitle { color: var(--dark-theme-text-secondary-color, #b0b0b0); }
+.dark-theme .error-message { background-color: #4a1c1c; color: #ffcdd2; }
+.dark-theme .signup-link, .dark-theme .login-link { color: var(--dark-theme-text-secondary-color, #b0b0b0); }
+.dark-theme .terms-checkbox span { color: var(--dark-theme-text-secondary-color, #b0b0b0); }
+.dark-theme .divider { color: #777; }
+.dark-theme .divider::before, .dark-theme .divider::after { border-bottom: 1px solid #444; }
+.dark-theme .social-button { background-color: #444; border-color: #666; }
+.dark-theme .social-button mat-icon { color: #eee; }
+.dark-theme .social-button:hover { background-color: #555; border-color: #888; }
+.dark-theme .dark-mode-toggle-container { color: var(--dark-theme-text-color, #e0e0e0); }
 
-.dark-theme h2 {
-  color: #e0e0e0; /* Consider var(--dark-text) if defined globally */
-}
-
-.dark-theme .subtitle {
-  color: #b0b0b0;
-}
-
-.dark-theme .error-message {
-  background-color: #4a1c1c;
-  color: #ffcdd2;
-}
-
-.dark-theme .signup-link {
-  color: #b0b0b0;
-}
-
-.dark-theme .signup-link a,
-.dark-theme .forgot-password-link {
-  color: #8c9eff; /* Consider a CSS variable */
-}
-
-.dark-theme .divider {
-  color: #777;
-}
-
-.dark-theme .divider::before,
-.dark-theme .divider::after {
-  border-bottom: 1px solid #444;
-}
-
-/* Material Form Field Dark Theme Overrides - !important kept as usually necessary */
+/* Material Overrides - Kept as is, assuming necessary for theme */
 .dark-theme .mat-mdc-form-field .mdc-text-field--filled,
-.dark-theme .mat-mdc-form-field .mdc-text-field--outlined {
-  background-color: transparent !important;
-}
-
+.dark-theme .mat-mdc-form-field .mdc-text-field--outlined { background-color: transparent !important; }
 .dark-theme .mat-mdc-form-field .mdc-notched-outline__leading,
 .dark-theme .mat-mdc-form-field .mdc-notched-outline__notch,
-.dark-theme .mat-mdc-form-field .mdc-notched-outline__trailing {
-  border-color: rgba(255, 255, 255, 0.3) !important;
-}
-
-.dark-theme .mat-mdc-form-field:not(.mat-form-field-disabled) .mdc-floating-label {
-  color: rgba(255, 255, 255, 0.6) !important;
-}
-
-.dark-theme .mat-mdc-input-element {
-  caret-color: #8c9eff !important;
-  color: #e0e0e0 !important;
-}
-
+.dark-theme .mat-mdc-form-field .mdc-notched-outline__trailing { border-color: rgba(255, 255, 255, 0.3) !important; }
+.dark-theme .mat-mdc-form-field:not(.mat-form-field-disabled) .mdc-floating-label { color: rgba(255, 255, 255, 0.6) !important; }
+.dark-theme .mat-mdc-input-element { caret-color: #8c9eff !important; color: #e0e0e0 !important; }
 .dark-theme .mat-mdc-form-field.mat-focused .mdc-floating-label,
 .dark-theme .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
 .dark-theme .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
-.dark-theme .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
-  color: #8c9eff !important;
-  border-color: #8c9eff !important;
-}
-
+.dark-theme .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing { color: #8c9eff !important; border-color: #8c9eff !important; }
 .dark-theme .mat-mdc-form-field .mat-mdc-select-arrow,
-.dark-theme .mat-mdc-form-field .mat-icon {
-  color: rgba(255, 255, 255, 0.7) !important;
-}
-
-.dark-theme .mat-mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate) ~ .mdc-checkbox__background {
-  border-color: rgba(255, 255, 255, 0.7) !important;
-}
-.dark-theme .mat-mdc-checkbox .mdc-checkbox__checkmark {
-  fill: #1e1e1e !important; /* Check if this color is intended for dark mode checkmark */
-}
-.dark-theme .mat-mdc-checkbox label {
-  color: #e0e0e0 !important;
-}
-
-.dark-theme .mat-mdc-stroked-button:not(:disabled) {
-  border-color: rgba(255, 255, 255, 0.3) !important;
-  color: rgba(255, 255, 255, 0.7) !important;
-}
-.dark-theme .mat-mdc-stroked-button:not(:disabled) .mat-icon {
-  color: rgba(255, 255, 255, 0.7) !important;
-}
-
-.dark-theme .social-button {
-  background-color: #444;
-  border-color: #666;
-}
-
-.dark-theme .social-button mat-icon {
-  color: #eee;
-}
-
-.dark-theme .social-button:hover {
-  background-color: #555;
-  border-color: #888;
-}
+.dark-theme .mat-mdc-form-field .mat-icon { color: rgba(255, 255, 255, 0.7) !important; }
+.dark-theme .mat-mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate) ~ .mdc-checkbox__background { border-color: rgba(255, 255, 255, 0.7) !important; }
+.dark-theme .mat-mdc-checkbox .mdc-checkbox__checkmark { fill: #1e1e1e !important; }
+.dark-theme .mat-mdc-checkbox label { color: #e0e0e0 !important; }
+.dark-theme .mat-mdc-stroked-button:not(:disabled) { border-color: rgba(255, 255, 255, 0.3) !important; color: rgba(255, 255, 255, 0.7) !important; }
+.dark-theme .mat-mdc-stroked-button:not(:disabled) .mat-icon { color: rgba(255, 255, 255, 0.7) !important; }
+.mat-mdc-slide-toggle .mdc-switch__track { background-color: #ccc !important; }
+.mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__track { background-color: #4A50E0 !important; }
+.mat-mdc-slide-toggle .mdc-switch__handle { background-color: white !important; }
+.dark-theme .mat-mdc-slide-toggle .mdc-switch__track { background-color: #525252 !important; }
+.dark-theme .mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__track { background-color: #8c9eff !important; }
+.dark-theme .mat-mdc-slide-toggle .mdc-switch__handle { background-color: #f0f0f0 !important; }
 
 
-/* Responsiveness */
-/* md breakpoint (Medium / Tablets) */
-@media (max-width: 1279.98px) {
-  .login-container {
-    gap: 2.5rem; /* 40px, reduced gap for medium screens */
-  }
-  .login-right {
-     min-height: 30rem; /* 480px, adjust min-height for medium screens */
-  }
-}
-
-/* sm breakpoint (Small / Mobile Landscape / Small Tablets) */
-@media (max-width: 959.98px) { /* Was 960px */
-  .login-container {
-    flex-direction: column;
-    gap: 1.25rem; /* 20px */
-    align-items: center;
-  }
-  .login-right {
-    display: none;
-    min-height: auto;
-  }
-  .login-left {
-    width: 100%;
-    padding: 1.5rem;
-    order: 1; /* Ensure form is first if needed, though default stacking order is fine */
-  }
-  .login-left .login-panel-spacer-top,
-  .login-left .login-panel-spacer-bottom {
-    flex-grow: 0;
-    height: 0;
-  }
-  .login-left .logo {
-    margin-bottom: 1.5rem;
-  }
-  .login-panel {
-    margin: 0 auto;
-    padding: 2rem;
-    max-width: 100%; /* Allow panel to use more width on smaller screens */
-  }
-}
-
-/* xs breakpoint (Extra Small / Mobile Portrait) */
-@media (max-width: 599.98px) { /* Was 480px */
+/* --- Mobile First Media Queries --- */
+/* sm (min-width: 600px) - Small Tablets. html font-size is 15px */
+@media (min-width: 600px) {
   .login-page-wrapper {
-    padding: 0.75rem; /* 12px */
+    padding: 1.33rem; /* 20px / 15px */
   }
-  h2 {
-    font-size: 1.6rem;
+  .login-container {
+    gap: 2rem; /* Approx 30px. Was 1.5rem */
+    max-width: 30rem; /* Approx 450px. Increase max-width for form panel */
   }
-  .subtitle {
-    font-size: 0.9rem;
-    margin-bottom: 1.5rem;
-  }
-  .login-left {
-    padding: 1rem; /* Further reduce padding on very small screens */
-  }
-  .login-panel {
-    padding: 1.5rem; /* Further reduce panel padding */
-    margin: 1rem auto;
+  .login-left { padding: 1.33rem; /* 20px / 15px */ }
+  .login-panel { padding: 1.33rem; }
+  .logo { width: 9.33rem; /* Approx 140px. Was 8.5rem */ margin-bottom: 2rem; /* Approx 30px */ }
+  h2 { font-size: 1.7rem; /* Approx 25.5px. Was 1.6rem */ }
+  .subtitle { font-size: 0.95rem; /* Approx 14.25px. Was 0.9rem */ margin-bottom: 1.66rem; /* Approx 25px */ }
+  .form-row {
+    flex-direction: row; /* Side-by-side for half-width fields */
+    gap: 1rem; /* Approx 15px. Was 0 */
   }
   .form-options {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem; /* 12px */
-  }
-  .forgot-password-link {
-    align-self: flex-start; /* Already there, good */
-  }
-  .social-buttons {
-    gap: 0.75rem; /* 12px */
+    flex-direction: row; /* Side-by-side */
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem; /* Approx 13.5px. Was 0.85rem */
   }
   .social-button {
-    width: 2.5rem !important;  /* 40px */
-    height: 2.5rem !important; /* 40px */
+    min-width: 3rem !important; /* Approx 45px. Was 2.5rem */
+    height: 3rem !important; /* Approx 45px. Was 2.5rem */
   }
   .social-button mat-icon {
-    font-size: 1.25rem; /* 20px */
-    width: 1.25rem; /* 20px */
-    height: 1.25rem; /* 20px */
+    font-size: 1.5rem; /* Approx 22.5px. Was 1.25rem */
+    width: 1.5rem; height: 1.5rem;
   }
-  .dark-mode-toggle-container {
-    font-size: 0.85rem;
-    gap: 0.375rem; /* 6px */
+}
+
+/* md (min-width: 960px) - Tablets Landscape, Small Laptops. html font-size is 16px */
+@media (min-width: 960px) {
+  .login-page-wrapper {
+    padding: 1.25rem; /* 20px / 16px */
   }
-  .dark-mode-toggle-container .toggle-icon {
-    font-size: 1.125rem; /* 18px */
-    width: 1.125rem; /* 18px */
-    height: 1.125rem; /* 18px */
+  .login-container {
+    flex-direction: row; /* Two columns again */
+    max-width: 75rem; /* 1200px original max-width */
+    gap: 5rem; /* 80px original gap */
+    align-items: stretch; /* Stretch items */
+  }
+  .login-left {
+    padding: 2rem; /* 32px / 16px. Original was 2rem */
+    align-items: center; /* Re-center content if needed */
+  }
+  .login-panel {
+    max-width: 26.25rem; /* 420px original max-width for panel */
+    padding: 0; /* Original padding for panel */
+  }
+  .login-panel-spacer-top,
+  .login-panel-spacer-bottom {
+    flex-grow: 1; /* Restore spacers */
+  }
+  .logo {
+    width: 11.5rem; /* 184px / 16px. Original */
+    margin-bottom: 3rem; /* 48px / 16px. Original */
+  }
+  h2 { font-size: 1.8rem; /* 28.8px / 16px. Original */ }
+  .subtitle { font-size: 1rem; /* 16px. Original */ margin-bottom: 2rem; /* 32px. Original */ }
+  .login-right {
+    display: flex; /* Show image carousel */
+    min-height: 35rem; /* 560px. Original */
+  }
+  .carousel-container {
+    padding: 1.25rem; /* 20px / 16px. Original */
+  }
+  .social-button {
+    width: 9rem !important; /* Original width */
+    padding: 0 0 0 1rem !important; /* Original padding */
+  }
+}
+
+/* lg (min-width: 1280px) - Desktops */
+@media (min-width: 1280px) {
+  /* Further adjustments if needed, e.g., larger fonts or carousel */
+  .login-container {
+    /* max-width: 80rem; /* Example: slightly wider on very large screens */
   }
 }
