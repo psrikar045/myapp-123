@@ -17,7 +17,7 @@
           <form [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
             <mat-form-field appearance="outline" class="full-width">
               <mat-label i18n="@@identifierLabel">Email or Username</mat-label>
-              <input matInput formControlName="identifier" placeholder="your.email@example.com or username" i18n-placeholder="@@identifierPlaceholder" required autofocus>
+              <input matInput formControlName="identifier" placeholder="your.email@example.com or username" i18n-placeholder="@@identifierPlaceholder" required autocomplete="off" autofocus>
               <button mat-icon-button matSuffix *ngIf="loginIdentifierCtrl.value" (click)="clearIdentifier()" type="button" aria-label="Clear email or username" i18n-aria-label="@@clearIdentifierAriaLabel">
                 <mat-icon>close</mat-icon>
               </button>
@@ -31,7 +31,7 @@
 
             <mat-form-field appearance="outline" class="full-width">
               <mat-label i18n="@@passwordLabel">Password</mat-label>
-              <input matInput [type]="hideLoginPassword ? 'password' : 'text'" formControlName="password" placeholder="Enter your password" i18n-placeholder="@@passwordPlaceholder" required>
+              <input matInput [type]="hideLoginPassword ? 'password' : 'text'" formControlName="password" placeholder="Enter your password" i18n-placeholder="@@passwordPlaceholder" required autocomplete="off">
               <button mat-icon-button matSuffix (click)="toggleLoginPasswordVisibility()" type="button" [attr.aria-label]="hideLoginPassword ? 'Show password' : 'Hide password'" [attr.i18n-aria-label]="hideLoginPassword ? '@@showPasswordAriaLabel' : '@@hidePasswordAriaLabel'">
                 <mat-icon>{{hideLoginPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
               </button>
@@ -66,7 +66,7 @@
             <div class="form-row">
               <mat-form-field appearance="outline" class="half-width">
                 <mat-label i18n="@@firstNameLabel">First Name</mat-label>
-                <input matInput formControlName="firstName" placeholder="John" i18n-placeholder="@@firstNamePlaceholder" required>
+                <input matInput formControlName="firstName" placeholder="John" i18n-placeholder="@@firstNamePlaceholder" autocomplete="off" required>
                 <mat-error *ngIf="regFirstNameCtrl.hasError('required')" i18n="@@firstNameRequiredError">
                   First name is required.
                 </mat-error>
@@ -74,7 +74,7 @@
 
               <mat-form-field appearance="outline" class="half-width">
                 <mat-label i18n="@@lastNameLabel">Last Name</mat-label>
-                <input matInput formControlName="lastName" placeholder="Doe" i18n-placeholder="@@lastNamePlaceholder" required>
+                <input matInput formControlName="lastName" placeholder="Doe" i18n-placeholder="@@lastNamePlaceholder" autocomplete="off" required>
                 <mat-error *ngIf="regLastNameCtrl.hasError('required')" i18n="@@lastNameRequiredError">
                   Last name is required.
                 </mat-error>
@@ -84,7 +84,7 @@
             <div class="form-row">
               <mat-form-field appearance="outline" class="half-width">
                 <mat-label i18n="@@emailLabelRegister">Email</mat-label>
-                <input matInput type="email" formControlName="email" placeholder="your.email@example.com" i18n-placeholder="@@emailPlaceholderRegister" required>
+                <input matInput type="email" formControlName="email" placeholder="your.email@example.com" i18n-placeholder="@@emailPlaceholderRegister" autocomplete="off" required>
                 <mat-error *ngIf="regEmailCtrl.hasError('required')" i18n="@@emailRequiredErrorRegister">
                   Email is required.
                 </mat-error>
@@ -95,7 +95,7 @@
 
               <mat-form-field appearance="outline" class="half-width">
                 <mat-label i18n="@@phoneNumberLabel">Phone Number</mat-label>
-                <input matInput type="tel" formControlName="phoneNumber" placeholder="e.g., 1234567890" i18n-placeholder="@@phonePlaceholder" required>
+                <input matInput type="tel" formControlName="phoneNumber" placeholder="e.g., 1234567890" i18n-placeholder="@@phonePlaceholder" autocomplete="off" required>
                 <mat-error *ngIf="regPhoneCtrl.hasError('required')" i18n="@@phoneRequiredError">
                   Phone number is required.
                 </mat-error>
@@ -107,7 +107,7 @@
 
             <mat-form-field appearance="outline" class="full-width">
               <mat-label i18n="@@passwordLabelRegister">Create Password</mat-label>
-              <input matInput [type]="hideRegisterPassword ? 'password' : 'text'" formControlName="password" placeholder="Enter your password" i18n-placeholder="@@passwordPlaceholderRegister" required>
+              <input matInput [type]="hideRegisterPassword ? 'password' : 'text'" formControlName="password" placeholder="Enter your password" i18n-placeholder="@@passwordPlaceholderRegister" autocomplete="off" required>
               <button mat-icon-button matSuffix (click)="toggleRegisterPasswordVisibility()" type="button" [attr.aria-label]="hideRegisterPassword ? 'Show password' : 'Hide password'" [attr.i18n-aria-label]="hideRegisterPassword ? '@@showPasswordAriaLabel' : '@@hidePasswordAriaLabel'">
                 <mat-icon>{{hideRegisterPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
               </button>
@@ -121,7 +121,7 @@
 
             <mat-form-field appearance="outline" class="full-width">
               <mat-label i18n="@@confirmPasswordLabelRegister">Confirm Password</mat-label>
-              <input matInput [type]="hideRegisterConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" placeholder="Re-enter your password" i18n-placeholder="@@confirmPasswordPlaceholderRegister" required>
+              <input matInput [type]="hideRegisterConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" placeholder="Re-enter your password" i18n-placeholder="@@confirmPasswordPlaceholderRegister" autocomplete="off" required>
               <button mat-icon-button matSuffix (click)="toggleRegisterConfirmPasswordVisibility()" type="button" [attr.aria-label]="hideRegisterConfirmPassword ? 'Show password' : 'Hide password'" [attr.i18n-aria-label]="hideRegisterConfirmPassword ? '@@showPasswordAriaLabel' : '@@hidePasswordAriaLabel'">
                 <mat-icon>{{hideRegisterConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
               </button>
@@ -134,9 +134,12 @@
             </mat-form-field>
 
             <div class="terms-checkbox-container">
-              <mat-checkbox formControlName="termsAccepted" class="terms-checkbox" required>
-                <span i18n="@@agreeToTermsPrompt">I agree to all the <a href="#" class="interactive-link-inline" i18n="@@termsLink">Terms</a> and <a href="#" class="interactive-link-inline" i18n="@@privacyPolicyLink">Privacy Policies</a></span>
-              </mat-checkbox>
+            <mat-checkbox formControlName="termsAccepted" class="terms-checkbox" required>
+              <span i18n="@@agreeToTermsPrompt">
+                I agree to all the <a href="#" class="interactive-link-inline">Terms</a> and <a href="#"
+                  class="interactive-link-inline">Privacy Policies</a>
+              </span>
+            </mat-checkbox>
               <mat-error *ngIf="regTermsCtrl.hasError('requiredTrue') && (regTermsCtrl.touched || registerForm.errors?.['mismatch'] === undefined)" class="terms-error" i18n="@@termsRequiredError">
                 You must accept the terms and policies.
               </mat-error>

@@ -6,7 +6,8 @@ import {
   FormGroup, // Explicitly import FormGroup
   FormControl, // Explicitly import FormControl
   NonNullableFormBuilder, // Using NonNullableFormBuilder
-  AbstractControl // Import if needed, though direct control access is often typed
+  AbstractControl, // Import if needed, though direct control access is often typed
+  ValidationErrors
 } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'; // <-- Add this to imports array
 import { Router, RouterModule } from '@angular/router'; // <-- Import Router
@@ -15,7 +16,8 @@ import { emailOrUsernameValidator } from '../../../core/validators/custom-valida
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { catchError, of, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
+import { of } from 'rxjs'; // Correct way to import 'of'
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
