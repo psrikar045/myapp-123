@@ -1,3 +1,364 @@
+:host {
+  /* Define CSS variables for theming within the component's scope */
+  --primary-blue: #4A50E0;
+  --primary-orange-accent: #FF7800;
+
+  --light-text: #333333; /* Clear dark gray for light theme text */
+  --light-background-rgb: 255, 255, 255;
+  --light-background-opacity: rgba(var(--light-background-rgb), 0.95);
+
+  --dark-text: #EEEEEE; /* Clear light gray for dark theme text */
+  --dark-background-rgb: 30, 30, 30;
+  --dark-background-opacity: rgba(var(--dark-background-rgb), 0.95);
+
+  --dark-overlay-bg-rgb: 25, 25, 25;
+
+  /* Theme Toggle Button Specific Variables */
+  --theme-toggle-light-border-color: var(--primary-blue);
+  --theme-toggle-light-bg-color: #FFFFFF;
+  --theme-toggle-light-icon-color: var(--primary-blue); /* Icon color for light theme toggle */
+
+  --theme-toggle-dark-border-color: var(--primary-orange-accent);
+  --theme-toggle-dark-bg-color: rgba(255, 120, 0, 0.2);
+  --theme-toggle-dark-icon-color: var(--primary-orange-accent); /* Icon color for dark theme toggle */
+
+  --toolbar-height: 68px;
+  --toolbar-padding-x: 24px;
+  --toolbar-shadow-light: 0 2px 4px rgba(0, 0, 0, 0.07);
+  --toolbar-shadow-dark: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --button-pill-radius: 9999px;
+  --button-font-weight: 600;
+  --button-padding: 8px 24px;
+
+  /* For rgba usage if needed directly */
+  --primary-blue-rgb: 74, 80, 224;
+  --primary-orange-accent-rgb: 255, 120, 0;
+}
+
+.app-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--toolbar-padding-x);
+  height: var(--toolbar-height);
+  background-color: var(--light-background-opacity);
+  color: var(--light-text); /* CRITICAL: Base text color for light theme */
+  box-shadow: var(--toolbar-shadow-light);
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease-in-out, box-shadow 0.3s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.app-toolbar.dark-mode-toolbar {
+  background-color: var(--dark-background-opacity);
+  color: var(--dark-text); /* CRITICAL: Base text color for dark theme */
+  box-shadow: var(--toolbar-shadow-dark);
+}
+
+/* Ensure all direct text and icons within toolbar inherit themed color */
+/* These rules ensure that elements not specifically styled otherwise get the correct theme color */
+.app-toolbar .mat-button,
+.app-toolbar .mat-icon,
+.app-toolbar .mat-icon-button .mat-icon, /* For icons inside generic icon buttons */
+.app-toolbar span, /* For any direct span elements */
+.app-toolbar .company-logo-icon, /* Ensure logo icon inherits */
+.app-toolbar .mobile-menu-trigger-button .mat-icon /* Ensure hamburger icon inherits */ {
+  color: inherit !important; /* Use !important here carefully if Material styles are too strong */
+                             /* Prefer more specific selectors if possible, but for broad override this might be needed */
+}
+
+
+.app-toolbar.toolbar-hidden {
+  transform: translateY(-100%);
+}
+
+/* Toolbar Sections */
+.toolbar-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Logo Styling */
+.company-logo-button {
+  padding: 0;
+  line-height: 0;
+}
+.company-logo-icon {
+  width: auto;
+  height: 48px;
+  vertical-align: middle;
+}
+
+/* Middle Navigation Links */
+.middle-section .mat-button {
+  margin: 0 8px;
+  font-weight: var(--button-font-weight);
+  letter-spacing: 0.25px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  /* color: inherit; /* Already handled by the broader .app-toolbar .mat-button rule */
+}
+.middle-section .mat-button:hover {
+  color: var(--primary-blue); /* Hover color for light theme */
+  background-color: rgba(var(--primary-blue-rgb), 0.08);
+}
+.app-toolbar.dark-mode-toolbar .middle-section .mat-button:hover {
+  color: #8a8eff; /* Hover color for dark theme */
+  background-color: rgba(var(--primary-blue-rgb), 0.15);
+}
+
+/* Hamburger menu trigger button */
+.mobile-menu-trigger-button .mat-icon {
+  font-size: 30px;
+  width: 30px;
+  height: 30px;
+  /* color: inherit; /* Already handled by broader rule */
+}
+
+/* Theme Toggle Button Styling - ENHANCED */
+.theme-toggle-button {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  min-width: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--theme-toggle-light-bg-color);
+  border: 1px solid var(--theme-toggle-light-border-color);
+  transition: all 0.3s ease-in-out;
+}
+.theme-toggle-button .theme-icon { /* Icon styling for light theme state */
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: var(--theme-toggle-light-icon-color); /* Blue icon */
+}
+
+.app-toolbar.dark-mode-toolbar .theme-toggle-button { /* Dark theme state styling */
+  background-color: var(--theme-toggle-dark-bg-color);
+  border: 1px solid var(--theme-toggle-dark-border-color);
+}
+.app-toolbar.dark-mode-toolbar .theme-toggle-button .theme-icon { /* Icon styling for dark theme state */
+  color: var(--theme-toggle-dark-icon-color); /* Orange icon */
+}
+
+.theme-toggle-button:hover {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+/* Login Button Styling */
+.login-button {
+  background-color: var(--primary-blue);
+  color: white; /* Removed !important, relying on color="primary" removal */
+  border-radius: var(--button-pill-radius);
+  padding: var(--button-padding);
+  font-weight: var(--button-font-weight);
+  line-height: initial;
+  transition: all 0.2s ease-in-out;
+  height: auto;
+}
+.login-button:hover {
+  box-shadow: 0 4px 12px rgba(var(--primary-blue-rgb), 0.3);
+  transform: translateY(-2px);
+  background-color: #3b3fb5;
+}
+
+/* Get Started Button Styling */
+.get-started-button {
+  background-color: var(--primary-blue);
+  color: white; /* Removed !important */
+  border-radius: var(--button-pill-radius);
+  padding: var(--button-padding);
+  font-weight: var(--button-font-weight);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  line-height: initial;
+  transition: all 0.2s ease-in-out;
+  height: auto;
+}
+.get-started-button:hover {
+  box-shadow: 0 4px 12px rgba(var(--primary-blue-rgb), 0.3);
+  background-color: #3b3fb5;
+}
+.get-started-button .get-started-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease-out;
+  color: white;
+}
+.get-started-button:hover .get-started-icon {
+  transform: translateX(4px);
+}
+
+
+/* Mobile Menu Overlay Styling */
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(var(--light-background-rgb), 0.98);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  box-sizing: border-box;
+  color: var(--light-text);
+}
+.mobile-menu-overlay.dark-mode-overlay {
+  background-color: rgba(var(--dark-overlay-bg-rgb), 0.98);
+  color: var(--dark-text);
+}
+.mobile-menu-overlay:where(*ngIf) {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.mobile-menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 0 var(--toolbar-padding-x);
+  height: var(--toolbar-height);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+.mobile-menu-overlay.dark-mode-overlay .mobile-menu-header {
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+.mobile-menu-header .mat-icon-button .mat-icon,
+.mobile-menu-header .company-logo-icon-mobile {
+    color: inherit !important; /* Ensure these inherit color from mobile menu overlay */
+}
+
+.company-logo-button-mobile .company-logo-icon-mobile {
+  width: auto;
+  height: 40px;
+}
+
+.mobile-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 24px 0;
+  overflow-y: auto;
+  flex-grow: 1;
+  box-sizing: border-box;
+}
+
+.mobile-nav-button {
+  width: calc(100% - 48px);
+  max-width: 320px;
+  padding: 18px 0;
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: var(--button-font-weight);
+  margin-bottom: 16px;
+  border-radius: 8px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  color: inherit;
+}
+.mobile-menu-overlay .mobile-nav-button:hover {
+  background-color: rgba(var(--primary-blue-rgb), 0.1);
+  color: var(--primary-blue);
+}
+.mobile-menu-overlay.dark-mode-overlay .mobile-nav-button:hover {
+  background-color: rgba(var(--primary-blue-rgb), 0.2);
+  color: #a0a3ff;
+}
+
+.mobile-menu-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px var(--toolbar-padding-x);
+  gap: 16px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+.mobile-menu-overlay.dark-mode-overlay .mobile-menu-actions {
+  border-top: 1px solid rgba(255,255,255,0.12);
+}
+.mobile-menu-actions .theme-toggle-button-mobile {
+    /* Styles are inherited from .theme-toggle-button */
+}
+.mobile-menu-actions .login-button-mobile {
+    /* Styles are inherited from .login-button */
+}
+.mobile-menu-actions .get-started-button-mobile {
+    /* Styles are inherited from .get-started-button */
+}
+
+
+/* Responsive Design Adjustments */
+@media (max-width: 960px) {
+  :host {
+    --toolbar-padding-x: 16px;
+    --button-padding: 6px 18px;
+  }
+  .company-logo-icon {
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  :host {
+    --toolbar-height: 60px;
+    --toolbar-padding-x: 12px;
+    --button-padding: 6px 14px;
+    --button-font-weight: 500;
+  }
+  .company-logo-icon {
+    height: 36px;
+  }
+   .login-button, .get-started-button {
+    font-size: 0.9em;
+  }
+  .get-started-button {
+    gap: 4px;
+  }
+  .get-started-button .get-started-icon {
+    font-size: 18px; width: 18px; height: 18px;
+  }
+
+  .mobile-menu-header { height: var(--toolbar-height); }
+  .company-logo-button-mobile .company-logo-icon-mobile { height: 32px; }
+  .mobile-nav-button { font-size: 1.1em; padding: 16px 0; margin-bottom: 12px; }
+  .mobile-menu-actions { padding: 16px; gap: 12px; }
+}
+
+/* Remove !important from ::ng-deep if possible, relying on specificity or direct styling */
+:host ::ng-deep .login-button .mdc-button__label,
+:host ::ng-deep .get-started-button .mdc-button__label,
+:host ::ng-deep .login-button-mobile .mdc-button__label,
+:host ::ng-deep .get-started-button-mobile .mdc-button__label {
+  color: white;
+}
+:host ::ng-deep .middle-section .mat-button .mdc-button__label,
+:host ::ng-deep .mobile-nav-button .mdc-button__label {
+  /* color: inherit; /* Let the button itself or its parent define this */
+}
+
 .landing-container {
   display: flex;
   justify-content: center;
