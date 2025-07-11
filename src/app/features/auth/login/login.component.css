@@ -6,7 +6,7 @@
 .login-container {
   min-height: 100vh;
   display: flex;
-  align-items: center; /* Vertically center children */
+  align-items: stretch; /* Stretch children to be same height */
   justify-content: center; /* Horizontally center children */
   padding: 2rem; /* Space from screen edges */
   box-sizing: border-box; /* Include padding in total width/height */
@@ -20,10 +20,16 @@
   flex: 0 1 auto; /* Allow shrinking, don't grow, base on content size */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  /* padding: 2rem; */ /* Padding moved to login-container */
+  justify-content: flex-start; /* Align logo to the top, panel will be handled by margins */
+  align-items: center; /* Center children (logo, panel) horizontally */
   box-sizing: border-box;
+  /* align-self: stretch; -- This is implicit due to login-container's align-items: stretch */
+}
+
+.logo {
+  width: 120px; /* Adjusted logo size */
+  margin-bottom: 1.5rem; /* Space below logo, can be adjusted */
+  /* align-self: center; -- Handled by login-left's align-items: center */
 }
 
 .login-panel {
@@ -35,11 +41,8 @@
   max-width: 420px; /* Max width for the form panel */
   text-align: center;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.logo {
-  width: 120px; /* Adjusted logo size */
-  margin-bottom: 1.5rem;
+  margin-top: auto; /* These two will center the panel in the available space below logo */
+  margin-bottom: auto;
 }
 
 h2 {
@@ -287,33 +290,39 @@ mat-form-field {
 
 
 /* Right Section: Image Gallery / Carousel */
-.login-right {
+.login-right { /* This is the gallery-wrapper */
   flex: 0 1 auto; /* Allow shrinking, don't grow, base on content size */
-  /* background-color: #eef2f7; */ /* Slightly different background for gallery - REMOVE IF TRULY TRANSPARENT BACKGROUND REQUIRED FOR WHOLE PAGE */
   display: flex;
   justify-content: center;
   align-items: center;
-  /* padding: 2rem; */ /* Padding moved to login-container or use margin for spacing */
-  margin-left: 2rem; /* Gap between left and right sections */
-  overflow: hidden; /* Hide parts of non-active images */
-  position: relative; /* For absolute positioning of images if needed */
+  margin-left: 2rem; /* Gap between left and right sections. Value can be adjusted. */
+  overflow: hidden;
+  position: relative;
   transition: background-color 0.3s ease;
+  min-height: 400px; /* Fixed minimum height for the gallery container */
+  /* Ensure it has no explicit background or box-shadow itself */
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .carousel-container {
   width: 100%;
   max-width: 500px; /* Max width of the carousel content */
-  height: auto; /* Adjust as needed, or fixed height */
+  /* height: auto; */ /* Let it fill the min-height of parent or its own content */
+  height: 100%; /* Make carousel container fill the .login-right (gallery-wrapper) */
+  display: flex; /* To center image if it's smaller than container */
+  align-items: center; /* To center image if it's smaller than container */
+  justify-content: center; /* To center image if it's smaller than container */
   position: relative; /* For image positioning */
 }
 
 .carousel-image {
   width: 100%;
   height: auto; /* Maintain aspect ratio */
-  max-height: 400px; /* Max height for the images */
+  max-height: 400px; /* Max height for the images - should not exceed min-height of .login-right ideally */
   object-fit: contain; /* Show entire image, may leave empty space */
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); */ /* REMOVED shadow from images */
   display: none; /* Hide all images by default */
   transition: opacity 0.5s ease-in-out; /* Smooth transition */
 }
@@ -437,12 +446,15 @@ mat-form-field {
 
 
 /* Right section dark theme */
-.dark-theme .login-right {
+.dark-theme .login-right { /* This is the gallery-wrapper */
   /* background-color: #2a2a2a; */ /* Dark background for gallery area - REMOVED */
+  /* Ensure it has no explicit background or box-shadow itself */
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .dark-theme .carousel-image {
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Darker shadow for images */
+  /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); */ /* REMOVED Darker shadow for images */
 }
 
 
