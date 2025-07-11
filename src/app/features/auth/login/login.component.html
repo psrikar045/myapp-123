@@ -1,9 +1,8 @@
 <div class="login-container" [class.dark-theme]="isDarkMode" mat-typography>
   <!-- Left Section: Login Form -->
   <div class="login-left">
+    <img src="images/logo.svg" alt="TravelWise Logo" class="logo" i18n-alt="@@logoAltText">
     <div class="login-panel">
-      <img src="images/logo.svg" alt="TravelWise Logo" class="logo" i18n-alt="@@logoAltText">
-
       <h2 i18n="@@loginTitle">Login</h2>
       <p class="subtitle" i18n="@@loginSubtitle">Login to access your travelwise account</p>
 
@@ -93,8 +92,8 @@
   </div>
 
   <!-- Right Section: Image Gallery / Carousel -->
-  <div class="login-right">
-    <div class="carousel-container">
+  <div class="login-right"> <!-- This will now act as the gallery-wrapper conceptually -->
+    <div class="carousel-container"> <!-- This remains for existing carousel logic -->
       <img *ngFor="let image of galleryImages; let i = index"
            [src]="image"
            alt="Gallery image {{i + 1}}"
