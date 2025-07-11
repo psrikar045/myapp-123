@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core'; // <-- Add PLATFORM_ID
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
-import { Router } from '@angular/router'; // For redirection after login/logout
+import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common'; // <-- Import isPlatformBrowser
 
 // Define interfaces for clarity
 interface LoginResponse {
@@ -24,6 +25,8 @@ export class AuthService {
   private readonly API_BASE_URL = 'http://localhost:3000'; // Example backend URL
   private readonly LOGIN_URL = `${this.API_BASE_URL}/api/auth/login`;
 
+  private readonly platformId = inject(PLATFORM_ID); // <-- Inject PLATFORM_ID
+
   constructor(private http: HttpClient, private router: Router) { }
 
   /**
@@ -37,10 +40,11 @@ export class AuthService {
     return this.http.post<LoginResponse>(this.LOGIN_URL, { identifier, password })
       .pipe(
         tap(response => {
-          // Store JWT and user data securely (localStorage for simplicity here, consider alternatives for production)
-          localStorage.setItem('jwt_token', response.token);
-          localStorage.setItem('user_data', JSON.stringify(response.user));
-          console.log('Login successful, token stored.');
+          if (isPlatformBrowser(this.platformId)) { // <-- Add this check
+            localStorage.setItem('jwt_token', response.token);
+            localStorage.setItem('user_data', JSON.stringify(response.user));
+            console.log('Login successful, token stored.');
+          }
         }),
         catchError(this.handleError)
       );
@@ -51,7 +55,10 @@ export class AuthService {
    * @returns The JWT string or null if not found.
    */
   getToken(): string | null {
-    return localStorage.getItem('jwt_token');
+    if (isPlatformBrowser(this.platformId)) { // <-- Add this check
+      return localStorage.getItem('jwt_token');
+    }
+    return null; // Return null if not in a browser environment
   }
 
   /**
@@ -60,9 +67,14 @@ export class AuthService {
    * @returns True if a token is present, false otherwise.
    */
   isAuthenticated(): boolean {
-    const token = this.getToken();
-    // In a real app, you'd also decode the token and check its expiry (exp claim)
-    return !!token;
+    if (isPlatformBrowser(this.platformId)) { // <-- Add this check
+      const token = this.getToken();
+      // For production, also check token expiry:
+      // const payload = token ? JSON.parse(atob(token.split('.')[1])) : null;
+      // return !!token && payload && payload.exp * 1000 > Date.now();
+      return !!token;
+    }
+    return false; // Not authenticated if not in a browser
   }
 
   /**
@@ -71,16 +83,17 @@ export class AuthService {
    * @returns An array of strings representing user roles, or null if not available.
    */
   getUserRoles(): string[] | null {
-    const userDataString = localStorage.getItem('user_data');
-    if (userDataString) {
-      try {
-        const userData = JSON.parse(userDataString);
-        // Assuming your user_data JSON has a 'roles' array, e.g., { ..., "roles": ["admin", "user"] }
-        if (userData && Array.isArray(userData.roles)) {
-          return userData.roles;
+    if (isPlatformBrowser(this.platformId)) { // <-- Add this check
+      const userDataString = localStorage.getItem('user_data');
+      if (userDataString) {
+        try {
+          const userData = JSON.parse(userDataString);
+          if (userData && Array.isArray(userData.roles)) {
+            return userData.roles;
+          }
+        } catch (e) {
+          console.error('Error parsing user data from localStorage', e);
         }
-      } catch (e) {
-        console.error('Error parsing user data from localStorage', e);
       }
     }
     return null;
@@ -90,9 +103,11 @@ export class AuthService {
    * Clears authentication data and redirects to login.
    */
   logout(): void {
-    localStorage.removeItem('jwt_token');
-    localStorage.removeItem('user_data');
-    this.router.navigate(['/login']); // Redirect to login page
+    if (isPlatformBrowser(this.platformId)) { // <-- Add this check
+      localStorage.removeItem('jwt_token');
+      localStorage.removeItem('user_data');
+    }
+    this.router.navigate(['/login']);
     console.log('Logged out.');
   }
 

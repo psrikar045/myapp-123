@@ -90,7 +90,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     // will produce a FormGroup whose controls are non-nullable and match the types specified
     // (string for empty string initial value, boolean for boolean initial value).
 
-    this.registerSvgIcons();
+    // Move the registerSvgIcons() call into a platform check
+    // This will prevent it from running during SSR
+    if (isPlatformBrowser(this.platformId)) { // <-- Add this check
+      this.registerSvgIcons();
+    }
   }
 
   ngOnInit(): void {
