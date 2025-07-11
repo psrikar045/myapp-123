@@ -1,15 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
 
-/* Defined Breakpoints for reference (desktop-first approach with max-width):
-   - md (Medium / Tablets): @media (max-width: 1279.98px)
-   - sm (Small / Mobile Landscape / Small Tablets): @media (max-width: 959.98px)
-   - xs (Extra Small / Mobile Portrait): @media (max-width: 599.98px)
+/*
+  Mobile-First Breakpoints:
+  - Default styles (target < 600px)
+  - sm (Small screens / Tablets portrait): @media (min-width: 600px)
+  - md (Medium screens / Tablets landscape / Small Laptops): @media (min-width: 960px)
+  - lg (Large screens / Desktops): @media (min-width: 1280px)
+  - xl (Extra Large screens / Large Desktops): @media (min-width: 1920px)
 */
 
-/* Set base font size for consistent rem unit behavior */
+/* Set base font size for consistent rem unit behavior.
+   This is the default for mobile (<600px). Adjustments can be made in media queries.
+*/
 html {
-  font-size: 16px;
-  scroll-behavior: smooth; /* Optional: for smooth scrolling on anchor links */
+  font-size: 14px; /* Adjusted base for smaller screens, 1rem = 14px */
+  scroll-behavior: smooth;
 }
 
 /* Apply box-sizing border-box to all elements and their pseudo-elements */
@@ -27,39 +32,103 @@ body {
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
-  line-height: 1.5; /* Add a sensible default line-height for readability */
-  -webkit-font-smoothing: antialiased; /* Improve font rendering on WebKit */
-  -moz-osx-font-smoothing: grayscale; /* Improve font rendering on Firefox */
+  line-height: 1.6; /* Slightly increased line-height for better readability on mobile */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #fff; /* Default light theme background */
+  color: #333; /* Default light theme text color */
 }
 
 /* Basic responsive media elements */
 img,
 svg,
 picture,
-video {
+video,
+canvas, /* Added canvas for responsiveness */
+iframe { /* Added iframe for responsiveness */
   max-width: 100%;
   height: auto;
   display: block; /* Prevents bottom margin issues with images in containers */
 }
 
 /* Optional: Remove default margin from common elements for easier layout control */
-body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd {
+body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, ul, ol {
   margin: 0;
 }
 
 /* Optional: Basic list styling reset */
-ul[role='list'],
-ol[role='list'] {
+ul,
+ol {
   list-style: none;
   padding: 0;
-  margin: 0;
+  /* margin: 0; /* Already covered by the general reset above */
 }
 
 /* Further global typography or link styling can be added here as needed */
 a {
-  color: inherit; /* Optional: make links inherit text color by default */
-  text-decoration: none; /* Optional: remove underlines by default */
+  color: inherit;
+  text-decoration: none;
+  /* Consider adding focus styles for accessibility */
 }
+a:hover {
+  text-decoration: underline; /* Optional: common hover effect */
+}
+
+/* Container utility class for consistent max-width and padding */
+.container {
+  width: 100%;
+  max-width: 1200px; /* Default max-width, can be adjusted */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;  /* 14px based on new html font-size */
+  padding-right: 1rem; /* 14px */
+}
+
+
+/* Typography adjustments for different breakpoints */
+
+/* sm: Small screens / Tablets portrait (min-width: 600px) */
+@media (min-width: 600px) {
+  html {
+    font-size: 15px; /* Increase base font size slightly, 1rem = 15px */
+  }
+  .container {
+    padding-left: 1.5rem; /* ~22.5px */
+    padding-right: 1.5rem; /* ~22.5px */
+  }
+}
+
+/* md: Medium screens / Tablets landscape / Small Laptops (min-width: 960px) */
+@media (min-width: 960px) {
+  html {
+    font-size: 16px; /* Standard base font size, 1rem = 16px */
+  }
+  body {
+    line-height: 1.7; /* Can afford more line height on larger screens */
+  }
+  .container {
+    padding-left: 2rem; /* 32px */
+    padding-right: 2rem; /* 32px */
+  }
+}
+
+/* lg: Large screens / Desktops (min-width: 1280px) */
+@media (min-width: 1280px) {
+  /* Potential for larger font sizes or wider containers if design calls for it */
+  /* html { font-size: 17px; } */
+  .container {
+    max-width: 1400px; /* Example: Wider container for large screens */
+  }
+}
+
+/* xl: Extra Large screens / Large Desktops (min-width: 1920px) */
+@media (min-width: 1920px) {
+  /* html { font-size: 18px; } */
+  .container {
+    max-width: 1600px; /* Example: Even wider container */
+  }
+}
+
 
 /* Utility class for visually hidden elements (for accessibility) */
 .sr-only {
@@ -76,8 +145,12 @@ a {
 
 /* Dark Theme Styles */
 body.dark-theme {
-  background-color: #121212; /* A common dark background color */
-  color: #e0e0e0; /* A light text color for readability */
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+body.dark-theme a:hover {
+  /* Adjust link hover color for dark theme if needed */
 }
 
 /* Ensure Material components have a contrasting background when body is dark.
@@ -85,13 +158,27 @@ body.dark-theme {
    if a full Material dark theme isn't used. */
 body.dark-theme .mat-mdc-card,
 body.dark-theme .mat-mdc-dialog-container,
-body.dark-theme .mat-mdc-snack-bar-container {
-  background-color: #2a2a2a; /* Slightly lighter than body for cards/dialogs */
+body.dark-theme .mat-mdc-snack-bar-container,
+body.dark-theme .mat-mdc-menu-panel { /* Added for menus */
+  background-color: #2a2a2a;
   color: #e0e0e0;
 }
 
+body.dark-theme .mat-mdc-text-field-wrapper, /* For form fields */
+body.dark-theme .mat-mdc-select-value,
+body.dark-theme .mat-mdc-option {
+    /* color: #e0e0e0; /* Ensure text in form fields is light */
+}
 /* Example for input fields if not using a full Material dark theme */
 body.dark-theme .mat-mdc-form-field-focus-overlay,
 body.dark-theme .mat-mdc-form-field-infix {
   /* Adjust text color for inputs if needed */
+}
+
+/* Add more specific dark theme adjustments for components as needed */
+body.dark-theme .mat-mdc-button.mat-primary,
+body.dark-theme .mat-mdc-raised-button.mat-primary,
+body.dark-theme .mat-mdc-fab.mat-primary,
+body.dark-theme .mat-mdc-mini-fab.mat-primary {
+  /* Example: Adjust primary button colors for dark theme if default Material theme isn't sufficient */
 }

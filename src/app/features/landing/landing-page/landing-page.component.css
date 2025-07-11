@@ -1,39 +1,65 @@
-/* Toolbar CSS (Moved from toolbar.component.css) */
-/* Base font size: 16px, so 1rem = 16px */
+/* Using global html font-size for rem, e.g., 1rem = 14px on mobile by default */
 :host {
-  /* Define CSS variables for theming within the component's scope */
   --primary-blue: #4A50E0;
   --primary-orange-accent: #FF7800;
-
-  --light-text: #333333; /* Clear dark gray for light theme text */
+  --light-text: #333333;
   --light-background-rgb: 255, 255, 255;
   --light-background-opacity: rgba(var(--light-background-rgb), 0.95);
-
-  --dark-text: #EEEEEE; /* Clear light gray for dark theme text */
+  --dark-text: #EEEEEE;
   --dark-background-rgb: 30, 30, 30;
   --dark-background-opacity: rgba(var(--dark-background-rgb), 0.95);
 
-  /* Theme Toggle Button Specific Variables */
   --theme-toggle-light-border-color: var(--primary-blue);
   --theme-toggle-light-bg-color: #FFFFFF;
-  --theme-toggle-light-icon-color: var(--primary-blue); /* Icon color for light theme toggle */
-
+  --theme-toggle-light-icon-color: var(--primary-blue);
   --theme-toggle-dark-border-color: var(--primary-orange-accent);
   --theme-toggle-dark-bg-color: rgba(255, 120, 0, 0.2);
-  --theme-toggle-dark-icon-color: var(--primary-orange-accent); /* Icon color for dark theme toggle */
+  --theme-toggle-dark-icon-color: var(--primary-orange-accent);
 
-  --toolbar-height: 4.25rem; /* 68px */
-  --toolbar-padding-x: 1.5rem; /* 24px */
-  --toolbar-shadow-light: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.07); /* 0 2px 4px */
-  --toolbar-shadow-dark: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3); /* 0 2px 8px */
-  --button-pill-radius: 9999px; /* Effectively a pill shape */
-  --button-font-weight: 600;
-  --button-padding: 0.5rem 1.5rem; /* 8px 24px */
+  /* Default (Mobile-first) values */
+  --toolbar-height: 3.75rem; /* 52.5px at 14px base, was 60px */
+  --toolbar-padding-x: 0.75rem; /* ~10.5px, was 12px */
+  --button-font-weight: 500;
+  --button-padding: 0.375rem 0.875rem; /* ~5px 12px, was 6px 14px */
 
-  /* For rgba usage if needed directly */
+  --toolbar-shadow-light: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.07);
+  --toolbar-shadow-dark: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.3);
+  --button-pill-radius: 9999px;
+
   --primary-blue-rgb: 74, 80, 224;
   --primary-orange-accent-rgb: 255, 120, 0;
+
+  --sidenav-width: 250px; /* Width for the sidenav */
 }
+
+.sidenav-container {
+  height: 100%;
+}
+
+.app-sidenav {
+  width: var(--sidenav-width);
+  background-color: var(--light-background-opacity); /* Default light theme */
+  color: var(--light-text);
+}
+:host-context(.dark-theme) .app-sidenav {
+  background-color: var(--dark-background-opacity);
+  color: var(--dark-text);
+}
+.sidenav-toolbar {
+  background-color: transparent; /* Or a subtle color */
+  color: inherit;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+:host-context(.dark-theme) .sidenav-toolbar {
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.sidenav-toolbar .spacer {
+  flex: 1 1 auto;
+}
+.app-sidenav .mat-mdc-list-item .mdc-list-item__primary-text {
+  color: inherit !important; /* Ensure nav items inherit color */
+}
+
 
 .app-toolbar {
   display: flex;
@@ -45,45 +71,48 @@
   color: var(--light-text);
   box-shadow: var(--toolbar-shadow-light);
   transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease-in-out, box-shadow 0.3s ease;
-  position: fixed;
+  position: fixed; /* Keep it fixed */
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000;
 }
-
 .app-toolbar.dark-mode-toolbar {
   background-color: var(--dark-background-opacity);
   color: var(--dark-text);
   box-shadow: var(--toolbar-shadow-dark);
 }
-
-/* Ensure all direct text and icons within toolbar inherit themed color */
 .app-toolbar .mat-button,
 .app-toolbar .mat-icon,
 .app-toolbar .mat-icon-button .mat-icon,
 .app-toolbar span,
 .app-toolbar .company-logo-icon {
-  color: inherit !important; /* Use !important here carefully if Material styles are too strong */
+  color: inherit !important; /* Review if !important is truly needed */
 }
-
 .app-toolbar.toolbar-hidden {
   transform: translateY(-100%);
 }
 
-/* Toolbar Sections */
 .toolbar-section {
   display: flex;
   align-items: center;
-  gap: 1rem; /* 16px */
+  gap: 0.5rem; /* ~7px, was 8px */
+}
+.toolbar-spacer {
+  flex-grow: 1;
+}
+
+/* Hamburger Menu Button */
+.menu-button {
+  /* Styles for hamburger menu button if needed, beyond mat-icon-button defaults */
 }
 
 /* Logo Styling */
 .company-logo-button {
   padding: 0;
   line-height: 0;
-  width: 3.75rem; /* 60px */
-  height: 3.75rem; /* 60px */
+  width: 2.75rem; /* ~38.5px, was 44px */
+  height: 2.75rem; /* ~38.5px, was 44px */
   min-width: 0;
   border-radius: 50%;
   display: flex;
@@ -91,39 +120,35 @@
   justify-content: center;
   overflow: hidden;
   background-color: transparent;
-  box-shadow: 0 0 0 rgba(0,0,0,0);
+  box-shadow: none;
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
-
 .company-logo-button:hover {
-    background-color: rgba(var(--primary-blue-rgb), 0.05);
-    box-shadow: 0 0 0.5rem rgba(var(--primary-blue-rgb), 0.2); /* 8px */
+  background-color: rgba(var(--primary-blue-rgb), 0.05);
+  box-shadow: 0 0 0.5rem rgba(var(--primary-blue-rgb), 0.2);
 }
 .app-toolbar.dark-mode-toolbar .company-logo-button:hover {
-    background-color: rgba(var(--primary-blue-rgb), 0.1);
-    box-shadow: 0 0 0.625rem rgba(var(--primary-blue-rgb), 0.4); /* 10px */
+  background-color: rgba(var(--primary-blue-rgb), 0.1);
+  box-shadow: 0 0 0.625rem rgba(var(--primary-blue-rgb), 0.4);
 }
-
 .company-logo-icon {
   width: 90%;
   height: 90%;
   object-fit: contain;
   vertical-align: middle;
   transition: transform 0.2s ease-in-out;
-  color: inherit;
 }
 .company-logo-button:hover .company-logo-icon {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
-
-/* Middle Navigation Links */
+/* Middle Navigation Links (for desktop) */
 .middle-section .mat-button {
-  margin: 0 0.5rem; /* 8px */
+  margin: 0 0.25rem; /* ~3.5px */
   font-weight: var(--button-font-weight);
-  letter-spacing: 0.015625rem; /* 0.25px */
-  padding: 0.375rem 0.5rem; /* 6px 8px */
-  border-radius: 0.25rem; /* 4px */
+  letter-spacing: 0.015rem;
+  padding: 0.375rem 0.5rem; /* ~5px 7px */
+  border-radius: 0.25rem; /* ~3.5px */
   transition: color 0.2s ease, background-color 0.2s ease;
 }
 .middle-section .mat-button:hover {
@@ -135,27 +160,26 @@
   background-color: rgba(var(--primary-blue-rgb), 0.15);
 }
 
-/* Theme Toggle Button Styling - ENHANCED */
+/* Theme Toggle Button Styling */
 .theme-toggle-button {
   border-radius: 50%;
-  width: 2.5rem; /* 40px */
-  height: 2.5rem; /* 40px */
+  width: 2.25rem; /* ~31.5px, was 36px */
+  height: 2.25rem; /* ~31.5px, was 36px */
   min-width: 0;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--theme-toggle-light-bg-color);
-  border: 1px solid var(--theme-toggle-light-border-color); /* Border width could be rem too, but 1px is often fine */
+  border: 1px solid var(--theme-toggle-light-border-color);
   transition: all 0.3s ease-in-out;
 }
 .theme-toggle-button .theme-icon {
-  font-size: 1.25rem; /* 20px */
-  width: 1.25rem; /* 20px */
-  height: 1.25rem; /* 20px */
+  font-size: 1.125rem; /* ~16px, was 18px */
+  width: 1.125rem;
+  height: 1.125rem;
   color: var(--theme-toggle-light-icon-color);
 }
-
 .app-toolbar.dark-mode-toolbar .theme-toggle-button {
   background-color: var(--theme-toggle-dark-bg-color);
   border: 1px solid var(--theme-toggle-dark-border-color);
@@ -163,178 +187,173 @@
 .app-toolbar.dark-mode-toolbar .theme-toggle-button .theme-icon {
   color: var(--theme-toggle-dark-icon-color);
 }
-
 .theme-toggle-button:hover {
-  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.2); /* 8px */
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.2);
   transform: scale(1.05);
 }
 
-/* Login Button Styling */
-.login-button {
-  background-color: var(--primary-blue);
-  color: white;
-  border-radius: var(--button-pill-radius);
+/* Login & Get Started Buttons */
+.login-button, .get-started-button {
+  font-size: 0.875rem; /* ~12px, was 0.875rem relative to 16px */
   padding: var(--button-padding);
   font-weight: var(--button-font-weight);
-  line-height: initial; /* Or use a specific rem value if needed */
+  border-radius: var(--button-pill-radius);
+  line-height: initial;
   transition: all 0.2s ease-in-out;
-  height: auto; /* Or specify if fixed height is desired, using rem */
+  height: auto;
+  background-color: var(--primary-blue); /* Common style */
+  color: white; /* Common style */
 }
-.login-button:hover {
-  box-shadow: 0 0.25rem 0.75rem rgba(var(--primary-blue-rgb), 0.3); /* 0 4px 12px */
-  transform: translateY(-0.125rem); /* -2px */
+.login-button:hover, .get-started-button:hover {
+  box-shadow: 0 0.25rem 0.75rem rgba(var(--primary-blue-rgb), 0.3);
+  transform: translateY(-0.125rem); /* ~ -1.75px */
   background-color: #3b3fb5;
 }
-
-/* Get Started Button Styling */
 .get-started-button {
-  background-color: var(--primary-blue);
-  color: white;
-  border-radius: var(--button-pill-radius);
-  padding: var(--button-padding);
-  font-weight: var(--button-font-weight);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.375rem; /* 6px */
-  line-height: initial; /* Or use a specific rem value if needed */
-  transition: all 0.2s ease-in-out;
-  height: auto; /* Or specify if fixed height is desired, using rem */
-}
-.get-started-button:hover {
-  box-shadow: 0 0.25rem 0.75rem rgba(var(--primary-blue-rgb), 0.3); /* 0 4px 12px */
-  background-color: #3b3fb5;
+  gap: 0.25rem; /* ~3.5px, was 4px */
 }
 .get-started-button .get-started-icon {
-  font-size: 1.25rem; /* 20px */
-  width: 1.25rem; /* 20px */
-  height: 1.25rem; /* 20px */
+  font-size: 1.125rem; /* ~16px, was 18px */
+  width: 1.125rem;
+  height: 1.125rem;
   transition: transform 0.2s ease-out;
   color: white;
 }
 .get-started-button:hover .get-started-icon {
-  transform: translateX(0.25rem); /* 4px */
+  transform: translateX(0.25rem); /* ~3.5px */
+}
+.get-started-button span {
+  /* Default: visible. Hide if needed on very small screens via another media query if required */
 }
 
-/* Responsive Design Adjustments */
-/* md breakpoint (Medium / Tablets) - No specific rules added yet, but available if needed */
-/* @media (max-width: 1279.98px) { ... } */
-
-/* sm breakpoint (Small / Mobile Landscape / Small Tablets) */
-@media (max-width: 959.98px) { /* Was 960px */
-  :host {
-    --toolbar-padding-x: 1rem; /* 16px */
-    --button-padding: 0.375rem 1.125rem; /* 6px 18px */
-    /* Potentially reduce --toolbar-height for sm screens if needed */
-    /* --toolbar-height: 4rem; */ /* Example: 64px */
-  }
-  .toolbar-section {
-    gap: 0.75rem; /* 12px, reduced gap for smaller screens */
-  }
-  .company-logo-button {
-    width: 3.25rem; /* 52px */
-    height: 3.25rem; /* 52px */
-  }
-  /* .company-logo-icon can remain 90% as it's relative to the button */
-
-  /* The middle section (nav links) should be hidden on mobile */
-  .middle-section {
-    display: none; /* This is already in place and correct */
-  }
-
-  .login-button, .get-started-button {
-    /* Slightly reduce font size if needed, or rely on padding adjustments */
-    /* font-size: 0.9rem; */ /* Example */
-  }
-}
-
-/* xs breakpoint (Extra Small / Mobile Portrait) */
-@media (max-width: 599.98px) { /* Was 480px */
-  :host {
-    --toolbar-height: 3.75rem; /* 60px */
-    --toolbar-padding-x: 0.75rem; /* 12px */
-    --button-padding: 0.375rem 0.875rem; /* 6px 14px */
-    --button-font-weight: 500; /* Already present, kept */
-  }
-  .toolbar-section {
-    gap: 0.5rem; /* 8px, further reduced gap */
-  }
-  .company-logo-button {
-    width: 2.75rem; /* 44px */
-    height: 2.75rem; /* 44px */
-  }
-  .theme-toggle-button {
-    width: 2.25rem; /* 36px */
-    height: 2.25rem; /* 36px */
-  }
-  .theme-toggle-button .theme-icon {
-    font-size: 1.125rem; /* 18px */
-    width: 1.125rem; /* 18px */
-    height: 1.125rem; /* 18px */
-  }
-   .login-button, .get-started-button {
-    font-size: 0.875rem; /* Replaced 0.9em with rem, slightly smaller for xs */
-    padding: 0.375rem 0.75rem; /* Adjusted padding for smaller buttons */
-  }
-  .get-started-button {
-    gap: 0.25rem; /* 4px */
-  }
-  .get-started-button .get-started-icon {
-    font-size: 1.125rem; /* 18px */
-    width: 1.125rem; /* 18px */
-    height: 1.125rem; /* 18px */
-  }
-  .get-started-button span {
-    /* Optionally hide "Get Started" text and only show icon if space is very limited */
-    /* display: none; */
-  }
-}
-
-/* Remove !important from ::ng-deep if possible, relying on specificity or direct styling */
+/* Remove ::ng-deep if possible by targeting Material's inner elements more specifically if necessary */
 :host ::ng-deep .login-button .mdc-button__label,
 :host ::ng-deep .get-started-button .mdc-button__label {
-  color: white; /* Kept as is for now, assuming it's necessary for Material button internals */
-}
-:host ::ng-deep .middle-section .mat-button .mdc-button__label {
-  /* color: inherit; /* Let the button itself or its parent define this */
+  color: white;
 }
 
+
+/* Landing Container */
 .landing-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: calc(100vh - var(--toolbar-height)); /* Adjusted to account for toolbar height */
-  padding-top: var(--toolbar-height); /* Add padding to prevent content from being hidden behind fixed toolbar */
+  flex-direction: column; /* Stack sections vertically */
+  align-items: center; /* Center sections if they don't take full width */
+  /* height: calc(100vh - var(--toolbar-height)); */ /* Commented out: page will scroll */
+  padding-top: var(--toolbar-height);
   text-align: center;
 }
-
 .landing-container h1 {
-  font-size: 2.5rem; /* Default for larger screens */
-  color: var(--light-text); /* Use CSS variable for consistency, assuming light mode default */
-  /* Dark mode color for h1 should be handled if .landing-container or a parent gets a dark-mode class */
-  /* For example:
-  .dark-mode .landing-container h1 {
+  font-size: 1.75rem; /* ~24.5px, mobile first */
+  color: var(--light-text);
+  padding: 1rem; /* Add some padding around h1 */
+  margin-bottom: 1rem;
+}
+:host-context(.dark-theme) .landing-container h1 {
     color: var(--dark-text);
-  }
-  */
-  padding: 0 1rem; /* Add some horizontal padding for text on smaller screens */
+}
+.landing-container section { /* For placeholder sections */
+  width: 100%;
+  padding: 2rem 1rem; /* Add padding to sections */
+  box-sizing: border-box;
+}
+.landing-container section h2 {
+  font-size: 1.5rem; /* ~21px */
+  margin-bottom: 1rem;
 }
 
-/* Responsive font size for h1 */
-@media (max-width: 1279.98px) { /* md */
+
+/* --- Mobile First Media Queries --- */
+/* sm breakpoint (min-width: 600px) - Small screens / Tablets portrait */
+/* Global html font-size is 15px here, so 1rem = 15px */
+@media (min-width: 600px) {
+  :host {
+    --toolbar-height: 4rem; /* 60px */
+    --toolbar-padding-x: 1rem; /* 15px */
+    --button-padding: 0.375rem 1.125rem; /* ~5.6px 17px */
+  }
+  .toolbar-section {
+    gap: 0.75rem; /* ~11px */
+  }
+  .company-logo-button {
+    width: 3.25rem; /* ~49px */
+    height: 3.25rem; /* ~49px */
+  }
+  .theme-toggle-button {
+    width: 2.5rem; /* ~37.5px */
+    height: 2.5rem; /* ~37.5px */
+  }
+  .theme-toggle-button .theme-icon {
+    font-size: 1.25rem; /* ~19px */
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+  .login-button, .get-started-button {
+    font-size: 0.9rem; /* ~13.5px */
+  }
+  .get-started-button {
+    gap: 0.3rem; /* ~4.5px */
+  }
+  .get-started-button .get-started-icon {
+    font-size: 1.2rem; /* ~18px */
+    width: 1.2rem;
+    height: 1.2rem;
+  }
   .landing-container h1 {
-    font-size: 2.25rem;
+    font-size: 2rem; /* 30px */
+  }
+   .landing-container section h2 {
+    font-size: 1.75rem; /* ~26px */
   }
 }
 
-@media (max-width: 959.98px) { /* sm */
+/* md breakpoint (min-width: 960px) - Medium screens / Tablets landscape / Small Laptops */
+/* Global html font-size is 16px here, so 1rem = 16px */
+@media (min-width: 960px) {
+  :host {
+    --toolbar-height: 4.25rem; /* ~68px */
+    --toolbar-padding-x: 1.5rem; /* 24px */
+    --button-font-weight: 600; /* Restore original font weight */
+    --button-padding: 0.5rem 1.5rem; /* 8px 24px */
+  }
+  .toolbar-section {
+    gap: 1rem; /* 16px */
+  }
+  /* Middle section (desktop nav) becomes visible here via *ngIf, specific styling if needed */
+  .middle-section .mat-button {
+    margin: 0 0.5rem; /* 8px */
+    padding: 0.375rem 0.5rem; /* 6px 8px */
+  }
+  .login-button, .get-started-button {
+    font-size: 1rem; /* 16px */
+  }
+  .get-started-button {
+    gap: 0.375rem; /* 6px */
+  }
+  .get-started-button .get-started-icon {
+    font-size: 1.25rem; /* 20px */
+    width: 1.25rem;
+    height: 1.25rem;
+  }
   .landing-container h1 {
-    font-size: 2rem;
+    font-size: 2.25rem; /* 36px */
+  }
+  .landing-container section h2 {
+    font-size: 2rem; /* 32px */
   }
 }
 
-@media (max-width: 599.98px) { /* xs */
+/* lg breakpoint (min-width: 1280px) - Large screens / Desktops */
+@media (min-width: 1280px) {
   .landing-container h1 {
-    font-size: 1.75rem;
+    font-size: 2.5rem; /* 40px */
+  }
+  .landing-container section {
+    padding: 3rem 2rem; /* More padding on larger screens */
+  }
+   .landing-container section h2 {
+    font-size: 2.25rem; /* 36px */
   }
 }
