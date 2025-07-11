@@ -324,22 +324,24 @@ mat-form-field {
   transform: translateX(-0.3125rem); /* -5px */
 }
 
-.dark-mode-toggle-container:not(.dark-theme) .sun-icon {
+/* Default (Light Mode): Moon visible, Sun hidden */
+.login-container .dark-mode-toggle-container .sun-icon {
   opacity: 0;
   transform: translateX(-0.3125rem); /* -5px */
 }
-.dark-mode-toggle-container:not(.dark-theme) .moon-icon {
+.login-container .dark-mode-toggle-container .moon-icon {
   opacity: 1;
   transform: translateX(0);
-  color: #FF7800;
+  color: #FF7800; /* Active icon color */
 }
 
-.dark-theme .dark-mode-toggle-container .sun-icon {
+/* Dark Mode: Sun visible, Moon hidden */
+.login-container.dark-theme .dark-mode-toggle-container .sun-icon {
   opacity: 1;
   transform: translateX(0);
-  color: #FF7800;
+  color: #FF7800; /* Active icon color */
 }
-.dark-theme .dark-mode-toggle-container .moon-icon {
+.login-container.dark-theme .dark-mode-toggle-container .moon-icon {
   opacity: 0;
   transform: translateX(0.3125rem); /* 5px */
 }
