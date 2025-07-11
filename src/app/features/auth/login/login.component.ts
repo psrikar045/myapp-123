@@ -8,6 +8,9 @@ import {
   NonNullableFormBuilder, // Using NonNullableFormBuilder
   AbstractControl // Import if needed, though direct control access is often typed
 } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http'; // <-- Add this to imports array
+import { Router } from '@angular/router'; // <-- Import Router
+import { AuthService } from '../../../core/services/auth.service'; // <-- Import AuthService (adjust path)
 import { emailOrUsernameValidator } from '../../../core/validators/custom-validators'; // Import the custom validator
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -33,7 +36,8 @@ import { ThemeService } from '../../../core/services/theme.service';
     MatButtonModule,
     MatCheckboxModule,
     MatSlideToggleModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    HttpClientModule // <-- Ensure this is here for Auth Service
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
@@ -46,6 +50,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   public readonly themeService = inject(ThemeService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly authService = inject(AuthService); // <-- Inject AuthService
+  private readonly router = inject(Router); // <-- Inject Router
 
   // Explicitly type loginForm as per requirements
   loginForm: FormGroup<{
@@ -156,19 +162,30 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.isLoading = true;
-    // Simulate API call
-    setTimeout(() => {
-      this.isLoading = false;
-      // Simulate a login error for demonstration
-      if (this.identifier.value === 'error@example.com' || this.identifier.value === 'erroruser') { // Updated to use identifier
-        this.errorMessage = 'Invalid identifier or password. Please try again.'; // Updated error message
-      } else {
-        // Simulate success
-        console.log('Login successful:', this.loginForm.value);
-      }
-      this.cdr.markForCheck(); // Needed due to setTimeout
-    }, 1500);
+    this.isLoading = true; // Set loading state to true
+
+    const { identifier, password } = this.loginForm.getRawValue(); // Get identifier and password values from the form
+
+    // Call the login method from AuthService
+    this.authService.login(identifier, password)
+      .subscribe({
+        next: (response) => {
+          console.log('Login API success!', response);
+          // On successful login, navigate to a protected route (e.g., dashboard)
+          this.router.navigate(['/dashboard']); // IMPORTANT: Replace '/dashboard' with your actual protected route
+        },
+        error: (error: Error) => {
+          // Handle errors from AuthService (e.g., network issues, invalid credentials)
+          this.errorMessage = error.message || 'Login failed. Please try again.';
+          console.error('Login API error:', error);
+          // Optionally, reset password field or other form parts
+          this.password.setValue('');
+        },
+        complete: () => {
+          this.isLoading = false; // Always set loading state to false when the request completes
+          this.cdr.markForCheck(); // Trigger change detection
+        }
+      });
   }
 
   toggleDarkMode(): void {

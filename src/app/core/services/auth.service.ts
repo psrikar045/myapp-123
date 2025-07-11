@@ -1,102 +1,112 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { BehaviorSubject } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { Router } from '@angular/router'; // For redirection after login/logout
+
+// Define interfaces for clarity
+interface LoginResponse {
+  token: string;
+  user: { // You can expand this interface based on actual user data returned
+    id: string;
+    username: string;
+    email: string;
+    // Add other user properties like roles, etc.
+  };
+  // Potentially include refreshToken if your auth flow uses it
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private readonly TOKEN_KEY = 'authToken';
-  private loggedInStatus = new BehaviorSubject<boolean>(this.hasToken());
+  // IMPORTANT: Replace with your actual backend base URL
+  private readonly API_BASE_URL = 'http://localhost:3000'; // Example backend URL
+  private readonly LOGIN_URL = `${this.API_BASE_URL}/api/auth/login`;
 
-  // Observable for components to subscribe to login status changes
-  loggedIn$ = this.loggedInStatus.asObservable();
+  constructor(private http: HttpClient, private router: Router) { }
 
-  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
-
-  saveToken(token: string): void {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem(this.TOKEN_KEY, token);
-      this.loggedInStatus.next(true);
-    }
+  /**
+   * Sends login credentials to the backend API.
+   * On success, stores the JWT and user data, then returns the response.
+   * @param identifier Email or username
+   * @param password User's password
+   * @returns An Observable of the LoginResponse
+   */
+  login(identifier: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(this.LOGIN_URL, { identifier, password })
+      .pipe(
+        tap(response => {
+          // Store JWT and user data securely (localStorage for simplicity here, consider alternatives for production)
+          localStorage.setItem('jwt_token', response.token);
+          localStorage.setItem('user_data', JSON.stringify(response.user));
+          console.log('Login successful, token stored.');
+        }),
+        catchError(this.handleError)
+      );
   }
 
+  /**
+   * Retrieves the stored JWT.
+   * @returns The JWT string or null if not found.
+   */
   getToken(): string | null {
-    if (isPlatformBrowser(this.platformId)) {
-      return localStorage.getItem(this.TOKEN_KEY);
-    }
-    return null;
+    return localStorage.getItem('jwt_token');
   }
 
-  removeToken(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem(this.TOKEN_KEY);
-      this.loggedInStatus.next(false);
-    }
+  /**
+   * Checks if the user is authenticated (based on token presence).
+   * For production, also consider token expiry validation.
+   * @returns True if a token is present, false otherwise.
+   */
+  isAuthenticated(): boolean {
+    const token = this.getToken();
+    // In a real app, you'd also decode the token and check its expiry (exp claim)
+    return !!token;
   }
 
-  isLoggedIn(): boolean {
-    return this.loggedInStatus.value;
-  }
-
-  private hasToken(): boolean {
-    if (isPlatformBrowser(this.platformId)) {
-      return !!localStorage.getItem(this.TOKEN_KEY);
-    }
-    return false;
-  }
-
-  // Placeholder for login method
-  login(credentials: any): /* Observable<any> | */ Promise<any> {
-    // Replace with actual API call
-    // For example:
-    // return this.apiService.post('/auth/login', credentials).pipe(
-    //   tap((response: any) => {
-    //     if (response && response.token) {
-    //       this.saveToken(response.token);
-    //     }
-    //   })
-    // );
-    return new Promise((resolve) => {
-      // Simulate API call
-      setTimeout(() => {
-        const fakeToken = 'fake-jwt-token';
-        this.saveToken(fakeToken);
-        resolve({ token: fakeToken });
-      }, 1000);
-    });
-  }
-
-  // Placeholder for logout method
+  /**
+   * Clears authentication data and redirects to login.
+   */
   logout(): void {
-    this.removeToken();
-    // Additional cleanup if needed, e.g., redirect to login
-    // this.router.navigate(['/login']);
+    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('user_data');
+    this.router.navigate(['/login']); // Redirect to login page
+    console.log('Logged out.');
   }
 
-  // Placeholder for token refresh logic
-  refreshToken(): /* Observable<any> | */ Promise<any> {
-    // This would typically involve an API call to a refresh token endpoint
-    // Example:
-    // return this.apiService.post('/auth/refresh', { refreshToken: this.getRefreshToken() }).pipe(
-    //   tap((response: any) => {
-    //     if (response && response.token) {
-    //       this.saveToken(response.token);
-    //     }
-    //   })
-    // );
-    return new Promise((resolve, reject) => {
-      // Simulate refresh
-      const currentToken = this.getToken();
-      if (currentToken) {
-        setTimeout(() => {
-          const refreshedToken = 'refreshed-fake-jwt-token';
-          this.saveToken(refreshedToken);
-          resolve({ token: refreshedToken });
-        }, 500);
-      } else {
-        reject('No token to refresh');
+  /**
+   * Handles HTTP errors from API calls.
+   * @param error The HttpErrorResponse object.
+   * @returns An Observable that throws an error with a user-friendly message.
+   */
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage = 'An unexpected error occurred. Please try again later.';
+
+    if (error.error instanceof ErrorEvent) {
+      // Client-side or network error occurred.
+      console.error('Client-side or network error:', error.error.message);
+      errorMessage = `Network error: ${error.error.message}`;
+    } else {
+      // The backend returned an unsuccessful response code.
+      // The response body may contain clues as to what went wrong.
+      console.error(
+        `Backend returned code ${error.status}, ` +
+        `body was: ${JSON.stringify(error.error)}`);
+
+      if (error.status === 401 || error.status === 400) {
+        // Specific errors for invalid credentials or bad request
+        errorMessage = error.error?.message || 'Invalid email/username or password.';
+      } else if (error.status === 403) {
+        errorMessage = 'Access denied. You do not have permission to perform this action.';
+      } else if (error.status === 500) {
+        errorMessage = 'Server error. Please try again or contact support.';
+      } else if (error.error && error.error.message) {
+        // Generic error message from backend if available
+        errorMessage = error.error.message;
       }
-    });
+    }
+    // Return an observable with a user-facing error message
+    return throwError(() => new Error(errorMessage));
   }
 }
