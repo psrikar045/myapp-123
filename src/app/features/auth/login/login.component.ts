@@ -80,7 +80,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   hideRegisterConfirmPassword = true;
 
   // --- Carousel Properties ---
-  readonly loginCarouselImages: readonly string[] = ['images/gallery3.png', 'images/gallery1.png'];
+  readonly loginCarouselImages: readonly string[] = ['images/gallery1.png','images/gallery2.png','images/gallery3.png'];
   readonly registerFormImage: string = 'images/gallery2.png';
   currentImageIndex: number = 0; // For login carousel
   carouselImage: string = ''; // Holds the src for the currently displayed image
