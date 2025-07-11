@@ -1,51 +1,30 @@
-import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  RouterStateSnapshot,
-  UrlTree,
-  Router
-} from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthService } from '../services/auth.service'; // Assuming AuthService holds role info or can fetch it
-// import { NotificationService } from '../services/notification.service'; // Example
+import { CanActivateFn, Router } from '@angular/router';
+import { inject } from '@angular/core';
+import { AuthService } from '../services/auth.service'; // Ensure path is correct
 
-@Injectable({
-  providedIn: 'root'
-})
-export class RoleGuard implements CanActivate {
+export const roleGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
 
-  constructor(
-    private authService: AuthService,
-    private router: Router,
-    // private notificationService: NotificationService // Example
-  ) {}
-
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    // This is a placeholder implementation.
-    // A real implementation would check user roles against route data.
-    // For example, if route.data.expectedRole is 'admin'
-    // const expectedRole = route.data.expectedRole;
-    // const userRole = this.authService.getUserRole(); // Assuming AuthService has a method like this
-
-    // For now, let's assume if the user is logged in, they pass the role guard.
-    // This is NOT a secure or correct role check for a real app.
-    if (this.authService.isLoggedIn()) { // isLoggedIn() is synchronous check from AuthService
-      // In a real app:
-      // if (this.authService.hasRole(expectedRole)) {
-      //   return true;
-      // } else {
-      //   this.notificationService.showError('You do not have permission to access this page.');
-      //   return this.router.createUrlTree(['/dashboard']); // Or an unauthorized page
-      // }
-      return true; // Placeholder: allow if logged in
-    }
-
-    // If not logged in, AuthGuard should have already redirected.
-    // But as a fallback, redirect to login.
-    return this.router.createUrlTree(['/login'], { queryParams: { redirectUrl: state.url } });
+  // First, check if the user is authenticated at all
+  if (!authService.isAuthenticated()) { // <-- Corrected from isLoggedIn() to isAuthenticated()
+    router.navigate(['/login']); // Redirect to login if not authenticated
+    return false;
   }
-}
+
+  // --- Placeholder for Role-based logic ---
+  // If you are not implementing roles yet, you can simplify this or remove the role-specific parts.
+  const requiredRoles = route.data?.['roles'] as string[]; // Get roles from route data
+  // You would need a method in AuthService to get the user's roles, e.g.:
+  // const userRoles = authService.getUserRoles(); // Requires implementation in AuthService
+
+  // For demonstration, let's assume any authenticated user can access if no specific roles are required
+  // If roles are required, and userRoles are available:
+  // if (requiredRoles && userRoles && !requiredRoles.every(role => userRoles.includes(role))) {
+  //   router.navigate(['/unauthorized']); // Or some other forbidden page
+  //   return false;
+  // }
+  // --- End Placeholder ---
+
+  return true; // User is authenticated (and optionally, roles check passes)
+};

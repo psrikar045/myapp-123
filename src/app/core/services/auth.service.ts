@@ -66,6 +66,27 @@ export class AuthService {
   }
 
   /**
+   * Retrieves user roles from stored user data.
+   * This is a placeholder; you'll need to parse your actual user data structure.
+   * @returns An array of strings representing user roles, or null if not available.
+   */
+  getUserRoles(): string[] | null {
+    const userDataString = localStorage.getItem('user_data');
+    if (userDataString) {
+      try {
+        const userData = JSON.parse(userDataString);
+        // Assuming your user_data JSON has a 'roles' array, e.g., { ..., "roles": ["admin", "user"] }
+        if (userData && Array.isArray(userData.roles)) {
+          return userData.roles;
+        }
+      } catch (e) {
+        console.error('Error parsing user data from localStorage', e);
+      }
+    }
+    return null;
+  }
+
+  /**
    * Clears authentication data and redirects to login.
    */
   logout(): void {

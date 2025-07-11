@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { RoleGuard } from './core/guards/role.guard'; // RoleGuard might still be class-based
+import { roleGuard } from './core/guards/role.guard'; // Import functional roleGuard
 import { LoginComponent } from './features/auth/login/login.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component'; // Import DashboardComponent
 import { authGuard } from './core/guards/auth.guard'; // Import functional authGuard
@@ -16,7 +16,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    canActivate: [authGuard, RoleGuard], // Assuming RoleGuard is still class-based or also updated
+    canActivate: [authGuard, roleGuard], // Use functional roleGuard
     loadChildren: () => import('./features/admin/admin.module').then((m) => m.AdminModule)
   },
   {
