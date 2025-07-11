@@ -22,8 +22,13 @@ interface LoginResponse {
 })
 export class AuthService {
   // IMPORTANT: Replace with your actual backend base URL
-  private readonly API_BASE_URL = 'http://localhost:3000'; // Example backend URL
-  private readonly LOGIN_URL = `${this.API_BASE_URL}/api/auth/login`;
+  private readonly API_BASE_URL = 'http://localhost:3000/api'; // Example backend URL
+  private readonly LOGIN_URL = `${this.API_BASE_URL}/auth/login`;
+  // Define new API endpoints here
+  private readonly FORGOT_PASSWORD_URL = `${this.API_BASE_URL}/auth/forgot-password`;
+  private readonly VERIFY_CODE_URL = `${this.API_BASE_URL}/auth/verify-reset-code`;
+  private readonly RESET_PASSWORD_URL = `${this.API_BASE_URL}/auth/reset-password`;
+
 
   private readonly platformId = inject(PLATFORM_ID); // <-- Inject PLATFORM_ID
 
@@ -109,6 +114,42 @@ export class AuthService {
     }
     this.router.navigate(['/login']);
     console.log('Logged out.');
+  }
+
+  /**
+   * Initiates the forgot password process by sending a reset code to the user's email.
+   * @param email The user's email address.
+   */
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post<any>(this.FORGOT_PASSWORD_URL, { email }).pipe(
+      tap(() => console.log('Forgot password request sent successfully.')),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Verifies the authentication code sent to the user's email.
+   * @param email The user's email address.
+   * @param code The verification code.
+   */
+  verifyResetCode(email: string, code: string): Observable<any> {
+    return this.http.post<any>(this.VERIFY_CODE_URL, { email, code }).pipe(
+      tap(() => console.log('Verification code checked successfully.')),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Resets the user's password after successful code verification.
+   * @param email The user's email address.
+   * @param code The verification code.
+   * @param newPassword The new password.
+   */
+  resetPassword(email: string, code: string, newPassword: string): Observable<any> {
+    return this.http.post<any>(this.RESET_PASSWORD_URL, { email, code, newPassword }).pipe(
+      tap(() => console.log('Password reset successfully.')),
+      catchError(this.handleError)
+    );
   }
 
   /**
