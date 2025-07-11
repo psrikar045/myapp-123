@@ -1,6 +1,7 @@
 /* General Page Styles */
 :host {
   display: block;
+  /* Base font size is 16px, so 1rem = 16px */
 }
 
 /* Overall Page Wrapper for central alignment and no background */
@@ -9,8 +10,8 @@
   display: flex;
   justify-content: center; /* Centers the login-container horizontally */
   align-items: center; /* Centers the login-container vertically */
-  background-color: transparent; /* **No background for the entire UI** */
-  padding: 20px; /* Overall padding from screen edges */
+  background-color: transparent;
+  padding: 1.25rem; /* 20px */
   box-sizing: border-box;
   font-family: "Poppins", "Roboto", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   transition: background-color 0.3s ease; /* For dark mode transition */
@@ -19,60 +20,57 @@
 /* Main Container for Left and Right Sections */
 .login-container {
   display: flex;
-  max-width: 1200px; /* Adjust max-width for the combined content */
-  width: 100%; /* Ensure it takes available width within wrapper */
-  background-color: transparent; /* **No background for the container holding sections** */
+  max-width: 75rem; /* 1200px */
+  width: 100%;
+  background-color: transparent;
   overflow: hidden;
-  gap: 80px; /* **Increased gap between left and right sections** */
-  align-items: stretch; /* **CRITICAL: Makes both flex items (.login-left and .login-right) stretch to the same height. This height is dictated by the taller one, which we'll make .login-right.** */
+  gap: 5rem; /* 80px */
+  align-items: stretch;
 }
 
 /* Left Section: Login Form Area */
 .login-left {
-  flex: 1; /* Allows it to take available space */
+  flex: 1;
   display: flex;
-  flex-direction: column; /* **Stacks logo, spacers, and form vertically** */
-  align-items: center; /* Center logo and form horizontally within this section */
-  padding: 2rem; /* Internal padding for the left section */
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
   box-sizing: border-box;
-  background-color: transparent; /* **No background for the left section** */
+  background-color: transparent;
 }
 
 .logo {
-  width: 120px; /* Adjusted logo size */
-  /* No margin-bottom here, the spacer below it handles separation */
+  width: 7.5rem; /* 120px */
+  height: auto; /* Maintain aspect ratio */
 }
 
-/* **SPACER STYLES FOR VERTICAL ALIGNMENT OF THE FORM** */
 .login-panel-spacer-top {
-  flex-grow: 1; /* **This spacer pushes the login-panel DOWN from the logo.** It will grow to take available space above the form. */
+  flex-grow: 1;
 }
 .login-panel-spacer-bottom {
-  flex-grow: 1; /* **This spacer balances the top spacer, effectively centering the login-panel within the .login-left's available vertical space.** */
+  flex-grow: 1;
 }
 
-
 .login-panel {
-  background-color: transparent; /* **No background for the form panel** */
-  box-shadow: none; /* **No shadow for the form panel** */
-  padding: 0; /* Remove internal padding if login-left padding is sufficient */
+  background-color: transparent;
+  box-shadow: none;
+  padding: 0;
   width: 100%;
-  max-width: 420px; /* Max width for the form panel */
+  max-width: 26.25rem; /* 420px */
   text-align: center;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  /* Removed margin-top/bottom: auto here; spacers handle alignment */
 }
 
 h2 {
   font-size: 1.8rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
-  color: #333;
+  color: #333; /* Will be themed by .dark-theme rules */
 }
 
 .subtitle {
   font-size: 1rem;
-  color: #666;
+  color: #666; /* Will be themed by .dark-theme rules */
   margin-bottom: 2rem;
 }
 
@@ -82,7 +80,7 @@ h2 {
 }
 
 mat-form-field {
-  margin-bottom: 1rem; /* Spacing between form fields */
+  margin-bottom: 1rem;
 }
 
 .form-options {
@@ -94,7 +92,7 @@ mat-form-field {
 }
 
 .forgot-password-link {
-  color: #4A50E0; /* Primary color */
+  color: #4A50E0;
   text-decoration: none;
   font-weight: 500;
 }
@@ -107,21 +105,21 @@ mat-form-field {
   font-size: 1rem;
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  height: auto; /* Ensure spinner fits */
-  line-height: normal; /* Ensure spinner fits */
+  letter-spacing: 0.03125rem; /* 0.5px */
+  height: auto;
+  line-height: normal;
 }
 
 .button-spinner {
-  display: inline-block; /* Make spinner align with text if text were present */
+  display: inline-block;
   vertical-align: middle;
 }
 
 .error-message {
-  background-color: #ffebee; /* Light red background for errors */
-  color: #c62828; /* Darker red text for errors */
+  background-color: #ffebee;
+  color: #c62828;
   padding: 0.8rem;
-  border-radius: 4px;
+  border-radius: 0.25rem; /* 4px */
   margin-bottom: 1.5rem;
   font-size: 0.9rem;
   text-align: left;
@@ -131,11 +129,11 @@ mat-form-field {
 .signup-link {
   margin-top: 2rem;
   font-size: 0.9rem;
-  color: #555;
+  color: #555; /* Will be themed by .dark-theme rules */
 }
 
 .signup-link a {
-  color: #4A50E0; /* Primary color */
+  color: #4A50E0;
   text-decoration: none;
   font-weight: 600;
   margin-left: 0.3rem;
@@ -149,7 +147,7 @@ mat-form-field {
   display: flex;
   align-items: center;
   text-align: center;
-  color: #aaa;
+  color: #aaa; /* Will be themed by .dark-theme rules */
   margin: 2rem 0;
   font-size: 0.85rem;
 }
@@ -158,7 +156,7 @@ mat-form-field {
 .divider::after {
   content: '';
   flex: 1;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0; /* Will be themed by .dark-theme rules */
 }
 
 .divider:not(:empty)::before {
@@ -169,54 +167,52 @@ mat-form-field {
   margin-left: .5em;
 }
 
-/* Social Login Buttons - MODIFIED FOR RECTANGULAR SHAPE AND CENTERED ICONS */
+/* Social Login Buttons */
 .social-buttons {
   display: flex;
-  justify-content: center; /* Centers the group of buttons horizontally */
-  gap: 16px; /* Space between buttons */
+  justify-content: center;
+  gap: 1rem; /* 16px */
   margin-bottom: 1.5rem;
-  margin-top: 20px;
+  margin-top: 1.25rem; /* 20px */
 }
 
 .social-button {
-  border-radius: 4px !important;
-  width: 48px !important;
-  height: 48px !important;
+  border-radius: 0.25rem !important; /* 4px - !important kept if Material override needed */
+  width: 3rem !important;  /* 48px */
+  height: 3rem !important; /* 48px */
   padding: 0 !important;
   min-width: 0 !important;
   display: flex;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  border: 1px solid #ccc;
-  background-color: white;
+  border: 1px solid #ccc; /* Will be themed by .dark-theme rules */
+  background-color: white; /* Will be themed by .dark-theme rules */
   transition: all 0.2s ease-in-out;
 }
 
 .social-button:hover {
-  background-color: #f0f0f0;
-  border-color: #999;
-  transform: translateY(-2px);
+  background-color: #f0f0f0; /* Will be themed by .dark-theme rules */
+  border-color: #999; /* Will be themed by .dark-theme rules */
+  transform: translateY(-0.125rem); /* -2px */
 }
 
 .social-button mat-icon {
-  font-size: 24px;
-  width: 24px;
-  height: 24px;
-  color: #333;
+  font-size: 1.5rem; /* 24px */
+  width: 1.5rem; /* 24px */
+  height: 1.5rem; /* 24px */
+  color: #333; /* Will be themed by .dark-theme rules */
 }
 
-/* ---------------------------------------------------- */
-/* --- Dark Mode Toggle - CORRECTED LAYOUT & ICONS --- */
-/* ---------------------------------------------------- */
+/* Dark Mode Toggle */
 .dark-mode-toggle-container {
   margin-top: 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 0.5rem; /* 8px */
   font-size: 0.95rem;
-  color: #333;
+  color: #333; /* Will be themed by .dark-theme rules */
   transition: color 0.3s ease;
 }
 
@@ -228,24 +224,24 @@ mat-form-field {
 .dark-mode-toggle-container mat-slide-toggle label {
   color: inherit;
   white-space: nowrap;
-  margin-left: 8px;
+  margin-left: 0.5rem; /* 8px */
 }
 
 .dark-mode-toggle-container .toggle-icon {
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
+  font-size: 1.25rem; /* 20px */
+  width: 1.25rem; /* 20px */
+  height: 1.25rem; /* 20px */
   line-height: 1;
   transition: opacity 0.3s ease, transform 0.3s ease;
   flex-shrink: 0;
   position: relative;
   opacity: 0;
-  transform: translateX(-5px);
+  transform: translateX(-0.3125rem); /* -5px */
 }
 
 .dark-mode-toggle-container:not(.dark-theme) .sun-icon {
   opacity: 0;
-  transform: translateX(-5px);
+  transform: translateX(-0.3125rem); /* -5px */
 }
 .dark-mode-toggle-container:not(.dark-theme) .moon-icon {
   opacity: 1;
@@ -260,13 +256,14 @@ mat-form-field {
 }
 .dark-theme .dark-mode-toggle-container .moon-icon {
   opacity: 0;
-  transform: translateX(5px);
+  transform: translateX(0.3125rem); /* 5px */
 }
 
 .dark-theme .dark-mode-toggle-container {
   color: #e0e0e0;
 }
 
+/* Material Slide Toggle Theme Overrides - !important kept as usually necessary */
 .mat-mdc-slide-toggle .mdc-switch__track {
     background-color: #ccc !important;
 }
@@ -294,51 +291,34 @@ mat-form-field {
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* Crucial: Content overflowing this div will be hidden */
+  overflow: hidden;
   position: relative;
-  /* Adjust min-height based on your tallest image and desired presentation.
-     If the images are very tall, this needs to be large enough to give them room. */
-  min-height: 750px; /* **Increased min-height further to accommodate taller images** */
+  min-height: 35rem; /* 560px - Adjusted base min-height, will be responsive */
   background-color: transparent !important;
   box-shadow: none !important;
 }
 
 .carousel-container {
   width: 100%;
-  height: 100%; /* Ensures this container takes the full height of .login-right */
+  height: 100%;
   display: flex;
-  align-items: center; /* Vertically center the image */
-  justify-content: center; /* Horizontally center the image */
+  align-items: center;
+  justify-content: center;
   position: relative;
-  padding: 20px; /* Adjust padding as needed */
+  padding: 1.25rem; /* 20px */
   box-sizing: border-box;
-  overflow: hidden; /* **Added overflow: hidden here as well for good measure** */
+  overflow: hidden;
 }
 
 .carousel-image {
-  display: none; /* Hidden by default */
-  width: auto; /* Allow natural width */
-  height: auto; /* Allow natural height */
-  max-width: 100%; /* Image will shrink to 100% of container width if wider */
-  max-height: 100%; /* Image will shrink to 100% of container height if taller */
-  
-  /* **CRITICAL ADJUSTMENT for your tall images:**
-     Choose one of the following `object-fit` strategies: */
-
-  /* Option A: If you want the ENTIRE image visible, even if it leaves empty space (letterboxing/pillarboxing).
-     This is what 'contain' does, and it's generally what's desired for "not going beyond".
-     The "UX problem" with this option might be the empty space. */
-  object-fit: contain;
+  display: none;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* This is good for preventing overflow */
   object-position: center;
-
-  /* Option B: (Uncomment this and comment out Option A if you prefer to fill the space,
-     even if it means cropping the top/bottom or sides of the image).
-     This might look better if the empty space from 'contain' is undesirable,
-     but it will crop your images. */
-  /* object-fit: cover; */
-  /* object-position: center; */
-
-  border-radius: 8px;
+  border-radius: 0.5rem; /* 8px */
   box-shadow: none;
   transition: opacity 0.5s ease-in-out;
 }
@@ -349,11 +329,10 @@ mat-form-field {
 }
 
 
-/* --- Dark Theme Styles --- */
+/* --- Dark Theme Styles (largely unchanged, ensure variables from :host or global are used if possible) --- */
 .login-page-wrapper.dark-theme {
-  background-color: #121212; /* Dark background for viewport in dark mode */
+  background-color: #121212;
 }
-/* Ensure login-container and sections remain transparent in dark mode */
 .dark-theme .login-container,
 .dark-theme .login-left,
 .dark-theme .login-panel,
@@ -363,7 +342,7 @@ mat-form-field {
 }
 
 .dark-theme h2 {
-  color: #e0e0e0;
+  color: #e0e0e0; /* Consider var(--dark-text) if defined globally */
 }
 
 .dark-theme .subtitle {
@@ -381,7 +360,7 @@ mat-form-field {
 
 .dark-theme .signup-link a,
 .dark-theme .forgot-password-link {
-  color: #8c9eff;
+  color: #8c9eff; /* Consider a CSS variable */
 }
 
 .dark-theme .divider {
@@ -393,6 +372,7 @@ mat-form-field {
   border-bottom: 1px solid #444;
 }
 
+/* Material Form Field Dark Theme Overrides - !important kept as usually necessary */
 .dark-theme .mat-mdc-form-field .mdc-text-field--filled,
 .dark-theme .mat-mdc-form-field .mdc-text-field--outlined {
   background-color: transparent !important;
@@ -430,7 +410,7 @@ mat-form-field {
   border-color: rgba(255, 255, 255, 0.7) !important;
 }
 .dark-theme .mat-mdc-checkbox .mdc-checkbox__checkmark {
-  fill: #1e1e1e !important;
+  fill: #1e1e1e !important; /* Check if this color is intended for dark mode checkmark */
 }
 .dark-theme .mat-mdc-checkbox label {
   color: #e0e0e0 !important;
@@ -460,35 +440,52 @@ mat-form-field {
 
 
 /* Responsiveness */
-@media (max-width: 960px) {
+/* md breakpoint (Medium / Tablets) */
+@media (max-width: 1279.98px) {
   .login-container {
-    flex-direction: column; /* Stack sections vertically */
-    gap: 20px; /* Adjust gap when stacked */
-    align-items: center; /* Center items when stacked */
+    gap: 2.5rem; /* 40px, reduced gap for medium screens */
   }
   .login-right {
-    display: none; /* Hide image gallery on smaller screens */
-    min-height: auto; /* Reset min-height when hidden */
-  }
-  .login-left {
-    width: 100%; /* Take full width */
-    padding: 1.5rem; /* Adjust padding for smaller screens */
-  }
-  .login-left .login-panel-spacer-top,
-  .login-left .login-panel-spacer-bottom {
-    flex-grow: 0; /* **Remove flex-grow from spacers when stacked as fixed height no longer applies** */
-    height: 0; /* Collapse spacers */
-  }
-  .login-left .logo {
-    margin-bottom: 1.5rem; /* Adjust spacing */
-  }
-  .login-panel {
-    margin: 0 auto; /* Center form horizontally when stacked */
-    padding: 2rem; /* Add padding to panel if removed above */
+     min-height: 30rem; /* 480px, adjust min-height for medium screens */
   }
 }
 
-@media (max-width: 480px) {
+/* sm breakpoint (Small / Mobile Landscape / Small Tablets) */
+@media (max-width: 959.98px) { /* Was 960px */
+  .login-container {
+    flex-direction: column;
+    gap: 1.25rem; /* 20px */
+    align-items: center;
+  }
+  .login-right {
+    display: none;
+    min-height: auto;
+  }
+  .login-left {
+    width: 100%;
+    padding: 1.5rem;
+    order: 1; /* Ensure form is first if needed, though default stacking order is fine */
+  }
+  .login-left .login-panel-spacer-top,
+  .login-left .login-panel-spacer-bottom {
+    flex-grow: 0;
+    height: 0;
+  }
+  .login-left .logo {
+    margin-bottom: 1.5rem;
+  }
+  .login-panel {
+    margin: 0 auto;
+    padding: 2rem;
+    max-width: 100%; /* Allow panel to use more width on smaller screens */
+  }
+}
+
+/* xs breakpoint (Extra Small / Mobile Portrait) */
+@media (max-width: 599.98px) { /* Was 480px */
+  .login-page-wrapper {
+    padding: 0.75rem; /* 12px */
+  }
   h2 {
     font-size: 1.6rem;
   }
@@ -496,36 +493,40 @@ mat-form-field {
     font-size: 0.9rem;
     margin-bottom: 1.5rem;
   }
+  .login-left {
+    padding: 1rem; /* Further reduce padding on very small screens */
+  }
   .login-panel {
-    padding: 1.5rem;
-    margin: 1rem auto; /* Add margin to panel itself on very small screens and center */
+    padding: 1.5rem; /* Further reduce panel padding */
+    margin: 1rem auto;
   }
   .form-options {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: 0.75rem; /* 12px */
   }
   .forgot-password-link {
-    align-self: flex-start;
+    align-self: flex-start; /* Already there, good */
   }
   .social-buttons {
-    gap: 0.8rem;
+    gap: 0.75rem; /* 12px */
   }
   .social-button {
-    width: 40px !important;
-    height: 40px !important;
+    width: 2.5rem !important;  /* 40px */
+    height: 2.5rem !important; /* 40px */
   }
   .social-button mat-icon {
-    width: 20px;
-    height: 20px;
+    font-size: 1.25rem; /* 20px */
+    width: 1.25rem; /* 20px */
+    height: 1.25rem; /* 20px */
   }
   .dark-mode-toggle-container {
     font-size: 0.85rem;
-    gap: 6px;
+    gap: 0.375rem; /* 6px */
   }
   .dark-mode-toggle-container .toggle-icon {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
+    font-size: 1.125rem; /* 18px */
+    width: 1.125rem; /* 18px */
+    height: 1.125rem; /* 18px */
   }
 }
