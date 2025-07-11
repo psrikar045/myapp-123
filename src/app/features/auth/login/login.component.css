@@ -396,21 +396,23 @@ mat-form-field {
 }
 
 .carousel-image {
-  display: none;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain; /* This is good for preventing overflow */
+  position: absolute; /* Stack images */
+  top: 0;
+  left: 0;
+  width: 100%; /* Cover container */
+  height: 100%; /* Cover container */
+  object-fit: contain;
   object-position: center;
   border-radius: 0.5rem; /* 8px */
   box-shadow: none;
-  transition: opacity 0.5s ease-in-out;
+  opacity: 0; /* Start transparent */
+  transition: opacity 0.5s ease-in-out; /* Fade transition */
+  display: block; /* Keep as block, manage visibility with opacity */
 }
 
 .carousel-image.active {
-  display: block;
-  opacity: 1;
+  opacity: 1; /* Fade in */
+  z-index: 1; /* Ensure active image is on top if needed, though opacity should handle it */
 }
 
 
