@@ -4,8 +4,9 @@ import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideServiceWorker } from '@angular/service-worker';
-import { AuthGuard } from './core/guards/auth.guard';
-import { RoleGuard } from './core/guards/role.guard';
+// Class-based guard imports are no longer needed if guards are functional
+// import { AuthGuard } from './core/guards/auth.guard';
+// import { RoleGuard } from './core/guards/role.guard';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { ErrorHandler } from '@angular/core';
 import { GlobalErrorHandler } from './core/handlers/global-error-handler';
@@ -23,8 +24,10 @@ export const appConfig: ApplicationConfig = {
       registrationStrategy: 'registerWhenStable:30000'
     }),
     provideAnimationsAsync(),
-    AuthGuard,
-    RoleGuard,
+    // AuthGuard, // Removed class-based guard from providers
+    // RoleGuard, // Removed class-based guard from providers (if it's also functional now)
+    // If RoleGuard is still class-based and needed as a service elsewhere, it might stay.
+    // However, for CanActivate, functional guards don't need to be in providers.
     { provide: ErrorHandler, useClass: GlobalErrorHandler }
   ]
 };
