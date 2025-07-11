@@ -3,9 +3,7 @@ import { roleGuard } from './core/guards/role.guard'; // Import functional roleG
 import { LoginComponent } from './features/auth/login/login.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component'; // Import DashboardComponent
 import { authGuard } from './core/guards/auth.guard'; // Import functional authGuard
-import { ForgotPasswordComponent } from './features/forgot-password/forgot-password.component';
-import { VerifyCodeComponent } from './features/verify-code/verify-code.component';
-import { SetPasswordComponent } from './features/set-password/set-password.component';
+import { ResetPasswordComponent } from './features/reset-password/reset-password.component';
 
 export const routes: Routes = [
   {
@@ -14,15 +12,7 @@ export const routes: Routes = [
   },
   {
     path: 'forgot-password',
-    component: ForgotPasswordComponent
-  },
-  {
-    path: 'verify-code',
-    component: VerifyCodeComponent
-  },
-  {
-    path: 'set-password',
-    component: SetPasswordComponent
+    component: ResetPasswordComponent
   },
   {
     path: 'dashboard',
