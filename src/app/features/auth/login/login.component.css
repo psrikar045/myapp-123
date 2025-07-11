@@ -144,38 +144,143 @@ mat-form-field {
   margin-left: .5em;
 }
 
-/* Social Login Buttons */
+/* Social Login Buttons - MODIFIED FOR RECTANGULAR SHAPE AND CENTERED ICONS */
 .social-buttons {
   display: flex;
-  justify-content: center;
-  gap: 1rem; /* Space between buttons */
+  justify-content: center; /* Centers the group of buttons horizontally */
+  gap: 16px; /* Space between buttons */
   margin-bottom: 1.5rem;
+  margin-top: 20px;
 }
 
 .social-button {
-  border-radius: 50% !important; /* Circular shape */
-  width: 44px !important; /* Fixed width */
-  height: 44px !important; /* Fixed height */
+  border-radius: 4px !important; /* Soften corners slightly for a modern look */
+  width: 48px !important; /* Fixed width */
+  height: 48px !important; /* Fixed height */
   padding: 0 !important; /* Remove padding to center icon */
-  min-width: auto !important; /* Override Material's min-width */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  min-width: 0 !important; /* Override Material's min-width */
+  display: flex; /* Use flexbox for centering content */
+  justify-content: center; /* Horizontally centers the icon */
+  align-items: center; /* Vertically centers the icon */
+  box-sizing: border-box; /* Include padding/border in element's total width/height */
+  border: 1px solid #ccc; /* Example border, adjust as per your design */
+  background-color: white; /* Example background */
+  transition: all 0.2s ease-in-out;
+}
+
+.social-button:hover {
+  background-color: #f0f0f0; /* Subtle hover effect */
+  border-color: #999;
+  transform: translateY(-2px); /* Slight lift on hover */
 }
 
 .social-button mat-icon {
-  /* Ensure SVG icons scale correctly if needed */
-  width: 24px;
-  height: 24px;
+  font-size: 24px; /* Set the desired size for the SVG icon */
+  width: 24px; /* Set the desired width for the SVG icon */
+  height: 24px; /* Set the desired height for the SVG icon */
+  color: #333; /* Default icon color */
 }
 
-/* Dark Mode Toggle */
+/* ---------------------------------------------------- */
+/* --- Dark Mode Toggle - CORRECTED LAYOUT & ICONS --- */
+/* ---------------------------------------------------- */
 .dark-mode-toggle-container {
   margin-top: 1.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: flex; /* Use flexbox for horizontal alignment */
+  align-items: center; /* Vertically align items */
+  justify-content: center; /* Center the whole group */
+  gap: 8px; /* Space between the toggle, label, and icon */
+  font-size: 0.95rem;
+  color: #333; /* Default text color for light mode */
+  transition: color 0.3s ease;
 }
+
+/* No special internal handle hiding needed; Material default is fine here */
+/* .mat-mdc-slide-toggle .mdc-switch__handle::before,
+.mat-mdc-slide-toggle .mdc-switch__handle::after,
+.mat-mdc-slide-toggle .mdc-switch__handle .mdc-switch__ripple {
+  display: none !important;
+} */
+
+/* Adjustments for the mat-slide-toggle component itself within the flex container */
+.dark-mode-toggle-container mat-slide-toggle {
+  /* No special positioning/overflow needed; flexbox handles flow */
+  position: static;
+  overflow: visible; /* Ensure label is visible within toggle */
+}
+
+/* Style the label text inside the mat-slide-toggle */
+.dark-mode-toggle-container mat-slide-toggle label {
+  color: inherit; /* Inherit color from parent container which changes with theme */
+  white-space: nowrap; /* Prevent text from wrapping */
+  /* You might need to adjust margin-left to position the text relative to the toggle */
+  margin-left: 8px; /* Default margin between toggle thumb and label text */
+}
+
+
+/* Styles for the custom icons (sun and moon) */
+.dark-mode-toggle-container .toggle-icon {
+  font-size: 20px; /* Adjust icon size */
+  width: 20px;
+  height: 20px;
+  line-height: 1; /* Helps vertical alignment */
+  transition: opacity 0.3s ease, transform 0.3s ease; /* Smooth fade and slide */
+  flex-shrink: 0; /* Prevent icon from shrinking on smaller screens */
+  position: relative; /* Make it a positioning context */
+  /* Initial state for both: off-screen and invisible */
+  opacity: 0;
+  transform: translateX(-5px); /* Start slightly off-left */
+}
+
+/* Icon visibility for Light Mode (when .dark-theme is NOT present) */
+.dark-mode-toggle-container:not(.dark-theme) .sun-icon {
+  opacity: 0; /* Hide sun in light mode */
+  transform: translateX(-5px);
+}
+.dark-mode-toggle-container:not(.dark-theme) .moon-icon {
+  opacity: 1; /* Show moon in light mode */
+  transform: translateX(0); /* Slide into view */
+  color: #FF7800; /* Orange color for moon in light mode, as seen in provided images like image_eaa393.png */
+}
+
+/* Icon visibility for Dark Mode (when .dark-theme IS present) */
+.dark-theme .dark-mode-toggle-container .sun-icon {
+  opacity: 1; /* Show sun in dark mode */
+  transform: translateX(0); /* Slide into view */
+  color: #FF7800; /* Example color for sun in dark mode, matching theme accent */
+}
+.dark-theme .dark-mode-toggle-container .moon-icon {
+  opacity: 0; /* Hide moon in dark mode */
+  transform: translateX(5px); /* Slide slightly off-right */
+}
+
+/* Adjustments for dark theme on the entire container and text */
+.dark-theme .dark-mode-toggle-container {
+  color: #e0e0e0; /* Lighter text color for dark mode */
+}
+
+/* Ensure the toggle's track and handle colors are correctly themed for both modes */
+.mat-mdc-slide-toggle .mdc-switch__track {
+    background-color: #ccc !important; /* Default track color light mode */
+}
+.mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__track {
+    background-color: #4A50E0 !important; /* Checked track color light mode (your primary color) */
+}
+.mat-mdc-slide-toggle .mdc-switch__handle {
+    background-color: white !important; /* Handle color light mode */
+}
+
+/* Dark theme specific track and handle colors */
+.dark-theme .mat-mdc-slide-toggle .mdc-switch__track {
+    background-color: #525252 !important; /* Darker track dark mode */
+}
+.dark-theme .mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__track {
+    background-color: #8c9eff !important; /* Checked track dark mode (lighter primary) */
+}
+.dark-theme .mat-mdc-slide-toggle .mdc-switch__handle {
+    background-color: #f0f0f0 !important; /* Lighter handle for unchecked in dark theme */
+}
+
 
 /* Right Section: Image Gallery / Carousel */
 .login-right {
@@ -214,7 +319,7 @@ mat-form-field {
 }
 
 
-/* --- Dark Theme Styles --- */
+/* --- Dark Theme Styles (for overall login page) --- */
 .login-container.dark-theme {
   background-color: #121212; /* Dark background for viewport */
 }
@@ -301,26 +406,6 @@ mat-form-field {
   color: #e0e0e0 !important;
 }
 
-
-/* Slide Toggle */
-.dark-theme .mat-mdc-slide-toggle .mdc-switch__track::after,
-.dark-theme .mat-mdc-slide-toggle .mdc-switch__track::before {
-  background-color: #525252 !important; /* Darker track */
-}
-.dark-theme .mat-mdc-slide-toggle .mdc-switch.mdc-switch--selected .mdc-switch__track::after,
-.dark-theme .mat-mdc-slide-toggle .mdc-switch.mdc-switch--selected .mdc-switch__track::before {
-    background-color: #8c9eff !important; /* Primary color for selected track */
-    opacity: 0.5;
-}
-.dark-theme .mat-mdc-slide-toggle .mdc-switch.mdc-switch--selected .mdc-switch__handle::after,
-.dark-theme .mat-mdc-slide-toggle .mdc-switch.mdc-switch--selected .mdc-switch__handle::before {
-    background-color: #8c9eff !important; /* Primary color for selected handle */
-}
-.dark-theme .mat-mdc-slide-toggle label {
-  color: #e0e0e0 !important;
-}
-
-
 /* Stroked buttons (social) */
 .dark-theme .mat-mdc-stroked-button:not(:disabled) {
   border-color: rgba(255, 255, 255, 0.3) !important;
@@ -328,6 +413,21 @@ mat-form-field {
 }
 .dark-theme .mat-mdc-stroked-button:not(:disabled) .mat-icon {
   color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Dark mode specific social button styles */
+.dark-theme .social-button {
+  background-color: #444; /* Darker background for dark mode */
+  border-color: #666;
+}
+
+.dark-theme .social-button mat-icon {
+  color: #eee; /* Lighter icon color for dark mode */
+}
+
+.dark-theme .social-button:hover {
+  background-color: #555;
+  border-color: #888;
 }
 
 
@@ -378,11 +478,21 @@ mat-form-field {
     gap: 0.8rem;
   }
   .social-button {
-    width: 40px !important;
+    width: 40px !important; /* Smaller size for very small screens */
     height: 40px !important;
   }
   .social-button mat-icon {
-    width: 20px;
+    width: 20px; /* Smaller icon for very small screens */
     height: 20px;
+  }
+  /* Adjustments for the dark mode toggle on very small screens */
+  .dark-mode-toggle-container {
+    font-size: 0.85rem; /* Smaller text */
+    gap: 6px; /* Reduced gap */
+  }
+  .dark-mode-toggle-container .toggle-icon {
+    font-size: 18px; /* Smaller icons */
+    width: 18px;
+    height: 18px;
   }
 }

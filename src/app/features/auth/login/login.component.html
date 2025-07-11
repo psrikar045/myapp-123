@@ -2,7 +2,7 @@
   <!-- Left Section: Login Form -->
   <div class="login-left">
     <div class="login-panel">
-      <img src="assets/images/logo.png" alt="TravelWise Logo" class="logo" i18n-alt="@@logoAltText">
+      <img src="images/logo.svg" alt="TravelWise Logo" class="logo" i18n-alt="@@logoAltText">
 
       <h2 i18n="@@loginTitle">Login</h2>
       <p class="subtitle" i18n="@@loginSubtitle">Login to access your travelwise account</p>
@@ -77,8 +77,16 @@
       </div>
 
       <!-- Dark Mode Toggle -->
-      <div class="dark-mode-toggle-container">
+      <!-- <div class="dark-mode-toggle-container">
          <mat-slide-toggle [checked]="(themeService.isDarkMode$ | async)!" (change)="toggleDarkMode()" i18n="@@darkModeLabel">Dark Mode</mat-slide-toggle>
+      </div> -->
+      <div class="dark-mode-toggle-container">
+        <mat-slide-toggle [checked]="(themeService.isDarkMode$ | async)!" (change)="toggleDarkMode()" i18n="@@darkModeLabel">
+          Dark Mode
+        </mat-slide-toggle>
+      
+        <mat-icon svgIcon="moon" class="toggle-icon moon-icon"></mat-icon>
+        <mat-icon svgIcon="sun" class="toggle-icon sun-icon"></mat-icon>
       </div>
 
     </div>

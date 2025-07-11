@@ -6,7 +6,7 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subject, Subscription, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, startWith, takeUntil } from 'rxjs/operators';
-import { ThemeService } from '../../core/services/theme.service'; // Adjusted path
+import { ThemeService } from '../../../core/services/theme.service'
 import { Router } from '@angular/router'; // Added Router import
 
 @Component({
@@ -14,20 +14,13 @@ import { Router } from '@angular/router'; // Added Router import
   standalone: true,
   imports: [
     CommonModule,
-    MatToolbarModule, // Added
-    MatButtonModule,  // Added
-    MatIconModule     // Added
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule
   ],
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.css']
-  // Placeholder for Angular animations if needed for mobile menu
-  // animations: [
-  //   trigger('mobileMenuOverlayAnimation', [
-  //     state('open', style({ transform: 'translateX(0)', opacity: 1 })),
-  //     state('closed', style({ transform: 'translateX(100%)', opacity: 0 })),
-  //     transition('closed <=> open', animate('300ms ease-in-out'))
-  //   ])
-  // ]
+  // REMOVED: Angular animations placeholder for mobile menu
 })
 export class LandingPageComponent implements OnInit, OnDestroy {
   // Properties from ToolbarComponent
@@ -36,36 +29,31 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   private lastScrollY: number = 0;
   isMobileView: boolean = false;
   private mobileBreakpoint: number = 960;
-  isMobileMenuOpen: boolean = false;
+  // REMOVED: isMobileMenuOpen property
   private destroy$ = new Subject<void>();
   private themeSubscription!: Subscription;
   private scrollSubscription!: Subscription;
 
-  private logoPath = 'assets/images/logo.svg';
-  private sunIconPath = 'assets/icons/sun.svg';
-  private cloudIconPath = 'assets/icons/cloud.svg';
-  private arrowForwardIconPath = 'assets/icons/arrow_forward.svg';
-  private menuIconPath = 'assets/icons/menu.svg';
+  private logoPath = 'images/logo.svg';
+  private sunIconPath = 'icons/sun.svg';
+  private cloudIconPath = 'icons/cloud.svg';
+  private arrowForwardIconPath = 'icons/arrow_forward.svg';
+  // REMOVED: private menuIconPath = 'images/icons/menu.svg';
 
   // Injections from ToolbarComponent (and existing if any)
   private themeService = inject(ThemeService);
   private iconRegistry = inject(MatIconRegistry);
   private sanitizer = inject(DomSanitizer);
-  private router = inject(Router); // Added Router injection
-  @Inject(PLATFORM_ID) private platformId: Object;
-
-  // Existing LandingPageComponent properties (if any) would go here
+  private router = inject(Router);
+  @Inject(PLATFORM_ID) private platformId!: Object;
 
   constructor() {
-    // Logic from ToolbarComponent's constructor
     this.registerIcons();
-    // Existing LandingPageComponent constructor logic (if any) would go here
   }
 
   ngOnInit(): void {
-    // Logic from ToolbarComponent's ngOnInit
     this.themeSubscription = this.themeService.isDarkMode$.pipe(
-      startWith(this.themeService.isDarkMode$.getValue()),
+      // startWith(this.themeService.isDarkMode$.getValue()),
       takeUntil(this.destroy$)
     ).subscribe(isDark => {
       this.isDarkMode = isDark;
@@ -81,14 +69,11 @@ export class LandingPageComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       ).subscribe(() => this.handleScroll());
     }
-    // Existing LandingPageComponent ngOnInit logic (if any) would go here
   }
 
   ngOnDestroy(): void {
-    // Logic from ToolbarComponent's ngOnDestroy
     this.destroy$.next();
     this.destroy$.complete();
-    // Existing LandingPageComponent ngOnDestroy logic (if any) would go here
   }
 
   // Methods from ToolbarComponent
@@ -98,7 +83,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       { name: 'sun', path: this.sunIconPath },
       { name: 'cloud', path: this.cloudIconPath },
       { name: 'arrow-forward', path: this.arrowForwardIconPath },
-      { name: 'custom-menu', path: this.menuIconPath }
+      // REMOVED: { name: 'custom-menu', path: this.menuIconPath } // Removed as hamburger icon is removed
     ];
     icons.forEach(icon => {
       this.iconRegistry.addSvgIcon(
@@ -135,9 +120,11 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       const wasMobile = this.isMobileView;
       this.isMobileView = window.innerWidth < this.mobileBreakpoint;
 
-      if (wasMobile && !this.isMobileView && this.isMobileMenuOpen) {
-        this.isMobileMenuOpen = false;
-      }
+      // The condition to close mobile menu if it was open and now is no longer mobile view
+      // is removed as there is no mobile menu to close.
+      // if (wasMobile && !this.isMobileView && this.isMobileMenuOpen) {
+      //   this.isMobileMenuOpen = false;
+      // }
     }
   }
 
@@ -150,46 +137,38 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     this.themeService.toggleDarkMode();
   }
 
-  // Placeholder for MapsToLogin as it was not in the provided ToolbarComponent code
-  // but mentioned as being called by the Login button.
-  MapsToLogin(): void {
-    console.log('LandingPageComponent (Toolbar logic): MapsToLogin() called. Navigating to /login.');
-    this.router.navigate(['/login']); // Example navigation
+  // Renamed MapsToLogin to navigateToLogin for consistency with HTML
+  navigateToLogin(): void {
+    console.log('LandingPageComponent: Navigating to login page...');
+    // REMOVED: Check and toggle mobile menu as there is no mobile menu
+    this.router.navigate(['/login']);
   }
 
   scrollToSection(sectionId: string): void {
-    // If the login button directly calls MapsToLogin, this 'login' case might not be hit from that button.
-    // However, if scrollToSection('login') is called from elsewhere, this handles it.
+    console.log(`LandingPageComponent: Attempting to scroll to section: ${sectionId}`);
+
     if (sectionId === 'login') {
-      this.MapsToLogin();
-      if (this.isMobileMenuOpen) { // Ensure menu closes if login is triggered from menu
-        this.toggleMobileMenu();
-      }
-      return;
+      this.navigateToLogin(); // Direct call to navigateToLogin
+      return; // Exit after navigation
     }
 
-    console.log(`LandingPageComponent (Toolbar logic): Attempting to scroll to section: ${sectionId}`);
-
-    if (this.isMobileMenuOpen) {
-      this.toggleMobileMenu();
-    }
+    // REMOVED: Check and toggle mobile menu as there is no mobile menu
+    // if (this.isMobileMenuOpen) {
+    //   this.toggleMobileMenu();
+    // }
 
     if (isPlatformBrowser(this.platformId)) {
       const element = document.getElementById(sectionId);
       if (element) {
+        console.log(`LandingPageComponent: Scrolling smoothly to physical section: #${sectionId}`);
         element.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
-        console.log(`LandingPageComponent (Toolbar logic): Successfully scrolled to section: ${sectionId}`);
       } else {
-        console.warn(`LandingPageComponent (Toolbar logic): Element with ID '${sectionId}' not found. Cannot scroll.`);
+        console.warn(`LandingPageComponent: Element with ID '${sectionId}' not found for scrolling.`);
       }
     } else {
-      console.log(`LandingPageComponent (Toolbar logic): Skipping scroll for section '${sectionId}' (not in browser environment).`);
+      console.log(`LandingPageComponent: Skipping scroll on server for section: ${sectionId}`);
     }
   }
 
-  toggleMobileMenu(): void {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
-  }
-
-  // Existing LandingPageComponent methods (if any) would go here
+  // REMOVED: toggleMobileMenu() method
 }

@@ -62,9 +62,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   private carouselIntervalId: any;
 
   readonly GALLERY_IMAGE_PATHS: readonly string[] = [
-    'assets/images/gallery1.png',
-    'assets/images/gallery2.png',
-    'assets/images/gallery3.png',
+    'images/gallery1.png',
+    'images/gallery2.png',
+    'images/gallery3.png',
   ];
   readonly CAROUSEL_INTERVAL_MS = 3000;
 
@@ -100,7 +100,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private registerSvgIcons(): void {
-    const iconPath = 'assets/icons/';
+    const iconPath = 'icons/';
     this.matIconRegistry.addSvgIcon(
       'google',
       this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'google.svg')
@@ -112,6 +112,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.matIconRegistry.addSvgIcon(
       'apple',
       this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'apple.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'sun',
+      this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'sun.svg')
+    );
+    this.matIconRegistry.addSvgIcon(
+      'moon',
+      this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'moon.svg')
     );
   }
 
