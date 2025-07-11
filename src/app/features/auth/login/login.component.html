@@ -2,68 +2,171 @@
   <div class="login-container" [class.dark-theme]="isDarkMode" mat-typography>
     <div class="login-left">
       <img src="images/logo.svg" alt="TravelWise Logo" class="logo" i18n-alt="@@logoAltText">
-      <div class="login-panel-spacer-top"></div> <div class="login-panel">
-        <h2 i18n="@@loginTitle">Login</h2>
-        <p class="subtitle" i18n="@@loginSubtitle">Login to access your travelwise account</p>
+      <div class="login-panel-spacer-top"></div>
+      <div class="login-panel">
 
-        <div *ngIf="errorMessage" class="error-message" role="alert">
-          {{ errorMessage }}
-        </div>
+        <!-- Login Form -->
+        <div *ngIf="!showRegisterForm">
+          <h2 i18n="@@loginTitle">Login</h2>
+          <p class="subtitle" i18n="@@loginSubtitle">Login to access your travelwise account</p>
 
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label i18n="@@identifierLabel">Email or Username</mat-label>
-            <input matInput formControlName="identifier" placeholder="your.email@example.com or username" i18n-placeholder="@@identifierPlaceholder" required autofocus>
-            <button mat-icon-button matSuffix *ngIf="identifier.value" (click)="clearIdentifier()" type="button" aria-label="Clear email or username" i18n-aria-label="@@clearIdentifierAriaLabel">
-              <mat-icon>close</mat-icon>
-            </button>
-            <mat-error *ngIf="identifier.hasError('required')" i18n="@@identifierRequiredError">
-              Email or Username is required.
-            </mat-error>
-            <mat-error *ngIf="identifier.hasError('emailOrUsernameInvalid') && !identifier.hasError('required')" i18n="@@identifierInvalidError">
-              Please enter a valid email or username.
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label i18n="@@passwordLabel">Password</mat-label>
-            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Enter your password" i18n-placeholder="@@passwordPlaceholder" required>
-            <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button" [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'" [attr.i18n-aria-label]="hidePassword ? '@@showPasswordAriaLabel' : '@@hidePasswordAriaLabel'">
-              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
-            <mat-error *ngIf="password.hasError('required')" i18n="@@passwordRequiredError">
-              Password is required.
-            </mat-error>
-          </mat-form-field>
-
-          <div class="form-options">
-            <mat-checkbox formControlName="rememberMe" i18n="@@rememberMeLabel">Remember me</mat-checkbox>
-            <a routerLink="/forgot-password" class="forgot-password-link" i18n="@@forgotPasswordLink">Forgot Password?</a>
+          <div *ngIf="errorMessage" class="error-message" role="alert">
+            {{ errorMessage }}
           </div>
 
-          <button mat-raised-button color="primary" type="submit" class="full-width login-button" [disabled]="loginForm.invalid || isLoading">
-            <span *ngIf="!isLoading" i18n="@@loginButtonText">Login</span>
-            <mat-spinner *ngIf="isLoading" diameter="24" class="button-spinner"></mat-spinner>
-          </button>
-        </form>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label i18n="@@identifierLabel">Email or Username</mat-label>
+              <input matInput formControlName="identifier" placeholder="your.email@example.com or username" i18n-placeholder="@@identifierPlaceholder" required autofocus>
+              <button mat-icon-button matSuffix *ngIf="loginIdentifierCtrl.value" (click)="clearIdentifier()" type="button" aria-label="Clear email or username" i18n-aria-label="@@clearIdentifierAriaLabel">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error *ngIf="loginIdentifierCtrl.hasError('required')" i18n="@@identifierRequiredError">
+                Email or Username is required.
+              </mat-error>
+              <mat-error *ngIf="loginIdentifierCtrl.hasError('emailOrUsernameInvalid') && !loginIdentifierCtrl.hasError('required')" i18n="@@identifierInvalidError">
+                Please enter a valid email or username.
+              </mat-error>
+            </mat-form-field>
 
-        <div class="signup-link">
-          <span i18n="@@dontHaveAccountPrompt">Don't have an account?</span>
-          <a href="#" i18n="@@signUpLink">Sign up</a>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label i18n="@@passwordLabel">Password</mat-label>
+              <input matInput [type]="hideLoginPassword ? 'password' : 'text'" formControlName="password" placeholder="Enter your password" i18n-placeholder="@@passwordPlaceholder" required>
+              <button mat-icon-button matSuffix (click)="toggleLoginPasswordVisibility()" type="button" [attr.aria-label]="hideLoginPassword ? 'Show password' : 'Hide password'" [attr.i18n-aria-label]="hideLoginPassword ? '@@showPasswordAriaLabel' : '@@hidePasswordAriaLabel'">
+                <mat-icon>{{hideLoginPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              <mat-error *ngIf="loginPasswordCtrl.hasError('required')" i18n="@@passwordRequiredError">
+                Password is required.
+              </mat-error>
+            </mat-form-field>
+
+            <div class="form-options">
+              <mat-checkbox formControlName="rememberMe" i18n="@@rememberMeLabel">Remember me</mat-checkbox>
+              <a routerLink="/forgot-password" class="forgot-password-link" i18n="@@forgotPasswordLink">Forgot Password?</a>
+            </div>
+
+            <button mat-raised-button color="primary" type="submit" class="full-width login-button" [disabled]="loginForm.invalid || isLoading">
+              <span *ngIf="!isLoading" i18n="@@loginButtonText">Login</span>
+              <mat-spinner *ngIf="isLoading" diameter="24" class="button-spinner"></mat-spinner>
+            </button>
+          </form>
+
+          <div class="signup-link">
+            <span i18n="@@dontHaveAccountPrompt">Don't have an account?</span>
+            <a (click)="toggleToRegister()" class="interactive-link" i18n="@@signUpLink">Sign up</a>
+          </div>
         </div>
 
+        <!-- Registration Form -->
+        <div *ngIf="showRegisterForm">
+          <h2 i18n="@@registerTitle">Create an Account</h2>
+          <p class="subtitle" i18n="@@registerSubtitle">Join us and start your journey with TravelWise!</p>
+
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmitRegister()">
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label i18n="@@firstNameLabel">First Name</mat-label>
+                <input matInput formControlName="firstName" placeholder="John" i18n-placeholder="@@firstNamePlaceholder" required>
+                <mat-error *ngIf="regFirstNameCtrl.hasError('required')" i18n="@@firstNameRequiredError">
+                  First name is required.
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label i18n="@@lastNameLabel">Last Name</mat-label>
+                <input matInput formControlName="lastName" placeholder="Doe" i18n-placeholder="@@lastNamePlaceholder" required>
+                <mat-error *ngIf="regLastNameCtrl.hasError('required')" i18n="@@lastNameRequiredError">
+                  Last name is required.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label i18n="@@emailLabelRegister">Email</mat-label>
+                <input matInput type="email" formControlName="email" placeholder="your.email@example.com" i18n-placeholder="@@emailPlaceholderRegister" required>
+                <mat-error *ngIf="regEmailCtrl.hasError('required')" i18n="@@emailRequiredErrorRegister">
+                  Email is required.
+                </mat-error>
+                <mat-error *ngIf="regEmailCtrl.hasError('email') && !regEmailCtrl.hasError('required')" i18n="@@emailInvalidErrorRegister">
+                  Please enter a valid email address.
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="half-width">
+                <mat-label i18n="@@phoneNumberLabel">Phone Number</mat-label>
+                <input matInput type="tel" formControlName="phoneNumber" placeholder="e.g., 1234567890" i18n-placeholder="@@phonePlaceholder" required>
+                <mat-error *ngIf="regPhoneCtrl.hasError('required')" i18n="@@phoneRequiredError">
+                  Phone number is required.
+                </mat-error>
+                <mat-error *ngIf="regPhoneCtrl.hasError('pattern') && !regPhoneCtrl.hasError('required')" i18n="@@phonePatternError">
+                  Please enter a valid phone number.
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label i18n="@@passwordLabelRegister">Create Password</mat-label>
+              <input matInput [type]="hideRegisterPassword ? 'password' : 'text'" formControlName="password" placeholder="Enter your password" i18n-placeholder="@@passwordPlaceholderRegister" required>
+              <button mat-icon-button matSuffix (click)="toggleRegisterPasswordVisibility()" type="button" [attr.aria-label]="hideRegisterPassword ? 'Show password' : 'Hide password'" [attr.i18n-aria-label]="hideRegisterPassword ? '@@showPasswordAriaLabel' : '@@hidePasswordAriaLabel'">
+                <mat-icon>{{hideRegisterPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              <mat-error *ngIf="regPasswordCtrl.hasError('required')" i18n="@@passwordRequiredErrorRegister">
+                Password is required.
+              </mat-error>
+              <mat-error *ngIf="regPasswordCtrl.hasError('minlength')" i18n="@@passwordMinLengthErrorRegister">
+                Password must be at least 8 characters.
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label i18n="@@confirmPasswordLabelRegister">Confirm Password</mat-label>
+              <input matInput [type]="hideRegisterConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" placeholder="Re-enter your password" i18n-placeholder="@@confirmPasswordPlaceholderRegister" required>
+              <button mat-icon-button matSuffix (click)="toggleRegisterConfirmPasswordVisibility()" type="button" [attr.aria-label]="hideRegisterConfirmPassword ? 'Show password' : 'Hide password'" [attr.i18n-aria-label]="hideRegisterConfirmPassword ? '@@showPasswordAriaLabel' : '@@hidePasswordAriaLabel'">
+                <mat-icon>{{hideRegisterConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+              </button>
+              <mat-error *ngIf="regConfirmPasswordCtrl.hasError('required')" i18n="@@confirmPasswordRequiredErrorRegister">
+                Please confirm your password.
+              </mat-error>
+              <mat-error *ngIf="regConfirmPasswordCtrl.hasError('mismatch') && !regConfirmPasswordCtrl.hasError('required')" i18n="@@passwordsDoNotMatchErrorRegister">
+                Passwords do not match.
+              </mat-error>
+            </mat-form-field>
+
+            <div class="terms-checkbox-container">
+              <mat-checkbox formControlName="termsAccepted" class="terms-checkbox" required>
+                <span i18n="@@agreeToTermsPrompt">I agree to all the <a href="#" class="interactive-link-inline" i18n="@@termsLink">Terms</a> and <a href="#" class="interactive-link-inline" i18n="@@privacyPolicyLink">Privacy Policies</a></span>
+              </mat-checkbox>
+              <mat-error *ngIf="regTermsCtrl.hasError('requiredTrue') && (regTermsCtrl.touched || registerForm.errors?.['mismatch'] === undefined)" class="terms-error" i18n="@@termsRequiredError">
+                You must accept the terms and policies.
+              </mat-error>
+            </div>
+
+            <button mat-raised-button color="primary" type="submit" class="full-width register-button" [disabled]="registerForm.invalid || isLoading">
+              <span *ngIf="!isLoading" i18n="@@createAccountButtonText">Create account</span>
+              <mat-spinner *ngIf="isLoading" diameter="24" class="button-spinner"></mat-spinner>
+            </button>
+          </form>
+
+          <div class="login-link">
+            <span i18n="@@alreadyHaveAccountPrompt">Already have an account?</span>
+            <a (click)="toggleToLogin()" class="interactive-link" i18n="@@loginLink">Login</a>
+          </div>
+        </div>
+
+        <!-- Common Elements for both forms -->
         <div class="divider">
-          <span i18n="@@orLoginWithDivider">Or login with</span>
+          <span i18n="@@orDivider">{{ showRegisterForm ? 'Or sign up with' : 'Or login with' }}</span>
         </div>
 
         <div class="social-buttons" *ngIf="iconsRegistered">
-          <button mat-stroked-button class="social-button" aria-label="Login with Google" i18n-aria-label="@@loginWithGoogleAriaLabel">
+          <button mat-stroked-button class="social-button" aria-label="Sign in with Google" i18n-aria-label="@@signInWithGoogleAriaLabel">
             <mat-icon svgIcon="google"></mat-icon>
           </button>
-          <button mat-stroked-button class="social-button" aria-label="Login with Facebook" i18n-aria-label="@@loginWithFacebookAriaLabel">
+          <button mat-stroked-button class="social-button" aria-label="Sign in with Facebook" i18n-aria-label="@@signInWithFacebookAriaLabel">
             <mat-icon svgIcon="facebook"></mat-icon>
           </button>
-          <button mat-stroked-button class="social-button" aria-label="Login with Apple" i18n-aria-label="@@loginWithAppleAriaLabel">
+          <button mat-stroked-button class="social-button" aria-label="Sign in with Apple" i18n-aria-label="@@signInWithAppleAriaLabel">
             <mat-icon svgIcon="apple"></mat-icon>
           </button>
         </div>
@@ -72,22 +175,31 @@
           <mat-slide-toggle [checked]="(themeService.isDarkMode$ | async)!" (change)="toggleDarkMode()" i18n="@@darkModeLabel">
             Dark Mode
           </mat-slide-toggle>
-
           <mat-icon svgIcon="moon" class="toggle-icon moon-icon"></mat-icon>
           <mat-icon svgIcon="sun" class="toggle-icon sun-icon"></mat-icon>
         </div>
 
       </div>
-      <div class="login-panel-spacer-bottom"></div> </div>
+      <div class="login-panel-spacer-bottom"></div>
+    </div>
 
     <div class="login-right">
       <div class="carousel-container">
-        <img *ngFor="let image of galleryImages; let i = index"
+        <!-- Original carousel logic - if keeping interval based changes -->
+        <!-- <img *ngFor="let image of galleryImages; let i = index"
              [src]="image"
              alt="Gallery image {{i + 1}}"
              i18n-alt="@@galleryImageAltText"
              class="carousel-image"
              [class.active]="i === currentImageIndex"
+             loading="lazy"> -->
+
+        <!-- Simplified for single dynamic image based on component state -->
+        <img [src]="carouselImage"
+             *ngIf="carouselImage"
+             alt="Decorative image"
+             i18n-alt="@@authFlowImageAltText"
+             class="carousel-image active"
              loading="lazy">
       </div>
     </div>

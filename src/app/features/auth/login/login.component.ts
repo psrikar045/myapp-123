@@ -9,11 +9,13 @@ import {
   AbstractControl // Import if needed, though direct control access is often typed
 } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'; // <-- Add this to imports array
-import { Router } from '@angular/router'; // <-- Import Router
-import { AuthService } from '../../../core/services/auth.service'; // <-- Import AuthService (adjust path)
+import { Router, RouterModule } from '@angular/router'; // <-- Import Router
+import { AuthService, RegisterData } from '../../../core/services/auth.service'; // <-- Import AuthService (adjust path)
 import { emailOrUsernameValidator } from '../../../core/validators/custom-validators'; // Import the custom validator
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { catchError, of, tap } from 'rxjs/operators';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -38,7 +40,8 @@ import { ThemeService } from '../../../core/services/theme.service';
     MatSlideToggleModule,
     MatProgressSpinnerModule,
     HttpClientModule, // <-- Ensure this is here for Auth Service
-    RouterModule // <-- Add RouterModule for routerLink
+  RouterModule, // <-- Add RouterModule for routerLink
+  MatSnackBarModule // <-- Add MatSnackBarModule for notifications
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
@@ -53,63 +56,86 @@ export class LoginComponent implements OnInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly authService = inject(AuthService); // <-- Inject AuthService
   private readonly router = inject(Router); // <-- Inject Router
+  private readonly snackBar = inject(MatSnackBar); // <-- Inject MatSnackBar
 
-  // Explicitly type loginForm as per requirements
-  loginForm: FormGroup<{
-    identifier: FormControl<string>; // Changed from email to identifier
+  // --- Form Definitions ---
+  loginForm!: FormGroup<{
+    identifier: FormControl<string>;
     password: FormControl<string>;
     rememberMe: FormControl<boolean>;
   }>;
+  registerForm!: FormGroup; // Typed below
 
-  hidePassword = true;
+  // --- State Properties ---
+  showRegisterForm: boolean = false;
   isLoading = false;
-  errorMessage: string | null = null;
+  errorMessage: string | null = null; // For login form errors
   isDarkMode = false;
 
-  private themeSubscription!: Subscription;
-  private carouselIntervalId: any;
+  // Password visibility toggles
+  hideLoginPassword = true;
+  hideRegisterPassword = true;
+  hideRegisterConfirmPassword = true;
 
-  readonly GALLERY_IMAGE_PATHS: readonly string[] = [
-    'images/gallery1.png',
-    'images/gallery2.png',
-    'images/gallery3.png',
-  ];
-  readonly CAROUSEL_INTERVAL_MS = 3000;
-
-  galleryImages = this.GALLERY_IMAGE_PATHS;
+  // --- Carousel Properties ---
+  // currentImageIndex is used by the original carousel logic if startCarousel() is called
+  // For simple image switching, carouselImage is enough.
   currentImageIndex = 0;
-iconsRegistered = false;
-  constructor() {
-    // Initialize the form using NonNullableFormBuilder.
-    // The return type of this.fb.group should align with the explicit type of loginForm.
-    this.loginForm = this.fb.group({
-      identifier: this.fb.control('', [Validators.required, emailOrUsernameValidator()]), // Changed email to identifier and added custom validator
-      password: this.fb.control('', [Validators.required]),
-      rememberMe: this.fb.control(false), // NonNullableFormBuilder ensures this is FormControl<boolean>
-    });
-    // No cast needed here because NonNullableFormBuilder's group method with NonNullableControls
-    // will produce a FormGroup whose controls are non-nullable and match the types specified
-    // (string for empty string initial value, boolean for boolean initial value).
+  carouselImage: string = 'images/gallery3.png'; // Default for login form
 
-    // Move the registerSvgIcons() call into a platform check
-    // This will prevent it from running during SSR
-    if (isPlatformBrowser(this.platformId)) { // <-- Add this check
+  // readonly GALLERY_IMAGE_PATHS: readonly string[] = [
+  //   'images/gallery1.png', // Example: For step 1 if multi-step within login
+  //   'images/gallery2.png', // For register form
+  //   'images/gallery3.png', // For login form
+  // ];
+  // readonly CAROUSEL_INTERVAL_MS = 3000; // If using interval-based carousel
+
+  // --- Subscriptions & Timers ---
+  private themeSubscription!: Subscription;
+  private carouselIntervalId: any; // Keep if using interval-based carousel logic
+
+  iconsRegistered = false;
+
+  constructor() {
+    // Form initializations moved to ngOnInit as NonNullableFormBuilder (fb) might not be fully ready in constructor
+    // if it's injected and its own dependencies are complex. ngOnInit is safer.
+    if (isPlatformBrowser(this.platformId)) {
       this.registerSvgIcons();
       this.iconsRegistered = true;
     }
   }
 
   ngOnInit(): void {
+    // Initialize forms here
+    this.loginForm = this.fb.group({
+      identifier: this.fb.control('', [Validators.required, emailOrUsernameValidator()]),
+      password: this.fb.control('', [Validators.required]),
+      rememberMe: this.fb.control(false),
+    });
+
+    this.registerForm = this.fb.group({
+      firstName: this.fb.control('', [Validators.required]),
+      lastName: this.fb.control('', [Validators.required]),
+      email: this.fb.control('', [Validators.required, Validators.email]),
+      phoneNumber: this.fb.control('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9\+\-\s()]*$/)]), // More flexible phone pattern
+      password: this.fb.control('', [Validators.required, Validators.minLength(8)]),
+      confirmPassword: this.fb.control('', [Validators.required]),
+      termsAccepted: this.fb.control(false, [Validators.requiredTrue]),
+    }, { validators: passwordMatchValidator });
+
     this.themeSubscription = this.themeService.isDarkMode$.subscribe(isDark => {
       this.isDarkMode = isDark;
       this.cdr.markForCheck();
     });
-
     this.isDarkMode = this.themeService.getIsDarkMode();
 
-    if (isPlatformBrowser(this.platformId)) {
-      this.startCarousel();
-    }
+    this.carouselImage = this.showRegisterForm ? 'images/gallery2.png' : 'images/gallery3.png';
+    this.cdr.markForCheck();
+
+    // Optional: Start interval carousel if needed, and only for login view by default
+    // if (isPlatformBrowser(this.platformId) && !this.showRegisterForm) {
+    //  this.startCarousel();
+    // }
   }
 
   private registerSvgIcons(): void {
@@ -136,76 +162,170 @@ iconsRegistered = false;
     );
   }
 
-  // Typed get accessor for identifier (renamed from email)
-  get identifier(): FormControl<string> {
-    // When loginForm is explicitly typed as FormGroup<{ identifier: FormControl<string>; ... }>,
-    // this.loginForm.controls.identifier is already correctly typed as FormControl<string>.
-    return this.loginForm.controls.identifier;
+  // --- Getters for form controls (optional, for cleaner template access) ---
+  get loginIdentifierCtrl() { return this.loginForm.get('identifier') as FormControl<string>; }
+  get loginPasswordCtrl() { return this.loginForm.get('password') as FormControl<string>; }
+
+  get regFirstNameCtrl() { return this.registerForm.get('firstName') as FormControl<string>; }
+  get regLastNameCtrl() { return this.registerForm.get('lastName') as FormControl<string>; }
+  get regEmailCtrl() { return this.registerForm.get('email') as FormControl<string>; }
+  get regPhoneCtrl() { return this.registerForm.get('phoneNumber') as FormControl<string>; }
+  get regPasswordCtrl() { return this.registerForm.get('password') as FormControl<string>; }
+  get regConfirmPasswordCtrl() { return this.registerForm.get('confirmPassword') as FormControl<string>; }
+  get regTermsCtrl() { return this.registerForm.get('termsAccepted') as FormControl<boolean>; }
+
+
+  // --- Methods for Login Form ---
+  clearIdentifier(): void {
+    this.loginIdentifierCtrl.setValue('');
   }
 
-  // Typed get accessor for password
-  get password(): FormControl<string> {
-    return this.loginForm.controls.password;
+  toggleLoginPasswordVisibility(): void {
+    this.hideLoginPassword = !this.hideLoginPassword;
   }
 
-  // Optional: Typed get accessor for rememberMe
-  get rememberMe(): FormControl<boolean> {
-    return this.loginForm.controls.rememberMe;
-  }
-
-  clearIdentifier(): void { // Renamed from clearEmail
-    this.identifier.setValue('');
-  }
-
-  togglePasswordVisibility(): void {
-    this.hidePassword = !this.hidePassword;
-  }
-
-  onSubmit(): void {
+  onSubmitLogin(): void {
     this.errorMessage = null;
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
-
-    this.isLoading = true; // Set loading state to true
-
-    const { identifier, password } = this.loginForm.getRawValue(); // Get identifier and password values from the form
-
-    // Call the login method from AuthService
+    this.isLoading = true;
+    const { identifier, password } = this.loginForm.getRawValue();
     this.authService.login(identifier, password)
-      .subscribe({
-        next: (response) => {
+      .pipe(
+        tap(response => {
           console.log('Login API success!', response);
-          // On successful login, navigate to a protected route (e.g., dashboard)
-          this.router.navigate(['/dashboard']); // IMPORTANT: Replace '/dashboard' with your actual protected route
-        },
-        error: (error: Error) => {
-          // Handle errors from AuthService (e.g., network issues, invalid credentials)
+          this.router.navigate(['/dashboard']);
+        }),
+        catchError(error => {
           this.errorMessage = error.message || 'Login failed. Please try again.';
           console.error('Login API error:', error);
-          // Optionally, reset password field or other form parts
-          this.password.setValue('');
-        },
-        complete: () => {
-          this.isLoading = false; // Always set loading state to false when the request completes
-          this.cdr.markForCheck(); // Trigger change detection
-        }
+          this.loginPasswordCtrl.setValue('');
+          return of(null); // Consumed error
+        })
+      )
+      .subscribe(() => {
+        this.isLoading = false;
+        this.cdr.markForCheck();
       });
+  }
+
+  // --- Methods for Registration Form ---
+  toggleRegisterPasswordVisibility(): void {
+    this.hideRegisterPassword = !this.hideRegisterPassword;
+  }
+
+  toggleRegisterConfirmPasswordVisibility(): void {
+    this.hideRegisterConfirmPassword = !this.hideRegisterConfirmPassword;
+  }
+
+  onSubmitRegister(): void {
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      // Manually trigger validation for confirmPassword due to potential issues with form group validator
+      this.regConfirmPasswordCtrl.updateValueAndValidity();
+      this.cdr.markForCheck();
+      return;
+    }
+    this.isLoading = true;
+    const rawValues = this.registerForm.getRawValue();
+    const registerData: RegisterData = {
+      firstName: rawValues.firstName,
+      lastName: rawValues.lastName,
+      email: rawValues.email,
+      phoneNumber: rawValues.phoneNumber,
+      password: rawValues.password,
+    };
+
+    this.authService.register(registerData)
+      .pipe(
+        tap(() => {
+          this.snackBar.open('Registration successful! Please login.', 'Close', { duration: 5000 });
+          this.toggleToLogin(); // Switch to login form
+          this.loginForm.reset(); // Optionally reset login form
+          this.registerForm.reset(); // Reset register form
+        }),
+        catchError(error => {
+          this.snackBar.open(error.message || 'Registration failed. Please try again.', 'Close', { duration: 7000 });
+          console.error('Register API error:', error);
+          return of(null); // Consumed error
+        })
+      )
+      .subscribe(() => {
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      });
+  }
+
+  // --- Methods for Toggling Forms & UI ---
+  toggleToRegister(): void {
+    this.showRegisterForm = true;
+    this.carouselImage = 'images/gallery2.png';
+    this.errorMessage = null; // Clear login error message
+    // this.startOrUpdateCarousel(); // If using interval-based carousel
+    this.cdr.markForCheck();
+  }
+
+  toggleToLogin(): void {
+    this.showRegisterForm = false;
+    this.carouselImage = 'images/gallery3.png';
+    // this.startOrUpdateCarousel(); // If using interval-based carousel
+    this.cdr.markForCheck();
   }
 
   toggleDarkMode(): void {
     this.themeService.toggleDarkMode();
   }
 
-  private startCarousel(): void {
-    if (this.galleryImages.length > 0) {
-      this.carouselIntervalId = setInterval(() => {
-        this.currentImageIndex = (this.currentImageIndex + 1) % this.galleryImages.length;
-        this.cdr.markForCheck();
-      }, this.CAROUSEL_INTERVAL_MS);
-    }
-  }
+  // --- Carousel Logic (Original - adapt if needed) ---
+  // If you want a continuously cycling carousel on the right, use this.
+  // If you just want a static image per form (login vs register), then setting this.carouselImage is enough.
+  // private startOrUpdateCarousel(): void {
+  //   if (isPlatformBrowser(this.platformId)) {
+  //     if (this.carouselIntervalId) {
+  //       clearInterval(this.carouselIntervalId);
+  //     }
+  //     // Determine which set of images to use or how to behave based on this.showRegisterForm
+  //     // This is a placeholder for more complex carousel logic if needed
+  //     const imagesToShow = this.showRegisterForm ? [this.GALLERY_IMAGE_PATHS[1]] : [this.GALLERY_IMAGE_PATHS[2]];
+
+  //     if (imagesToShow.length > 0) {
+  //       this.currentImageIndex = 0; // Reset index
+  //       this.carouselImage = imagesToShow[this.currentImageIndex]; // Set initial image for the current view
+  //       this.cdr.markForCheck();
+
+  //       if (imagesToShow.length > 1) { // Only set interval if multiple images for current view
+  //         this.carouselIntervalId = setInterval(() => {
+  //           this.currentImageIndex = (this.currentImageIndex + 1) % imagesToShow.length;
+  //           this.carouselImage = imagesToShow[this.currentImageIndex];
+  //           this.cdr.markForCheck();
+  //         }, this.CAROUSEL_INTERVAL_MS);
+  //       }
+  //     }
+  //   }
+  // }
+
+  // Simplified from original: if you want a cycling carousel for the "login" view and a static for "register"
+  // you would call this from ngOnInit and toggleToLogin, and just set static image in toggleToRegister.
+  // private startCarousel(): void {
+  //   if (isPlatformBrowser(this.platformId) && !this.showRegisterForm && this.GALLERY_IMAGE_PATHS.length > 0) {
+  //     // Example: only cycle gallery3 for login view, or a specific subset
+  //     const loginImages = [this.GALLERY_IMAGE_PATHS[2], this.GALLERY_IMAGE_PATHS[0]]; // e.g. gallery3 and gallery1
+  //     this.currentImageIndex = 0;
+  //     this.carouselImage = loginImages[this.currentImageIndex];
+  //     this.cdr.markForCheck();
+
+  //     this.carouselIntervalId = setInterval(() => {
+  //       this.currentImageIndex = (this.currentImageIndex + 1) % loginImages.length;
+  //       this.carouselImage = loginImages[this.currentImageIndex];
+  //       this.cdr.markForCheck();
+  //     }, this.CAROUSEL_INTERVAL_MS);
+  //   } else if (this.carouselIntervalId) {
+  //     clearInterval(this.carouselIntervalId);
+  //   }
+  // }
+
 
   ngOnDestroy(): void {
     if (this.themeSubscription) {
@@ -215,4 +335,21 @@ iconsRegistered = false;
       clearInterval(this.carouselIntervalId);
     }
   }
+}
+
+// Standalone passwordMatchValidator function
+export function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+  const password = control.get('password');
+  const confirmPassword = control.get('confirmPassword');
+
+  if (password && confirmPassword && password.value !== confirmPassword.value) {
+    confirmPassword.setErrors({ mismatch: true });
+    return { mismatch: true }; // Error set on the form group
+  } else {
+    // If passwords match or one field is empty, clear the mismatch error from confirmPassword
+    if (confirmPassword?.hasError('mismatch')) {
+      confirmPassword.setErrors(null);
+    }
+  }
+  return null;
 }

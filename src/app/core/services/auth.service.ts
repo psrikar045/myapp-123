@@ -17,6 +17,16 @@ interface LoginResponse {
   // Potentially include refreshToken if your auth flow uses it
 }
 
+// Define an interface for the registration data payload
+export interface RegisterData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string; // Ensure this matches your backend's expected field
+  password: string;
+  // termsAccepted: boolean; // You might send this or handle it purely client-side
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -28,6 +38,7 @@ export class AuthService {
   private readonly FORGOT_PASSWORD_URL = `${this.API_BASE_URL}/auth/forgot-password`;
   private readonly VERIFY_CODE_URL = `${this.API_BASE_URL}/auth/verify-reset-code`;
   private readonly RESET_PASSWORD_URL = `${this.API_BASE_URL}/auth/reset-password`;
+  private readonly REGISTER_URL = `${this.API_BASE_URL}/auth/register`; // Adjust to your actual backend endpoint
 
 
   private readonly platformId = inject(PLATFORM_ID); // <-- Inject PLATFORM_ID
@@ -123,6 +134,26 @@ export class AuthService {
   forgotPassword(email: string): Observable<any> {
     return this.http.post<any>(this.FORGOT_PASSWORD_URL, { email }).pipe(
       tap(() => console.log('Forgot password request sent successfully.')),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Registers a new user.
+   * @param userData The registration data (firstName, lastName, email, phoneNumber, password).
+   */
+  register(userData: RegisterData): Observable<any> { // Adjust return type based on API response
+    // Remove confirmPassword and termsAccepted from the payload if your backend doesn't expect them
+    const payload = {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      phoneNumber: userData.phoneNumber,
+      password: userData.password,
+      // Add other fields as per your backend API contract
+    };
+    return this.http.post<any>(this.REGISTER_URL, payload).pipe(
+      tap(() => console.log('User registered successfully.')),
       catchError(this.handleError)
     );
   }
