@@ -1,10 +1,75 @@
 /* You can add global styles to this file, and also import other style files */
 
+/* Defined Breakpoints for reference (desktop-first approach with max-width):
+   - md (Medium / Tablets): @media (max-width: 1279.98px)
+   - sm (Small / Mobile Landscape / Small Tablets): @media (max-width: 959.98px)
+   - xs (Extra Small / Mobile Portrait): @media (max-width: 599.98px)
+*/
+
+/* Set base font size for consistent rem unit behavior */
+html {
+  font-size: 16px;
+  scroll-behavior: smooth; /* Optional: for smooth scrolling on anchor links */
+}
+
+/* Apply box-sizing border-box to all elements and their pseudo-elements */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+  line-height: 1.5; /* Add a sensible default line-height for readability */
+  -webkit-font-smoothing: antialiased; /* Improve font rendering on WebKit */
+  -moz-osx-font-smoothing: grayscale; /* Improve font rendering on Firefox */
+}
+
+/* Basic responsive media elements */
+img,
+svg,
+picture,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block; /* Prevents bottom margin issues with images in containers */
+}
+
+/* Optional: Remove default margin from common elements for easier layout control */
+body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd {
+  margin: 0;
+}
+
+/* Optional: Basic list styling reset */
+ul[role='list'],
+ol[role='list'] {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Further global typography or link styling can be added here as needed */
+a {
+  color: inherit; /* Optional: make links inherit text color by default */
+  text-decoration: none; /* Optional: remove underlines by default */
+}
+
+/* Utility class for visually hidden elements (for accessibility) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
