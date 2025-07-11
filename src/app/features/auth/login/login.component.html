@@ -38,7 +38,7 @@
 
           <div class="form-options">
             <mat-checkbox formControlName="rememberMe" i18n="@@rememberMeLabel">Remember me</mat-checkbox>
-            <a href="#" class="forgot-password-link" i18n="@@forgotPasswordLink">Forgot Password?</a>
+            <a routerLink="/forgot-password" class="forgot-password-link" i18n="@@forgotPasswordLink">Forgot Password?</a>
           </div>
 
           <button mat-raised-button color="primary" type="submit" class="full-width login-button" [disabled]="loginForm.invalid || isLoading">

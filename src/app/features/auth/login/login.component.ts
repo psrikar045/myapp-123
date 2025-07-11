@@ -37,7 +37,8 @@ import { ThemeService } from '../../../core/services/theme.service';
     MatCheckboxModule,
     MatSlideToggleModule,
     MatProgressSpinnerModule,
-    HttpClientModule // <-- Ensure this is here for Auth Service
+    HttpClientModule, // <-- Ensure this is here for Auth Service
+    RouterModule // <-- Add RouterModule for routerLink
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
