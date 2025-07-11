@@ -6,27 +6,31 @@
 .login-container {
   min-height: 100vh;
   display: flex;
-  background-color: #f5f5f5; /* Light gray background for viewport */
+  align-items: center; /* Vertically center children */
+  justify-content: center; /* Horizontally center children */
+  padding: 2rem; /* Space from screen edges */
+  box-sizing: border-box; /* Include padding in total width/height */
+  /* background-color: #f5f5f5; */ /* Light gray background for viewport - REMOVED */
   font-family: "Poppins", "Roboto", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   transition: background-color 0.3s ease;
 }
 
 /* Left Section: Login Form Area */
 .login-left {
-  flex: 1;
+  flex: 0 1 auto; /* Allow shrinking, don't grow, base on content size */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
+  /* padding: 2rem; */ /* Padding moved to login-container */
   box-sizing: border-box;
 }
 
 .login-panel {
-  background-color: #ffffff; /* White card background */
+  /* background-color: #ffffff; */ /* White card background - REMOVED */
   padding: 2.5rem;
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); */ /* REMOVED for flatter look */
   width: 100%;
   max-width: 420px; /* Max width for the form panel */
   text-align: center;
@@ -284,12 +288,13 @@ mat-form-field {
 
 /* Right Section: Image Gallery / Carousel */
 .login-right {
-  flex: 1;
-  background-color: #eef2f7; /* Slightly different background for gallery */
+  flex: 0 1 auto; /* Allow shrinking, don't grow, base on content size */
+  /* background-color: #eef2f7; */ /* Slightly different background for gallery - REMOVE IF TRULY TRANSPARENT BACKGROUND REQUIRED FOR WHOLE PAGE */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
+  /* padding: 2rem; */ /* Padding moved to login-container or use margin for spacing */
+  margin-left: 2rem; /* Gap between left and right sections */
   overflow: hidden; /* Hide parts of non-active images */
   position: relative; /* For absolute positioning of images if needed */
   transition: background-color 0.3s ease;
@@ -321,12 +326,12 @@ mat-form-field {
 
 /* --- Dark Theme Styles (for overall login page) --- */
 .login-container.dark-theme {
-  background-color: #121212; /* Dark background for viewport */
+  /* background-color: #121212; */ /* Dark background for viewport - REMOVED */
 }
 
 .dark-theme .login-panel {
-  background-color: #1e1e1e; /* Darker card background */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  /* background-color: #1e1e1e; */ /* Darker card background - REMOVED */
+  /* box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); */ /* REMOVED for flatter look */
 }
 
 .dark-theme h2 {
@@ -433,7 +438,7 @@ mat-form-field {
 
 /* Right section dark theme */
 .dark-theme .login-right {
-  background-color: #2a2a2a; /* Dark background for gallery area */
+  /* background-color: #2a2a2a; */ /* Dark background for gallery area - REMOVED */
 }
 
 .dark-theme .carousel-image {
@@ -445,12 +450,18 @@ mat-form-field {
 @media (max-width: 960px) {
   .login-right {
     display: none; /* Hide image gallery on smaller screens */
+    margin-left: 0; /* Remove margin when it's hidden or stacked */
   }
   .login-left {
-    padding: 1.5rem; /* Adjust padding for smaller screens */
+    /* padding: 1.5rem; */ /* Padding is on login-container, this could be removed or adjusted if specific smaller screen padding for login-left is needed */
+    /* flex-basis: 100%; */ /* Ensure it takes full width if stacking or if it's the only item */
+  }
+  .login-container {
+    padding: 1rem; /* Optionally adjust container padding for smaller screens */
   }
   .login-panel {
     padding: 2rem; /* Adjust panel padding */
+    /* Potentially add margin here if login-container padding is not enough separation from edges */
   }
 }
 
