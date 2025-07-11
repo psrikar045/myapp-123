@@ -80,11 +80,23 @@ h2 {
   width: 100%;
 }
 
+/* Shared styles for form rows if any */
+.form-row {
+  display: flex;
+  gap: 1rem; /* Space between items in a row */
+  margin-bottom: 0.5rem; /* Reduced margin if fields already have bottom margin */
+}
+
+.half-width {
+  flex: 1; /* Each takes half of the space in a .form-row */
+  min-width: 0; /* Prevents overflow issues with flex items */
+}
+
 mat-form-field {
   margin-bottom: 1rem;
 }
 
-.form-options {
+.form-options { /* For login form: remember me & forgot password */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -101,7 +113,35 @@ mat-form-field {
   text-decoration: underline;
 }
 
-.login-button {
+.interactive-link { /* Class for Sign up / Login links */
+  color: #4A50E0;
+  text-decoration: none;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 0.3rem;
+}
+.interactive-link:hover {
+  text-decoration: underline;
+}
+.dark-theme .interactive-link {
+  color: #8c9eff;
+}
+
+.interactive-link-inline { /* For terms and privacy policy links */
+  color: #4A50E0;
+  text-decoration: underline;
+  font-weight: 500; /* Or normal if preferred */
+  cursor: pointer;
+}
+.interactive-link-inline:hover {
+  text-decoration: underline;
+}
+.dark-theme .interactive-link-inline {
+  color: #8c9eff;
+}
+
+
+.login-button, .register-button {
   padding: 0.8rem 0;
   font-size: 1rem;
   font-weight: 500;
@@ -143,7 +183,51 @@ mat-form-field {
   text-decoration: underline;
 }
 
-/* Divider "Or login with" */
+/* Login Link (below register form) */
+.login-link {
+  margin-top: 1.5rem; /* Adjusted from signup-link */
+  font-size: 0.9rem;
+  color: #555;
+}
+.dark-theme .login-link {
+  color: #b0b0b0;
+}
+.login-link a { /* Uses .interactive-link now */
+  margin-left: 0.3rem;
+}
+
+
+/* Terms Checkbox Specific Styles */
+.terms-checkbox-container {
+  margin-bottom: 1.5rem; /* Space before the register button */
+  text-align: left; /* Align checkbox and text to the left */
+}
+
+.terms-checkbox .mat-mdc-checkbox-layout {
+  /* Adjust if needed, but default alignment of checkbox internal elements is usually fine */
+}
+
+.terms-checkbox span { /* The text next to the checkbox */
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: #555;
+}
+.dark-theme .terms-checkbox span {
+  color: #b0b0b0;
+}
+
+.terms-error {
+  display: block; /* Make it take its own line */
+  font-size: 0.75rem; /* Standard mat-error font size */
+  color: var(--mat-form-field-error-text-color, #f44336); /* Material error color */
+  margin-top: 0.3rem; /* Space from checkbox */
+}
+.dark-theme .terms-error {
+  color: var(--mat-form-field-error-text-color-dark, #ff9891); /* Dark theme error color */
+}
+
+
+/* Divider "Or login with" / "Or sign up with" */
 .divider {
   display: flex;
   align-items: center;
