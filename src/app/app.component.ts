@@ -18,6 +18,6 @@ export class AppComponent {
 
   isAuthRoute(): boolean {
     const url = this.router.url;
-    return url.startsWith('/login') || url.startsWith('/reset-password');
+    return url.startsWith('/login') || url.startsWith('/reset-password') || url.startsWith('/forgot-password');
   }
 }

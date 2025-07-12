@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ToolbarService, ToolbarLogo, ToolbarNavItem, ToolbarAction } from '../../shared/services/toolbar.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -16,6 +16,7 @@ export class HeaderComponent implements OnInit {
   logo$: Observable<ToolbarLogo>;
   navItems$: Observable<ToolbarNavItem[]>;
   actions$: Observable<ToolbarAction[]>;
+  @Input() showNavigation = true;
 
   constructor(
     private toolbarService: ToolbarService,

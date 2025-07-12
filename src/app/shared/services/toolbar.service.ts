@@ -38,7 +38,7 @@ export class ToolbarService {
 
   private actions$ = new BehaviorSubject<ToolbarAction[]>([
     { type: 'login', label: 'Login', route: '/login' },
-    { type: 'get-started', label: 'Get Start', icon: 'landing/icons/arrow_forward.svg', route: '/get-started' }
+    { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.svg', route: '/my-profile' }
   ]);
 
   logo = this.logo$.asObservable();
@@ -46,7 +46,15 @@ export class ToolbarService {
   actions = this.actions$.asObservable();
 
   constructor() { }
-
+  setProfileHeaderOnly() {
+     this.logo$.next({
+      src: 'assets/logo icon.png',
+      alt: 'Marketify',
+      link: '/'
+    });
+    this.navItems$.next([]);
+    this.actions$.next([]);
+  }
   setLoggedInToolbar(): void {
     this.logo$.next({
       src: 'landing/logo icon.png',
@@ -79,7 +87,7 @@ export class ToolbarService {
     ]);
     this.actions$.next([
       { type: 'login', label: 'Login', route: '/login' },
-      { type: 'get-started', label: 'Get Start', icon: 'landing/icons/arrow_forward.svg', route: '/get-started' }
+      { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.svg', route: '/my-profile' }
     ]);
   }
 }

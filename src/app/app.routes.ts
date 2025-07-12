@@ -8,6 +8,7 @@ import { LandingPageComponent } from './features/landing/landing-page/landing-pa
 import { SearchComponent } from './features/search/search/search.component';
 import { SearchViewComponent } from './features/search-view/search-view/search-view.component';
 import { HomePageComponent } from './features/home/home-page.component';
+import { MyProfileComponent } from './features/my-profile/my-profile.component';
 
 export const routes: Routes = [
   // 1. Redirect root path '' to '/login'
@@ -51,6 +52,11 @@ export const routes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [authGuard]
+  },
+    {
+    path: 'my-profile',
+    component: MyProfileComponent,
+    
   },
   {
     path: 'admin',
