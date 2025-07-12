@@ -40,11 +40,11 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   private themeSubscription!: Subscription;
   private scrollSubscription!: Subscription;
 
-  private logoPath = 'public/images/logo.svg'; // Ensure correct path
-  private sunIconPath = 'public/icons/sun.svg'; // Ensure correct path
-  private cloudIconPath = 'public/icons/cloud.svg'; // Ensure correct path
-  private arrowForwardIconPath = 'public/icons/arrow_forward.svg'; // Ensure correct path
-  private menuIconPath = 'public/icons/menu.svg'; // Ensure correct path for menu icon
+  private logoPath = 'images/logo.svg'; // Ensure correct path
+  private sunIconPath = 'icons/sun.svg'; // Ensure correct path
+  private cloudIconPath = 'icons/cloud.svg'; // Ensure correct path
+  private arrowForwardIconPath = 'icons/arrow_forward.svg'; // Ensure correct path
+  private menuIconPath = 'icons/menu.svg'; // Ensure correct path for menu icon
 
   private themeService = inject(ThemeService);
   private iconRegistry = inject(MatIconRegistry);
