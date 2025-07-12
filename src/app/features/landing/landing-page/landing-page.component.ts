@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit, inject, PLATFORM_ID, Inject, ViewChild } from '@angular/core';
-import { isPlatformBrowser, CommonModule } from '@angular/common';
+import { isPlatformBrowser, CommonModule,NgClass, NgIf, NgFor, NgSwitch } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -11,7 +11,6 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ThemeService } from '../../../core/services/theme.service';
 import { LayoutService } from '../../../core/services/layout.service'; // Import LayoutService
 import { Router } from '@angular/router';
-
 @Component({
   selector: 'app-landing-page',
   standalone: true,
@@ -21,7 +20,8 @@ import { Router } from '@angular/router';
     MatButtonModule,
     MatIconModule,
     MatSidenavModule, // Add MatSidenavModule
-    MatListModule     // Add MatListModule for nav items in sidenav
+    MatListModule,
+    NgClass, NgIf, NgFor, NgSwitch     // Add MatListModule for nav items in sidenav
   ],
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.css']
@@ -53,7 +53,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   public layoutService = inject(LayoutService); // Inject LayoutService
   @Inject(PLATFORM_ID) private platformId!: Object;
 
-  constructor() {
+   constructor() {
     this.isMobile$ = this.layoutService.isMobile$; // Initialize isMobile$
     this.registerIcons();
   }
@@ -177,4 +177,241 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       console.log(`LandingPageComponent: Skipping scroll on server for section: ${sectionId}`);
     }
   }
+
+    open = false;
+
+  logo = {
+    src: '/assets/logo.svg', // Replace with your logo path or use the SVG inline
+    alt: 'Marketify Logo',
+    text: 'Marketify',
+  };
+
+  menuItems = [
+    { label: 'Home', link: '#' },
+    { label: 'Features', link: '#' },
+    { label: 'Developers', link: '#' },
+    { label: 'Pricing', link: '#' },
+    { label: 'About', link: '#' },
+  ];
+
+  buttons = [
+    {
+      label: 'Login',
+      link: '#',
+      style: 'ghost',
+      icon: null,
+    },
+    {
+      label: 'Get Started',
+      link: '#',
+      style: 'primary',
+      icon: 'arrow',
+    },
+  ];
+  // Hero section logic
+  heroHeadline = {
+    main: 'Fetch company brand Data Instantly with',
+    highlight: 'Marketify',
+    waveIcon: true
+  };
+  heroSubheadline = 'Access logos, brand colors, fonts and social links by simply entering a domain name';
+  ctas = [
+    { label: 'Try Marketify now', style: 'primary', icon: 'arrow' },
+    { label: 'View Docs', style: 'secondary', icon: 'arrow' }
+  ];
+  rating = {
+    label: 'Excellent',
+    value: 4.7,
+    count: 194
+  };
+  // Company logos orbit section logic
+  orbitHeadline = 'Trusted by Forward – Thinking Teams';
+  orbitSubheadline = 'Polygon absolutely works great with tools in your other existing platform.';
+  orbitLogos = [
+    { src: '/company/Item-1.svg', alt: 'Company 1' },
+    { src: '/company/Item-2.svg', alt: 'Company 2' },
+    { src: '/company/Item-3.svg', alt: 'Company 3' },
+    { src: '/company/Item-4.svg', alt: 'Company 4' },
+    { src: '/company/Item.svg', alt: 'Company 5' }
+  ];
+  // Company logos row section logic (after hero)
+  companyLogos = [
+    { src: '/company/Item-1.svg', alt: 'Company 1' },
+    { src: '/company/Item-2.svg', alt: 'Company 2' },
+    { src: '/company/Item-3.svg', alt: 'Company 3' },
+    { src: '/company/Item-4.svg', alt: 'Company 4' },
+    { src: '/company/Item.svg', alt: 'Company 5' }
+  ];
+  // Core capabilities section logic
+  coreHeadline = "Discover Marketify’s Core Capabilities";
+  coreSubheadline = "Everything you need to build powerful brand integrations";
+  cards = [
+    {
+      icon: 'bi bi-brightness-high',
+      title: 'Logos and Brand Assets',
+      button: 'Learn More'
+    },
+    {
+      icon: 'bi bi-display',
+      title: 'Brand colors & Fonts',
+      button: 'Learn More'
+    },
+    {
+      icon: 'bi bi-lightning-charge',
+      title: 'Real time API',
+      button: 'Learn More'
+    },
+    {
+      icon: 'bi bi-arrow-repeat',
+      title: 'Always Update',
+      button: 'Learn More'
+    }
+  ];
+  // All sections logic
+  allSections = [
+    {
+      title: 'For Designers',
+      description: 'A new way to book travel online, saving you time. With trip, There are no confusing spreadsheets or complicated searches. We just ask the right questions, find the best deal for you, then you book it.',
+      cards: [
+        { icon: 'bi bi-journal-bookmark', title: 'Brand Guidelines', subtitle: 'Cheap Flights\nAmazing Experiences' },
+        { icon: 'bi bi-palette', title: 'Color palettes', subtitle: 'Choose from a Wide Range\nof Options' },
+        { icon: 'bi bi-type', title: 'Typography', subtitle: 'Find the Right Fonts\nAmazing Services' },
+        { icon: 'bi bi-easel', title: 'Design assets', subtitle: 'Cheap Flights\nAmazing Experiences' }
+      ]
+    },
+    {
+      title: 'For Developers',
+      description: 'A new way to book travel online, saving you time. With trip, There are no confusing spreadsheets or complicated searches. We just ask the right questions, find the best deal for you, then you book it.',
+      cards: [
+        { icon: 'bi bi-plug', title: 'Rest API', subtitle: 'Amazing Functions\nAmazing Experiences' },
+        { icon: 'bi bi-boxes', title: 'SDKs Available', subtitle: 'Choose from a Wide Range\nof Options' },
+        { icon: 'bi bi-code-slash', title: 'Code Examples', subtitle: 'Easy Integration\nAmazing Services' },
+        { icon: 'bi bi-graph-up', title: 'Real Time Data', subtitle: 'Cheap Flights\nAmazing Experiences' }
+      ]
+    },
+    {
+      title: 'For Marketers',
+      description: 'A new way to book travel online, saving you time. With trip, There are no confusing spreadsheets or complicated searches. We just ask the right questions, find the best deal for you, then you book it.',
+      cards: [
+        { icon: 'bi bi-geo-alt', title: 'Trip Advisor', subtitle: 'Cheap Flights\nAmazing Experiences' },
+        { icon: 'bi bi-airplane', title: 'Airban', subtitle: 'Choose from a Wide Range\nof Options' },
+        { icon: 'bi bi-truck', title: 'Turkish Kargo', subtitle: 'Cheap Flights\nAmazing Experiences' },
+        { icon: 'bi bi-people', title: 'Itata', subtitle: 'Cheap Flights\nAmazing Experiences' }
+      ]
+    }
+  ];
+  // Supercharge workflow section logic
+  superchargeHeadline = 'Ready to Supercharge Your Workflow';
+  superchargeSubheadline = 'Start fetching brand data in minutes with Marketify.';
+  superchargeCta = 'Get Started';
+  // Pricing section logic
+  pricingHeadline = 'Expand your options with a subscription';
+  pricingSubheadline = 'Graphs displaying your performance for metrics like follower evolution, average rate per post and reach and impressions to give you the insights.';
+  pricingPlans = [
+    {
+      name: 'Base',
+      price: '$0',
+      features: [
+        'Access to editing all blocks',
+        'Editing blocks together',
+        'Access to all premium icons',
+        'A dedicated domain',
+        'Ability to integrate with CMS'
+      ],
+      cta: 'Try for Free',
+      highlight: false
+    },
+    {
+      name: 'Standard',
+      price: '$300',
+      features: [
+        'Access to editing all blocks',
+        'Editing blocks together',
+        'Access to all premium icons',
+        'A dedicated domain',
+        'Ability to integrate with CMS'
+      ],
+      cta: 'Start 14 Days Free Trial',
+      highlight: true
+    },
+    {
+      name: 'Unlimited',
+      price: '$600',
+      features: [
+        'Access to editing all blocks',
+        'Editing blocks together',
+        'Access to all premium icons',
+        'A dedicated domain',
+        'Ability to integrate with CMS'
+      ],
+      cta: 'Start 14 Days Free Trial',
+      highlight: false
+    }
+  ];
+  // All merged logic from dashboard components will go here
+  isDarkTheme = false;
+
+  toggleTheme() {
+    this.isDarkTheme = !this.isDarkTheme;
+    if (this.isDarkTheme) {
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme');
+    }
+  }
+
+  goToSearch() {
+    this.router.navigate(['/search']);
+  }
+
+  testimonials = [
+    {
+      name: 'Mila McSabbu',
+      role: 'Freelance Designer',
+      avatar: 'assets/testimonials/avatar1.jpg',
+      text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
+    },
+    {
+      name: 'Mila McSabbu',
+      role: 'Freelance Designer',
+      avatar: 'assets/testimonials/avatar2.jpg',
+      text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
+    },
+    {
+      name: 'Mila McSabbu',
+      role: 'Freelance Designer',
+      avatar: 'assets/testimonials/avatar3.jpg',
+      text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
+    },
+    {
+      name: 'Mila McSabbu',
+      role: 'Freelance Designer',
+      avatar: 'assets/testimonials/avatar4.jpg',
+      text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
+    },
+    {
+      name: 'Mila McSabbu',
+      role: 'Freelance Designer',
+      avatar: 'assets/testimonials/avatar5.jpg',
+      text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
+    },
+    {
+      name: 'Mila McSabbu',
+      role: 'Freelance Designer',
+      avatar: 'assets/testimonials/avatar1.jpg',
+      text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
+    },
+    {
+      name: 'Mila McSabbu',
+      role: 'Freelance Designer',
+      avatar: 'assets/testimonials/avatar2.jpg',
+      text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
+    },
+    {
+      name: 'Mila McSabbu',
+      role: 'Freelance Designer',
+      avatar: 'assets/testimonials/avatar3.jpg',
+      text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
+    }
+  ];
 }

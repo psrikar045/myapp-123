@@ -1,79 +1,355 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav
-               [mode]="(layoutService.isMobile$ | async) ? 'over' : 'side'"
-               [opened]="(layoutService.isDesktop$ | async) && false"
-               fixedInViewport="true"
-               class="app-sidenav">
-    <mat-toolbar class="sidenav-toolbar">
-      <span>Menu</span>
-      <span class="spacer"></span>
-      <button mat-icon-button (click)="sidenav.close()" *ngIf="(layoutService.isMobile$ | async)">
-        <mat-icon>close</mat-icon> <!-- Using Material Icon 'close' -->
-      </button>
-    </mat-toolbar>
-    <mat-nav-list>
-      <a mat-list-item (click)="scrollToSection('home'); sidenav.close()">Home</a>
-      <a mat-list-item (click)="scrollToSection('features'); sidenav.close()">Features</a>
-      <a mat-list-item (click)="scrollToSection('developers'); sidenav.close()">Developers</a>
-      <a mat-list-item (click)="scrollToSection('pricing'); sidenav.close()">Pricing</a>
-      <a mat-list-item (click)="scrollToSection('about'); sidenav.close()">About</a>
-      <mat-divider></mat-divider>
-      <a mat-list-item (click)="navigateToLogin(); sidenav.close()">Login</a>
-    </mat-nav-list>
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-    <mat-toolbar
-      class="app-toolbar"
-      [class.toolbar-hidden]="!isVisible"
-      [ngClass]="{'dark-mode-toolbar': isDarkMode}">
-
-      <div class="toolbar-section left-section">
-        <button mat-icon-button
-                *ngIf="(layoutService.isMobile$ | async)"
-                (click)="sidenav.toggle()"
-                aria-label="Toggle Menu"
-                class="menu-button">
-          <mat-icon svgIcon="menu"></mat-icon>
-        </button>
-        <button mat-icon-button class="company-logo-button" (click)="scrollToSection('home')" aria-label="Company Logo">
-          <mat-icon svgIcon="company-logo" class="company-logo-icon"></mat-icon>
+<!-- Pixel-perfect Header Start -->
+<header class="landing-header">
+  <div class="container-fluid landing-header-container">
+    <div class="landing-header-inner">
+      <!-- Logo -->
+      <div class="landing-header-logo-row">
+        <span class="landing-header-logo-icon">
+          <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="48" height="48" rx="12" fill="#377DFF"/>
+            <text x="10" y="34" font-size="28" font-family="Inter, sans-serif" font-weight="bold" fill="white">M</text>
+          </svg>
+        </span>
+        <span class="landing-header-logo-text">Marketify</span>
+      </div>
+      <!-- Center Nav Links -->
+      <nav class="landing-header-nav">
+        <a *ngFor="let item of menuItems" [href]="item.link" class="landing-header-nav-link">{{ item.label }}</a>
+      </nav>
+      <!-- Actions -->
+      <div class="landing-header-actions">
+        <!-- Theme Toggle Switch -->
+        <label class="theme-toggle-switch">
+          <input type="checkbox" [checked]="isDarkTheme" (change)="toggleTheme()" />
+          <span class="slider"></span>
+        </label>
+        <button class="landing-header-login-btn" (click)="navigateToLogin(); sidenav.close()">Login</button>
+        <button class="landing-header-getstart-btn">Get Start <span class="arrow">→</span></button>
+        <!-- Hamburger (Mobile) -->
+        <button class="landing-header-hamburger" (click)="open = !open" aria-label="Open menu">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect y="8" width="36" height="4" rx="2" fill="#23272f"/>
+            <rect y="16" width="36" height="4" rx="2" fill="#23272f"/>
+            <rect y="24" width="36" height="4" rx="2" fill="#23272f"/>
+          </svg>
         </button>
       </div>
-
-      <div class="toolbar-section middle-section" *ngIf="layoutService.isDesktop$ | async">
-        <button mat-button (click)="scrollToSection('home')">Home</button>
-        <button mat-button (click)="scrollToSection('features')">Features</button>
-        <button mat-button (click)="scrollToSection('developers')">Developers</button>
-        <button mat-button (click)="scrollToSection('pricing')">Pricing</button>
-        <button mat-button (click)="scrollToSection('about')">About</button>
-      </div>
-
-      <span class="toolbar-spacer" *ngIf="!(layoutService.isDesktop$ | async)"></span>
-
-
-      <div class="toolbar-section right-section">
-        <button mat-icon-button (click)="toggleDarkMode()" class="theme-toggle-button" [attr.aria-label]="isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
-          <mat-icon [svgIcon]="isDarkMode ? 'cloud' : 'sun'" class="theme-icon"></mat-icon>
-        </button>
-
-        <button mat-button class="login-button" (click)="navigateToLogin()" *ngIf="layoutService.isDesktop$ | async">Login</button>
-
-        <button mat-flat-button class="get-started-button" (click)="scrollToSection('get-started')">
-          <span>Get Started</span>
-          <mat-icon svgIcon="arrow-forward" class="get-started-icon"></mat-icon>
-        </button>
-      </div>
-    </mat-toolbar>
-
-    <div class="landing-container" id="home">
-      <h1>Welcome User!</h1>
-      <!-- Placeholder for more content sections -->
-      <section id="features" style="height: 500px; background: #f0f0f0; padding-top: var(--toolbar-height);"><h2>Features Section</h2></section>
-      <section id="developers" style="height: 500px; background: #e0e0e0; padding-top: var(--toolbar-height);"><h2>Developers Section</h2></section>
-      <section id="pricing" style="height: 500px; background: #d0d0d0; padding-top: var(--toolbar-height);"><h2>Pricing Section</h2></section>
-      <section id="about" style="height: 500px; background: #c0c0c0; padding-top: var(--toolbar-height);"><h2>About Section</h2></section>
-      <section id="get-started" style="height: 500px; background: #b0b0b0; padding-top: var(--toolbar-height);"><h2>Get Started Section</h2></section>
     </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    <!-- Mobile Menu -->
+    <div *ngIf="open" class="landing-header-mobile-menu">
+      <nav class="landing-header-mobile-nav">
+        <a *ngFor="let item of menuItems" [href]="item.link" class="landing-header-mobile-link">{{ item.label }}</a>
+        <label class="theme-toggle-switch mobile">
+          <input type="checkbox" [checked]="isDarkTheme" (change)="toggleTheme()" />
+          <span class="slider"></span>
+        </label>
+        <button class="landing-header-mobile-login">Login</button>
+        <button class="landing-header-mobile-getstart">Get Start <span class="arrow">→</span></button>
+      </nav>
+    </div>
+  </div>
+</header>
+<!-- Pixel-perfect Header End -->
+
+<section class="hero-section position-relative w-100 overflow-hidden">
+  <!-- Large white circle overlay behind headline -->
+  <div class="hero-white-circle position-absolute rounded-circle"></div>
+  <!-- Decorative yellow/orange circle on the left behind text/CTAs -->
+  <img src="assets/Group 1000003639.svg" alt="Yellow Circle" class="hero-yellow-circle position-absolute" />
+  <div class="container position-relative z-2 py-5 hero-container">
+    <div class="d-flex flex-lg-row flex-column align-items-center justify-content-between hero-row">
+      <!-- Left: Text and CTAs -->
+      <div class="hero-left d-flex flex-column align-items-start justify-content-center flex-shrink-0">
+        <h1 class="hero-headline fw-extrabold mb-4">
+          {{ heroHeadline.main }}<br>
+          <span class="hero-highlight">{{ heroHeadline.highlight }}</span>
+          <svg *ngIf="heroHeadline.waveIcon" width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="hero-wave-icon"><path d="M2 12C6.5 2 13.5 2 18 12C22.5 22 29.5 22 34 12" stroke="#377DFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </h1>
+        <p class="hero-subheadline mb-4">{{ heroSubheadline }}</p>
+        <!-- Two separate CTA Button Cards -->
+        <div class="hero-ctas d-flex align-items-center mb-4">
+          <!-- CTA 1 -->
+          <div class="hero-cta hero-cta-primary">
+            <span class="hero-cta-label">Try Marketify now</span>
+            <button class="hero-cta-btn d-flex align-items-center justify-content-center" (click)="goToSearch()">
+              <svg class="w-5 h-5" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+          <!-- CTA 2 -->
+          <div class="hero-cta hero-cta-secondary">
+            <span class="hero-cta-label">View Docs</span>
+            <button class="hero-cta-btn d-flex align-items-center justify-content-center">
+              <svg class="w-5 h-5" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="hero-rating d-flex align-items-center gap-4 mt-2">
+          <div class="d-flex flex-column align-items-start">
+            <span class="hero-rating-label">Excellent</span>
+            <span class="d-flex align-items-center mt-1 hero-rating-stars">
+              <ng-container *ngFor="let star of [1,2,3,4,5]">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" class="d-inline align-text-bottom"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg>
+              </ng-container>
+            </span>
+          </div>
+          <div class="d-flex flex-column align-items-start hero-rating-score">
+            <span class="fw-bold text-primary hero-rating-value">4.7</span>
+            <span class="text-muted hero-rating-count">out of 5 on 194 reviews</span>
+          </div>
+        </div>
+      </div>
+      <!-- Right: Illustration -->
+      <div class="hero-right d-flex align-items-center justify-content-center flex-grow-1 position-relative">
+        <!-- Main illustration: Frame 37.svg -->
+        <img src="assets/Frame 37.svg" alt="Main Illustration" class="hero-main-illustration" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="company-logos-section w-100">
+  <div class="company-logos-container container">
+    <div class="company-logos-row">
+      <img *ngFor="let logo of orbitLogos" [src]="logo.src" [alt]="logo.alt" class="company-logo" />
+    </div>
+  </div>
+</section>
+
+<section class="core-capabilities-section w-100 position-relative">
+  <div class="core-capabilities-container container">
+    <h2 class="core-capabilities-headline">{{ coreHeadline }}</h2>
+    <p class="core-capabilities-subheadline">{{ coreSubheadline }}</p>
+    <div class="core-capabilities-cards-row">
+      <div *ngFor="let card of cards" class="core-capabilities-card">
+        <div class="core-capabilities-card-icon">
+          <i [class]="card.icon"></i>
+        </div>
+        <div class="core-capabilities-card-title">{{ card.title }}</div>
+        <button class="core-capabilities-card-btn">
+          {{ card.button }}
+          <i class="bi bi-arrow-right ms-1"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <img src="assets/Group 1000003638.svg" alt="Illustration" class="core-capabilities-illustration" />
+</section>
+
+<div class="container-fluid all-sections-wrapper">
+  <div *ngFor="let section of allSections; let i = index" class="section-row">
+    <div class="section-inner">
+      <ng-container *ngIf="i === 1">
+        <div class="section-illustration">
+          <img src="/assets/card.svg" alt="Card Illustration" />
+        </div>
+        <div class="section-content">
+          <h2 class="section-title">{{ section.title }}</h2>
+          <p class="section-description">{{ section.description }}</p>
+          <div class="section-cards">
+            <div *ngFor="let card of section.cards" class="section-card">
+              <i [class]="card.icon + ' card-icon'"></i>
+              <div class="card-title">{{ card.title }}</div>
+              <div class="card-subtitle">{{ card.subtitle }}</div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="i !== 1">
+        <div class="section-content">
+          <h2 class="section-title">{{ section.title }}</h2>
+          <p class="section-description">{{ section.description }}</p>
+          <div class="section-cards">
+            <div *ngFor="let card of section.cards" class="section-card">
+              <i [class]="card.icon + ' card-icon'"></i>
+              <div class="card-title">{{ card.title }}</div>
+              <div class="card-subtitle">{{ card.subtitle }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="section-illustration">
+          <img src="/assets/card.svg" alt="Card Illustration" />
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<div class="supercharge-section-wrapper container-fluid">
+  <div class="supercharge-section-inner">
+    <div class="supercharge-illustration">
+      <img src="/assets/Illustration.svg" alt="Workflow Illustration" class="workflow-illustration-img" />
+    </div>
+    <div class="supercharge-content">
+      <h2 class="supercharge-headline">{{ superchargeHeadline }}</h2>
+      <p class="supercharge-subheadline">{{ superchargeSubheadline }}</p>
+      <div class="supercharge-form-row">
+        <input type="email" class="supercharge-email-input" placeholder="Your Email here.." />
+        <button class="supercharge-cta-btn">{{ superchargeCta }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Testimonials Section Start -->
+<section class="testimonials-section container-fluid">
+  <div class="testimonials-header">
+    <h2 class="testimonials-title">Reviews From Our Customers</h2>
+    <p class="testimonials-subtitle">CareerPathNow has got more than 100k positive ratings from our users around the world.</p>
+  </div>
+  <div class="testimonials-cards-row">
+    <div class="testimonial-card" *ngFor="let testimonial of testimonials">
+      <img class="testimonial-avatar" [src]="testimonial.avatar" [alt]="testimonial.name" />
+      <div class="testimonial-info">
+        <div class="testimonial-name">{{ testimonial.name }}</div>
+        <div class="testimonial-role">{{ testimonial.role }}</div>
+      </div>
+      <div class="testimonial-text">{{ testimonial.text }}</div>
+    </div>
+  </div>
+  <div class="testimonials-pagination">
+    <button class="testimonials-arrow-btn" aria-label="Previous">
+      <span>&larr;</span>
+    </button>
+    <button class="testimonials-arrow-btn active" aria-label="Next">
+      <span>&rarr;</span>
+    </button>
+  </div>
+</section>
+<!-- Testimonials Section End -->
+
+<section class="pricing-section-wrapper container-fluid">
+  <div class="pricing-section-inner">
+    <h2 class="pricing-headline">{{ pricingHeadline }}</h2>
+    <p class="pricing-subheadline">{{ pricingSubheadline }}</p>
+    <div class="pricing-billing-toggle-row">
+      <span [class.active]="true">Bill Monthly</span>
+      <span class="pricing-toggle-switch">
+        <input type="checkbox" id="billing-toggle" checked />
+        <label for="billing-toggle"></label>
+      </span>
+      <span>Bill Anually</span>
+    </div>
+    <div class="pricing-cards-row">
+      <div *ngFor="let plan of pricingPlans; let i = index" class="pricing-card" [ngClass]="{ 'highlight': plan.highlight }">
+        <div class="pricing-card-header">
+          <div class="pricing-card-name">{{ plan.name }}</div>
+          <div class="pricing-card-desc">
+            <ng-container [ngSwitch]="i">
+              <span *ngSwitchCase="0">Free start for your project on our platform.</span>
+              <span *ngSwitchCase="1">For a small company that wants to show what it's worth.</span>
+              <span *ngSwitchCase="2">For a large company that wants to achieve maximum returns</span>
+            </ng-container>
+          </div>
+          <div class="pricing-card-price-row">
+            <span class="pricing-card-price">{{ plan.price }}</span>
+            <span class="pricing-card-period">Per User / Per Year</span>
+          </div>
+        </div>
+        <ul class="pricing-card-features">
+          <li *ngFor="let feature of plan.features">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>{{ feature }}</span>
+          </li>
+        </ul>
+        <button class="pricing-card-cta" [ngClass]="{ 'highlight-btn': plan.highlight }">{{ plan.cta }}</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="company-logos-section">
+  <div class="company-logos-orbit-wrapper">
+    <svg class="company-logos-orbit-svg" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="400" cy="200" rx="340" ry="160" stroke="#D6E4F7" stroke-width="2" />
+      <ellipse cx="400" cy="200" rx="270" ry="120" stroke="#E3EDFA" stroke-width="2" />
+      <ellipse cx="400" cy="200" rx="200" ry="80" stroke="#F0F4FA" stroke-width="2" />
+    </svg>
+    <div class="company-logos-content">
+      <h2 class="company-logos-headline">{{ orbitHeadline }}</h2>
+      <p class="company-logos-subheadline">{{ orbitSubheadline }}</p>
+    </div>
+    <ng-container *ngFor="let logo of orbitLogos; let i = index">
+      <div class="company-logo-card logo-pos-{{i}}">
+        <img [src]="logo.src" [alt]="logo.alt" />
+      </div>
+    </ng-container>
+  </div>
+</section>
+
+<!-- Footer Section Start (Pixel-Perfect) -->
+<footer class="footer-section">
+  <div class="footer-container">
+    <div class="footer-col footer-brand">
+      <div class="footer-logo-row">
+        <span class="footer-logo-icon">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="8" fill="white" fill-opacity="0.1"/>
+            <text x="8" y="24" font-size="18" font-family="Inter, sans-serif" font-weight="bold" fill="white">M</text>
+          </svg>
+        </span>
+        <span class="footer-logo-text">Marketify</span>
+      </div>
+      <div class="footer-desc">Access logos, brand colors, fonts and social links by simply entering a domain name</div>
+      <div class="footer-social-row">
+        <a href="#" class="footer-social-icon" aria-label="Instagram">
+          <!-- Instagram SVG -->
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="5" stroke="#2743d2" stroke-width="2"/><circle cx="11" cy="11" r="4" stroke="#2743d2" stroke-width="2"/><circle cx="16.2" cy="5.8" r="1" fill="#2743d2"/></svg>
+        </a>
+        <a href="#" class="footer-social-icon" aria-label="LinkedIn">
+          <!-- LinkedIn SVG -->
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="5" stroke="#2743d2" stroke-width="2"/><rect x="6" y="9" width="2" height="7" fill="#2743d2"/><rect x="10" y="12" width="2" height="4" fill="#2743d2"/><circle cx="7" cy="7" r="1" fill="#2743d2"/></svg>
+        </a>
+        <a href="#" class="footer-social-icon" aria-label="Facebook">
+          <!-- Facebook SVG -->
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="5" stroke="#2743d2" stroke-width="2"/><path d="M13 7h2V5h-2a3 3 0 0 0-3 3v2H7v2h3v5h2v-5h2l1-2h-3V8a1 1 0 0 1 1-1z" fill="#2743d2"/></svg>
+        </a>
+        <a href="#" class="footer-social-icon" aria-label="Twitter">
+          <!-- Twitter SVG -->
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="5" stroke="#2743d2" stroke-width="2"/><path d="M7 15c6 0 9-5 9-9v-.4A6.5 6.5 0 0 0 18 4.5a6.3 6.3 0 0 1-1.8.5A3.1 3.1 0 0 0 17.5 3a6.2 6.2 0 0 1-2 0.8A3.1 3.1 0 0 0 11 8.2a8.8 8.8 0 0 1-6.4-3.2s-1.2 2.1 1.2 3.2A3.1 3.1 0 0 1 4 7.7v.1a3.1 3.1 0 0 0 2.5 3A3.1 3.1 0 0 1 4 11.2a3.1 3.1 0 0 0 2.9 2A6.2 6.2 0 0 1 3 14.5c2.1 1.3 4.6 2 7 2z" fill="#2743d2"/></svg>
+        </a>
+      </div>
+      <div class="footer-copyright">© Copyright 2021 Duxo.io All rights reserved.</div>
+    </div>
+    <div class="footer-col footer-links">
+      <div class="footer-links-title">TOP BRAND CATEGORIES</div>
+      <div class="footer-links-row">
+        <ul>
+          <li>Computers Electronics</li>
+          <li>Finance</li>
+          <li>Vehicles</li>
+          <li>E-Commerce</li>
+          <li>News and Media</li>
+          <li>Luxury</li>
+        </ul>
+        <ul>
+          <li>Arts and Entertainment</li>
+          <li>Food and Drink</li>
+          <li>Travel and Tourism</li>
+          <li>Business and Services</li>
+          <li>Lifestyle</li>
+          <li>View all categories</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-col footer-dev">
+      <div class="footer-links-title">FOR DEVELOPERS</div>
+      <ul>
+        <li>Developers</li>
+        <li>Pricing</li>
+        <li>Docs</li>
+      </ul>
+    </div>
+    <div class="footer-col footer-company">
+      <div class="footer-links-title">COMPANY</div>
+      <ul>
+        <li>Home</li>
+        <li>For Brands</li>
+        <li>Plugins</li>
+        <li>Terms and conditions</li>
+        <li>Privacy policy</li>
+        <li>Blog</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<!-- Footer Section End --> 
