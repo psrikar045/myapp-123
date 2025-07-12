@@ -1,6 +1,6 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core'; // <-- Add PLATFORM_ID
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common'; // <-- Import isPlatformBrowser
@@ -42,6 +42,8 @@ export class AuthService {
 
 
   private readonly platformId = inject(PLATFORM_ID); // <-- Inject PLATFORM_ID
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.isAuthenticated());
+  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -59,6 +61,7 @@ export class AuthService {
           if (isPlatformBrowser(this.platformId)) { // <-- Add this check
             localStorage.setItem('jwt_token', response.token);
             localStorage.setItem('user_data', JSON.stringify(response.user));
+            this.isAuthenticatedSubject.next(true);
             console.log('Login successful, token stored.');
           }
         }),
@@ -122,6 +125,7 @@ export class AuthService {
     if (isPlatformBrowser(this.platformId)) { // <-- Add this check
       localStorage.removeItem('jwt_token');
       localStorage.removeItem('user_data');
+      this.isAuthenticatedSubject.next(false);
     }
     this.router.navigate(['/login']);
     console.log('Logged out.');

@@ -1,0 +1,86 @@
+:host {
+  display: block;
+  padding: 2rem;
+  background-color: #f5f5f5;
+}
+
+.home-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.main-content {
+  background-color: #fff;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+}
+
+/* Card styles */
+mat-card {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.card-large,
+.card-medium,
+.card-small {
+  background-color: #f9f9f9;
+}
+
+.card-feature-1 {
+  background: linear-gradient(to right, #6e8efb, #a777e3);
+  color: white;
+}
+
+.card-feature-2 {
+  background: linear-gradient(to right, #ff8c00, #ffc700);
+  color: white;
+}
+
+/* Responsive grid layout */
+@media (min-width: 600px) {
+  .grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 960px) {
+  .grid-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .card-large {
+    grid-column: span 2;
+  }
+
+  .card-medium {
+    grid-column: span 1;
+  }
+}
+
+footer {
+  text-align: center;
+  margin-top: 2rem;
+  color: #666;
+}
+
+button {
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
