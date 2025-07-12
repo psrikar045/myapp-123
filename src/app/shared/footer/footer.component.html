@@ -1,0 +1,47 @@
+<footer class="footer-container">
+  <div class="footer-content">
+    <!-- Column 1: Logo, description, socials, copyright -->
+    <div class="footer-section company-info">
+      <div class="footer-logo-row">
+        <img src="assets/images/logo.svg" alt="Logo" class="footer-logo-img" />
+        <span class="company-name">{{ companyName }}</span>
+      </div>
+      <div class="company-description">{{ companyDescription }}</div>
+      <div class="footer-socials-row">
+        <a *ngFor="let social of socialLinks" [href]="social.url" target="_blank" rel="noopener" class="footer-social-btn">
+          <i [class]="social.iconClass"></i>
+        </a>
+      </div>
+      <div class="footer-copyright">{{ copyright }}</div>
+    </div>
+
+    <!-- Column 2: Top Brand Categories -->
+    <div class="footer-section footer-categories">
+      <div class="footer-title">TOP BRAND CATEGORIES</div>
+      <div class="footer-links-row">
+        <ul>
+          <li *ngFor="let cat of brandCategories.slice(0,6)"><a href="#" class="footer-link">{{ cat }}</a></li>
+        </ul>
+        <ul>
+          <li *ngFor="let cat of brandCategories.slice(6)"><a href="#" class="footer-link">{{ cat }}</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Column 3: For Developers -->
+    <div class="footer-section footer-developers">
+      <div class="footer-title">FOR DEVELOPERS</div>
+      <ul>
+        <li *ngFor="let link of developerLinks"><a [href]="link.url" class="footer-link">{{ link.label }}</a></li>
+      </ul>
+    </div>
+
+    <!-- Column 4: Company -->
+    <div class="footer-section footer-company">
+      <div class="footer-title">COMPANY</div>
+      <ul>
+        <li *ngFor="let link of companyLinks"><a [href]="link.url" class="footer-link">{{ link.label }}</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>

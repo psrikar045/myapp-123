@@ -28,6 +28,6 @@ export class SearchComponent {
   }
 
   goToResults(brand: string) {
-    this.router.navigate(['/search-results', brand.toLowerCase()]);
+    this.router.navigate(['/search-view', brand.toLowerCase()]);
   }
 }

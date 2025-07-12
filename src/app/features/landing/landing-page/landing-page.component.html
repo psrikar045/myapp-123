@@ -58,43 +58,40 @@
   <img src="assets/Group 1000003639.svg" alt="Yellow Circle" class="hero-yellow-circle position-absolute" />
   <div class="container position-relative z-2 py-5 hero-container">
     <div class="d-flex flex-lg-row flex-column align-items-center justify-content-between hero-row">
-      <!-- Left: Text and CTAs -->
-      <div class="hero-left d-flex flex-column align-items-start justify-content-center flex-shrink-0">
+      <!-- Left: Text and Search -->
+      <div class="hero-left" style="display:flex; flex-direction:column; align-items:flex-start;">
         <h1 class="hero-headline fw-extrabold mb-4">
           {{ heroHeadline.main }}<br>
           <span class="hero-highlight">{{ heroHeadline.highlight }}</span>
           <svg *ngIf="heroHeadline.waveIcon" width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="hero-wave-icon"><path d="M2 12C6.5 2 13.5 2 18 12C22.5 22 29.5 22 34 12" stroke="#377DFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </h1>
         <p class="hero-subheadline mb-4">{{ heroSubheadline }}</p>
-        <!-- Two separate CTA Button Cards -->
-        <div class="hero-ctas d-flex align-items-center mb-4">
-          <!-- CTA 1 -->
-          <div class="hero-cta hero-cta-primary">
-            <span class="hero-cta-label">Try Marketify now</span>
-            <button class="hero-cta-btn d-flex align-items-center justify-content-center" (click)="goToSearch()">
-              <svg class="w-5 h-5" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </button>
+        <!-- Search Bar -->
+        <form class="hero-search-bar" autocomplete="off">
+          <span class="hero-search-icon">
+            <svg width="28" height="28" fill="none" stroke="#B0B7C3" stroke-width="2.2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <input type="text" class="hero-search-input" placeholder="Search a brand" (focus)="goToSearch()" />
+          <button type="button" class="hero-search-btn" (click)="goToSearch()">
+            <svg width="28" height="28" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </form>
+        <!-- Ratings Block -->
+        <div class="hero-rating" style="margin-top:28px; margin-left:8px; display:block; width:100%;">
+          <div style="font-size:14px; color:#6b7280; font-weight:400; margin-bottom:2px; line-height:1.2;">
+            Our customers say
           </div>
-          <!-- CTA 2 -->
-          <div class="hero-cta hero-cta-secondary">
-            <span class="hero-cta-label">View Docs</span>
-            <button class="hero-cta-btn d-flex align-items-center justify-content-center">
-              <svg class="w-5 h-5" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </button>
-          </div>
-        </div>
-        <div class="hero-rating d-flex align-items-center gap-4 mt-2">
-          <div class="d-flex flex-column align-items-start">
-            <span class="hero-rating-label">Excellent</span>
-            <span class="d-flex align-items-center mt-1 hero-rating-stars">
-              <ng-container *ngFor="let star of [1,2,3,4,5]">
-                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" class="d-inline align-text-bottom"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg>
-              </ng-container>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-weight:700; color:#23272f; font-size:18px; line-height:1;">Excellent</span>
+            <span style="display:flex; align-items:center; gap:1px;">
+              <svg width="16" height="16" fill="#FBBF24" viewBox="0 0 20 20" style="display:inline-block;vertical-align:middle;"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg>
+              <svg width="16" height="16" fill="#FBBF24" viewBox="0 0 20 20" style="display:inline-block;vertical-align:middle;"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg>
+              <svg width="16" height="16" fill="#FBBF24" viewBox="0 0 20 20" style="display:inline-block;vertical-align:middle;"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg>
+              <svg width="16" height="16" fill="#FBBF24" viewBox="0 0 20 20" style="display:inline-block;vertical-align:middle;"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg>
+              <svg width="16" height="16" fill="#FBBF24" viewBox="0 0 20 20" style="display:inline-block;vertical-align:middle;"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg>
             </span>
-          </div>
-          <div class="d-flex flex-column align-items-start hero-rating-score">
-            <span class="fw-bold text-primary hero-rating-value">4.7</span>
-            <span class="text-muted hero-rating-count">out of 5 on 194 reviews</span>
+            <span style="font-weight:700; color:#377DFF; font-size:18px; line-height:1;">4.7</span>
+            <span style="color:#B0B7C3; font-size:13px; font-weight:400; line-height:1;">out of 5 on 194 reviews</span>
           </div>
         </div>
       </div>
@@ -191,7 +188,7 @@
 </div>
 
 <!-- Testimonials Section Start -->
-<section class="testimonials-section container-fluid">
+<section class="testimonials-section container-fluid" *ngIf="false">
   <div class="testimonials-header">
     <h2 class="testimonials-title">Reviews From Our Customers</h2>
     <p class="testimonials-subtitle">CareerPathNow has got more than 100k positive ratings from our users around the world.</p>
@@ -274,82 +271,4 @@
       </div>
     </ng-container>
   </div>
-</section>
-
-<!-- Footer Section Start (Pixel-Perfect) -->
-<footer class="footer-section">
-  <div class="footer-container">
-    <div class="footer-col footer-brand">
-      <div class="footer-logo-row">
-        <span class="footer-logo-icon">
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="32" height="32" rx="8" fill="white" fill-opacity="0.1"/>
-            <text x="8" y="24" font-size="18" font-family="Inter, sans-serif" font-weight="bold" fill="white">M</text>
-          </svg>
-        </span>
-        <span class="footer-logo-text">Marketify</span>
-      </div>
-      <div class="footer-desc">Access logos, brand colors, fonts and social links by simply entering a domain name</div>
-      <div class="footer-social-row">
-        <a href="#" class="footer-social-icon" aria-label="Instagram">
-          <!-- Instagram SVG -->
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="5" stroke="#2743d2" stroke-width="2"/><circle cx="11" cy="11" r="4" stroke="#2743d2" stroke-width="2"/><circle cx="16.2" cy="5.8" r="1" fill="#2743d2"/></svg>
-        </a>
-        <a href="#" class="footer-social-icon" aria-label="LinkedIn">
-          <!-- LinkedIn SVG -->
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="5" stroke="#2743d2" stroke-width="2"/><rect x="6" y="9" width="2" height="7" fill="#2743d2"/><rect x="10" y="12" width="2" height="4" fill="#2743d2"/><circle cx="7" cy="7" r="1" fill="#2743d2"/></svg>
-        </a>
-        <a href="#" class="footer-social-icon" aria-label="Facebook">
-          <!-- Facebook SVG -->
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="5" stroke="#2743d2" stroke-width="2"/><path d="M13 7h2V5h-2a3 3 0 0 0-3 3v2H7v2h3v5h2v-5h2l1-2h-3V8a1 1 0 0 1 1-1z" fill="#2743d2"/></svg>
-        </a>
-        <a href="#" class="footer-social-icon" aria-label="Twitter">
-          <!-- Twitter SVG -->
-          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="2" width="18" height="18" rx="5" stroke="#2743d2" stroke-width="2"/><path d="M7 15c6 0 9-5 9-9v-.4A6.5 6.5 0 0 0 18 4.5a6.3 6.3 0 0 1-1.8.5A3.1 3.1 0 0 0 17.5 3a6.2 6.2 0 0 1-2 0.8A3.1 3.1 0 0 0 11 8.2a8.8 8.8 0 0 1-6.4-3.2s-1.2 2.1 1.2 3.2A3.1 3.1 0 0 1 4 7.7v.1a3.1 3.1 0 0 0 2.5 3A3.1 3.1 0 0 1 4 11.2a3.1 3.1 0 0 0 2.9 2A6.2 6.2 0 0 1 3 14.5c2.1 1.3 4.6 2 7 2z" fill="#2743d2"/></svg>
-        </a>
-      </div>
-      <div class="footer-copyright">© Copyright 2021 Duxo.io All rights reserved.</div>
-    </div>
-    <div class="footer-col footer-links">
-      <div class="footer-links-title">TOP BRAND CATEGORIES</div>
-      <div class="footer-links-row">
-        <ul>
-          <li>Computers Electronics</li>
-          <li>Finance</li>
-          <li>Vehicles</li>
-          <li>E-Commerce</li>
-          <li>News and Media</li>
-          <li>Luxury</li>
-        </ul>
-        <ul>
-          <li>Arts and Entertainment</li>
-          <li>Food and Drink</li>
-          <li>Travel and Tourism</li>
-          <li>Business and Services</li>
-          <li>Lifestyle</li>
-          <li>View all categories</li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-col footer-dev">
-      <div class="footer-links-title">FOR DEVELOPERS</div>
-      <ul>
-        <li>Developers</li>
-        <li>Pricing</li>
-        <li>Docs</li>
-      </ul>
-    </div>
-    <div class="footer-col footer-company">
-      <div class="footer-links-title">COMPANY</div>
-      <ul>
-        <li>Home</li>
-        <li>For Brands</li>
-        <li>Plugins</li>
-        <li>Terms and conditions</li>
-        <li>Privacy policy</li>
-        <li>Blog</li>
-      </ul>
-    </div>
-  </div>
-</footer>
-<!-- Footer Section End --> 
+</section> 

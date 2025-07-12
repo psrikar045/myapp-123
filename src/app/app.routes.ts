@@ -5,6 +5,8 @@ import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { authGuard } from './core/guards/auth.guard';
 import { ResetPasswordComponent } from './features/reset-password/reset-password.component';
 import { LandingPageComponent } from './features/landing/landing-page/landing-page.component'; // Added import
+import { SearchComponent } from './features/search/search/search.component';
+import { SearchViewComponent } from './features/search-view/search-view/search-view.component';
 
 export const routes: Routes = [
   // 1. Redirect root path '' to '/home'
@@ -33,6 +35,14 @@ export const routes: Routes = [
   {
     path: 'forgot-password',
     component: ResetPasswordComponent
+  },
+  {
+    path: 'search',
+    component: SearchComponent
+  },
+  {
+    path: 'search-view/:brand',
+    component: SearchViewComponent
   },
 
   // 4. Protected Routes
