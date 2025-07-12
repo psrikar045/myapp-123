@@ -1,17 +1,17 @@
 <header class="header-container">
   <div class="header-logo">
-    <a [routerLink]="logo.link" class="d-flex align-items-center">
+    <a [routerLink]="(logo$ | async)?.link" class="d-flex align-items-center">
       <span class="logo-img-wrapper">
-        <img [src]="logo.src" [alt]="logo.alt" height="44" width="44" />
+        <img [src]="(logo$ | async)?.src" [alt]="(logo$ | async)?.alt" height="44" width="44" />
       </span>
-      <span class="logo-text ms-2">{{ logo.alt }}</span>
+      <span class="logo-text ms-2">{{ (logo$ | async)?.alt }}</span>
     </a>
   </div>
   <nav class="header-nav">
-    <a *ngFor="let item of navItems" [routerLink]="item.route" class="nav-link">{{ item.label }}</a>
+    <a *ngFor="let item of navItems$ | async as navItems" [routerLink]="item.route" class="nav-link">{{ item.label }}</a>
   </nav>
   <div class="header-actions">
-    <ng-container *ngFor="let action of actions">
+    <ng-container *ngFor="let action of actions$ | async as actions">
       <button *ngIf="action.type === 'login'" [routerLink]="action.route" class="action-btn login-btn">
         {{ action.label }}
       </button>

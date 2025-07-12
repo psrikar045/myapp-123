@@ -24,7 +24,7 @@ export interface ToolbarAction {
 })
 export class ToolbarService {
   private logo$ = new BehaviorSubject<ToolbarLogo>({
-    src: 'assets/logo icon.png',
+    src: 'landing/logo icon.png',
     alt: 'Marketify',
     link: '/'
   });
@@ -38,7 +38,7 @@ export class ToolbarService {
 
   private actions$ = new BehaviorSubject<ToolbarAction[]>([
     { type: 'login', label: 'Login', route: '/login' },
-    { type: 'get-started', label: 'Get Start', icon: 'assets/icons/arrow_forward.svg', route: '/get-started' }
+    { type: 'get-started', label: 'Get Start', icon: 'landing/icons/arrow_forward.svg', route: '/get-started' }
   ]);
 
   logo = this.logo$.asObservable();
@@ -49,7 +49,7 @@ export class ToolbarService {
 
   setLoggedInToolbar(): void {
     this.logo$.next({
-      src: 'assets/logo icon.png',
+      src: 'landing/logo icon.png',
       alt: 'Marketify',
       link: '/home'
     });
@@ -67,7 +67,7 @@ export class ToolbarService {
 
   setLoggedOutToolbar(): void {
     this.logo$.next({
-      src: 'assets/logo icon.png',
+      src: 'landing/logo icon.png',
       alt: 'Marketify',
       link: '/'
     });
@@ -79,7 +79,7 @@ export class ToolbarService {
     ]);
     this.actions$.next([
       { type: 'login', label: 'Login', route: '/login' },
-      { type: 'get-started', label: 'Get Start', icon: 'assets/icons/arrow_forward.svg', route: '/get-started' }
+      { type: 'get-started', label: 'Get Start', icon: 'landing/icons/arrow_forward.svg', route: '/get-started' }
     ]);
   }
 }

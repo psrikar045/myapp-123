@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   // --- State Properties ---
   showRegisterForm: boolean = false;
   isLoading = false;
-  errorMessage: string | null = null; // For login form errors
+  errorMessage: string = ''; // For login form errors
   isDarkMode = false;
 
   // Password visibility toggles
@@ -203,7 +203,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onSubmitLogin(): void {
-    this.errorMessage = null;
+    this.errorMessage = '';
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
@@ -291,7 +291,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.showRegisterForm = true;
     this.stopCarousel();
     this.carouselImage = this.registerFormImage; // Static image for registration
-    this.errorMessage = null; // Clear login error message
+    this.errorMessage = ''; // Clear login error message
     this.cdr.markForCheck();
   }
 

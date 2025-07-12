@@ -13,7 +13,7 @@ export const routes: Routes = [
   // 1. Redirect root path '' to '/login'
   {
     path: '',
-    redirectTo: '/login',
+    redirectTo: '/landing',
     pathMatch: 'full'
   },
 
@@ -31,7 +31,7 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomePageComponent,
-    canActivate: [authGuard]
+    // canActivate: [authGuard]
   },
   {
     path: 'forgot-password',

@@ -187,7 +187,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     open = false;
 
   logo = {
-    src: '/assets/logo.svg', // Replace with your logo path or use the SVG inline
+    src: 'landing/logo.svg', // Replace with your logo path or use the SVG inline
     alt: 'Marketify Logo',
     text: 'Marketify',
   };
@@ -372,7 +372,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   testimonials = [
     {
-      avatar: 'assets/user.jfif',
+      avatar: 'landing/user.jfif',
       name: 'User',
       role: 'Customer',
       text: 'This is a testimonial from user.jfif.'
@@ -380,49 +380,49 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/user.jfif',
+      avatar: 'landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/user.jfif',
+      avatar: 'landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/user.jfif',
+      avatar: 'landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/user.jfif',
+      avatar: 'landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/user.jfif',
+      avatar: 'landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/user.jfif',
+      avatar: 'landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/user.jfif',
+      avatar: 'landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/user.jfif',
+      avatar: 'landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     }
   ];
