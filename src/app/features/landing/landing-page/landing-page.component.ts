@@ -1,5 +1,6 @@
 import { Component, HostListener, OnDestroy, OnInit, inject, PLATFORM_ID, Inject, ViewChild } from '@angular/core';
-import { isPlatformBrowser, CommonModule,NgClass, NgIf, NgFor, NgSwitch } from '@angular/common';
+import { isPlatformBrowser, CommonModule, NgClass, NgIf, NgFor, NgSwitch } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
@@ -11,6 +12,7 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ThemeService } from '../../../core/services/theme.service';
 import { LayoutService } from '../../../core/services/layout.service'; // Import LayoutService
 import { Router } from '@angular/router';
+import { HeaderComponent } from '../../header/header.component';
 @Component({
   selector: 'app-landing-page',
   standalone: true,
@@ -21,7 +23,9 @@ import { Router } from '@angular/router';
     MatIconModule,
     MatSidenavModule, // Add MatSidenavModule
     MatListModule,
-    NgClass, NgIf, NgFor, NgSwitch     // Add MatListModule for nav items in sidenav
+    NgClass, NgIf, NgFor, NgSwitch,    // Add MatListModule for nav items in sidenav
+    HeaderComponent, // <-- Add HeaderComponent here
+    FormsModule // <-- Add FormsModule for ngModel
   ],
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.css']
@@ -52,6 +56,8 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   public layoutService = inject(LayoutService); // Inject LayoutService
   @Inject(PLATFORM_ID) private platformId!: Object;
+
+  isAnnual = false;
 
    constructor() {
     this.isMobile$ = this.layoutService.isMobile$; // Initialize isMobile$

@@ -1,0 +1,24 @@
+<header class="header-container">
+  <div class="header-logo">
+    <a [routerLink]="logo.link" class="d-flex align-items-center">
+      <span class="logo-img-wrapper">
+        <img [src]="logo.src" [alt]="logo.alt" height="44" width="44" />
+      </span>
+      <span class="logo-text ms-2">{{ logo.alt }}</span>
+    </a>
+  </div>
+  <nav class="header-nav">
+    <a *ngFor="let item of navItems" [routerLink]="item.route" class="nav-link">{{ item.label }}</a>
+  </nav>
+  <div class="header-actions">
+    <ng-container *ngFor="let action of actions">
+      <button *ngIf="action.type === 'login'" [routerLink]="action.route" class="action-btn login-btn">
+        {{ action.label }}
+      </button>
+      <button *ngIf="action.type === 'get-started'" [routerLink]="action.route" class="action-btn get-started-btn d-flex align-items-center">
+        {{ action.label }}
+        <i class="bi bi-arrow-right ms-2" style="font-size: 1.1rem;"></i>
+      </button>
+    </ng-container>
+  </div>
+</header>
