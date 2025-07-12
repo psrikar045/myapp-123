@@ -215,11 +215,13 @@ export class LoginComponent implements OnInit, OnDestroy {
         tap(response => {
           console.log('Login API success!', response);
           this.router.navigate(['/home']);
+          this._openSnackBar('Login successful!', 'Dismiss');
         }),
         catchError(error => {
           this.errorMessage = error.message || 'Login failed. Please try again.';
           console.error('Login API error:', error);
           this.loginPasswordCtrl.setValue('');
+          this._openSnackBar(this.errorMessage, 'Retry');
           return of(null); // Consumed error
         })
       )
@@ -227,6 +229,14 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.cdr.markForCheck();
       });
+  }
+
+  private _openSnackBar(message: string, action: string = 'Close', duration: number = 3000) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+      verticalPosition: 'bottom', // Can be 'top' or 'bottom'
+      horizontalPosition: 'center', // Can be 'start', 'center', 'end', 'left', or 'right'
+    });
   }
 
   // --- Methods for Registration Form ---

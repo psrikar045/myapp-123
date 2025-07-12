@@ -1,7 +1,7 @@
 :host {
   display: block;
   padding: 2rem;
-  background-color: #f5f5f5;
+  background-color: #f0f2f5;
 }
 
 .home-container {
@@ -13,7 +13,7 @@
   background-color: #fff;
   border-radius: 0.5rem;
   padding: 2rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .grid-container {
@@ -26,22 +26,69 @@
 mat-card {
   border-radius: 0.5rem;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.card-large,
-.card-medium,
-.card-small {
-  background-color: #f9f9f9;
+mat-card-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+}
+
+mat-card-title {
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+mat-card-subtitle {
+  font-size: 0.875rem;
+  color: #6c757d;
+}
+
+mat-card-content {
+  padding: 1rem;
+  flex-grow: 1;
+}
+
+.card-large {
+  color: white;
+  position: relative;
 }
 
 .card-feature-1 {
-  background: linear-gradient(to right, #6e8efb, #a777e3);
-  color: white;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .card-feature-2 {
-  background: linear-gradient(to right, #ff8c00, #ffc700);
-  color: white;
+  background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+}
+
+.card-icon {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  font-size: 4rem;
+  opacity: 0.2;
+}
+
+.card-medium {
+  text-align: center;
+}
+
+.card-medium mat-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #fff;
+  background-color: #007bff;
+  border-radius: 50%;
+  padding: 1rem;
+}
+
+.card-small {
+  background-color: #fff;
+  border: 1px solid #e9ecef;
 }
 
 /* Responsive grid layout */
@@ -53,34 +100,18 @@ mat-card {
 
 @media (min-width: 960px) {
   .grid-container {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(12, 1fr);
   }
 
   .card-large {
-    grid-column: span 2;
+    grid-column: span 6;
   }
 
   .card-medium {
-    grid-column: span 1;
+    grid-column: span 4;
   }
-}
 
-footer {
-  text-align: center;
-  margin-top: 2rem;
-  color: #666;
-}
-
-button {
-  margin-top: 1rem;
-  padding: 0.75rem 1.5rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 0.25rem;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #0056b3;
+  .card-small {
+    grid-column: span 3;
+  }
 }
