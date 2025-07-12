@@ -2425,3 +2425,6 @@ body.dark-theme .footer-copyright {
     transform: translateX(18px);
   }
 } 
+.dummyDiv{
+  padding: 10px;
+}
