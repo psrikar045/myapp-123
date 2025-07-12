@@ -7,30 +7,31 @@ import { ResetPasswordComponent } from './features/reset-password/reset-password
 import { LandingPageComponent } from './features/landing/landing-page/landing-page.component'; // Added import
 import { SearchComponent } from './features/search/search/search.component';
 import { SearchViewComponent } from './features/search-view/search-view/search-view.component';
+import { HomePageComponent } from './features/home/home-page.component';
 
 export const routes: Routes = [
-  // 1. Redirect root path '' to '/home'
+  // 1. Redirect root path '' to '/login'
   {
     path: '',
-    redirectTo: '/home',
+    redirectTo: '/login',
     pathMatch: 'full'
   },
 
   // 2. Public Route: Landing Page
   {
-    path: 'home',
+    path: 'landing',
     component: LandingPageComponent
   },
-  // Optional: path 'landing' also goes to LandingPageComponent
-  // {
-  //   path: 'landing',
-  //   component: LandingPageComponent
-  // },
 
   // 3. Public Routes: Login, Forgot Password
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'home',
+    component: HomePageComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'forgot-password',

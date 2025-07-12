@@ -214,7 +214,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .pipe(
         tap(response => {
           console.log('Login API success!', response);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/home']);
         }),
         catchError(error => {
           this.errorMessage = error.message || 'Login failed. Please try again.';

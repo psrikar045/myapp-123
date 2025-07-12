@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 
 export interface ToolbarLogo {
   src: string;
@@ -12,7 +13,7 @@ export interface ToolbarNavItem {
 }
 
 export interface ToolbarAction {
-  type: 'theme-toggle' | 'login' | 'get-started';
+  type: 'theme-toggle' | 'login' | 'get-started' | 'upgrade' | 'profile';
   label?: string;
   icon?: string;
   route?: string;
@@ -22,24 +23,63 @@ export interface ToolbarAction {
   providedIn: 'root'
 })
 export class ToolbarService {
-  logo: ToolbarLogo = {
+  private logo$ = new BehaviorSubject<ToolbarLogo>({
     src: 'assets/logo icon.png',
     alt: 'Marketify',
     link: '/'
-  };
+  });
 
-  navItems: ToolbarNavItem[] = [
+  private navItems$ = new BehaviorSubject<ToolbarNavItem[]>([
     { label: 'Brands', route: '/brands' },
     { label: 'Developers', route: '/developers' },
     { label: 'Pricing', route: '/pricing' },
     { label: 'Blog', route: '/blog' }
-  ];
+  ]);
 
-  actions: ToolbarAction[] = [
-    // { type: 'theme-toggle', icon: 'assets/icons/fire.svg' }, // Hide fire toggle for now
+  private actions$ = new BehaviorSubject<ToolbarAction[]>([
     { type: 'login', label: 'Login', route: '/login' },
     { type: 'get-started', label: 'Get Start', icon: 'assets/icons/arrow_forward.svg', route: '/get-started' }
-  ];
+  ]);
+
+  logo = this.logo$.asObservable();
+  navItems = this.navItems$.asObservable();
+  actions = this.actions$.asObservable();
 
   constructor() { }
+
+  setLoggedInToolbar(): void {
+    this.logo$.next({
+      src: 'assets/logo icon.png',
+      alt: 'Marketify',
+      link: '/home'
+    });
+    this.navItems$.next([
+      { label: 'Home', route: '/home' },
+      { label: 'Brand API', route: '/brand-api' },
+      { label: 'Logo link', route: '/logo-link' },
+      { label: 'Search API', route: '/search-api' }
+    ]);
+    this.actions$.next([
+      { type: 'upgrade', label: 'Upgrade' },
+      { type: 'profile', label: 'Profile' }
+    ]);
+  }
+
+  setLoggedOutToolbar(): void {
+    this.logo$.next({
+      src: 'assets/logo icon.png',
+      alt: 'Marketify',
+      link: '/'
+    });
+    this.navItems$.next([
+      { label: 'Brands', route: '/brands' },
+      { label: 'Developers', route: '/developers' },
+      { label: 'Pricing', route: '/pricing' },
+      { label: 'Blog', route: '/blog' }
+    ]);
+    this.actions$.next([
+      { type: 'login', label: 'Login', route: '/login' },
+      { type: 'get-started', label: 'Get Start', icon: 'assets/icons/arrow_forward.svg', route: '/get-started' }
+    ]);
+  }
 }
