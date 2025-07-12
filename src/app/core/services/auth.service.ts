@@ -31,7 +31,7 @@ export interface RegisterData {
   providedIn: 'root'
 })
 export class AuthService {
-  // IMPORTANT: Replace with your actual backend base URL
+  // IMPORTANT: Replace with your actual backend base URL 
   private readonly API_BASE_URL = 'http://localhost:3000/api'; // Example backend URL
   private readonly LOGIN_URL = `${this.API_BASE_URL}/auth/login`;
   // Define new API endpoints here
