@@ -25,6 +25,9 @@
             <span class="pricing-card-price">{{ plan.price }}</span>
             <span class="pricing-card-period">Per User / Per Year</span>
           </div>
+          <div *ngIf="plan.showDiscount" class="pricing-card-discount" style="color: #22c55e; font-weight: 600; font-size: 1rem; margin-top: 4px;">
+            {{ plan.discount }}
+          </div>
         </div>
         <ul class="pricing-card-features">
           <li *ngFor="let feature of plan.features">

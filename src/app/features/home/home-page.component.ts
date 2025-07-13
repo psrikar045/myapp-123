@@ -25,6 +25,12 @@ import { ToolbarService } from '../../shared/services/toolbar.service';
 export class HomePageComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
+  companyIcons = [
+    { src: 'company/Item-1.svg', alt: 'Company 1' },
+    { src: 'company/Item-2.svg', alt: 'Company 2' },
+    { src: 'company/Item-3.svg', alt: 'Company 3' },
+    { src: 'company/Item-4.svg', alt: 'Company 4' }
+  ];
   constructor(private toolbarService: ToolbarService) {
     // Initialize any necessary services or state here
   }

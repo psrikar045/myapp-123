@@ -1,7 +1,8 @@
 <app-header></app-header>
 <div class="home-container">
   <main class="main-content">
-    <div class="grid-container">
+    <!-- Top Row: 2 Large Cards -->
+    <div class="grid-top-row">
       <div class="card-large card-feature-1">
         <mat-card>
           <mat-card-header>
@@ -11,11 +12,7 @@
             <a href="#" class="getting-started-link">Getting Started <i class="bi bi-arrow-right"></i></a>
           </mat-card-content>
           <div class="card-icons">
-            <img src="assets/images/shop.png" alt="Shop Icon" class="card-icon-img shop-icon">
-            <img src="assets/images/dropbox.png" alt="Dropbox Icon" class="card-icon-img dropbox-icon">
-            <img src="assets/images/google-drive.png" alt="Google Drive Icon" class="card-icon-img drive-icon">
-            <img src="assets/images/jira.png" alt="Jira Icon" class="card-icon-img jira-icon">
-            <img src="assets/images/figma.png" alt="Figma Icon" class="card-icon-img figma-icon">
+            <img *ngFor="let icon of companyIcons" [src]="icon.src" [alt]="icon.alt" class="card-icon-img" />
           </div>
         </mat-card>
       </div>
@@ -35,11 +32,14 @@
           </div>
         </mat-card>
       </div>
+    </div>
 
+    <!-- Middle Row: 3 Medium Cards -->
+    <div class="grid-middle-row">
       <div class="card-medium api-card-purple">
         <mat-card>
           <mat-card-header>
-            <mat-icon class="api-icon">pie_chart</mat-icon>
+            <i class="bi bi-pie-chart api-icon"></i>
             <mat-card-title>Brand API</mat-card-title>
             <mat-card-subtitle>Data for B2B personalization</mat-card-subtitle>
           </mat-card-header>
@@ -48,7 +48,8 @@
       <div class="card-medium api-card-teal">
         <mat-card>
           <mat-card-header>
-            <mat-icon class="api-icon">sync_alt</mat-icon> <mat-card-title>Brand API</mat-card-title>
+            <i class="bi bi-files api-icon"></i>
+            <mat-card-title>Brand API</mat-card-title>
             <mat-card-subtitle>Data for B2B personalization</mat-card-subtitle>
           </mat-card-header>
         </mat-card>
@@ -56,51 +57,43 @@
       <div class="card-medium api-card-brown">
         <mat-card>
           <mat-card-header>
-            <mat-icon class="api-icon">search</mat-icon> <mat-card-title>Brand API</mat-card-title>
+            <i class="bi bi-pie-chart api-icon"></i>
+            <mat-card-title>Brand API</mat-card-title>
             <mat-card-subtitle>Data for B2B personalization</mat-card-subtitle>
           </mat-card-header>
         </mat-card>
       </div>
+    </div>
 
+    <!-- Bottom Row: 4 Small Cards as a Grouped Card -->
+    <div class="grid-bottom-row">
       <div class="card-small support-card">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>API Documentation</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p>Our comprehensive guide to using the Marketify API.</p>
-          </mat-card-content>
-        </mat-card>
+        <div class="small-card-inner">
+          <i class="bi bi-journal-code small-card-icon"></i>
+          <div class="small-card-title">API Documentation</div>
+          <div class="small-card-desc">Our comprehensive guide to using the Marketify API.</div>
+        </div>
       </div>
       <div class="card-small">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>Need help</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p>Contact our support team for assistance.</p>
-          </mat-card-content>
-        </mat-card>
+        <div class="small-card-inner">
+          <i class="bi bi-question-circle small-card-icon"></i>
+          <div class="small-card-title">Need help</div>
+          <div class="small-card-desc">Contact our support team for assistance.</div>
+        </div>
       </div>
       <div class="card-small">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>Request an update</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p>Request new features or updates.</p>
-          </mat-card-content>
-        </mat-card>
+        <div class="small-card-inner">
+          <i class="bi bi-arrow-repeat small-card-icon"></i>
+          <div class="small-card-title">Request an update</div>
+          <div class="small-card-desc">Request new features or updates.</div>
+        </div>
       </div>
       <div class="card-small">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>Service status</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p>Check the current status of Marketify services.</p>
-          </mat-card-content>
-        </mat-card>
+        <div class="small-card-inner">
+          <i class="bi bi-activity small-card-icon"></i>
+          <div class="small-card-title">Service status</div>
+          <div class="small-card-desc">Check the current status of Marketify services.</div>
+        </div>
       </div>
     </div>
   </main>

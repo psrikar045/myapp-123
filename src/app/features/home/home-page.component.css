@@ -4,235 +4,264 @@
   background-color: #f0f2f5;
 } */ /* This might be better as a global body background */
 
+/* --- Layout & Grid --- */
 .home-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 2rem 0; /*Add padding to the container */
-  background-color: #fff; /* The main white background for the content area */
-  border-radius: 1rem; /* Adjust to match main container's rounded corners */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Subtle shadow for the main container */
+  max-width: 1320px;
+  margin: 40px auto 0 auto;
+  padding: 0 32px 32px 32px;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
-/* Removed .main-content wrapper as .home-container now serves its purpose */
-
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 1.5rem; /* Gap between cards */
-}
-
-/* Card styles */
-mat-card {
-  border-radius: 0.875rem; /* ~14px, slightly more rounded than default */
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* Consistent card shadow */
-  border: none; /* Remove default material border */
-}
-
-mat-card-header {
-  display: flex;
-  align-items: center;
-  padding: 1.5rem; /* Increased padding */
-}
-
-mat-card-title {
-  font-size: 1.375rem; /* ~22px */
-  font-weight: 600;
-  margin-bottom: 0.5rem; /* Space below title */
-  color: inherit; /* Inherit color from parent card */
-}
-
-mat-card-subtitle {
-  font-size: 0.9375rem; /* ~15px */
-  color: inherit; /* Inherit color from parent card */
-  opacity: 0.8;
-}
-
-mat-card-content {
-  padding: 0 1.5rem 1.5rem; /* Adjust padding */
-  flex-grow: 1;
-}
-
-/* --- Top Featured Cards Styling --- */
-.card-large {
+.main-container-card {
+  background: #fff;
+  border-radius: 32px;
+  box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
+  padding: 0;
+  margin: 40px auto 0 auto;
+  max-width: 1400px;
+  border: none;
   position: relative;
-  overflow: hidden; /* Ensure background images/icons stay within bounds */
+  z-index: 1;
 }
 
+@media (max-width: 900px) {
+  .main-container-card {
+    border-radius: 16px;
+    margin: 16px 4px 0 4px;
+    max-width: 100%;
+  }
+}
+
+/* --- Top Row: 2 Large Cards --- */
+.grid-top-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* --- Middle Row: 3 Medium Cards --- */
+.grid-middle-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+/* --- Bottom Row: 4 Small Cards --- */
+.grid-bottom-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 0;
+}
+
+/* --- Top Cards --- */
 .card-large mat-card {
-  height: auto; /* Allow height to adjust to content */
-  min-height: 20rem; /* Minimum height for large cards */
+  min-height: 320px;
+  padding: 40px 40px 0 40px;
+  border-radius: 32px;
+  box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
   display: flex;
   flex-direction: column;
-  justify-content: space-between; /* Push content and icons apart */
-  padding-bottom: 3rem; /* Add extra padding for bottom icons */
+  justify-content: flex-start;
+  align-items: flex-start;
 }
-
 .card-feature-1 mat-card {
-  background-color: #7B68EE; /* A primary blue-violet */
-  background-image: linear-gradient(135deg, #7B68EE 0%, #A97BEC 100%); /* Purple/Pink gradient */
-  color: white;
+  background: linear-gradient(135deg, #e3d6ff 0%, #a18aff 100%);
+  color: #23272f;
+  box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
 }
-
 .card-feature-2 mat-card {
-  background-color: #6C5CE7; /* A slightly darker blue-violet */
-  background-image: linear-gradient(135deg, #6C5CE7 0%, #8A5EE6 100%); /* Another purple gradient */
-  color: white;
+  background: linear-gradient(178deg, #d6e6ff 0% 0%, #0050c1 75%);
+  color: #23272f;
+  box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
 }
-
+.card-large mat-card-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  letter-spacing: -1px;
+}
+.card-large mat-card-content {
+  padding: 0;
+  margin-bottom: 32px;
+}
 .card-large .getting-started-link {
-  color: white;
+  color: #23272f;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 8px;
   text-decoration: none;
-  font-size: 1rem;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  margin-top: 1rem;
 }
-
-.card-large .getting-started-link i {
-  margin-left: 0.5rem;
-  transition: transform 0.2s ease-in-out;
-}
-
-.card-large .getting-started-link:hover i {
-  transform: translateX(5px);
-}
-
 .card-icons {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: auto; /* Adjust height based on content */
-  display: flex; /* Use flex to arrange icons */
-  justify-content: flex-start; /* Align icons to the start */
-  align-items: flex-end; /* Align icons to the bottom */
-  padding: 0 1.5rem 1.5rem; /* Padding for the icons area */
-  pointer-events: none; /* Make sure icons don't block clicks on card */
+  display: flex;
+  gap: 24px;
+  padding: 0 32px 32px 32px;
+  pointer-events: none;
 }
-
 .card-icon-img {
-  height: 4rem; /* Size of the individual icon images */
-  width: auto;
-  opacity: 0.2; /* Subtle opacity as per mockup */
-  margin-right: -0.5rem; /* Overlap icons slightly */
-  filter: grayscale(100%) brightness(200%); /* Make icons white and somewhat transparent */
+  height: 56px;
+  width: 56px;
+  opacity: 1;
+  filter: none;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(55,125,255,0.10);
+  object-fit: contain;
+  padding: 8px;
 }
 
-/* --- Mid API/Feature Cards Styling --- */
+/* --- API Cards --- */
 .card-medium mat-card {
+  min-height: 180px;
+  border-radius: 24px;
+  box-shadow: 0 4px 16px 0 rgba(55,125,255,0.08);
+  padding: 32px 24px 24px 24px;
+  align-items: flex-start;
+}
+.api-card-purple mat-card {
+  background: linear-gradient(135deg, #c471f5 0%, #fa71cd 100%);
+  color: #23272f;
+  box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
+}
+.api-card-teal mat-card {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  color: #23272f;
+  box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
+}
+.api-card-brown mat-card {
+  background: linear-gradient(135deg, #b79891 0%, #e8d5b5 100%);
+  color: #23272f;
+  box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
+}
+.card-medium mat-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+.card-medium mat-card-subtitle {
+  font-size: 1rem;
+  color: #23272f;
+  opacity: 0.8;
+}
+.card-medium .api-icon {
+  font-size: 2.2rem;
+  background: #fff;
+  color: #a18aff;
+  border-radius: 50%;
+  padding: 12px;
+  margin-bottom: 8px;
+}
+
+/* --- Support/Documentation Cards --- */
+.card-small {
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+/* --- Bottom Card Group --- */
+.grid-bottom-row {
+  background: linear-gradient(135deg, #e0e7ff 0%, #b3d1ff 100%);
+  border-radius: 28px;
+  box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
+  padding: 32px 24px 24px 24px;
+  margin-bottom: 0;
+  margin-top: 0;
+  max-width: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+/* --- Small Cards --- */
+.small-card-inner {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(55,125,255,0.08);
+  padding: 28px 18px 20px 18px;
+  min-height: 120px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  min-height: 12rem; /* Give medium cards a min height */
+  align-items: flex-start;
+  justify-content: flex-start;
+  transition: box-shadow 0.18s, transform 0.18s;
 }
-
-.card-medium mat-card-header {
-  flex-direction: column; /* Stack title, subtitle vertically */
-  text-align: center;
-  padding: 0; /* Remove header default padding as we want custom alignment */
-  width: 100%;
+.small-card-inner:hover {
+  box-shadow: 0 6px 24px 0 rgba(55,125,255,0.13);
+  transform: translateY(-2px) scale(1.02);
 }
-
-.card-medium mat-card-title {
-  font-size: 1.125rem; /* ~18px */
-  margin-top: 0.5rem;
-  margin-bottom: 0.25rem;
+.small-card-icon {
+  font-size: 2.1rem;
+  color: #377dff;
+  margin-bottom: 12px;
 }
-
-.card-medium mat-card-subtitle {
-  font-size: 0.875rem; /* ~14px */
+.small-card-title {
+  font-size: 1.13rem;
+  font-weight: 700;
+  color: #23272f;
+  margin-bottom: 6px;
+}
+.small-card-desc {
+  font-size: 1rem;
+  color: #6b7280;
+  line-height: 1.5;
   margin-bottom: 0;
 }
 
-.card-medium .api-icon {
-  font-size: 2.5rem; /* Size of the icon */
-  color: white; /* Icon color */
-  background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent white circle background */
-  border-radius: 50%;
-  padding: 0.75rem; /* Padding to make the circle larger than the icon */
-  display: inline-flex; /* To center icon inside circle */
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 1rem; /* Space between icon and title */
-}
-
-/* Specific background colors for API cards */
-.api-card-purple mat-card {
-  background-color: #8E24AA; /* Darker Purple for this specific card */
-  background-image: linear-gradient(135deg, #8E24AA 0%, #A647EB 100%);
-  color: white;
-}
-
-.api-card-teal mat-card {
-  background-color: #00ACC1; /* Teal for this specific card */
-  background-image: linear-gradient(135deg, #00ACC1 0%, #4DD0E1 100%);
-  color: white;
-}
-
-.api-card-brown mat-card {
-  background-color: #D2B48C; /* Tan/Brown for this specific card */
-  background-image: linear-gradient(135deg, #D2B48C 0%, #E8D5B5 100%);
-  color: white;
-}
-
-/* --- Bottom Support/Documentation Cards Styling --- */
-.card-small mat-card {
-  background-color: white;
-  border: 1px solid #e0e0e0; /* Light grey border */
-  box-shadow: none; /* Remove default shadow if it clashes */
-  text-align: center;
-  padding: 1.5rem; /* Adjust padding */
-  min-height: 10rem;
-}
-
-.card-small mat-card-title {
-  font-size: 1.125rem;
-  font-weight: 500;
-  color: #333;
-}
-
-.card-small mat-card-content p {
-  font-size: 0.875rem;
-  color: #666;
-  line-height: 1.5;
-}
-
-/* Responsive grid layout */
-@media (min-width: 600px) {
-  .grid-container {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 960px) {
-  .grid-container {
-    grid-template-columns: repeat(12, 1fr); /* 12-column grid for desktop */
-    gap: 2rem; /* Larger gap on desktop */
-  }
-
-  .card-large {
-    grid-column: span 6; /* Each large card spans 6 columns */
-  }
-
-  .card-medium {
-    grid-column: span 4; /* Each medium card spans 4 columns */
-  }
-
-  .card-small {
-    grid-column: span 3; /* Each small card spans 3 columns */
-  }
-}
+/* --- Footer --- */
 footer {
   text-align: center;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  color: #727171;
-  background-color: #000000;
+  padding: 32px 0 24px 0;
+  color: #b3b3b3;
+  background: #18181b;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  margin-top: 48px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 900px) {
+  .home-container {
+    padding: 0 8px 24px 8px;
+  }
+  .grid-container {
+    gap: 20px;
+  }
+  .card-large mat-card,
+  .card-medium mat-card,
+  .card-small mat-card {
+    padding: 18px 8px 12px 8px;
+    min-height: 80px;
+  }
+  .card-large mat-card-title {
+    font-size: 1.3rem;
+  }
+  .card-medium mat-card-title,
+  .card-small mat-card-title {
+    font-size: 1rem;
+  }
+  .card-medium mat-card-subtitle,
+  .card-small mat-card-content p {
+    font-size: 0.9rem;
+  }
+  footer {
+    padding: 18px 0 12px 0;
+    font-size: 0.95rem;
+  }
 }
