@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<section class="hero-section position-relative w-100 overflow-hidden">
+<section class="hero-section position-relative w-100 overflow-hidden" id="brands-section">
   <!-- Large white circle overlay behind headline -->
   <div class="hero-white-circle position-absolute rounded-circle"></div>
   <!-- Decorative yellow/orange circle on the left behind text/CTAs -->
@@ -56,7 +56,7 @@
   </div>
 </section>
 
-<section class="company-logos-section w-100">
+<section class="company-logos-section w-100" id="blog-section">
   <div class="company-logos-container container">
     <div class="company-logos-row">
       <img *ngFor="let logo of orbitLogos" [src]="logo.src" [alt]="logo.alt" class="company-logo" />
@@ -85,7 +85,7 @@
 </section>
 
 <div class="container-fluid all-sections-wrapper">
-  <div *ngFor="let section of allSections; let i = index" class="section-row">
+  <div *ngFor="let section of allSections; let i = index" class="section-row" [id]="i === 1 ? 'developers-section' : null">
     <div class="section-inner">
       <ng-container *ngIf="i === 1">
         <div class="section-illustration">
@@ -166,7 +166,7 @@
 </section>
 <!-- Testimonials Section End -->
 
-<section class="pricing-section-wrapper container-fluid">
+<section class="pricing-section-wrapper container-fluid" id="pricing-section">
   <div class="pricing-section-inner">
     <h2 class="pricing-headline">Expand your options with a subscription</h2>
     <p class="pricing-subheadline">Graphs displaying your performance for metrics like follower evolution, average rate per post and reach and impressions to give you the insights.</p>
@@ -237,7 +237,7 @@
   </div>
 </section>
 
-<section class="company-logos-section">
+<section class="company-logos-section w-100" id="company-logos-section">
   <div class="company-logos-orbit-wrapper">
     <svg class="company-logos-orbit-svg" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="400" cy="200" rx="340" ry="160" stroke="#D6E4F7" stroke-width="2" />

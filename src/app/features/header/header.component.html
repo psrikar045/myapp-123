@@ -9,11 +9,25 @@
   </div>
   <ng-container *ngIf="showNavigation">
   <nav class="header-nav">
-    <a *ngFor="let item of navItems$ | async as navItems" [routerLink]="item.route" class="nav-link">{{ item.label }}</a>
+    <a *ngFor="let item of navItems$ | async as navItems"
+       (click)="onNavClick(item)"
+       class="nav-link"
+       [ngClass]="{
+         'active': (item.route && currentRoute.startsWith(item.route)) || (item.label === 'Home' && currentRoute === '/home')
+       }">
+      {{ item.label }}
+    </a>
     <!-- <a *ngFor="let item of navItems$ | async as navItems"  class="nav-link">{{ item.label }}</a> -->
   </nav>
   <div class="header-actions">
     <ng-container *ngFor="let action of actions$ | async as actions">
+      <button *ngIf="action.type === 'upgrade'" class="action-btn upgrade-btn d-flex align-items-center">
+        {{ action.label }}
+        <i class="bi bi-arrow-right ms-2" style="font-size: 1.1rem;"></i>
+      </button>
+      <span *ngIf="action.type === 'profile'" class="header-profile-avatar ms-3" [routerLink]="action.route" style="cursor:pointer;">
+        <img src="/landing/user.jfif" alt="User Avatar" />
+      </span>
       <button *ngIf="action.type === 'login'" [routerLink]="action.route" class="action-btn login-btn">
         {{ action.label }}
       </button>
@@ -41,10 +55,6 @@
     </div>
   </ng-container> -->
   <ng-container *ngIf="!showNavigation">
-    <div class="header-actions">
-      <span class="header-profile-icon ms-3">
-        <img src="landing/user.jfif" alt="Profile" />
-      </span>
-    </div>
+    <!-- Only show logo, no profile icon or actions -->
   </ng-container>
 </header>

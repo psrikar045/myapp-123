@@ -29,7 +29,7 @@ export class MyProfileComponent {
   }
 
   profile = {
-    avatar: 'assets/user.jfif',
+    avatar: '/landing/user.jfif',
     name: 'Mobina Mirbagheri',
     status: 'Your account is ready, you can now apply for advice.'
   };

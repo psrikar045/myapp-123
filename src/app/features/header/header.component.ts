@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ToolbarService, ToolbarLogo, ToolbarNavItem, ToolbarAction } from '../../shared/services/toolbar.service';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { Observable } from 'rxjs';
 
@@ -16,15 +16,23 @@ export class HeaderComponent implements OnInit {
   logo$: Observable<ToolbarLogo>;
   navItems$: Observable<ToolbarNavItem[]>;
   actions$: Observable<ToolbarAction[]>;
+  currentRoute: string = '';
   @Input() showNavigation = true;
 
   constructor(
     private toolbarService: ToolbarService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     this.logo$ = this.toolbarService.logo;
     this.navItems$ = this.toolbarService.navItems;
     this.actions$ = this.toolbarService.actions;
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.currentRoute = event.urlAfterRedirects;
+        this.showNavigation = !this.currentRoute.startsWith('/my-profile');
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -36,5 +44,16 @@ export class HeaderComponent implements OnInit {
     //   }
     // });
     
+  }
+
+  onNavClick(item: ToolbarNavItem) {
+    if (item.scrollId && this.router.url.startsWith('/landing')) {
+      const el = document.getElementById(item.scrollId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else if (item.route) {
+      this.router.navigate([item.route]);
+    }
   }
 }

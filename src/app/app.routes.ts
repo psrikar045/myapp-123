@@ -10,6 +10,8 @@ import { SearchViewComponent } from './features/search-view/search-view/search-v
 import { HomePageComponent } from './features/home/home-page.component';
 import { MyProfileComponent } from './features/my-profile/my-profile.component';
 import { CompanyDataComponent } from './features/company-data/company-data.component';
+import { SearchApiComponent } from './features/search-api/search-api.component';
+import { LogoLinkComponent } from './features/logo-link/logo-link.component';
 
 export const routes: Routes = [
   // 1. Redirect root path '' to '/login'
@@ -41,6 +43,16 @@ export const routes: Routes = [
   {
     path: 'search-view/:brand',
     component: SearchViewComponent
+  },
+  {
+    path: 'logo-link',
+    component: LogoLinkComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'search-api',
+    component: SearchApiComponent,
+    canActivate: [authGuard]
   },
 
   // 4. Protected Routes

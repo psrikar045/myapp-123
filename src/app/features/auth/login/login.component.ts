@@ -29,6 +29,7 @@ import { Subscription } from 'rxjs';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { ThemeService } from '../../../core/services/theme.service';
+import { ToolbarService } from '../../../shared/services/toolbar.service';
 declare var google: any; // Declare google global variable
 @Component({
   selector: 'app-login',
@@ -74,6 +75,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly authService = inject(AuthService); // <-- Inject AuthService
   private readonly router = inject(Router); // <-- Inject Router
   private readonly snackBar = inject(MatSnackBar); // <-- Inject MatSnackBar
+  private readonly toolbarService = inject(ToolbarService);
 
   // --- Form Definitions ---
   loginForm!: FormGroup<{
@@ -290,6 +292,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
           console.log('Login API success!', response);
           this.router.navigate(['/home']);
           this._openSnackBar('Login successful!', 'Dismiss');
+          this.toolbarService.setLoggedInToolbar(); // <-- Set logged-in toolbar
         }),
         catchError(error => {
           this.errorMessage = error.message || 'Login failed. Please try again.';

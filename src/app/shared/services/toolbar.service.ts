@@ -74,13 +74,13 @@ export class ToolbarService {
     });
     this.navItems$.next([
       { label: 'Home', route: '/home', scrollId: '' },
-      { label: 'Brand API', route: '/brand-api', scrollId: '' },
+      { label: 'Brand API', route: '/brandApi', scrollId: '' },
       { label: 'Logo link', route: '/logo-link', scrollId: '' },
       { label: 'Search API', route: '/search-api', scrollId: '' }
     ]);
     this.actions$.next([
       { type: 'upgrade', label: 'Upgrade' },
-      { type: 'profile', label: 'Profile' }
+      { type: 'profile', label: 'Profile', route: '/my-profile' }
     ]);
   }
 

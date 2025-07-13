@@ -13,6 +13,7 @@ import { ThemeService } from '../../../core/services/theme.service';
 import { LayoutService } from '../../../core/services/layout.service'; // Import LayoutService
 import { Router } from '@angular/router';
 import { HeaderComponent } from '../../header/header.component';
+import { ToolbarService } from '../../../shared/services/toolbar.service';
 @Component({
   selector: 'app-landing-page',
   standalone: true,
@@ -55,6 +56,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   private sanitizer = inject(DomSanitizer);
   private router = inject(Router);
   public layoutService = inject(LayoutService); // Inject LayoutService
+  private toolbarService = inject(ToolbarService);
   @Inject(PLATFORM_ID) private platformId!: Object;
 
   isAnnual = false;
@@ -65,6 +67,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.toolbarService.setLoggedOutToolbar();
     this.themeSubscription = this.themeService.isDarkMode$.pipe(
       takeUntil(this.destroy$)
     ).subscribe(isDark => {
@@ -277,32 +280,32 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   allSections = [
     {
       title: 'For Designers',
-      description: 'A new way to book travel online, saving you time. With trip, There are no confusing spreadsheets or complicated searches. We just ask the right questions, find the best deal for you, then you book it.',
+      description: 'Instantly access brand assets, color palettes, and typography to streamline your creative workflow. Marketify makes it easy to maintain brand consistency and save hours on manual asset collection.',
       cards: [
-        { icon: 'bi bi-journal-bookmark', title: 'Brand Guidelines', subtitle: 'Cheap Flights\nAmazing Experiences' },
-        { icon: 'bi bi-palette', title: 'Color palettes', subtitle: 'Choose from a Wide Range\nof Options' },
-        { icon: 'bi bi-type', title: 'Typography', subtitle: 'Find the Right Fonts\nAmazing Services' },
-        { icon: 'bi bi-easel', title: 'Design assets', subtitle: 'Cheap Flights\nAmazing Experiences' }
+        { icon: 'bi bi-journal-bookmark', title: 'Brand Guidelines', subtitle: 'Official brand rules at your fingertips' },
+        { icon: 'bi bi-palette', title: 'Color Palettes', subtitle: 'Accurate brand color codes instantly' },
+        { icon: 'bi bi-type', title: 'Typography', subtitle: 'Discover and use brand fonts' },
+        { icon: 'bi bi-easel', title: 'Design Assets', subtitle: 'Download logos, icons, and more' }
       ]
     },
     {
       title: 'For Developers',
-      description: 'A new way to book travel online, saving you time. With trip, There are no confusing spreadsheets or complicated searches. We just ask the right questions, find the best deal for you, then you book it.',
+      description: 'Integrate real-time brand data into your apps and websites with our robust API and SDKs. Marketify empowers you to automate branding, onboarding, and more.',
       cards: [
-        { icon: 'bi bi-plug', title: 'Rest API', subtitle: 'Amazing Functions\nAmazing Experiences' },
-        { icon: 'bi bi-boxes', title: 'SDKs Available', subtitle: 'Choose from a Wide Range\nof Options' },
-        { icon: 'bi bi-code-slash', title: 'Code Examples', subtitle: 'Easy Integration\nAmazing Services' },
-        { icon: 'bi bi-graph-up', title: 'Real Time Data', subtitle: 'Cheap Flights\nAmazing Experiences' }
+        { icon: 'bi bi-plug', title: 'REST API', subtitle: 'Fetch brand assets programmatically' },
+        { icon: 'bi bi-boxes', title: 'SDKs Available', subtitle: 'Quick integration in your language' },
+        { icon: 'bi bi-code-slash', title: 'Code Examples', subtitle: 'Ready-to-use code snippets' },
+        { icon: 'bi bi-graph-up', title: 'Real-Time Data', subtitle: 'Always up-to-date brand info' }
       ]
     },
     {
       title: 'For Marketers',
-      description: 'A new way to book travel online, saving you time. With trip, There are no confusing spreadsheets or complicated searches. We just ask the right questions, find the best deal for you, then you book it.',
+      description: 'Ensure your campaigns and content always use the latest brand assets. Marketify helps you maintain consistency and credibility across all channels.',
       cards: [
-        { icon: 'bi bi-geo-alt', title: 'Trip Advisor', subtitle: 'Cheap Flights\nAmazing Experiences' },
-        { icon: 'bi bi-airplane', title: 'Airban', subtitle: 'Choose from a Wide Range\nof Options' },
-        { icon: 'bi bi-truck', title: 'Turkish Kargo', subtitle: 'Cheap Flights\nAmazing Experiences' },
-        { icon: 'bi bi-people', title: 'Itata', subtitle: 'Cheap Flights\nAmazing Experiences' }
+        { icon: 'bi bi-geo-alt', title: 'Social Links', subtitle: 'Find official social profiles' },
+        { icon: 'bi bi-bell', title: 'Brand Monitoring', subtitle: 'Get notified on asset changes' },
+        { icon: 'bi bi-collection', title: 'Asset Library', subtitle: 'Centralized brand visuals' },
+        { icon: 'bi bi-megaphone', title: 'Campaign Ready', subtitle: 'Assets for every platform' }
       ]
     }
   ];

@@ -1,0 +1,19 @@
+.dev-progress-message {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  color: #2563eb;
+  background: #f8fafc;
+}
+.dev-progress-message h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+.dev-progress-message p {
+  font-size: 1.15rem;
+  color: #64748b;
+}

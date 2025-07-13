@@ -1,0 +1,44 @@
+.dev-header-nav {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  align-items: center;
+  margin: 32px 0 24px 0;
+}
+.dev-header-nav a {
+  color: #23272f;
+  font-size: 1.15rem;
+  font-weight: 500;
+  text-decoration: none;
+  padding: 6px 18px;
+  border-radius: 6px;
+  transition: background 0.18s, color 0.18s;
+}
+.dev-header-nav a.active, .dev-header-nav a.router-link-active {
+  color: #2563eb;
+  background: #e6f0ff;
+  font-weight: 700;
+}
+.dev-header-nav a:hover {
+  background: #f1f5f9;
+  color: #2563eb;
+}
+.dev-progress-message {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  color: #2563eb;
+  background: #f8fafc;
+}
+.dev-progress-message h2 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+.dev-progress-message p {
+  font-size: 1.15rem;
+  color: #64748b;
+}
