@@ -364,6 +364,11 @@ mat-form-field {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: var(--text-secondary-color, #666);
+}
+
+.dark-theme .password-strength-text {
+  color: var(--dark-theme-text-secondary-color, #b0b0b0);
 }
 
 .password-strength-bar {

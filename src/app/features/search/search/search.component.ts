@@ -1,16 +1,18 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-search',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './search.component.html',
   styleUrl: './search.component.css'
 })
 export class SearchComponent {
  constructor(private router: Router) {}
 
+ searchDomainNameOrUrl:any = '';
   brands = [
     {
       name: 'Apple',
@@ -29,5 +31,8 @@ export class SearchComponent {
 
   goToResults(brand: string) {
     this.router.navigate(['/search-view', brand.toLowerCase()]);
+  }
+  findBrandInfo(event:any){
+
   }
 }

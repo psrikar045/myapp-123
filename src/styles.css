@@ -208,6 +208,11 @@ body.dark-theme {
   --button-disabled-bg: rgba(255, 255, 255, 0.12);
   --button-disabled-text: rgba(255, 255, 255, 0.38);
   
+  /* Dark theme password strength colors */
+  --password-strength-weak: #ff6e6e;
+  --password-strength-medium: #ffb74d;
+  --password-strength-strong: #81c784;
+  
   /* Apply dark theme text colors to all elements */
   color: var(--text-color);
   background-color: #121212;
@@ -221,8 +226,8 @@ body.dark-theme h4,
 body.dark-theme h5,
 body.dark-theme h6,
 body.dark-theme p,
-body.dark-theme span:not(.mat-mdc-form-field-error),
-body.dark-theme div:not(.mat-mdc-form-field-error),
+body.dark-theme span:not(.mat-mdc-form-field-error):not([style*="color"]),
+body.dark-theme div:not(.mat-mdc-form-field-error):not([style*="color"]),
 body.dark-theme label {
   color: var(--text-color);
 }

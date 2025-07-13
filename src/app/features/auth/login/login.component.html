@@ -126,9 +126,9 @@
               <div class="password-strength-text">
                 Password Strength: <span [style.color]="passwordStrengthColor">{{passwordStrengthText}}</span>
               </div>
-              <div class="password-strength-bar">
+              <!-- <div class="password-strength-bar">
                 <mat-progress-bar mode="determinate" [value]="passwordStrength" [color]="passwordStrengthText === 'Weak' ? 'warn' : (passwordStrengthText === 'Medium' ? 'accent' : 'primary')"></mat-progress-bar>
-              </div>
+              </div> -->
               <div class="password-strength-segments">
                 <div class="segment" [class.active]="passwordStrength >= 33" [style.background-color]="passwordStrength >= 33 ? passwordStrengthColor : ''"></div>
                 <div class="segment" [class.active]="passwordStrength >= 66" [style.background-color]="passwordStrength >= 66 ? passwordStrengthColor : ''"></div>
