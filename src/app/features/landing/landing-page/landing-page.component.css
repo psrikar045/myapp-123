@@ -1260,19 +1260,20 @@
 /* Section background and layout */
 .company-logos-section {
   width: 100%;
-  background: #fff;
-  padding: 96px 0 96px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: #f8fafc;
+  padding-top: 48px;
+  padding-bottom: 48px;
+  margin: 0;
+  border: none;
 }
 .company-logos-orbit-wrapper {
   position: relative;
-  width: 800px;
-  height: 400px;
+  width: 1200px; /* Increased from 800px */
+  height: 600px; /* Increased from 400px */
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0 auto; 
 }
 .company-logos-orbit-svg {
   position: absolute;
@@ -1308,25 +1309,26 @@
 }
 .company-logo-card {
   position: absolute;
-  width: 72px;
-  height: 72px;
-  background: #fff;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
   display: flex;
-  align-items: center;
   justify-content: center;
-  z-index: 3;
+  align-items: center;
+  background-color: #ffffff; 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  z-index: 2; 
 }
 .company-logo-card img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
+  max-width: 90%; 
+  max-height: 90%;
+  object-fit: contain; 
 }
 /* Position each logo around the orbit (pixel-perfect to mockup) */
-.logo-pos-0 { top: 32px; left: 80px; }
-.logo-pos-1 { top: 120px; left: 180px; }
-.logo-pos-2 { top: 280px; left: 120px; }
+.logo-pos-0 { top: 78px; left: 180px; }
+.logo-pos-1 { top: 240px; left: 260px; }
+.logo-pos-2 { top: 390px; left: 280px; }
 .logo-pos-3 { top: 320px; right: 180px; }
 .logo-pos-4 { top: 120px; right: 120px; }
 .logo-pos-5 { top: 32px; right: 80px; }
