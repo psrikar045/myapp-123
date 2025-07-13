@@ -68,7 +68,7 @@ export class HeaderComponent implements OnInit {
     this.showProfileDropdown = false;
     this.router.navigate(['/my-profile']);
   }
-  logout(event: Event) {
-  console.log('logout');
+  logout() {
+    this.authService.logout();
   }
 }

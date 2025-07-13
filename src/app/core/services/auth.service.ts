@@ -146,7 +146,7 @@ export class AuthService {
       localStorage.removeItem('user_data');
       this.isAuthenticatedSubject.next(false);
     }
-    this.router.navigate(['/login']);
+    this.router.navigate(['/landing']);
     console.log('Logged out.');
   }
 
