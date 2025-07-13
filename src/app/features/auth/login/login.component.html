@@ -194,13 +194,13 @@
         </div>
         <div id="googleSignInHiddenButton" style="position: absolute; left: -9999px; top: -9999px; width: 250px; height: 50px; opacity: 0;"></div>
 
-        <div class="dark-mode-toggle-container" *ngIf="iconsRegistered">
+        <!-- <div class="dark-mode-toggle-container" *ngIf="iconsRegistered">
           <mat-slide-toggle [checked]="(themeService.isDarkMode$ | async)!" (change)="toggleDarkMode()" i18n="@@darkModeLabel">
             <span class="toggle-text">{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</span>
           </mat-slide-toggle>
           <mat-icon svgIcon="moon" class="toggle-icon moon-icon" [class.active]="!isDarkMode" aria-hidden="true"></mat-icon>
           <mat-icon svgIcon="sun" class="toggle-icon sun-icon" [class.active]="isDarkMode" aria-hidden="true"></mat-icon>
-        </div>
+        </div> -->
 
       </div>
       <div class="login-panel-spacer-bottom"></div>

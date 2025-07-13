@@ -25,14 +25,17 @@ export class ThemeService {
         this._isDarkMode.next(prefersDark);
       }
       // Apply initial theme to body based on loaded state
-      this.applyThemeToBody(this._isDarkMode.value);
+      // this.applyThemeToBody(this._isDarkMode.value);
+      this.applyThemeToBody(false);
 
       // Subscribe to changes ONLY in browser to update localStorage
       this.isDarkMode$.subscribe(isDark => {
-        this.applyThemeToBody(isDark);
+        // this.applyThemeToBody(isDark);
+        this.applyThemeToBody(false);
         // Guard this localStorage operation as well
         if (isPlatformBrowser(this.platformId)) {
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            // localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            localStorage.setItem('theme',  'light');
         }
       });
     } else {
