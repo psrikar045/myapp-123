@@ -1,4 +1,9 @@
 .header-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -6,6 +11,11 @@
   background: linear-gradient(90deg, #fff6e5 0%, #f5faff 100%);
   box-shadow: 0 2px 8px rgba(0,0,0,0.02);
   min-height: 72px;
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.2s;
+}
+.header-container.header-hidden {
+  transform: translateY(-100%);
+  box-shadow: none;
 }
 
 .header-logo {
@@ -281,3 +291,10 @@
   color: #2563eb !important;
   margin-right: 10px;
 }
+
+/*
+  IMPORTANT: To prevent content from being hidden behind the fixed header,
+  add padding-top: 80px; (or the header's height) to your main content container.
+  For example, in your landing page's main wrapper:
+  .landing-page-content { padding-top: 80px; }
+*/

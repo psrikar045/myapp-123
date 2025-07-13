@@ -10,7 +10,9 @@
   max-width: 100vw;
   box-shadow: 0 2px 16px rgba(37,99,235,0.06);
 }
-
+.container {
+  margin-top: 115px;
+}
 .brand-analyzer-content {
   width: 100%;
   max-width: 1400px;
@@ -131,6 +133,7 @@
   max-width: 1440px;
   justify-content: center;
   align-items: flex-start;
+  padding-bottom: 40px;
 }
 
 .brand-details-card {

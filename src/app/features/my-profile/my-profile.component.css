@@ -317,6 +317,7 @@
   display: flex;
   align-items: flex-end;
   z-index: 2;
+  margin-top: 20px;
 }
 
 .profile-banner-inner {
@@ -474,7 +475,7 @@
   position: absolute;
   left: 15px;
   top: 110px; /* Adjust this value to match the vertical position of the Edit Profile button */
-  height: calc(100% - 110px);
+  height: calc(79% - 110px);
   width: 0;
   border-left: 1.5px solid #e5e7eb;
   z-index: 1;

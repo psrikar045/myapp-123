@@ -1,4 +1,4 @@
-<header class="header-container">
+<header class="header-container" [class.header-hidden]="!isVisible">
   <div class="header-logo">
     <a [routerLink]="(logo$ | async)?.link" class="d-flex align-items-center">
       <span class="logo-img-wrapper">

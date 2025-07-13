@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { ToolbarService, ToolbarLogo, ToolbarNavItem, ToolbarAction } from '../../shared/services/toolbar.service';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
@@ -21,7 +21,9 @@ export class HeaderComponent implements OnInit {
   currentRoute: string = '';
   @Input() showNavigation = true;
   showProfileDropdown = false;
-
+  isVisible = true;
+  private lastScrollY = 0;
+  private showTimeout: any;
   constructor(
     private toolbarService: ToolbarService,
     private authService: AuthService,
@@ -72,5 +74,38 @@ this.authService.checkAuthStatusAndNavigate();
   }
   logout() {
     this.authService.logout();
+  }
+  
+  private isHeroSectionInView(): boolean {
+    const hero = document.getElementById('hero');
+    if (!hero) return false;
+    const rect = hero.getBoundingClientRect();
+    // Consider in view if at least 40px of hero is visible at the top
+    return rect.top <= 80 && rect.bottom > 40;
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const currentScrollY = window.scrollY;
+    console.log('window.scrollY:', currentScrollY);
+    if (currentScrollY <= 70) {
+      // Always show at the top or in hero section
+      this.isVisible = true;
+      if (this.showTimeout) clearTimeout(this.showTimeout);
+    } else if (currentScrollY > this.lastScrollY) {
+      // Scrolling down
+      this.isVisible = false;
+      if (this.showTimeout) clearTimeout(this.showTimeout);
+    } else if (currentScrollY < this.lastScrollY) {
+      // Scrolling up
+      this.isVisible = true;
+      if (this.showTimeout) clearTimeout(this.showTimeout);
+      this.showTimeout = setTimeout(() => {
+        if (window.scrollY > 70) {
+          this.isVisible = false;
+        }
+      }, 1000);
+    }
+    this.lastScrollY = currentScrollY < 0 ? 0 : currentScrollY;
   }
 }
