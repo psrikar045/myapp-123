@@ -29,7 +29,7 @@ import { Subscription } from 'rxjs';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { ThemeService } from '../../../core/services/theme.service';
-
+declare var google: any; // Declare google global variable
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -425,34 +425,23 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      // @ts-ignore
+   // Initialize Google Sign-In
+    // Ensure google object is available
+    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
       google.accounts.id.initialize({
         client_id: '28315114628-i0gj4eg0kfjr3b2g6cb8f62rmkrhtm22.apps.googleusercontent.com',
         callback: this.handleGoogleSignIn.bind(this)
       });
-      // @ts-ignore
       google.accounts.id.renderButton(
-        this.document.getElementById('googleSignInHiddenButton'),
-        { theme: 'outline', size: 'large', type: 'standard' }
+        this.document.getElementById('googleSignInButton'),
+        { theme: 'outline', size: 'large', width: '250' } // Customize button options as needed
       );
+      // google.accounts.id.prompt(); // Optionally, display One Tap prompt
+    } else {
+      console.error('Google Identity Services script not loaded.');
     }
   }
 
-  signInWithGoogle(): void {
-    const hiddenButton = this.document.getElementById('googleSignInHiddenButton');
-    if (hiddenButton) {
-      // Use a small timeout to ensure the DOM is ready for the click
-      setTimeout(() => {
-        (hiddenButton as HTMLElement).click();
-      }, 100);
-    } else {
-      console.error('Hidden Google Sign-In button element not found.');
-      // Fallback: If for some reason the hidden button isn't available
-      // @ts-ignore
-      google.accounts.id.prompt(); // This might show One Tap
-    }
-  }
 
   handleGoogleSignIn(response: any): void {
     // Handle the Google Sign-In response here
