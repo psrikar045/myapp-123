@@ -9,6 +9,7 @@ import { SearchComponent } from './features/search/search/search.component';
 import { SearchViewComponent } from './features/search-view/search-view/search-view.component';
 import { HomePageComponent } from './features/home/home-page.component';
 import { MyProfileComponent } from './features/my-profile/my-profile.component';
+import { CompanyDataComponent } from './features/company-data/company-data.component';
 
 export const routes: Routes = [
   // 1. Redirect root path '' to '/login'
@@ -56,6 +57,11 @@ export const routes: Routes = [
     {
     path: 'my-profile',
     component: MyProfileComponent,
+    canActivate: [authGuard]
+  },
+    {
+    path: 'brandApi',
+    component: CompanyDataComponent,
     canActivate: [authGuard]
   },
   {
