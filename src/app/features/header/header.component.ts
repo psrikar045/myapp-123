@@ -48,7 +48,9 @@ export class HeaderComponent implements OnInit {
     // });
     
   }
-
+login() {
+this.authService.checkAuthStatusAndNavigate();
+}
   onNavClick(item: ToolbarNavItem) {
     if (item.scrollId && this.router.url.startsWith('/landing')) {
       const el = document.getElementById(item.scrollId);

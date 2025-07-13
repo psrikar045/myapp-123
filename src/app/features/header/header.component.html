@@ -38,7 +38,7 @@
           <span>Logout</span>
         </button>
       </mat-menu>
-      <button *ngIf="action.type === 'login'" [routerLink]="action.route" class="action-btn login-btn">
+      <button *ngIf="action.type === 'login'" (click)="login()" class="action-btn login-btn">
         {{ action.label }}
       </button>
       <button *ngIf="action.type === 'get-started'" [routerLink]="action.route" class="action-btn get-started-btn d-flex align-items-center">

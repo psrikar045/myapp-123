@@ -16,7 +16,7 @@ import {
   SetNewPasswordRequest,
   GoogleSignInRequest
 } from '../../shared/models/api.models';
-
+import { jwtDecode } from 'jwt-decode';
 // Define interfaces for clarity
 interface LoginResponse {
   token: string;
@@ -98,7 +98,44 @@ export class AuthService {
     }
     return null; // Return null if not in a browser environment
   }
+private hasValidToken(): boolean {
+    const token = this.getToken();
+    if (!token) {
+      return false; // No token found
+    }
 
+    try {
+      // Decode the JWT to check its expiry
+      const decodedToken: any = jwtDecode(token);
+      // JWT 'exp' (expiration time) is in seconds since epoch
+      if (decodedToken.exp * 1000 < Date.now()) {
+        console.warn('Token has expired.');
+        this.logout(); // Automatically log out if token is expired
+        return false;
+      }
+      return true; // Token exists and is not expired
+    } catch (error) {
+      console.error('Error decoding token or token is invalid:', error);
+      this.logout(); // Treat invalid token as logged out
+      return false;
+    }
+  }
+
+   // ⭐ New Method to Check Status and Navigate ⭐
+  /**
+   * @method checkAuthStatusAndNavigate
+   * @description Checks if a valid token exists in storage.
+   * If valid, navigates to the home page; otherwise, navigates to the login page.
+   */
+  checkAuthStatusAndNavigate(): void {
+    if (this.hasValidToken()) {
+      console.log('Valid token found. Navigating to home.');
+      this.router.navigate(['/home']);
+    } else {
+      console.log('No valid token found. Navigating to login.');
+      this.router.navigate(['/login']);
+    }
+  }
   /**
    * Checks if the user is authenticated (based on token presence).
    * For production, also consider token expiry validation.
