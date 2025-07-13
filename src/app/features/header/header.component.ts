@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { Observable } from 'rxjs';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, MatMenuModule, MatIconModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
@@ -18,6 +20,7 @@ export class HeaderComponent implements OnInit {
   actions$: Observable<ToolbarAction[]>;
   currentRoute: string = '';
   @Input() showNavigation = true;
+  showProfileDropdown = false;
 
   constructor(
     private toolbarService: ToolbarService,
@@ -55,5 +58,17 @@ export class HeaderComponent implements OnInit {
     } else if (item.route) {
       this.router.navigate([item.route]);
     }
+  }
+
+  toggleProfileDropdown() {
+    this.showProfileDropdown = !this.showProfileDropdown;
+  }
+  goToProfile(event: Event) {
+    event.stopPropagation();
+    this.showProfileDropdown = false;
+    this.router.navigate(['/my-profile']);
+  }
+  logout(event: Event) {
+  console.log('logout');
   }
 }

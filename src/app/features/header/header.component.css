@@ -219,8 +219,65 @@
   transform: translateY(-2px) scale(1.04);
 }
 
+.profile-dropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(37,99,235,0.13);
+  min-width: 150px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+}
+.profile-dropdown a {
+  color: #23272f;
+  font-size: 1.08rem;
+  font-weight: 500;
+  padding: 10px 24px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  border: none;
+  background: none;
+  text-align: left;
+}
+.profile-dropdown a:hover {
+  background: #f1f5f9;
+  color: #2563eb;
+}
+
 /* Bootstrap utility helpers */
 .d-flex { display: flex !important; }
 .align-items-center { align-items: center !important; }
 .justify-content-center { justify-content: center !important; }
 .ms-2 { margin-left: 0.5rem !important; }
+
+::ng-deep .mat-menu-panel {
+  border-radius: 14px !important;
+  min-width: 180px !important;
+  box-shadow: 0 8px 32px 0 rgba(37,99,235,0.13) !important;
+  padding: 8px 0 !important;
+}
+::ng-deep .mat-menu-item {
+  font-size: 1.08rem !important;
+  font-weight: 500 !important;
+  padding: 12px 28px 12px 18px !important;
+  border-radius: 8px !important;
+  margin: 0 6px !important;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: background 0.15s, color 0.15s;
+}
+::ng-deep .mat-menu-item:hover {
+  background: #f1f5f9 !important;
+  color: #2563eb !important;
+}
+::ng-deep .mat-menu-item mat-icon {
+  font-size: 1.35rem !important;
+  color: #2563eb !important;
+  margin-right: 10px;
+}

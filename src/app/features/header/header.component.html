@@ -25,9 +25,19 @@
         {{ action.label }}
         <i class="bi bi-arrow-right ms-2" style="font-size: 1.1rem;"></i>
       </button>
-      <span *ngIf="action.type === 'profile'" class="header-profile-avatar ms-3" [routerLink]="action.route" style="cursor:pointer;">
+      <span *ngIf="action.type === 'profile'" class="header-profile-avatar ms-3" [matMenuTriggerFor]="profileMenu" style="cursor:pointer;">
         <img src="/landing/user.jfif" alt="User Avatar" />
       </span>
+      <mat-menu #profileMenu="matMenu">
+        <button mat-menu-item (click)="goToProfile($event)">
+          <mat-icon>person</mat-icon>
+          <span>My Profile</span>
+        </button>
+        <button mat-menu-item (click)="logout($event)">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
       <button *ngIf="action.type === 'login'" [routerLink]="action.route" class="action-btn login-btn">
         {{ action.label }}
       </button>
