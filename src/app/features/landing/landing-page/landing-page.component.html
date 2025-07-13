@@ -185,7 +185,8 @@
           <div class="pricing-card-desc">Free start for your project on our platform.</div>
           <div class="pricing-card-price-row">
             <span class="pricing-card-price">$0</span>
-            <span class="pricing-card-period">Per User / Per Year</span>
+            <span class="pricing-card-period" *ngIf="!isAnnual">Per User / Monthly</span>
+            <span class="pricing-card-period" *ngIf="isAnnual">Per User / Yearly</span>
           </div>
         </div>
         <ul class="pricing-card-features">
@@ -202,8 +203,10 @@
           <div class="pricing-card-name">Standard</div>
           <div class="pricing-card-desc">For a small company that wants to show what it's worth.</div>
           <div class="pricing-card-price-row">
-            <span class="pricing-card-price">$300</span>
-            <span class="pricing-card-period">Per User / Per Year</span>
+            <span class="pricing-card-price" *ngIf="!isAnnual">$30</span>
+            <span class="pricing-card-price" *ngIf="isAnnual">$299</span>
+            <span class="pricing-card-period" *ngIf="!isAnnual">Per User / Monthly</span>
+            <span class="pricing-card-period" *ngIf="isAnnual">Per User / Yearly</span>
           </div>
         </div>
         <ul class="pricing-card-features">
@@ -220,8 +223,10 @@
           <div class="pricing-card-name">Unlimited</div>
           <div class="pricing-card-desc">For a large company that wants to achieve maximum returns</div>
           <div class="pricing-card-price-row">
-            <span class="pricing-card-price">$600</span>
-            <span class="pricing-card-period">Per User / Per Year</span>
+            <span class="pricing-card-price" *ngIf="!isAnnual">$60</span>
+            <span class="pricing-card-price" *ngIf="isAnnual">$599</span>
+            <span class="pricing-card-period" *ngIf="!isAnnual">Per User / Monthly</span>
+            <span class="pricing-card-period" *ngIf="isAnnual">Per User / Yearly</span>
           </div>
         </div>
         <ul class="pricing-card-features">

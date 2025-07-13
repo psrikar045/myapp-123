@@ -24,7 +24,7 @@ import { ToolbarService } from '../../../shared/services/toolbar.service';
     MatIconModule,
     MatSidenavModule, // Add MatSidenavModule
     MatListModule,
-    NgClass, NgIf, NgFor, NgSwitch,    // Add MatListModule for nav items in sidenav
+    NgClass, NgIf, NgFor,    // Add MatListModule for nav items in sidenav
     HeaderComponent, // <-- Add HeaderComponent here
     FormsModule // <-- Add FormsModule for ngModel
   ],
