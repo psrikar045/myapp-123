@@ -1,9 +1,21 @@
-import { Injectable, inject, PLATFORM_ID } from '@angular/core'; // <-- Add PLATFORM_ID
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common'; // <-- Import isPlatformBrowser
+import { isPlatformBrowser } from '@angular/common';
+import { UserAuthService } from '../../shared/services/user-auth.service';
+import {
+  AuthResponse,
+  EmailLoginRequest,
+  UsernameLoginRequest,
+  RegisterRequest,
+  ProfileUpdateRequest,
+  ForgotPasswordRequest,
+  VerifyCodeRequest,
+  SetNewPasswordRequest,
+  GoogleSignInRequest
+} from '../../shared/models/api.models';
 
 // Define interfaces for clarity
 interface LoginResponse {
@@ -19,11 +31,14 @@ interface LoginResponse {
 
 // Define an interface for the registration data payload
 export interface RegisterData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNumber: string; // Ensure this matches your backend's expected field
+  username: string;
   password: string;
+  email: string;
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+  location?: string;
+  brandId?: string;
   // termsAccepted: boolean; // You might send this or handle it purely client-side
 }
 
@@ -44,8 +59,12 @@ export class AuthService {
   private readonly platformId = inject(PLATFORM_ID); // <-- Inject PLATFORM_ID
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.isAuthenticated());
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
-
-  constructor(private http: HttpClient, private router: Router) { }
+  userDetails:any;
+  constructor(
+    private http: HttpClient, 
+    private router: Router,
+    private userAuthService: UserAuthService
+  ) { }
 
   /**
    * Sends login credentials to the backend API.
@@ -187,12 +206,256 @@ export class AuthService {
     );
   }
 
+  // ==================== NEW SWAGGER API METHODS ====================
+
+  /**
+   * Login with email
+   * @param email User's email
+   * @param password User's password
+   * @returns Observable of AuthResponse
+   */
+  loginWithEmail(email: string, password: string): Observable<AuthResponse> {
+    const request: EmailLoginRequest = { email, password };
+    return this.userAuthService.loginWithEmail(request).pipe(
+      tap(response => {
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('jwt_token', response.token);
+          if (response.refreshToken) {
+            localStorage.setItem('refresh_token', response.refreshToken);
+          }
+          if (response.brandId) {
+            localStorage.setItem('brand_id', response.brandId);
+          }
+          this.isAuthenticatedSubject.next(true);
+          console.log('Login successful, token stored.');
+        }
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Login with username
+   * @param username User's username
+   * @param password User's password
+   * @returns Observable of AuthResponse
+   */
+  loginWithUsername(username: string, password: string): Observable<AuthResponse> {
+    const request: UsernameLoginRequest = { username, password };
+    return this.userAuthService.loginWithUsername(request).pipe(
+      tap(response => {
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('jwt_token', response.token);
+          if (response.refreshToken) {
+            localStorage.setItem('refresh_token', response.refreshToken);
+          }
+          if (response.brandId) {
+            localStorage.setItem('brand_id', response.brandId);
+          }
+          this.isAuthenticatedSubject.next(true);
+          console.log('Login successful, token stored.');
+        }
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Register new user
+   * @param userData Registration data
+   * @returns Observable of registration response
+   */
+  registerUser(userData: RegisterRequest): Observable<any> {
+    return this.userAuthService.register(userData).pipe(
+      tap(() => console.log('User registered successfully.')),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Update user profile
+   * @param profileData Profile update data
+   * @param brandId Brand identifier
+   * @returns Observable of update response
+   */
+  updateProfile(profileData: ProfileUpdateRequest, brandId: string): Observable<any> {
+    return this.userAuthService.updateProfile(profileData, brandId).pipe(
+      tap(() => console.log('Profile updated successfully.')),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Refresh authentication token
+   * @returns Observable of refresh response
+   */
+  refreshToken(): Observable<any> {
+    if (isPlatformBrowser(this.platformId)) {
+      const refreshToken = localStorage.getItem('refresh_token');
+      if (refreshToken) {
+        return this.userAuthService.refreshToken(refreshToken).pipe(
+          tap(response => {
+            if (response.token) {
+              localStorage.setItem('jwt_token', response.token);
+            }
+            if (response.refreshToken) {
+              localStorage.setItem('refresh_token', response.refreshToken);
+            }
+            console.log('Token refreshed successfully.');
+          }),
+          catchError(this.handleError)
+        );
+      }
+    }
+    return throwError(() => new Error('No refresh token available'));
+  }
+
+  /**
+   * Verify email address
+   * @param token Verification token
+   * @returns Observable of verification response
+   */
+  verifyEmail(token: string): Observable<any> {
+    return this.userAuthService.verifyEmail(token).pipe(
+      tap(() => console.log('Email verified successfully.')),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Google Sign-In authentication
+   * @param idToken Google ID token
+   * @returns Observable of AuthResponse
+   */
+  googleSignIn(idToken: string): Observable<AuthResponse> {
+    const request: GoogleSignInRequest = { idToken };
+    return this.userAuthService.googleSignIn(request).pipe(
+      tap(response => {
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('jwt_token', response.token);
+          if (response.refreshToken) {
+            localStorage.setItem('refresh_token', response.refreshToken);
+          }
+          if (response.brandId) {
+            localStorage.setItem('brand_id', response.brandId);
+          }
+          this.isAuthenticatedSubject.next(true);
+          console.log('Google Sign-In successful, token stored.');
+        }
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Check if username exists
+   * @param username Username to check
+   * @returns Observable of check result
+   */
+  checkUsernameExists(username: string): Observable<string> {
+    return this.userAuthService.usernameExists(username).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Check if email exists
+   * @param email Email to check
+   * @param brandId Brand identifier
+   * @returns Observable of check result
+   */
+  checkEmailExists(email: string, brandId: string): Observable<any> {
+    return this.userAuthService.checkEmail({ email, brandId }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Send password reset code
+   * @param email Email address
+   * @returns Observable of response
+   */
+  sendPasswordResetCode(email: string): Observable<any> {
+    const request: ForgotPasswordRequest = { email };
+    return this.userAuthService.sendPasswordResetCode(request).pipe(
+      tap(() => console.log('Password reset code sent successfully.')),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Verify password reset code
+   * @param email Email address
+   * @param code Verification code
+   * @returns Observable of verification response
+   */
+  verifyPasswordResetCode(email: string, code: string): Observable<any> {
+    const request: VerifyCodeRequest = { email, code };
+    return this.userAuthService.verifyResetCode(request).pipe(
+      tap(() => console.log('Reset code verified successfully.')),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Set new password after verification
+   * @param userId User ID
+   * @param email Email address
+   * @param code Verification code
+   * @param newPassword New password
+   * @returns Observable of response
+   */
+  setNewPassword(userId: string, email: string, code: string, newPassword: string): Observable<any> {
+    const request: SetNewPasswordRequest = { userId, email, code, newPassword };
+    return this.userAuthService.setNewPassword(request).pipe(
+      tap(() => console.log('Password set successfully.')),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Get stored brand ID
+   * @returns Brand ID or null
+   */
+  getBrandId(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('brand_id');
+    }
+    return null;
+  }
+
+  /**
+   * Get stored refresh token
+   * @returns Refresh token or null
+   */
+  getRefreshToken(): string | null {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('refresh_token');
+    }
+    return null;
+  }
+
+  /**
+   * Complete logout that clears all tokens
+   */
+  logoutComplete(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('jwt_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('brand_id');
+      localStorage.removeItem('user_data');
+      this.isAuthenticatedSubject.next(false);
+    }
+    this.router.navigate(['/login']);
+    console.log('Logged out successfully.');
+  }
+
   /**
    * Handles HTTP errors from API calls.
    * @param error The HttpErrorResponse object.
    * @returns An Observable that throws an error with a user-friendly message.
    */
-  private handleError(error: HttpErrorResponse): Observable<never> {
+  private handleError = (error: HttpErrorResponse): Observable<never> => {
     let errorMessage = 'An unexpected error occurred. Please try again later.';
 
     if (error.error instanceof ErrorEvent) {
@@ -220,5 +483,21 @@ export class AuthService {
     }
     // Return an observable with a user-facing error message
     return throwError(() => new Error(errorMessage));
+  };
+   /**
+   * Generate a username based on first letter of first name and last name
+   * @param firstName The user's first name
+   * @param lastName The user's last name
+   * @returns Generated username string
+   */
+  generateUsername(firstName: string, lastName: string): string {
+    if (!firstName || !lastName) {
+      return '';
+    }
+    
+    const firstInitial = firstName.charAt(0).toLowerCase();
+    const sanitizedLastName = lastName.toLowerCase().replace(/\s+/g, '');
+    
+    return `${firstInitial}${sanitizedLastName}`;
   }
 }

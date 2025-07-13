@@ -153,6 +153,87 @@ body.dark-theme a:hover {
   /* Adjust link hover color for dark theme if needed */
 }
 
+/* Logo handling for dark theme */
+body.dark-theme img[src*="logo.svg"],
+.dark-theme-logo {
+  filter: brightness(0) invert(1); /* Convert black to white */
+}
+
+/* CSS variables for theme colors */
+:root {
+  --primary-color: #4A50E0;
+  --primary-color-dark: #8c9eff;
+  --text-color: #333;
+  --text-secondary-color: #666;
+  --dark-theme-text-color: #e0e0e0;
+  --dark-theme-text-secondary-color: #b0b0b0;
+  --password-strength-weak: #f44336;
+  --password-strength-medium: #ff9800;
+  --password-strength-strong: #4caf50;
+  
+  /* Form field colors */
+  --input-text-color: #333;
+  --input-placeholder-color: rgba(0, 0, 0, 0.6);
+  --input-border-color: rgba(0, 0, 0, 0.38);
+  --input-focused-border-color: #4A50E0;
+  --input-focused-label-color: #4A50E0;
+  --input-label-color: rgba(0, 0, 0, 0.6);
+  --input-error-color: #f44336;
+  
+  /* Button colors */
+  --button-primary-bg: #4A50E0;
+  --button-primary-text: #ffffff;
+  --button-primary-hover-bg: #3a40c0;
+  --button-disabled-bg: rgba(0, 0, 0, 0.12);
+  --button-disabled-text: rgba(0, 0, 0, 0.38);
+}
+
+body.dark-theme {
+  --text-color: #e0e0e0;
+  --text-secondary-color: #b0b0b0;
+  
+  /* Dark theme form field colors */
+  --input-text-color: #e0e0e0;
+  --input-placeholder-color: rgba(255, 255, 255, 0.4);
+  --input-border-color: rgba(255, 255, 255, 0.3);
+  --input-focused-border-color: #8c9eff;
+  --input-focused-label-color: #8c9eff;
+  --input-label-color: rgba(255, 255, 255, 0.6);
+  --input-error-color: #f77;
+  
+  /* Dark theme button colors */
+  --button-primary-bg: #8c9eff;
+  --button-primary-text: #ffffff;
+  --button-primary-hover-bg: #7986cb;
+  --button-disabled-bg: rgba(255, 255, 255, 0.12);
+  --button-disabled-text: rgba(255, 255, 255, 0.38);
+  
+  /* Apply dark theme text colors to all elements */
+  color: var(--text-color);
+  background-color: #121212;
+}
+
+/* Ensure all text is visible in dark mode */
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4,
+body.dark-theme h5,
+body.dark-theme h6,
+body.dark-theme p,
+body.dark-theme span:not(.mat-mdc-form-field-error),
+body.dark-theme div:not(.mat-mdc-form-field-error),
+body.dark-theme label {
+  color: var(--text-color);
+}
+
+/* Ensure all secondary text is visible in dark mode */
+body.dark-theme .subtitle,
+body.dark-theme .secondary-text,
+body.dark-theme .hint-text {
+  color: var(--text-secondary-color);
+}
+
 /* Ensure Material components have a contrasting background when body is dark.
    This is a general approach. Specific components might need more targetted rules
    if a full Material dark theme isn't used. */
@@ -164,21 +245,162 @@ body.dark-theme .mat-mdc-menu-panel { /* Added for menus */
   color: #e0e0e0;
 }
 
+/* Form field styles for dark theme */
 body.dark-theme .mat-mdc-text-field-wrapper, /* For form fields */
 body.dark-theme .mat-mdc-select-value,
 body.dark-theme .mat-mdc-option {
-    /* color: #e0e0e0; /* Ensure text in form fields is light */
-}
-/* Example for input fields if not using a full Material dark theme */
-body.dark-theme .mat-mdc-form-field-focus-overlay,
-body.dark-theme .mat-mdc-form-field-infix {
-  /* Adjust text color for inputs if needed */
+    color: var(--input-text-color) !important;
 }
 
-/* Add more specific dark theme adjustments for components as needed */
+/* Input field styles for dark theme */
+body.dark-theme .mat-mdc-form-field-focus-overlay,
+body.dark-theme .mat-mdc-form-field-infix {
+  color: var(--input-text-color) !important;
+}
+
+/* Form field label styles for dark theme */
+body.dark-theme .mat-mdc-floating-label,
+body.dark-theme .mat-mdc-form-field-label {
+  color: var(--input-label-color) !important;
+}
+
+/* Form field outline styles for dark theme */
+body.dark-theme .mdc-notched-outline__leading,
+body.dark-theme .mdc-notched-outline__notch,
+body.dark-theme .mdc-notched-outline__trailing {
+  border-color: var(--input-border-color) !important;
+}
+
+/* Form field focused styles for dark theme */
+body.dark-theme .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+body.dark-theme .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+body.dark-theme .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: var(--input-focused-border-color) !important;
+}
+
+/* Form field focused label styles for dark theme */
+body.dark-theme .mat-mdc-form-field.mat-focused .mat-mdc-floating-label {
+  color: var(--input-focused-label-color) !important;
+}
+
+/* Input text color for dark theme */
+body.dark-theme .mat-mdc-input-element {
+  color: var(--input-text-color) !important;
+  caret-color: var(--input-focused-border-color) !important;
+}
+
+/* Form field icons for dark theme */
+body.dark-theme .mat-mdc-form-field .mat-icon {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* All icons in dark theme */
+body.dark-theme .mat-icon {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Specific icon overrides for dark theme */
+body.dark-theme .success-icon,
+body.dark-theme .error-icon,
+body.dark-theme .warning-icon,
+body.dark-theme .info-icon {
+  color: inherit !important; /* These should keep their semantic colors */
+}
+
+/* Placeholder text for dark theme */
+body.dark-theme .mat-mdc-input-element::placeholder {
+  color: var(--input-placeholder-color) !important;
+}
+
+/* Error message styles for dark theme */
+body.dark-theme .mat-mdc-form-field-error,
+body.dark-theme .mat-error {
+  color: var(--input-error-color) !important;
+}
+
+/* Button styles for dark theme */
 body.dark-theme .mat-mdc-button.mat-primary,
 body.dark-theme .mat-mdc-raised-button.mat-primary,
 body.dark-theme .mat-mdc-fab.mat-primary,
 body.dark-theme .mat-mdc-mini-fab.mat-primary {
-  /* Example: Adjust primary button colors for dark theme if default Material theme isn't sufficient */
+  background-color: var(--button-primary-bg) !important;
+  color: var(--button-primary-text) !important;
+}
+
+/* Button hover styles for dark theme */
+body.dark-theme .mat-mdc-button.mat-primary:hover,
+body.dark-theme .mat-mdc-raised-button.mat-primary:hover,
+body.dark-theme .mat-mdc-fab.mat-primary:hover,
+body.dark-theme .mat-mdc-mini-fab.mat-primary:hover {
+  background-color: var(--button-primary-hover-bg) !important;
+}
+
+/* Button disabled styles for dark theme */
+body.dark-theme .mat-mdc-button.mat-primary[disabled],
+body.dark-theme .mat-mdc-raised-button.mat-primary[disabled],
+body.dark-theme .mat-mdc-fab.mat-primary[disabled],
+body.dark-theme .mat-mdc-mini-fab.mat-primary[disabled] {
+  background-color: var(--button-disabled-bg) !important;
+  color: var(--button-disabled-text) !important;
+}
+
+/* Icon button styles for dark theme */
+body.dark-theme .mat-mdc-icon-button {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Icon button hover styles for dark theme */
+body.dark-theme .mat-mdc-icon-button:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Checkbox styles for dark theme */
+body.dark-theme .mat-mdc-checkbox .mdc-checkbox__native-control:enabled:not(:checked):not(:indeterminate) ~ .mdc-checkbox__background {
+  border-color: rgba(255, 255, 255, 0.7) !important;
+}
+
+body.dark-theme .mat-mdc-checkbox .mdc-checkbox__checkmark {
+  fill: #1e1e1e !important;
+}
+
+body.dark-theme .mat-mdc-checkbox label {
+  color: var(--input-text-color) !important;
+}
+
+/* Toggle switch styles for dark theme */
+body.dark-theme .mat-mdc-slide-toggle .mdc-switch__track {
+  background-color: #525252 !important;
+}
+
+body.dark-theme .mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__track {
+  background-color: var(--primary-color-dark) !important;
+}
+
+/* Snackbar styles for dark theme */
+body.dark-theme .mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: #2d2d2d !important;
+  --mdc-snackbar-supporting-text-color: #e0e0e0 !important;
+  --mat-snack-bar-button-color: var(--primary-color-dark) !important;
+}
+
+/* Dialog styles for dark theme */
+body.dark-theme .mat-mdc-dialog-container {
+  --mdc-dialog-container-color: #2d2d2d !important;
+  --mdc-dialog-with-divider-divider-color: rgba(255, 255, 255, 0.12) !important;
+  --mdc-dialog-subhead-color: #e0e0e0 !important;
+  --mdc-dialog-supporting-text-color: #b0b0b0 !important;
+}
+
+/* Menu styles for dark theme */
+body.dark-theme .mat-mdc-menu-panel {
+  background-color: #2d2d2d !important;
+}
+
+body.dark-theme .mat-mdc-menu-item {
+  color: #e0e0e0 !important;
+}
+
+body.dark-theme .mat-mdc-menu-item:hover:not([disabled]) {
+  background-color: rgba(255, 255, 255, 0.08) !important;
 }

@@ -9,7 +9,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterModule } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Subscription, catchError, of, tap } from 'rxjs';
+import { Subscription, catchError, of, tap, interval } from 'rxjs';
+import { takeWhile } from 'rxjs/operators';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service'; // Assuming theme service might be used
@@ -51,6 +53,32 @@ export function passwordMatchValidator(control: AbstractControl): ValidationErro
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('successAnimation', [
+      state('void', style({
+        opacity: 0,
+        transform: 'scale(0.8)'
+      })),
+      state('*', style({
+        opacity: 1,
+        transform: 'scale(1)'
+      })),
+      transition('void => *', [
+        animate('0.3s ease-out')
+      ])
+    ]),
+    trigger('buttonScale', [
+      state('normal', style({
+        transform: 'scale(1)'
+      })),
+      state('loading', style({
+        transform: 'scale(0.95)'
+      })),
+      transition('normal <=> loading', [
+        animate('0.2s ease-in-out')
+      ])
+    ])
+  ]
 })
 export class ResetPasswordComponent implements OnInit, OnDestroy {
   currentStep: number = 1;
@@ -62,6 +90,17 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   hideConfirmPassword = true;
   isLoading = false;
   carouselImage: string = '';
+  buttonState: 'normal' | 'loading' = 'normal';
+  
+  // Success message state
+  showSuccessMessage = false;
+  
+  // Countdown timer for verification code
+  codeExpiryTime = 10 * 60; // 10 minutes in seconds
+  remainingTime = 0;
+  formattedTime = '10:00';
+  timerWarning = false;
+  private timerSubscription?: Subscription;
 
   // Injected services
   private readonly authService = inject(AuthService);
@@ -157,35 +196,142 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     this.router.navigate(['/login']);
   }
 
+  /**
+   * Starts the countdown timer for code expiration
+   */
+  startCodeExpiryTimer(): void {
+    // Clear any existing timer
+    this.stopCodeExpiryTimer();
+    
+    // Initialize timer values
+    this.remainingTime = this.codeExpiryTime;
+    this.updateFormattedTime();
+    
+    // Start the timer
+    this.timerSubscription = interval(1000).pipe(
+      takeWhile(() => this.remainingTime > 0)
+    ).subscribe(() => {
+      this.remainingTime--;
+      this.timerWarning = this.remainingTime <= 60; // Warning when less than 1 minute remains
+      this.updateFormattedTime();
+      
+      if (this.remainingTime === 0) {
+        this.handleCodeExpiration();
+      }
+      
+      this.cdr.markForCheck();
+    });
+  }
+  
+  /**
+   * Stops the countdown timer
+   */
+  stopCodeExpiryTimer(): void {
+    if (this.timerSubscription) {
+      this.timerSubscription.unsubscribe();
+      this.timerSubscription = undefined;
+    }
+  }
+  
+  /**
+   * Updates the formatted time display (MM:SS)
+   */
+  updateFormattedTime(): void {
+    const minutes = Math.floor(this.remainingTime / 60);
+    const seconds = this.remainingTime % 60;
+    this.formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+  
+  /**
+   * Handles code expiration
+   */
+  handleCodeExpiration(): void {
+    this.snackBar.open('Verification code has expired. Please request a new code.', 'Close', { duration: 7000 });
+    this.codeForm.reset();
+    this.codeForm.markAsPristine();
+  }
+  
+  /**
+   * Resends the verification code
+   */
+  resendVerificationCode(): void {
+    if (!this.emailForm.value.email) {
+      this.snackBar.open('Email not found. Please restart the process.', 'Close', { duration: 5000 });
+      this.currentStep = 1;
+      this.updateCarouselImage();
+      return;
+    }
+    
+    this.isLoading = true;
+    this.buttonState = 'loading';
+    
+    // Simulate API call
+    setTimeout(() => {
+      this.isLoading = false;
+      this.buttonState = 'normal';
+      this.startCodeExpiryTimer(); // Reset the timer
+      this.snackBar.open('New verification code sent to your email.', 'Close', { duration: 5000 });
+      this.cdr.markForCheck();
+    }, 1000);
+    
+    // Actual API call (commented out)
+    this.authService.sendPasswordResetCode(this.emailForm.value.email!)
+      .pipe(
+        tap(() => {
+          this.isLoading = false;
+          this.buttonState = 'normal';
+          this.startCodeExpiryTimer(); // Reset the timer
+          this.snackBar.open('New verification code sent to your email.', 'Close', { duration: 5000 });
+          this.cdr.markForCheck();
+        }),
+        catchError(error => {
+          this.isLoading = false;
+          this.buttonState = 'normal';
+          this.snackBar.open(error.message || 'Failed to send verification code. Please try again.', 'Close', { duration: 7000 });
+          this.cdr.markForCheck();
+          return of(null);
+        })
+      ).subscribe();
+  }
+
   onSubmitEmail(): void {
     if (this.emailForm.invalid) {
       this.emailForm.markAllAsTouched();
       return;
     }
     this.isLoading = true;
+    this.buttonState = 'loading';
+    this.showSuccessMessage = false;
+    
     setTimeout(() => {
       this.isLoading = false;
+      this.buttonState = 'normal';
       this.currentStep = 2;
       this.updateCarouselImage();
-      this.snackBar.open('Verification code sent to your email.', 'Close', { duration: 5000 });
+      this.showSuccessMessage = true;
+      this.startCodeExpiryTimer(); // Start the countdown timer
       this.cdr.markForCheck();
     }, 1000); // Simulate network delay
-    // this.authService.forgotPassword(this.emailForm.value.email!)
-    //   .pipe(
-    //     tap(() => {
-    //       this.isLoading = false;
-    //       this.currentStep = 2;
-    //       this.updateCarouselImage();
-    //       this.snackBar.open('Verification code sent to your email.', 'Close', { duration: 5000 });
-    //       this.cdr.markForCheck();
-    //     }),
-    //     catchError(error => {
-    //       this.isLoading = false;
-    //       this.snackBar.open(error.message || 'Failed to send verification code. Please try again.', 'Close', { duration: 7000 });
-    //       this.cdr.markForCheck();
-    //       return of(null); // Prevent error from propagating further if handled
-    //     })
-    //   ).subscribe();
+    
+    this.authService.forgotPassword(this.emailForm.value.email!)
+      .pipe(
+        tap(() => {
+          this.isLoading = false;
+          this.buttonState = 'normal';
+          this.currentStep = 2;
+          this.updateCarouselImage();
+          this.showSuccessMessage = true;
+          this.startCodeExpiryTimer(); // Start the countdown timer
+          this.cdr.markForCheck();
+        }),
+        catchError(error => {
+          this.isLoading = false;
+          this.buttonState = 'normal';
+          this.snackBar.open(error.message || 'Failed to send verification code. Please try again.', 'Close', { duration: 7000 });
+          this.cdr.markForCheck();
+          return of(null); // Prevent error from propagating further if handled
+        })
+      ).subscribe();
   }
 
   onSubmitCode(): void {
@@ -194,39 +340,57 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       return;
     }
     this.isLoading = true;
+    this.buttonState = 'loading';
+    
     // Email is needed for verifyResetCode according to AuthService
     const email = this.emailForm.value.email;
     if (!email) {
         this.isLoading = false;
+        this.buttonState = 'normal';
         this.snackBar.open('Email not found. Please restart the process.', 'Close', { duration: 7000 });
         this.currentStep = 1; // Go back to email step
         this.updateCarouselImage();
         this.cdr.markForCheck();
         return;
     }
+    
     setTimeout(() => {
       this.isLoading = false;
+      this.buttonState = 'normal';
       this.currentStep = 3;
       this.updateCarouselImage();
+      this.stopCodeExpiryTimer(); // Stop the timer when code is verified
       this.snackBar.open('Code verified. Please set your new password.', 'Close', { duration: 5000 });
       this.cdr.markForCheck();
     }, 1000); // Simulate network delay
-    // this.authService.verifyResetCode(email, this.codeForm.value.code!)
-    //   .pipe(
-    //     tap(() => {
-    //       this.isLoading = false;
-    //       this.currentStep = 3;
-    //       this.updateCarouselImage();
-    //       this.snackBar.open('Code verified. Please set your new password.', 'Close', { duration: 5000 });
-    //       this.cdr.markForCheck();
-    //     }),
-    //     catchError(error => {
-    //       this.isLoading = false;
-    //       this.snackBar.open(error.message || 'Invalid or expired code. Please try again.', 'Close', { duration: 7000 });
-    //       this.cdr.markForCheck();
-    //       return of(null);
-    //     })
-    //   ).subscribe();
+    
+    this.authService.verifyPasswordResetCode(email, this.codeForm.value.code!)
+      .pipe(
+        tap(() => {
+          this.isLoading = false;
+          this.buttonState = 'normal';
+          this.currentStep = 3;
+          this.updateCarouselImage();
+          this.stopCodeExpiryTimer(); // Stop the timer when code is verified
+          this.snackBar.open('Code verified. Please set your new password.', 'Close', { duration: 5000 });
+          this.cdr.markForCheck();
+        }),
+        catchError(error => {
+          this.isLoading = false;
+          this.buttonState = 'normal';
+          this.snackBar.open(error.message || 'Invalid or expired code. Please try again.', 'Close', { duration: 7000 });
+          this.cdr.markForCheck();
+          return of(null);
+        })
+      ).subscribe((response: any) => {
+        if (response) {
+          this.authService.userDetails = {
+            userId: response?.userId,
+            email: response?.email,
+            code: response?.code
+          }
+        }
+      });
   }
 
   onSubmitPassword(): void {
@@ -238,38 +402,45 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       return;
     }
     this.isLoading = true;
+    this.buttonState = 'loading';
     const email = this.emailForm.value.email;
     const code = this.codeForm.value.code;
 
     if (!email || !code) {
         this.isLoading = false;
+        this.buttonState = 'normal';
         this.snackBar.open('Session data missing. Please restart the password reset process.', 'Close', { duration: 7000 });
         this.currentStep = 1; // Go back to email step
         this.updateCarouselImage();
         this.cdr.markForCheck();
         return;
     }
-setTimeout(() => {
+    
+    setTimeout(() => {
       this.isLoading = false;
+      this.buttonState = 'normal';
       this.snackBar.open('Password successfully reset. Please login.', 'Close', { duration: 5000 });
       this.router.navigate(['/login']);
       this.cdr.markForCheck();
     }, 1000); // Simulate network delay
-    // this.authService.resetPassword(email, code, this.passwordForm.value.newPassword!)
-    //   .pipe(
-    //     tap(() => {
-    //       this.isLoading = false;
-    //       this.snackBar.open('Password successfully reset. Please login.', 'Close', { duration: 5000 });
-    //       this.router.navigate(['/login']);
-    //       this.cdr.markForCheck();
-    //     }),
-    //     catchError(error => {
-    //       this.isLoading = false;
-    //       this.snackBar.open(error.message || 'Failed to reset password. Please try again.', 'Close', { duration: 7000 });
-    //       this.cdr.markForCheck();
-    //       return of(null);
-    //     })
-    //   ).subscribe();
+    
+    this.authService.setNewPassword(this.authService.userDetails?.userId, email, code, this.passwordForm.value.newPassword!)
+      .pipe(
+        tap(() => {
+          this.isLoading = false;
+    //       this.buttonState = 'normal';
+          this.snackBar.open('Password successfully reset. Please login.', 'Close', { duration: 5000 });
+          this.router.navigate(['/login']);
+          this.cdr.markForCheck();
+        }),
+        catchError(error => {
+          this.isLoading = false;
+    //       this.buttonState = 'normal';
+          this.snackBar.open(error.message || 'Failed to reset password. Please try again.', 'Close', { duration: 7000 });
+          this.cdr.markForCheck();
+          return of(null);
+        })
+      ).subscribe();
   }
 
   // For dark mode toggle, if used in template
@@ -299,6 +470,7 @@ setTimeout(() => {
     if (this.carouselIntervalId && isPlatformBrowser(this.platformId)) {
       clearInterval(this.carouselIntervalId);
     }
+    this.stopCodeExpiryTimer(); // Clean up timer subscription
   }
 
   // Getter for easier access in template, if needed

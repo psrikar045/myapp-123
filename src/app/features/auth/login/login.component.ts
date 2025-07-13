@@ -16,15 +16,17 @@ import { emailOrUsernameValidator } from '../../../core/validators/custom-valida
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { of } from 'rxjs'; // Correct way to import 'of'
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { ThemeService } from '../../../core/services/theme.service';
 
@@ -41,13 +43,27 @@ import { ThemeService } from '../../../core/services/theme.service';
     MatCheckboxModule,
     MatSlideToggleModule,
     MatProgressSpinnerModule,
+    MatProgressBarModule,
     HttpClientModule, // <-- Ensure this is here for Auth Service
-  RouterModule, // <-- Add RouterModule for routerLink
-  MatSnackBarModule // <-- Add MatSnackBarModule for notifications
+    RouterModule, // <-- Add RouterModule for routerLink
+    MatSnackBarModule // <-- Add MatSnackBarModule for notifications
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [
+    trigger('buttonScale', [
+      state('normal', style({
+        transform: 'scale(1)'
+      })),
+      state('loading', style({
+        transform: 'scale(0.95)'
+      })),
+      transition('normal <=> loading', [
+        animate('0.2s ease-in-out')
+      ])
+    ])
+  ]
 })
 export class LoginComponent implements OnInit, OnDestroy {
   private readonly fb = inject(NonNullableFormBuilder); // Using NonNullableFormBuilder
@@ -73,11 +89,17 @@ export class LoginComponent implements OnInit, OnDestroy {
   isLoading = false;
   errorMessage: string = ''; // For login form errors
   isDarkMode = false;
+  buttonState: 'normal' | 'loading' = 'normal';
 
   // Password visibility toggles
   hideLoginPassword = true;
   hideRegisterPassword = true;
   hideRegisterConfirmPassword = true;
+
+  // Password strength indicator
+  passwordStrength = 0;
+  passwordStrengthText = '';
+  passwordStrengthColor = '';
 
   // --- Carousel Properties ---
   readonly loginCarouselImages: readonly string[] = ['images/gallery1.png','images/gallery2.png','images/gallery3.png'];
@@ -89,6 +111,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // --- Subscriptions & Timers ---
   private themeSubscription!: Subscription;
+  private passwordSubscription!: Subscription;
   // private carouselIntervalId: any; // Already declared above
 
   iconsRegistered = false;
@@ -120,6 +143,15 @@ export class LoginComponent implements OnInit, OnDestroy {
       termsAccepted: this.fb.control(false, [Validators.requiredTrue]),
     }, { validators: passwordMatchValidator });
 
+    // Monitor password strength
+    this.passwordSubscription = this.regPasswordCtrl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(password => {
+      this.checkPasswordStrength(password);
+      this.cdr.markForCheck();
+    });
+
     this.themeSubscription = this.themeService.isDarkMode$.subscribe(isDark => {
       this.isDarkMode = isDark;
       this.cdr.markForCheck();
@@ -132,6 +164,48 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.carouselImage = this.registerFormImage;
     }
     this.cdr.markForCheck();
+  }
+  
+  /**
+   * Checks password strength and updates UI indicators
+   * @param password The password to check
+   */
+  checkPasswordStrength(password: string): void {
+    if (!password) {
+      this.passwordStrength = 0;
+      this.passwordStrengthText = '';
+      this.passwordStrengthColor = '';
+      return;
+    }
+
+    // Calculate password strength
+    let strength = 0;
+    
+    // Length check
+    if (password.length >= 8) strength += 1;
+    if (password.length >= 12) strength += 1;
+    
+    // Complexity checks
+    if (/[A-Z]/.test(password)) strength += 1; // Has uppercase
+    if (/[a-z]/.test(password)) strength += 1; // Has lowercase
+    if (/[0-9]/.test(password)) strength += 1; // Has number
+    if (/[^A-Za-z0-9]/.test(password)) strength += 1; // Has special char
+    
+    // Normalize to 0-100 scale
+    const normalizedStrength = Math.min(Math.floor((strength / 6) * 100), 100);
+    this.passwordStrength = normalizedStrength;
+    
+    // Set text and color based on strength
+    if (normalizedStrength < 40) {
+      this.passwordStrengthText = 'Weak';
+      this.passwordStrengthColor = 'var(--password-strength-weak, #f44336)';
+    } else if (normalizedStrength < 70) {
+      this.passwordStrengthText = 'Medium';
+      this.passwordStrengthColor = 'var(--password-strength-medium, #ff9800)';
+    } else {
+      this.passwordStrengthText = 'Strong';
+      this.passwordStrengthColor = 'var(--password-strength-strong, #4caf50)';
+    }
   }
 
   startCarousel(): void {
@@ -209,6 +283,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
     this.isLoading = true;
+    this.buttonState = 'loading';
     const { identifier, password } = this.loginForm.getRawValue();
     this.authService.login(identifier, password)
       .pipe(
@@ -227,6 +302,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.isLoading = false;
+        this.buttonState = 'normal';
         this.cdr.markForCheck();
       });
   }
@@ -257,6 +333,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
     this.isLoading = true;
+    this.buttonState = 'loading';
     const rawValues = this.registerForm.getRawValue();
     const registerData: RegisterData = {
       firstName: rawValues.firstName,
@@ -264,9 +341,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: rawValues.email,
       phoneNumber: rawValues.phoneNumber,
       password: rawValues.password,
+      brandId:'',
+      location:'',
+      username:this.authService.generateUsername(rawValues.firstName,rawValues.lastName)
     };
-
-    this.authService.register(registerData)
+    this.authService.registerUser(registerData)
       .pipe(
         tap(() => {
           this.snackBar.open('Registration successful! Please login.', 'Close', { duration: 5000 });
@@ -282,6 +361,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this.isLoading = false;
+        this.buttonState = 'normal';
         this.cdr.markForCheck();
       });
   }
@@ -335,6 +415,15 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // Simplified from original: if you want a cycling carousel for the "login" view and a static for "register"
   // you would call this from ngOnInit and toggleToLogin, and just set static image in toggleToRegister.
+  ngOnDestroy(): void {
+    if (this.themeSubscription) {
+      this.themeSubscription.unsubscribe();
+    }
+    if (this.passwordSubscription) {
+      this.passwordSubscription.unsubscribe();
+    }
+    this.stopCarousel();
+  }
   // private startCarousel(): void {
   //   if (isPlatformBrowser(this.platformId) && !this.showRegisterForm && this.GALLERY_IMAGE_PATHS.length > 0) {
   //     // Example: only cycle gallery3 for login view, or a specific subset
@@ -353,13 +442,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   //   }
   // }
 
-
-  ngOnDestroy(): void {
-    if (this.themeSubscription) {
-      this.themeSubscription.unsubscribe();
-    }
-    this.stopCarousel(); // Ensure carousel stops on component destruction
-  }
 }
 
 // Standalone passwordMatchValidator function

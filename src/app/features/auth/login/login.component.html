@@ -1,5 +1,5 @@
-<div class="login-page-wrapper">
-  <div class="login-container" [class.dark-theme]="isDarkMode" mat-typography>
+<div class="login-page-wrapper" [class.dark-theme]="isDarkMode">
+  <div class="login-container" mat-typography>
     <div class="login-left">
       <img src="images/logo.svg" alt="TravelWise Logo" class="logo" i18n-alt="@@logoAltText">
       <div class="login-panel-spacer-top"></div>
@@ -45,7 +45,9 @@
               <a routerLink="/forgot-password" class="forgot-password-link" i18n="@@forgotPasswordLink">Forgot Password?</a>
             </div>
 
-            <button mat-raised-button color="primary" type="submit" class="full-width login-button" [disabled]="loginForm.invalid || isLoading">
+            <button mat-raised-button color="primary" type="submit" class="full-width login-button" 
+                    [disabled]="loginForm.invalid || isLoading"
+                    [@buttonScale]="buttonState">
               <span *ngIf="!isLoading" i18n="@@loginButtonText">Login</span>
               <mat-spinner *ngIf="isLoading" diameter="24" class="button-spinner"></mat-spinner>
             </button>
@@ -118,6 +120,21 @@
                 Password must be at least 8 characters.
               </mat-error>
             </mat-form-field>
+            
+            <!-- Password Strength Indicator -->
+            <div *ngIf="regPasswordCtrl.value && !regPasswordCtrl.hasError('required')" class="password-strength-container" role="status" [attr.aria-label]="'Password strength: ' + passwordStrengthText">
+              <div class="password-strength-text">
+                Password Strength: <span [style.color]="passwordStrengthColor">{{passwordStrengthText}}</span>
+              </div>
+              <div class="password-strength-bar">
+                <mat-progress-bar mode="determinate" [value]="passwordStrength" [color]="passwordStrengthText === 'Weak' ? 'warn' : (passwordStrengthText === 'Medium' ? 'accent' : 'primary')"></mat-progress-bar>
+              </div>
+              <div class="password-strength-segments">
+                <div class="segment" [class.active]="passwordStrength >= 33" [style.background-color]="passwordStrength >= 33 ? passwordStrengthColor : ''"></div>
+                <div class="segment" [class.active]="passwordStrength >= 66" [style.background-color]="passwordStrength >= 66 ? passwordStrengthColor : ''"></div>
+                <div class="segment" [class.active]="passwordStrength >= 90" [style.background-color]="passwordStrength >= 90 ? passwordStrengthColor : ''"></div>
+              </div>
+            </div>
 
             <mat-form-field appearance="outline" class="full-width">
               <mat-label i18n="@@confirmPasswordLabelRegister">Confirm Password</mat-label>
@@ -145,7 +162,9 @@
               </mat-error>
             </div>
 
-            <button mat-raised-button color="primary" type="submit" class="full-width register-button" [disabled]="registerForm.invalid || isLoading">
+            <button mat-raised-button color="primary" type="submit" class="full-width register-button" 
+                    [disabled]="registerForm.invalid || isLoading"
+                    [@buttonScale]="buttonState">
               <span *ngIf="!isLoading" i18n="@@createAccountButtonText">Create account</span>
               <mat-spinner *ngIf="isLoading" diameter="24" class="button-spinner"></mat-spinner>
             </button>
@@ -176,10 +195,10 @@
 
         <div class="dark-mode-toggle-container" *ngIf="iconsRegistered">
           <mat-slide-toggle [checked]="(themeService.isDarkMode$ | async)!" (change)="toggleDarkMode()" i18n="@@darkModeLabel">
-            Dark Mode
+            <span class="toggle-text">{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</span>
           </mat-slide-toggle>
-          <mat-icon svgIcon="moon" class="toggle-icon moon-icon"></mat-icon>
-          <mat-icon svgIcon="sun" class="toggle-icon sun-icon"></mat-icon>
+          <mat-icon svgIcon="moon" class="toggle-icon moon-icon" [class.active]="!isDarkMode" aria-hidden="true"></mat-icon>
+          <mat-icon svgIcon="sun" class="toggle-icon sun-icon" [class.active]="isDarkMode" aria-hidden="true"></mat-icon>
         </div>
 
       </div>

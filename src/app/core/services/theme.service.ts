@@ -57,9 +57,42 @@ export class ThemeService {
     if (isPlatformBrowser(this.platformId)) { // <-- Add this check
       if (isDark) {
         this.renderer.addClass(document.body, 'dark-theme');
+        // Set dark mode meta theme color for mobile browsers
+        this.updateMetaThemeColor('#121212');
+        
+        // Force update of Material components by triggering a window resize event
+        // This helps components like mat-select, mat-menu, etc. to update their styles
+        setTimeout(() => {
+          window.dispatchEvent(new Event('resize'));
+        }, 0);
       } else {
         this.renderer.removeClass(document.body, 'dark-theme');
+        // Set light mode meta theme color for mobile browsers
+        this.updateMetaThemeColor('#f4f6f8');
+        
+        // Force update of Material components
+        setTimeout(() => {
+          window.dispatchEvent(new Event('resize'));
+        }, 0);
       }
+    }
+  }
+  
+  /**
+   * Updates the meta theme-color tag for mobile browsers
+   * @param color The color to set
+   */
+  private updateMetaThemeColor(color: string): void {
+    if (isPlatformBrowser(this.platformId)) {
+      let metaThemeColor = document.querySelector('meta[name="theme-color"]');
+      
+      if (!metaThemeColor) {
+        metaThemeColor = document.createElement('meta');
+        this.renderer.setAttribute(metaThemeColor, 'name', 'theme-color');
+        this.renderer.appendChild(document.head, metaThemeColor);
+      }
+      
+      this.renderer.setAttribute(metaThemeColor, 'content', color);
     }
   }
 }

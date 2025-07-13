@@ -7,6 +7,7 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { Router } from '@angular/router';
 import { filter, map, Observable } from 'rxjs';
 import { ToolbarService } from './shared/services/toolbar.service';
+import { ThemeUtilsService } from './shared/services/theme-utils.service';
 
 @Component({
   selector: 'app-root',
@@ -17,10 +18,15 @@ import { ToolbarService } from './shared/services/toolbar.service';
 })
 export class AppComponent implements OnInit {
   showFooter$: Observable<boolean>;
-  constructor(public spinnerService: SpinnerService, private router: Router, private toolbarService: ToolbarService,) {
+  constructor(
+    public spinnerService: SpinnerService, 
+    private router: Router, 
+    private toolbarService: ToolbarService,
+    private themeUtilsService: ThemeUtilsService // Inject ThemeUtilsService
+  ) {
      // Initialize the showFooter$ observable from the service
     this.showFooter$ = this.toolbarService.showFooter$;
-  } // Inject Router
+  }
 ngOnInit() {
     // Logic to update footer visibility based on route
     this.router.events.pipe(
