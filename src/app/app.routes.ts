@@ -46,7 +46,7 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomePageComponent,
-    // canActivate: [authGuard]
+    canActivate: [authGuard]
   },
   {
     path: 'dashboard',
@@ -56,7 +56,7 @@ export const routes: Routes = [
     {
     path: 'my-profile',
     component: MyProfileComponent,
-    // canActivate: [authGuard]
+    canActivate: [authGuard]
   },
   {
     path: 'admin',

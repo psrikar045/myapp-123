@@ -32,8 +32,8 @@ export interface RegisterData {
 })
 export class AuthService {
   // IMPORTANT: Replace with your actual backend base URL 
-  private readonly API_BASE_URL = 'http://localhost:3000/api'; // Example backend URL
-  private readonly LOGIN_URL = `${this.API_BASE_URL}/auth/login`;
+  private readonly API_BASE_URL = 'http://202.65.155.125:8080/myapp'; // Example backend URL
+  private readonly LOGIN_URL = `${this.API_BASE_URL}/auth/login/email`;
   // Define new API endpoints here
   private readonly FORGOT_PASSWORD_URL = `${this.API_BASE_URL}/auth/forgot-password`;
   private readonly VERIFY_CODE_URL = `${this.API_BASE_URL}/auth/verify-reset-code`;
@@ -55,7 +55,7 @@ export class AuthService {
    * @returns An Observable of the LoginResponse
    */
   login(identifier: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(this.LOGIN_URL, { identifier, password })
+    return this.http.post<LoginResponse>(this.LOGIN_URL, { email:identifier, password:password })
       .pipe(
         tap(response => {
           if (isPlatformBrowser(this.platformId)) { // <-- Add this check
