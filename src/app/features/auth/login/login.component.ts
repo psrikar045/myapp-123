@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject, PLATFORM_ID } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject, PLATFORM_ID, Inject, AfterViewInit } from '@angular/core';
+import { CommonModule, isPlatformBrowser, DOCUMENT } from '@angular/common';
 import {
   ReactiveFormsModule,
   Validators,
@@ -65,13 +65,12 @@ import { ThemeService } from '../../../core/services/theme.service';
     ])
   ]
 })
-export class LoginComponent implements OnInit, OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly fb = inject(NonNullableFormBuilder); // Using NonNullableFormBuilder
   private readonly matIconRegistry = inject(MatIconRegistry);
   private readonly domSanitizer = inject(DomSanitizer);
   public readonly themeService = inject(ThemeService);
   private readonly cdr = inject(ChangeDetectorRef);
-  private readonly platformId = inject(PLATFORM_ID);
   private readonly authService = inject(AuthService); // <-- Inject AuthService
   private readonly router = inject(Router); // <-- Inject Router
   private readonly snackBar = inject(MatSnackBar); // <-- Inject MatSnackBar
@@ -116,7 +115,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   iconsRegistered = false;
 
-  constructor() {
+  constructor(@Inject(DOCUMENT) private document: Document, @Inject(PLATFORM_ID) private platformId: Object) {
     // Form initializations moved to ngOnInit as NonNullableFormBuilder (fb) might not be fully ready in constructor
     // if it's injected and its own dependencies are complex. ngOnInit is safer.
     if (isPlatformBrowser(this.platformId)) {
@@ -423,6 +422,41 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.passwordSubscription.unsubscribe();
     }
     this.stopCarousel();
+  }
+
+  ngAfterViewInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      // @ts-ignore
+      google.accounts.id.initialize({
+        client_id: '28315114628-i0gj4eg0kfjr3b2g6cb8f62rmkrhtm22.apps.googleusercontent.com',
+        callback: this.handleGoogleSignIn.bind(this)
+      });
+      // @ts-ignore
+      google.accounts.id.renderButton(
+        this.document.getElementById('googleSignInHiddenButton'),
+        { theme: 'outline', size: 'large', type: 'standard' }
+      );
+    }
+  }
+
+  signInWithGoogle(): void {
+    const hiddenButton = this.document.getElementById('googleSignInHiddenButton');
+    if (hiddenButton) {
+      // Use a small timeout to ensure the DOM is ready for the click
+      setTimeout(() => {
+        (hiddenButton as HTMLElement).click();
+      }, 100);
+    } else {
+      console.error('Hidden Google Sign-In button element not found.');
+      // Fallback: If for some reason the hidden button isn't available
+      // @ts-ignore
+      google.accounts.id.prompt(); // This might show One Tap
+    }
+  }
+
+  handleGoogleSignIn(response: any): void {
+    // Handle the Google Sign-In response here
+    console.log(response);
   }
   // private startCarousel(): void {
   //   if (isPlatformBrowser(this.platformId) && !this.showRegisterForm && this.GALLERY_IMAGE_PATHS.length > 0) {
