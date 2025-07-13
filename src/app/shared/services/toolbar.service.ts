@@ -10,6 +10,7 @@ export interface ToolbarLogo {
 export interface ToolbarNavItem {
   label: string;
   route: string;
+  scrollId: string;
 }
 
 export interface ToolbarAction {
@@ -30,10 +31,10 @@ export class ToolbarService {
   });
 
   private navItems$ = new BehaviorSubject<ToolbarNavItem[]>([
-    { label: 'Brands', route: '/brands' },
-    { label: 'Developers', route: '/developers' },
-    { label: 'Pricing', route: '/pricing' },
-    { label: 'Blog', route: '/blog' }
+    { label: 'Brands', route: '', scrollId: 'brands-section' },
+    { label: 'Developers', route: '', scrollId: 'developers-section' },
+    { label: 'Pricing', route: '', scrollId: 'pricing-section' },
+    { label: 'Blog', route: '', scrollId: 'blog-section' }
   ]);
 
   private actions$ = new BehaviorSubject<ToolbarAction[]>([
@@ -72,10 +73,10 @@ export class ToolbarService {
       link: '/home'
     });
     this.navItems$.next([
-      { label: 'Home', route: '/home' },
-      { label: 'Brand API', route: '/brand-api' },
-      { label: 'Logo link', route: '/logo-link' },
-      { label: 'Search API', route: '/search-api' }
+      { label: 'Home', route: '/home', scrollId: '' },
+      { label: 'Brand API', route: '/brand-api', scrollId: '' },
+      { label: 'Logo link', route: '/logo-link', scrollId: '' },
+      { label: 'Search API', route: '/search-api', scrollId: '' }
     ]);
     this.actions$.next([
       { type: 'upgrade', label: 'Upgrade' },
@@ -90,10 +91,10 @@ export class ToolbarService {
       link: '/'
     });
     this.navItems$.next([
-      { label: 'Brands', route: '/brands' },
-      { label: 'Developers', route: '/developers' },
-      { label: 'Pricing', route: '/pricing' },
-      { label: 'Blog', route: '/blog' }
+      { label: 'Brands', route: '', scrollId: 'brands-section' },
+      { label: 'Developers', route: '', scrollId: 'developers-section' },
+      { label: 'Pricing', route: '', scrollId: 'pricing-section' },
+      { label: 'Blog', route: '', scrollId: 'blog-section' }
     ]);
     this.actions$.next([
       { type: 'login', label: 'Login', route: '/login' },

@@ -28,12 +28,13 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.isAuthenticated$.subscribe(isAuthenticated => {
-      if (isAuthenticated) {
-        this.toolbarService.setLoggedInToolbar();
-      } else {
-        this.toolbarService.setLoggedOutToolbar();
-      }
-    });
+    // this.authService.isAuthenticated$.subscribe(isAuthenticated => {
+    //   if (isAuthenticated) {
+    //     this.toolbarService.setLoggedInToolbar();
+    //   } else {
+    //     this.toolbarService.setLoggedOutToolbar();
+    //   }
+    // });
+    
   }
 }

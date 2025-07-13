@@ -10,6 +10,7 @@
   <ng-container *ngIf="showNavigation">
   <nav class="header-nav">
     <a *ngFor="let item of navItems$ | async as navItems" [routerLink]="item.route" class="nav-link">{{ item.label }}</a>
+    <!-- <a *ngFor="let item of navItems$ | async as navItems"  class="nav-link">{{ item.label }}</a> -->
   </nav>
   <div class="header-actions">
     <ng-container *ngFor="let action of actions$ | async as actions">
