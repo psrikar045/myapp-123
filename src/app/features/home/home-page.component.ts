@@ -1,10 +1,12 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { HeaderComponent } from '../header/header.component';
+import { ToolbarService } from '../../shared/services/toolbar.service';
 
 @Component({
   selector: 'app-home-page',
@@ -13,15 +15,22 @@ import { AuthService } from '../../core/services/auth.service';
     CommonModule,
     MatCardModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    HeaderComponent
   ],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomePageComponent {
+export class HomePageComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
+  constructor(private toolbarService: ToolbarService) {
+    // Initialize any necessary services or state here
+  }
+  ngOnInit(): void {
+    this.toolbarService.setLoggedInToolbar();
+  }
 
   onLogout(): void {
     this.authService.logout();

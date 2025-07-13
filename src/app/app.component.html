@@ -1,5 +1,5 @@
 <app-spinner *ngIf="spinnerService.loading$ | async"></app-spinner>
 <router-outlet></router-outlet>
-<ng-container *ngIf="!isAuthRoute()">
+<ng-container *ngIf="showFooter$ | async">
   <app-footer></app-footer>
 </ng-container>

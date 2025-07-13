@@ -30,11 +30,6 @@ export const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'home',
-    component: HomePageComponent,
-    // canActivate: [authGuard]
-  },
-  {
     path: 'forgot-password',
     component: ResetPasswordComponent
   },
@@ -49,6 +44,11 @@ export const routes: Routes = [
 
   // 4. Protected Routes
   {
+    path: 'home',
+    component: HomePageComponent,
+    // canActivate: [authGuard]
+  },
+  {
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [authGuard]
@@ -56,7 +56,7 @@ export const routes: Routes = [
     {
     path: 'my-profile',
     component: MyProfileComponent,
-    
+    // canActivate: [authGuard]
   },
   {
     path: 'admin',
@@ -68,7 +68,7 @@ export const routes: Routes = [
   //    Redirects any unmatched paths to the landing page.
   {
     path: '**',
-    redirectTo: '/home'
+    redirectTo: '/landing'
   }
   // Or, if you have a 404 Not Found component:
   // { path: '**', component: NotFoundComponent }

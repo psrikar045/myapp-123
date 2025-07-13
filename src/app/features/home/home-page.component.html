@@ -1,67 +1,68 @@
+<app-header></app-header>
 <div class="home-container">
   <main class="main-content">
     <div class="grid-container">
-      <!-- Top Featured Cards -->
       <div class="card-large card-feature-1">
         <mat-card>
           <mat-card-header>
             <mat-card-title>Strat Building with Marketify</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p>Getting Started</p>
-            <a href="#">Learn more</a>
+            <a href="#" class="getting-started-link">Getting Started <i class="bi bi-arrow-right"></i></a>
           </mat-card-content>
-          <div class="card-icon">
-            <!-- Placeholder for icon -->
+          <div class="card-icons">
+            <img src="assets/images/shop.png" alt="Shop Icon" class="card-icon-img shop-icon">
+            <img src="assets/images/dropbox.png" alt="Dropbox Icon" class="card-icon-img dropbox-icon">
+            <img src="assets/images/google-drive.png" alt="Google Drive Icon" class="card-icon-img drive-icon">
+            <img src="assets/images/jira.png" alt="Jira Icon" class="card-icon-img jira-icon">
+            <img src="assets/images/figma.png" alt="Figma Icon" class="card-icon-img figma-icon">
           </div>
         </mat-card>
       </div>
       <div class="card-large card-feature-2">
         <mat-card>
           <mat-card-header>
-            <mat-card-title>Marketify - Seem less integration for developers</mat-card-title>
+            <mat-card-title>Marketify - Seamless integration for developers</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <p>Getting Started</p>
             <a href="#">Learn more</a>
           </mat-card-content>
-          <div class="card-icon">
-            <!-- Placeholder for icon -->
+          <div class="card-icons">
+            <img src="assets/images/globe.png" alt="Globe Icon" class="card-icon-img globe-icon">
+            <img src="assets/images/puzzle.png" alt="Puzzle Icon" class="card-icon-img puzzle-icon">
+            <img src="assets/images/network.png" alt="Network Icon" class="card-icon-img network-icon">
           </div>
         </mat-card>
       </div>
 
-      <!-- Mid API/Feature Cards -->
-      <div class="card-medium">
+      <div class="card-medium api-card-purple">
         <mat-card>
           <mat-card-header>
-            <mat-icon>pie_chart</mat-icon>
+            <mat-icon class="api-icon">pie_chart</mat-icon>
             <mat-card-title>Brand API</mat-card-title>
             <mat-card-subtitle>Data for B2B personalization</mat-card-subtitle>
           </mat-card-header>
         </mat-card>
       </div>
-      <div class="card-medium">
+      <div class="card-medium api-card-teal">
         <mat-card>
           <mat-card-header>
-            <mat-icon>description</mat-icon>
-            <mat-card-title>Brand API</mat-card-title>
+            <mat-icon class="api-icon">sync_alt</mat-icon> <mat-card-title>Brand API</mat-card-title>
             <mat-card-subtitle>Data for B2B personalization</mat-card-subtitle>
           </mat-card-header>
         </mat-card>
       </div>
-      <div class="card-medium">
+      <div class="card-medium api-card-brown">
         <mat-card>
           <mat-card-header>
-            <mat-icon>search</mat-icon>
-            <mat-card-title>Brand API</mat-card-title>
+            <mat-icon class="api-icon">search</mat-icon> <mat-card-title>Brand API</mat-card-title>
             <mat-card-subtitle>Data for B2B personalization</mat-card-subtitle>
           </mat-card-header>
         </mat-card>
       </div>
 
-      <!-- Bottom Support/Documentation Cards -->
-      <div class="card-small">
+      <div class="card-small support-card">
         <mat-card>
           <mat-card-header>
             <mat-card-title>API Documentation</mat-card-title>
@@ -84,23 +85,27 @@
       <div class="card-small">
         <mat-card>
           <mat-card-header>
-            <mat-card-title>Community Forum</mat-card-title>
+            <mat-card-title>Request an update</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p>Connect with other developers and share your knowledge.</p>
+            <p>Request new features or updates.</p>
           </mat-card-content>
         </mat-card>
       </div>
       <div class="card-small">
         <mat-card>
           <mat-card-header>
-            <mat-card-title>Contact Support</mat-card-title>
+            <mat-card-title>Service status</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            <p>Get in touch with us directly for any inquiries.</p>
+            <p>Check the current status of Marketify services.</p>
           </mat-card-content>
         </mat-card>
       </div>
     </div>
   </main>
 </div>
+<footer>
+    <p>Marketify — The modern way of doing business</p>
+    <p>&copy; 2023 Marketify. All rights reserved.</p>
+  </footer>

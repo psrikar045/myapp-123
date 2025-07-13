@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface ToolbarLogo {
   src: string;
@@ -55,6 +55,16 @@ export class ToolbarService {
     this.navItems$.next([]);
     this.actions$.next([]);
   }
+  private _showFooter = new BehaviorSubject<boolean>(true); // Default to true
+  public showFooter$: Observable<boolean> = this._showFooter.asObservable();
+    /**
+   * Sets whether the footer should be visible.
+   * @param isVisible True to show, false to hide.
+   */
+  setShowFooter(isVisible: boolean): void {
+    this._showFooter.next(isVisible);
+  }
+
   setLoggedInToolbar(): void {
     this.logo$.next({
       src: 'landing/logo icon.png',
