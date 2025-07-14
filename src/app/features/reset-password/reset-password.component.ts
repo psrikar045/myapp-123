@@ -10,11 +10,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Router, RouterModule } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription, catchError, of, tap, interval } from 'rxjs';
-import { takeWhile } from 'rxjs/operators';
+import { takeWhile, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { AuthService } from '../../core/services/auth.service';
 import { ThemeService } from '../../core/services/theme.service'; // Assuming theme service might be used
+import { ValidationService } from '../../core/services/validation.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 // Custom validator for password matching
@@ -95,12 +96,18 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   // Success message state
   showSuccessMessage = false;
   
+  // Password strength indicator
+  passwordStrength = 0;
+  passwordStrengthText = '';
+  passwordStrengthColor = '';
+  
   // Countdown timer for verification code
   codeExpiryTime = 10 * 60; // 10 minutes in seconds
   remainingTime = 0;
   formattedTime = '10:00';
   timerWarning = false;
   private timerSubscription?: Subscription;
+  private passwordSubscription?: Subscription;
 
   // Injected services
   private readonly authService = inject(AuthService);
@@ -110,6 +117,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   private readonly snackBar = inject(MatSnackBar);
   private readonly cdr = inject(ChangeDetectorRef);
   public readonly themeService = inject(ThemeService); // Public if used in template
+  private readonly validationService = inject(ValidationService);
   private readonly matIconRegistry = inject(MatIconRegistry);
   private readonly domSanitizer = inject(DomSanitizer);
 
@@ -142,6 +150,15 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       confirmPassword: this.fb.control('', [Validators.required]),
     }, { validators: passwordMatchValidator });
 
+    // Monitor password strength
+    this.passwordSubscription = this.newPasswordControl?.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe((password: string) => {
+      this.checkPasswordStrength(password);
+      this.cdr.markForCheck();
+    });
+
     this.updateCarouselImage();
 
     this.themeSubscription = this.themeService.isDarkMode$.subscribe(isDark => {
@@ -173,6 +190,17 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       this.carouselImage = 'images/gallery3.png'; // Ensure path is correct
     }
     this.cdr.markForCheck();
+  }
+
+  /**
+   * Checks password strength using the password strength service
+   * @param password The password to check
+   */
+  checkPasswordStrength(password: string): void {
+    const result = this.validationService.checkPasswordStrength(password);
+    this.passwordStrength = result.strength;
+    this.passwordStrengthText = result.text;
+    this.passwordStrengthColor = result.color;
   }
 
   toggleNewPasswordVisibility(): void {
@@ -313,7 +341,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       this.cdr.markForCheck();
     }, 1000); // Simulate network delay
     
-    this.authService.forgotPassword(this.emailForm.value.email!)
+    this.authService.sendPasswordResetCode(this.emailForm.value.email!)
       .pipe(
         tap(() => {
           this.isLoading = false;
@@ -466,6 +494,9 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.themeSubscription) {
       this.themeSubscription.unsubscribe();
+    }
+    if (this.passwordSubscription) {
+      this.passwordSubscription.unsubscribe();
     }
     if (this.carouselIntervalId && isPlatformBrowser(this.platformId)) {
       clearInterval(this.carouselIntervalId);

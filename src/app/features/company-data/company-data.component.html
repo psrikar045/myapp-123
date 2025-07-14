@@ -7,10 +7,38 @@
       <p class="brand-analyzer-subtitle">
         Enter a website URL to extract and visualize its brand identity.
       </p>
-      <div class="brand-analyzer-input-row">
-        <input class="brand-analyzer-input" type="text" placeholder="https://dribbble.com/" />
-        <button class="brand-analyzer-analyze-btn" (click)="onAnalyzeClick()">Analyze</button>
+      <div 
+          class="brand-analyzer-input-row">
+        <input 
+          class="brand-analyzer-input" 
+          type="text" 
+          placeholder="https://dribbble.com/" 
+          [(ngModel)]="websiteUrl"
+          [disabled]="isLoading" />
+        <button 
+          class="brand-analyzer-analyze-btn" 
+          (click)="onAnalyzeClick()"
+          [disabled]="isLoading">
+          {{ isLoading ? 'Analyzing...' : 'Analyze' }}
+        </button>
       </div>
+      
+      <!-- Error Message -->
+      <div class="error-message" *ngIf="errorMessage">
+        <span>{{ errorMessage }}</span>
+      </div>
+      
+      <!-- Animation Type Toggle -->
+      <!-- <div class="animation-selector" *ngIf="!isLoading">
+        <button 
+          type="button" 
+          class="animation-toggle-btn" 
+          (click)="toggleAnimationType()"
+          [title]="'Current: ' + selectedAnimationType + ' animation'">
+          <span class="toggle-icon">🎭</span>
+          <span class="toggle-text">{{ getToggleText() }}</span>
+        </button>
+      </div> -->
     </div>
   </div>
 
@@ -130,4 +158,7 @@
       </div>
     </div>
   </ng-container>
+  
+  <!-- Search Modal Component -->
+  <app-search-modal></app-search-modal>
 </div>

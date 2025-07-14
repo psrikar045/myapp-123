@@ -448,3 +448,187 @@
     padding-right: 12px;
   }
 }
+
+/* Error Message Styles */
+.error-message {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 0.9rem;
+  text-align: center;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dark-theme .error-message {
+  background: #7f1d1d;
+  border-color: #991b1b;
+  color: #fca5a5;
+}
+
+/* Animation Selector Styles */
+.animation-selector {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.animation-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  color: #374151;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.animation-toggle-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.animation-toggle-btn:active {
+  transform: translateY(0);
+}
+
+.dark-theme .animation-toggle-btn {
+  background: rgba(31, 41, 55, 0.9);
+  border-color: rgba(75, 85, 99, 0.5);
+  color: #d1d5db;
+}
+
+.dark-theme .animation-toggle-btn:hover {
+  background: rgba(31, 41, 55, 1);
+  border-color: rgba(75, 85, 99, 0.8);
+}
+
+.toggle-icon {
+  font-size: 1.1rem;
+}
+
+.toggle-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Button Loading State */
+.brand-analyzer-analyze-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #9ca3af;
+}
+
+.brand-analyzer-input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #f3f4f6;
+}
+
+.dark-theme .brand-analyzer-input:disabled {
+  background: #374151;
+}
+
+/* Error Message Styles */
+.error-message {
+  margin-top: 16px;
+  padding: 12px 16px;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 0.9rem;
+  text-align: center;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.dark-theme .error-message {
+  background: #7f1d1d;
+  border-color: #991b1b;
+  color: #fca5a5;
+}
+
+/* Animation Selector Styles */
+.animation-selector {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.animation-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  color: #374151;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.animation-toggle-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.animation-toggle-btn:active {
+  transform: translateY(0);
+}
+
+.dark-theme .animation-toggle-btn {
+  background: rgba(31, 41, 55, 0.9);
+  border-color: rgba(75, 85, 99, 0.5);
+  color: #d1d5db;
+}
+
+.dark-theme .animation-toggle-btn:hover {
+  background: rgba(31, 41, 55, 1);
+  border-color: rgba(75, 85, 99, 0.8);
+}
+
+.toggle-icon {
+  font-size: 1.1rem;
+}
+
+.toggle-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Button Loading State */
+.brand-analyzer-analyze-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #9ca3af;
+}
+
+.brand-analyzer-input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: #f3f4f6;
+}
+
+.dark-theme .brand-analyzer-input:disabled {
+  background: #374151;
+}
