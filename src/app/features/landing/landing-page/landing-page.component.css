@@ -427,15 +427,16 @@
 }
 
 .hero-headline {
-  font-family: 'Inter', sans-serif;
-  font-size: 3rem;
-  color: #23272f;
-  line-height: 1.08;
-  letter-spacing: -2px;
-  font-weight: 800;
-  margin-bottom: 24px;
-  text-align: left;
-  width: 100%;
+padding-top: 70px;
+font-family: "Inter", sans-serif;
+font-size: 52px;
+color: #23272f;
+line-height: 1.08;
+letter-spacing: -2px;
+font-weight: 1000;
+margin-bottom: 24px;
+text-align: left;
+width: 100%;
 }
 
 .hero-highlight {
@@ -1358,7 +1359,7 @@
 
 .core-capabilities-section {
   width: 100%;
-  background: linear-gradient(90deg, #fff 0%, #f9fafb 85%, #e6f0ff 97%, #e6f0ff 100%);
+  background: linear-gradient(93deg, #fff 0%, #f9fafb 48% 61%, #80b3ff 113%, #e6f0ff 38%);
   position: relative;
   overflow: hidden;
   padding-top: 96px;

@@ -12,6 +12,7 @@ import { MyProfileComponent } from './features/my-profile/my-profile.component';
 import { CompanyDataComponent } from './features/company-data/company-data.component';
 import { SearchApiComponent } from './features/search-api/search-api.component';
 import { LogoLinkComponent } from './features/logo-link/logo-link.component';
+import { AllCategoriesComponent } from './features/all-categories/all-categories.component';
 
 export const routes: Routes = [
   // 1. Redirect root path '' to '/login'
@@ -53,6 +54,10 @@ export const routes: Routes = [
     path: 'search-api',
     component: SearchApiComponent,
     canActivate: [authGuard]
+  },
+  {
+    path: 'all-categories',
+    component: AllCategoriesComponent
   },
 
   // 4. Protected Routes

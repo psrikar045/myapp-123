@@ -76,6 +76,10 @@ this.authService.checkAuthStatusAndNavigate();
     this.authService.logout();
   }
   
+  onUpgradeClick() {
+    this.router.navigate(['/all-categories']);
+  }
+  
   private isHeroSectionInView(): boolean {
     const hero = document.getElementById('hero');
     if (!hero) return false;

@@ -1,0 +1,48 @@
+<app-header [showNavigation]="true"></app-header>
+<div class="categories-bg">
+  <div class="categories-content">
+    <h1 class="categories-title">
+      <span class="highlight">Explore</span> Top Brands & Tools
+    </h1>
+    <p class="categories-desc">
+      Discover, search, and filter the world’s most popular digital products, platforms, and creative tools—all in one place.
+    </p>
+    <form class="categories-search-bar" (ngSubmit)="onSearch()">
+      <span class="search-icon">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="10" cy="10" r="7.5" stroke="#b0b7c3" stroke-width="2"/>
+          <line x1="16.3536" y1="16.6464" x2="20" y2="20.2929" stroke="#b0b7c3" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <input type="text" placeholder="Search categories..." [(ngModel)]="searchTerm" name="search" autocomplete="off" />
+      <button class="search-btn" type="submit">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 11H16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 7L16 11L12 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </form>
+    <div class="main-cards-container">
+      <!-- Categories Card -->
+      <div class="categories-card">
+        <h2 class="card-title">Categories</h2>
+        <div class="categories-list">
+          <button *ngFor="let cat of filteredCategories"
+                  class="category-btn"
+                  [class.active]="cat.label === selectedCategory"
+                  (click)="selectCategory(cat.label)">
+            {{ cat.label }}
+          </button>
+        </div>
+      </div>
+      <!-- Subcategories Card -->
+      <div class="subcategories-card" [ngStyle]="{ 'background': getSubCardBgColor() }">
+        <h2 class="card-title">{{ selectedCategory }}</h2>
+        <div class="subcategories-list">
+          <span *ngIf="tags.length === 0" class="empty-text">No subcategories available.</span>
+          <button *ngFor="let tag of getDisplayTags()" class="subcategory-btn">{{ tag }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -21,9 +21,8 @@
   </nav>
   <div class="header-actions">
     <ng-container *ngFor="let action of actions$ | async as actions">
-      <button *ngIf="action.type === 'upgrade'" class="action-btn upgrade-btn d-flex align-items-center">
-        {{ action.label }}
-        <i class="bi bi-arrow-right ms-2" style="font-size: 1.1rem;"></i>
+      <button *ngIf="action.type === 'upgrade'" class="action-btn upgrade-btn d-flex align-items-center" (click)="onUpgradeClick()">
+        Upgrade
       </button>
       <span *ngIf="action.type === 'profile'" class="header-profile-avatar ms-3" [matMenuTriggerFor]="profileMenu" style="cursor:pointer;">
         <img src="/landing/user.jfif" alt="User Avatar" />

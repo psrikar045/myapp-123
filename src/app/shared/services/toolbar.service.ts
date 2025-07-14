@@ -98,7 +98,7 @@ export class ToolbarService {
     ]);
     this.actions$.next([
       { type: 'login', label: 'Login', route: '/login' },
-      { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.svg', route: '/my-profile' }
+      { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.svg', route: '/all-categories' }
     ]);
   }
 }
