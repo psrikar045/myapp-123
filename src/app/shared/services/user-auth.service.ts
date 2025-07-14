@@ -218,11 +218,18 @@ export class UserAuthService {
    * Forward request
    * POST /auth/forward
    */
-  forwardRequest(request: AuthRequest, forwardUrl: string): Observable<any> {
+  forwardRequest(forwardUrl: string, token: any): Observable<any> {
+    let jwtToken: any = this.getAuthToken();
+    if (jwtToken == null && token) {
+      jwtToken = token;
+    }
+    let request = {
+      "url": forwardUrl
+    };
     const headers = new HttpHeaders({
-      'X-Forward-URL': forwardUrl
+      'Authorization': `Bearer ${jwtToken}`,
     });
-    return this.http.post<any>(`${this.baseUrl}/auth/forward`, request, { headers })
+    return this.http.post<any>(`${this.baseUrl}/forward`, request, { headers })
       .pipe(catchError(this.handleError));
   }
 

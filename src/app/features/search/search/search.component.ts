@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../../core/services/auth.service';
+import { ValidationService } from '../../../core/services/validation.service';
 import { SearchModalService } from '../../../shared/services/search-modal.service';
 import { SearchHistoryService, SearchedBrand } from '../../../shared/services/search-history.service';
 import { SearchModalComponent } from '../../../shared/components/search-modal/search-modal.component';
@@ -44,6 +45,7 @@ export class SearchComponent {
    });
  }
   private readonly authService = inject(AuthService);
+  private readonly validationService = inject(ValidationService);
   private readonly searchModalService = inject(SearchModalService);
 
  searchDomainNameOrUrl = '';
@@ -95,41 +97,7 @@ export class SearchComponent {
   goToResults(brand: string) {
     this.router.navigate(['/search-view', brand.toLowerCase()]);
   }
-  // Method to validate URL format
-  private isValidUrl(url: string): boolean {
-    try {
-      new URL(url);
-      return true;
-    } catch {
-      return false;
-    }
-  }
-
-  // Method to validate domain name format
-  private isValidDomain(domain: string): boolean {
-    const domainRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-    return domainRegex.test(domain);
-  }
-
-  // Method to convert domain to proper URL format
-  private async validateAndConvertDomain(domain: string): Promise<string> {
-    // First try with https
-    let testUrl = domain.startsWith('http') ? domain : `https://${domain}`;
-    
-    try {
-      const response = await fetch(testUrl, { method: 'HEAD', mode: 'no-cors' });
-      return testUrl;
-    } catch (error) {
-      // If https fails, try with http
-      testUrl = `http://${domain}`;
-      try {
-        const response = await fetch(testUrl, { method: 'HEAD', mode: 'no-cors' });
-        return testUrl;
-      } catch (error) {
-        throw new Error(`No website found for domain: ${domain}`);
-      }
-    }
-  }
+  // Validation methods now use ValidationService
 
   // Method to clear error message
   private clearError(): void {
@@ -261,23 +229,9 @@ export class SearchComponent {
     return knownBrands[brandKey] || 'generic';
   }
 
-  // Method to extract brand name from company name
+  // Method to extract brand name from company name (using ValidationService)
   private extractBrandName(companyName: string): string {
-    // If there's a dash, take the part after the last dash
-    if (companyName.includes(' - ')) {
-      const parts = companyName.split(' - ');
-      return parts[parts.length - 1].trim();
-    }
-    // If there's just a dash without spaces, try that too
-    else if (companyName.includes('-')) {
-      const parts = companyName.split('-');
-      return parts[parts.length - 1].trim();
-    }
-    // If no dash, return the original name (or first few words)
-    else {
-      // Optionally, you can take just the first word or first few words
-      return companyName.trim();
-    }
+    return this.validationService.extractBrandName(companyName);
   }
 handleKeyDown(event:any){
   if (event.key === 'Enter') {
@@ -291,40 +245,18 @@ handleKeyDown(event:any){
     this.clearError();
     this.isLoading = true;
 
-    // Validate input
-    if (!this.searchDomainNameOrUrl || this.searchDomainNameOrUrl.trim() === '') {
-      this.setError('Please enter a domain name or URL');
+    // Validate input using ValidationService
+    const validationResult = await this.validationService.validateUrlOrDomain(this.searchDomainNameOrUrl);
+    
+    if (!validationResult.isValid) {
+      this.setError(validationResult.error || 'Invalid input');
+      this.isLoading = false;
       return;
     }
 
-    const input = this.searchDomainNameOrUrl.trim();
-    let finalUrl: string;
-
-    try {
-      // Check if input is a URL
-      if (input.startsWith('http://') || input.startsWith('https://')) {
-        if (!this.isValidUrl(input)) {
-          this.setError('Invalid URL format. Please enter a valid URL');
-          return;
-        }
-        finalUrl = input;
-      } else {
-        // Check if input is a valid domain name
-        if (!this.isValidDomain(input)) {
-          this.setError('Invalid domain name format. Please enter a valid domain name');
-          return;
-        }
-
-        // Try to validate and convert domain to proper URL
-        try {
-          finalUrl = await this.validateAndConvertDomain(input);
-          // Update the input field with the proper URL
-          this.searchDomainNameOrUrl = finalUrl;
-        } catch (error) {
-          this.setError('No website found for the provided domain name');
-          return;
-        }
-      }
+    const finalUrl = validationResult.finalUrl!;
+    // Update the input field with the proper URL
+    this.searchDomainNameOrUrl = finalUrl;
 
       // Start brand analysis with progressive updates
       this.searchModalService.startBrandAnalysis({
@@ -367,9 +299,8 @@ handleKeyDown(event:any){
         }
       });
 
-    } catch (error) {
+    } catch (error:any) {
       console.error('Validation Error:', error);
       this.setError('An error occurred while validating the input. Please try again.');
     }
   }
-}

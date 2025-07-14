@@ -27,6 +27,7 @@ interface LoginResponse {
     email: string;
     // Add other user properties like roles, etc.
   };
+  refreshToken?: string; // Include refreshToken if needed
   // Potentially include refreshToken if your auth flow uses it
 }
 
@@ -42,6 +43,24 @@ export interface RegisterData {
   brandId?: string;
   // termsAccepted: boolean; // You might send this or handle it purely client-side
 }
+
+// Define interface for user details
+export interface UserDetails {
+  id?: string;
+  username?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+  location?: string;
+  userId?: string;
+  roles?: string[];
+  exp?: number; // JWT expiration
+  iat?: number; // JWT issued at
+  code?: string;
+  token?: string;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -60,12 +79,92 @@ export class AuthService {
   private readonly platformId = inject(PLATFORM_ID); // <-- Inject PLATFORM_ID
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.isAuthenticated());
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
-  userDetails:any;
+  
+  private userDetailsSubject = new BehaviorSubject<UserDetails | null>(this.getUserDetailsFromStorage());
+  userDetails$ = this.userDetailsSubject.asObservable();
+  userDetails: any = {};
   constructor(
     private http: HttpClient, 
     private router: Router,
     private userAuthService: UserAuthService
-  ) { }
+  ) {
+    // Initialize user details from storage on service creation
+    this.userDetails = this.getUserDetailsFromStorage();
+  }
+
+  /**
+   * Store user details from login response
+   * @param response AuthResponse from login
+   */
+  storeUserDetails(response: AuthResponse): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    try {
+      // Decode JWT token to extract user details
+      const decodedToken: any = jwtDecode(response.token);
+      
+      const userDetails: UserDetails = {
+        id: decodedToken.sub || decodedToken.userId,
+        username: decodedToken.username,
+        email: decodedToken.email,
+        firstName: decodedToken.firstName,
+        lastName: decodedToken.lastName,
+        phoneNumber: decodedToken.phoneNumber,
+        location: decodedToken.location,
+        userId: response.brandId || decodedToken.brandId,
+        roles: decodedToken.roles || [],
+        exp: decodedToken.exp,
+        iat: decodedToken.iat,
+        token: response.token
+      };
+
+      // Store in localStorage
+      localStorage.setItem('user_details', JSON.stringify(userDetails));
+      
+      // Update BehaviorSubject and local variable
+      this.userDetails = userDetails;
+      this.userDetailsSubject.next(userDetails);
+      
+      console.log('User details stored:', userDetails);
+    } catch (error) {
+      console.error('Error decoding token or storing user details:', error);
+    }
+  }
+
+  /**
+   * Get user details from localStorage
+   * @returns UserDetails or null
+   */
+  private getUserDetailsFromStorage(): UserDetails | null {
+    if (!isPlatformBrowser(this.platformId)) return null;
+
+    try {
+      const storedDetails = localStorage.getItem('user_details');
+      return storedDetails ? JSON.parse(storedDetails) : null;
+    } catch (error) {
+      console.error('Error parsing stored user details:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Get current user details
+   * @returns Current user details or null
+   */
+  getCurrentUserDetails(): UserDetails | null {
+    return this.userDetails;
+  }
+
+  /**
+   * Clear user details from storage and memory
+   */
+  private clearUserDetails(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.removeItem('user_details');
+    }
+    this.userDetails = null;
+    this.userDetailsSubject.next(null);
+  }
 
   /**
    * Sends login credentials to the backend API.
@@ -184,6 +283,8 @@ private hasValidToken(): boolean {
       localStorage.removeItem('user_data');
       this.isAuthenticatedSubject.next(false);
     }
+    // Clear user details
+    this.clearUserDetails();
     this.router.navigate(['/landing']);
     console.log('Logged out.');
   }
@@ -265,7 +366,11 @@ private hasValidToken(): boolean {
             localStorage.setItem('brand_id', response.brandId);
           }
           this.isAuthenticatedSubject.next(true);
-          console.log('Login successful, token stored.');
+          
+          // Store user details from the response
+          this.storeUserDetails(response);
+          
+          console.log('Login successful, token and user details stored.');
         }
       }),
       catchError(this.handleError)
@@ -484,6 +589,8 @@ private hasValidToken(): boolean {
       localStorage.removeItem('user_data');
       this.isAuthenticatedSubject.next(false);
     }
+    // Clear user details
+    this.clearUserDetails();
     this.router.navigate(['/login']);
     console.log('Logged out successfully.');
   }
@@ -542,6 +649,12 @@ private hasValidToken(): boolean {
     const request: PublicForwardRequest = { url };
     return this.userAuthService.publicForward(request).pipe(
       tap(() => console.log('Password set successfully.', request)),
+      catchError(this.handleError)
+    );
+  }
+   privateForward(url: any): Observable<any> {
+    return this.userAuthService.forwardRequest(url,this.userDetails?.token).pipe(
+      tap((response:any) => console.log('Password set successfully.',response)),
       catchError(this.handleError)
     );
   }

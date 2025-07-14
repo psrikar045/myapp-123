@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http'; // <-- Add this to impo
 import { Router, RouterModule } from '@angular/router'; // <-- Import Router
 import { AuthService, RegisterData } from '../../../core/services/auth.service'; // <-- Import AuthService (adjust path)
 import { emailOrUsernameValidator } from '../../../core/validators/custom-validators'; // Import the custom validator
+import { ValidationService } from '../../../core/services/validation.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -75,6 +76,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly authService = inject(AuthService); // <-- Inject AuthService
   private readonly router = inject(Router); // <-- Inject Router
   private readonly snackBar = inject(MatSnackBar); // <-- Inject MatSnackBar
+  private readonly validationService = inject(ValidationService);
   private readonly toolbarService = inject(ToolbarService);
 
   // --- Form Definitions ---
@@ -168,45 +170,14 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   
   /**
-   * Checks password strength and updates UI indicators
+   * Checks password strength using the password strength service
    * @param password The password to check
    */
   checkPasswordStrength(password: string): void {
-    if (!password) {
-      this.passwordStrength = 0;
-      this.passwordStrengthText = '';
-      this.passwordStrengthColor = '';
-      return;
-    }
-
-    // Calculate password strength
-    let strength = 0;
-    
-    // Length check
-    if (password.length >= 8) strength += 1;
-    if (password.length >= 12) strength += 1;
-    
-    // Complexity checks
-    if (/[A-Z]/.test(password)) strength += 1; // Has uppercase
-    if (/[a-z]/.test(password)) strength += 1; // Has lowercase
-    if (/[0-9]/.test(password)) strength += 1; // Has number
-    if (/[^A-Za-z0-9]/.test(password)) strength += 1; // Has special char
-    
-    // Normalize to 0-100 scale
-    const normalizedStrength = Math.min(Math.floor((strength / 6) * 100), 100);
-    this.passwordStrength = normalizedStrength;
-    
-    // Set text and color based on strength
-    if (normalizedStrength < 40) {
-      this.passwordStrengthText = 'Weak';
-      this.passwordStrengthColor = 'var(--password-strength-weak, #f44336)';
-    } else if (normalizedStrength < 70) {
-      this.passwordStrengthText = 'Medium';
-      this.passwordStrengthColor = 'var(--password-strength-medium, #ff9800)';
-    } else {
-      this.passwordStrengthText = 'Strong';
-      this.passwordStrengthColor = 'var(--password-strength-strong, #4caf50)';
-    }
+    const result = this.validationService.checkPasswordStrength(password);
+    this.passwordStrength = result.strength;
+    this.passwordStrengthText = result.text;
+    this.passwordStrengthColor = result.color;
   }
 
   startCarousel(): void {
