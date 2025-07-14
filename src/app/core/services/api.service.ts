@@ -114,7 +114,7 @@ export class ApiService {
   uploadFile<T>(
     path: string, 
     file: File, 
-    additionalData?: { [key: string]: string }
+    additionalData?: Record<string, string>
   ): Observable<T> {
     const formData = new FormData();
     formData.append('file', file);
@@ -158,7 +158,7 @@ export class ApiService {
    * @param additionalHeaders Additional headers to include
    * @returns HttpHeaders object
    */
-  createAuthHeaders(additionalHeaders?: { [key: string]: string }): HttpHeaders {
+  createAuthHeaders(additionalHeaders?: Record<string, string>): HttpHeaders {
     let headers = new HttpHeaders();
     
     // Note: Authentication headers are now handled by the interceptor
@@ -178,7 +178,7 @@ export class ApiService {
    * @param params Parameters object
    * @returns HttpParams object
    */
-  createHttpParams(params: { [key: string]: string | number | boolean }): HttpParams {
+  createHttpParams(params: Record<string, string | number | boolean>): HttpParams {
     let httpParams = new HttpParams();
     
     Object.keys(params).forEach(key => {

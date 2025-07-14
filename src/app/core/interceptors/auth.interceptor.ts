@@ -34,7 +34,7 @@ export const authInterceptor: HttpInterceptorFn = (
 
   // Add authentication headers for protected endpoints
   if (!isPublicUrl && authToken) {
-    const headers: { [key: string]: string } = {
+    const headers: Record<string, string> = {
       'Authorization': `Bearer ${authToken}`
     };
 

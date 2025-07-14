@@ -14,7 +14,8 @@ import {
   ForgotPasswordRequest,
   VerifyCodeRequest,
   SetNewPasswordRequest,
-  GoogleSignInRequest
+  GoogleSignInRequest,
+  PublicForwardRequest
 } from '../../shared/models/api.models';
 import { jwtDecode } from 'jwt-decode';
 // Define interfaces for clarity
@@ -536,5 +537,12 @@ private hasValidToken(): boolean {
     const sanitizedLastName = lastName.toLowerCase().replace(/\s+/g, '');
     
     return `${firstInitial}${sanitizedLastName}`;
+  }
+   publicForward(url: any): Observable<any> {
+    const request: PublicForwardRequest = { url };
+    return this.userAuthService.publicForward(request).pipe(
+      tap(() => console.log('Password set successfully.', request)),
+      catchError(this.handleError)
+    );
   }
 }

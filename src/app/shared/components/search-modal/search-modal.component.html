@@ -1,0 +1,220 @@
+<!-- Search Modal Overlay -->
+<div 
+  class="search-modal-overlay" 
+  [class]="getThemeClass()"
+  *ngIf="modalState.isVisible" 
+  [@fadeInOut]>
+  
+  <div class="search-modal" [@slideInOut]>
+    <!-- Theme Toggle Button -->
+    <button 
+      class="theme-toggle-btn" 
+      (click)="onToggleTheme()"
+      [title]="modalState.config?.isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+      <svg *ngIf="!modalState.config?.isDarkMode" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 2v2M10 18v2M4.22 4.22l1.42 1.42M16.36 16.36l1.42 1.42M2 10h2M18 10h2M4.22 15.78l1.42-1.42M16.36 7.64l1.42-1.42" 
+              stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="10" cy="10" r="4" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      <svg *ngIf="modalState.config?.isDarkMode" width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" 
+              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
+
+    <!-- Modal Header -->
+    <div class="search-modal-header">
+      <div class="search-modal-icon">
+        <svg class="search-spinner" width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="4" opacity="0.2"/>
+          <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="4" stroke-linecap="round" 
+                  stroke-dasharray="125" stroke-dashoffset="125">
+            <animate attributeName="stroke-dashoffset" dur="2s" values="125;0;125" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+      </div>
+      <h3 class="search-modal-title">{{ modalState.config?.title || '🔍 Searching...' }}</h3>
+    </div>
+    
+    <!-- Modal Content - Default Animation -->
+    <div class="search-modal-content" *ngIf="isDefaultAnimation()">
+      <p class="search-modal-description">
+        {{ modalState.config?.description || 'We\'re analyzing your request to find brand information for you' }}
+      </p>
+      
+      <!-- URL Display -->
+      <div class="url-display" *ngIf="modalState.config?.url">
+        <div class="url-label">Analyzing:</div>
+        <div class="url-value">{{ modalState.config?.url }}</div>
+      </div>
+      
+      <!-- Progress Section -->
+      <div class="progress-container">
+        <div class="progress-header">
+          <span class="progress-label">Progress</span>
+          <span class="progress-percentage">{{ modalState.progress }}%</span>
+        </div>
+        <div class="progress-bar">
+          <div 
+            class="progress-fill" 
+            [style.width.%]="modalState.progress"
+            [style.background]="getProgressColor()">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Current Step -->
+      <div class="current-step">
+        <div class="step-icon">
+          <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
+            <path d="M8 10l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="step-text">{{ modalState.currentStep }}</span>
+      </div>
+      
+      <!-- Time Estimation -->
+      <div class="time-estimation">
+        <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M8 4v4l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>{{ modalState.config?.estimatedTime || 'This usually takes 3-5 minutes...' }}</span>
+      </div>
+      
+      <!-- Additional Info -->
+      <div class="additional-info">
+        <div class="info-item">
+          <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14z" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M8 9v4M8 5h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Please keep this window open during the search</span>
+        </div>
+        <div class="info-item">
+          <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M14 8A6 6 0 1 1 2 8a6 6 0 0 1 12 0z" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M8 12l-2-2 2-2 2 2-2 2z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Our AI is analyzing multiple data sources</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Content - Card-based Animation -->
+    <div class="card-modal-content" *ngIf="isCardBasedAnimation()">
+      <p class="card-modal-description">
+        {{ modalState.config?.description || 'We\'re analyzing your request to find brand information for you' }}
+      </p>
+      
+      <!-- Progress Steps Cards -->
+      <div class="progress-steps-container">
+        <div 
+          class="progress-step-card" 
+          *ngFor="let step of modalState.progressSteps; let i = index"
+          [class]="'status-' + step.status"
+          [@slideInOut]
+          [style.animation-delay]="(i * 0.1) + 's'">
+          
+          <div class="step-card-content">
+            <div class="step-card-icon">
+              <span class="step-emoji">{{ step.icon }}</span>
+              <span class="step-status-icon">{{ getStepStatusIcon(step.status) }}</span>
+            </div>
+            
+            <div class="step-card-info">
+              <h4 class="step-card-title">{{ step.title }}</h4>
+              <div class="step-card-status">
+                <span class="status-badge" [class]="'badge-' + step.status">
+                  {{ getStepStatusText(step.status) }}
+                </span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Progress Line Connector -->
+          <div class="progress-connector" *ngIf="i < modalState.progressSteps.length - 1"
+               [class.active]="step.status === 'complete'">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Overall Progress -->
+      <div class="overall-progress">
+        <div class="overall-progress-text">
+          <span>Overall Progress: {{ modalState.progress }}%</span>
+        </div>
+        <div class="overall-progress-bar">
+          <div class="overall-progress-fill" 
+               [style.width.%]="modalState.progress"
+               [style.background]="getProgressColor()">
+          </div>
+        </div>
+      </div>
+      
+      <!-- Time Estimation -->
+      <div class="card-time-estimation">
+        <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M8 4v4l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>{{ modalState.config?.estimatedTime || 'Estimated time: 3-5 minutes' }}</span>
+      </div>
+    </div>
+
+    <!-- Modal Content - Minimalist Animation -->
+    <div class="minimalist-modal-content" *ngIf="isMinimalistAnimation()">
+      <p class="minimalist-description">
+        {{ modalState.config?.description || 'Analyzing your request with precision...' }}
+      </p>
+      
+      <!-- Minimalist Progress Circle -->
+      <div class="minimalist-progress-container">
+        <div class="minimalist-progress-circle">
+          <svg class="progress-ring" width="120" height="120">
+            <circle 
+              class="progress-ring-background"
+              stroke="currentColor" 
+              stroke-width="8"
+              fill="transparent"
+              r="50"
+              cx="60"
+              cy="60"/>
+            <circle 
+              class="progress-ring-progress"
+              stroke="currentColor" 
+              stroke-width="8"
+              fill="transparent"
+              r="50"
+              cx="60"
+              cy="60"
+              [style.stroke-dasharray]="314.16"
+              [style.stroke-dashoffset]="314.16 - (314.16 * modalState.progress) / 100"
+              transform="rotate(-90 60 60)"/>
+          </svg>
+          
+          <!-- Progress Percentage -->
+          <div class="progress-percentage-center">
+            <span class="progress-number">{{ modalState.progress }}</span>
+            <span class="progress-symbol">%</span>
+          </div>
+          
+          <!-- Pulse Indicator -->
+          <div class="pulse-indicator"></div>
+        </div>
+        
+        <!-- Current Step Text -->
+        <div class="minimalist-step-text">
+          {{ modalState.currentStep }}
+        </div>
+      </div>
+      
+      <!-- Time Estimation -->
+      <div class="minimalist-time-estimation">
+        <div class="time-icon">⏱️</div>
+        <span>{{ modalState.config?.estimatedTime || 'Usually takes 3-5 minutes' }}</span>
+      </div>
+    </div>
+  </div>
+</div>

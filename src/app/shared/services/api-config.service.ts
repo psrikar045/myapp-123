@@ -138,7 +138,7 @@ export class ApiConfigService {
    * @param params Query parameters
    * @returns URL with parameters
    */
-  buildUrlWithParams(baseUrl: string, params: { [key: string]: string | number | boolean }): string {
+  buildUrlWithParams(baseUrl: string, params: Record<string, string | number | boolean>): string {
     const url = new URL(baseUrl);
     
     Object.keys(params).forEach(key => {

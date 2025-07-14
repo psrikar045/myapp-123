@@ -5,29 +5,79 @@
         <!-- Search Icon SVG -->
         <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="7" stroke="#A0AEC0" stroke-width="2"/><path d="M20 20L17 17" stroke="#A0AEC0" stroke-width="2" stroke-linecap="round"/></svg>
       </span>
-      <input class="search-input" [(ngModel)]="searchDomainNameOrUrl " type="text" placeholder="Enter a brand name or website URL" />
-      <button class="shuffle-btn" (click)="findBrandInfo($event)" title="Shuffle Brands">
-        <!-- Shuffle Icon SVG -->
-        <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="11" width="16" height="2" rx="1" fill="#A78BFA"/><rect x="11" y="4" width="2" height="16" rx="1" fill="#A78BFA"/></svg>
+      <input class="search-input" (keydown)="handleKeyDown($event)" [(ngModel)]="searchDomainNameOrUrl" type="text" placeholder="Enter a brand name or website URL" [disabled]="isLoading" />
+      <button class="shuffle-btn"  (click)="findBrandInfo($event)" title="Search Brand" [disabled]="isLoading">
+        <!-- Loading Spinner -->
+        <div *ngIf="isLoading" class="loading-spinner">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="12" cy="12" r="10" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" stroke-dasharray="31.416" stroke-dashoffset="31.416">
+              <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite"/>
+              <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+        </div>
+        <!-- Search Icon SVG -->
+        <svg *ngIf="!isLoading" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="11" width="16" height="2" rx="1" fill="#A78BFA"/><rect x="11" y="4" width="2" height="16" rx="1" fill="#A78BFA"/></svg>
       </button>
     </div>
+    
+    <!-- Error Message Display -->
+    <div class="error-message" *ngIf="errorMessage" role="alert">
+      <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="10" cy="10" r="10" fill="#EF4444"/>
+        <path d="M10 6v4M10 14h.01" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>{{ errorMessage }}</span>
+    </div>
+    
+    <!-- Animation Type Toggle -->
+    <div class="animation-selector" *ngIf="!isLoading">
+      <button 
+        type="button" 
+        class="animation-toggle-btn" 
+        (click)="toggleAnimationType()"
+        [title]="'Current: ' + selectedAnimationType + ' animation'">
+        <span class="toggle-icon">🎭</span>
+        <span class="toggle-text">{{ getToggleText() }}</span>
+      </button>
+    </div>
+    
     <div class="recently-viewed-section" *ngIf="brands.length > 0">
       <div class="recently-viewed-header">
         <span>RECENTLY VIEWED</span>
         <button class="clear-all-btn" (click)="clearAll()">Clear all</button>
       </div>
-      <div class="brand-card" *ngFor="let brand of brands; let i = index" (click)="goToResults(brand.name)" style="cursor:pointer;">
+      <div class="brand-card" *ngFor="let brand of brands; let i = index" (click)="goToResults(brand.name)" style="cursor:pointer;" [title]="'Searched: ' + brand.url + ' on ' + (brand.searchedAt | date:'short')">
         <span class="brand-icon">
-          <!-- Apple Icon SVG (for demo, only Apple) -->
-          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#fff"/><path d="M21.5 17.5c-.1-2.1 1.7-3.1 1.8-3.2-1-1.5-2.6-1.7-3.1-1.7-1.3-.1-2.5.8-3.1.8-.6 0-1.6-.8-2.6-.8-1.3 0-2.5.8-3.2 2.1-1.4 2.4-.4 5.9 1 7.8.7 1 1.5 2.1 2.6 2.1 1 0 1.3-.7 2.6-.7s1.5.7 2.6.7c1.1 0 1.8-1 2.5-2 .8-1.1 1.1-2.2 1.1-2.3-.1-.1-2.1-.8-2.1-3.1zm-2-5.7c.5-.6.8-1.4.7-2.2-.7 0-1.6.5-2.1 1.1-.5.6-.8 1.4-.7 2.2.8.1 1.6-.4 2.1-1.1z" fill="#000"/></svg>
+          <!-- Favicon if available, otherwise show generic icon -->
+          <img *ngIf="brand.favicon && !brand.faviconError" 
+               [src]="brand.favicon" 
+               [alt]="brand.name" 
+               width="32" 
+               height="32" 
+               style="border-radius: 6px;" 
+               (error)="onFaviconError(i)"/>
+          <!-- Default Brand Icon SVG -->
+          <svg *ngIf="!brand.favicon || brand.faviconError" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="16" fill="#E5E7EB"/>
+            <text x="16" y="20" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#6B7280">
+              {{ brand.name.charAt(0).toUpperCase() }}
+            </text>
+          </svg>
         </span>
-        <span class="brand-name">{{ brand.name }}</span>
+        <div class="brand-info">
+          <span class="brand-name">{{ brand.name }}</span>
+          <span class="brand-domain" *ngIf="brand.domain">{{ brand.domain }}</span>
+        </div>
         <span class="verified-badge" *ngIf="brand.verified">
           <!-- Verified Icon SVG -->
           <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="10" fill="#3B82F6"/><path d="M7.5 10.5l2 2 3-3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>
-        <button class="remove-btn" (click)="$event.stopPropagation(); removeBrand(i)">&times;</button>
+        <button class="remove-btn" (click)="$event.stopPropagation(); removeBrand(i)" title="Remove from history">&times;</button>
       </div>
     </div>
   </div>
+
+  <!-- Reusable Search Modal Component -->
+  <app-search-modal></app-search-modal>
 </div>

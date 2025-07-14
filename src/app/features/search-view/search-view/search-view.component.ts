@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 @Component({
@@ -8,8 +8,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './search-view.component.html',
   styleUrl: './search-view.component.css'
 })
-export class SearchViewComponent {
- brand: string = '';
+export class SearchViewComponent implements OnInit {
+ brand = '';
   brandData: any;
 
   brandsData: Record<string, any> = {

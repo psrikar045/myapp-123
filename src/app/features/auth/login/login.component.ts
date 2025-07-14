@@ -286,7 +286,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isLoading = true;
     this.buttonState = 'loading';
     const { identifier, password } = this.loginForm.getRawValue();
-    this.authService.login(identifier, password)
+    this.authService.loginWithEmail(identifier, password)
       .pipe(
         tap(response => {
           console.log('Login API success!', response);
