@@ -418,3 +418,19 @@ body.dark-theme .mat-mdc-menu-item:hover:not([disabled]) {
 .pad100{padding-left:100px;padding-right:100px;}
 .CustomContainer{width:1400px !important;}
 .mar100{margin-left:100px;margin-right:100px;}
+
+/* :root {
+  --ngx-json-null: inherit;        
+  --ngx-json-null-bg: transparent; 
+} */
+
+:root {
+  --ngx-json-string: #FF6B6B;
+  --ngx-json-null: var(--ngx-json-string);
+  --ngx-json-null-bg: transparent;
+}
+.ngx-json-viewer {
+  font-family: 'Inter',  sans-serif !important;  /* Customize font */
+  line-height: 1.8 !important;                               /* Adjust spacing */
+  font-size: 16px;                                           /* Optional: size */
+}

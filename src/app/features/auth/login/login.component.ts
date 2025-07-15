@@ -471,7 +471,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
       );
       // google.accounts.id.prompt(); // Optionally, display One Tap prompt
     } else {
-      console.error('Google Identity Services script not loaded.');
+      console.log('Google Identity Services script not loaded.');
     }
   }
 

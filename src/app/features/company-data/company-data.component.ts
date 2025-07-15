@@ -7,11 +7,11 @@ import { ValidationService } from '../../core/services/validation.service';
 import { SearchModalService, SearchModalComponent, AnimationType } from '../../shared';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
-
+import {NgxJsonViewerModule} from 'ngx-json-viewer';
 @Component({
   selector: 'app-company-data',
   standalone: true,
-  imports: [CommonModule, FormsModule, HeaderComponent, SearchModalComponent],
+  imports: [CommonModule, FormsModule, HeaderComponent, SearchModalComponent, NgxJsonViewerModule ],
   templateUrl: './company-data.component.html',
   styleUrl: './company-data.component.css'
 })
@@ -88,7 +88,7 @@ export class CompanyDataComponent implements OnInit, OnDestroy {
       this.themeSubscription.unsubscribe();
     }
   }
-
+searchResult: any = null;
   async onAnalyzeClick() {
     this.errorMessage = '';
     this.isLoading = true;
@@ -117,14 +117,14 @@ export class CompanyDataComponent implements OnInit, OnDestroy {
       });
    this.authService.privateForward(finalUrl).subscribe({
         next: (data: any) => {
-          console.log(data);
+          // console.log(data);
           this.searchModalService.completeBrandAnalysis();
           
           setTimeout(() => {
             this.isLoading = false;
             this.showBrandDetails = true;
             if (data && data?.Company && data?.Company?.Name) {
-            
+            this.searchResult = data;
             } else {
               this.setError('No brand information found for this website');
             }
@@ -158,5 +158,37 @@ export class CompanyDataComponent implements OnInit, OnDestroy {
     this.errorMessage = message;
     this.isLoading = false;
     this.searchModalService.hideModal();
+  }
+  getLogoEntries(logoObject: any): { key: string; value: any }[] {
+  if (!logoObject) {
+    return [];
+  }
+  return Object.entries(logoObject).map(([key, value]) => ({ key, value }));
+  }
+  isValidImageUrl(url: any): boolean {
+    return typeof url === 'string' && url.length > 0 && (url.startsWith('http') || url.startsWith('data:image') || url.endsWith('.svg') || url.endsWith('.png') || url.endsWith('.webp') || url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.gif'));
+  }
+  generateLogoLabel(key: string): string {
+    // You can customize these mappings for better labels
+    switch (key) {
+      case 'Logo': return 'Main Logo';
+      case 'Symbol': return 'Brand Symbol';
+      case 'Icon': return 'Favicon / Icon';
+      case 'Banner': return 'Banner Image';
+      default:
+        // Capitalize first letter and add space before uppercase letters (e.g., 'mobileLogo' -> 'Mobile Logo')
+        return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+    }
+  }
+  generateAltText(companyName: string | null, key: string): string {
+    const companyPart = companyName ? `${companyName} ` : '';
+    const keyPart = this.generateLogoLabel(key).toLowerCase(); // Use the human-friendly label
+    return `${companyPart}${keyPart}`;
+  }
+  hasDisplayableLogos(logoObject: any): boolean {
+    if (!logoObject) {
+      return false;
+    }
+    return Object.values(logoObject).some(url => this.isValidImageUrl(url));
   }
 }

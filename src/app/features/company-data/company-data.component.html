@@ -47,28 +47,34 @@
       <!-- Left Card -->
       <div class="brand-details-card brand-details-left">
         <div class="brand-header">
-          <img src="assets/company-logo.svg" alt="Asana Logo" class="brand-logo" />
+          <img src="{{ searchResult?.Logo?.Logo }}" alt="{{ searchResult?.Company?.Name }} Logo" class="brand-logo" />
           <div>
-            <div class="brand-name">Asana</div>
-            <div class="brand-desc">Seem less integration for developers Seem less integration for developersSeem less integration for developers</div>
+            <div class="brand-name">{{ searchResult?.Company?.Name }}</div>
+            <div class="brand-desc">{{ searchResult?.Company?.Description }}</div>
           </div>
         </div>
         <div class="brand-section">
           <div class="brand-section-title">Fill Color</div>
           <div class="brand-colors">
-            <div class="brand-color" style="background:#1555DB"><span>#1555DB</span><span>Primary</span></div>
-            <div class="brand-color" style="background:#37BFFA"><span>#37BFFA</span><span>Secondary</span></div>
-            <div class="brand-color" style="background:#5692F1"><span>#5692F1</span><span></span></div>
-            <div class="brand-color" style="background:#00B2D9"><span>#00B2D9</span><span></span></div>
-            <div class="brand-color" style="background:#F4AD13"><span>#F4AD13</span><span></span></div>
-            <div class="brand-color" style="background:#15161F"><span>#15161F</span><span></span></div>
-            <div class="brand-color" style="background:#353B56"><span>#353B56</span><span></span></div>
-            <div class="brand-color" style="background:#94A7B4"><span>#94A7B4</span><span></span></div>
-            <div class="brand-color" style="background:#E3E3E3"><span>#E3E3E3</span><span></span></div>
-            <div class="brand-color" style="background:#FFFFFF"><span>#FFFFFF</span><span></span></div>
+            <!-- <div class="brand-color" style="background:#1555DB"><span>#1555DB</span><span>Primary</span></div>
+            <div class="brand-color" style="background:#37BFFA"><span>#37BFFA</span><span>Secondary</span></div> -->
+            <ng-container *ngFor="let color of searchResult?.Colors">
+              <div class="brand-color" [style.color]="color.brightness > 186 ? '#000' : '#fff'"
+                 [style.background-color]="color.hex">
+                <span>{{ color.hex }}</span>
+                <span *ngIf="color.name && color.name !== ''"  [style.color]="color.brightness > 186 ? '#000' : '#fff'" >
+                  {{ color.name }}
+                </span>
+              </div>
+            </ng-container>
+
+            <div *ngIf="!searchResult?.Colors || searchResult?.Colors.length === 0" class="no-colors-message">
+              No specific colors found.
+            </div>
           </div>
         </div>
-        <div class="brand-section">
+        <!-- this section will added in future enhancements -->
+        <!-- <div class="brand-section">
           <div class="brand-section-title">Typography</div>
           <table class="brand-typography-table">
             <thead>
@@ -86,17 +92,19 @@
               <tr><td>ICON</td><td>Font Awesome</td><td>Regular</td><td>16pt</td><td>1.5</td></tr>
             </tbody>
           </table>
-        </div>
+        </div> -->
         <div class="brand-section">
           <div class="brand-section-title">Logo's</div>
           <div class="brand-logos-row">
-            <div class="brand-logo-preview">
-              <img src="assets/brand-logo-light.svg" alt="Brand Logo Light" />
-              <div>Brand Logo Light</div>
-            </div>
-            <div class="brand-logo-preview">
-              <img src="assets/brand-logo-dark.svg" alt="Brand Logo Dark" />
-              <div>Brand Logo Dark</div>
+            <ng-container *ngFor="let entry of getLogoEntries(searchResult?.Logo)">
+              <div *ngIf="isValidImageUrl(entry.value)" class="brand-logo-preview">
+                <img [src]="entry.value" [alt]="generateAltText(searchResult?.Company?.Name, entry.key)" />
+                <div>{{ generateLogoLabel(entry.key) }}</div>
+              </div>
+            </ng-container>
+        
+            <div *ngIf="!hasDisplayableLogos(searchResult?.Logo)" class="no-logos-message">
+              No displayable logos found.
             </div>
           </div>
         </div>
@@ -104,54 +112,31 @@
       <!-- Right Card -->
       <div class="brand-details-card brand-details-right">
         <div class="brand-tabs">
-          <button *ngFor="let tab of tabs; let i = index" class="brand-tab" [class.active]="activeTab === i" (click)="setActiveTab(i)">{{ tab }}</button>
+          <button *ngFor="let tab of tabs; let i = index" class="brand-tab" [class.active]="activeTab === i"
+            (click)="setActiveTab(i)">{{ tab }}</button>
         </div>
         <div class="brand-tab-content">
           <ng-container [ngSwitch]="activeTab">
             <ng-container *ngSwitchCase="0">
-              <pre class="brand-code-block"><code><span class="code-line code-key">:root[data-theme-dark] &#123;</span>
-<span class="code-line code-var">  --surface-primary: var(--black-100);</span>
-<span class="code-line code-var">  --surface-secondary: var(--black-200);</span>
-<span class="code-line code-var">  --surface-tertiary: var(--black-400);</span>
-<span class="code-line code-var">  --surface-quaternary: var(--black-500);</span>
-<span class="code-line code-var">  --surface-quinary: var(--black-600);</span>
-<span class="code-line code-var">  --surface-light: var(--white-100);</span>
-<span class="code-line code-var">  --surface-dark: var(--black-400);</span>
-<span class="code-line code-var">  --surface-danger: var(--error-200);</span>
-<span class="code-line code-var">  --surface-success: var(--success-200);</span>
-<span class="code-line code-var">  --surface-warning: var(--warning-200);</span>
-<span class="code-line code-var">  --surface-blue: var(--blue-600);</span>
-<span class="code-line code-var">  --surface-purple: var(--purple-200);</span>
-<span class="code-line code-var">  --border-gap: var(--black-100);</span>
-<span class="code-line code-var">  --border-normal: var(--black-500);</span>
-<span class="code-line code-var">  --border-subtle: var(--black-400);</span>
-<span class="code-line code-var">  --border-contrast: var(--black-600);</span>
-<span class="code-line code-var">  --border-active: var(--white-200);</span>
-<span class="code-line code-var">  --text-primary: var(--white-100);</span>
-<span class="code-line code-var">  --text-secondary: var(--white-400);</span>
-<span class="code-line code-var">  --text-tertiary: var(--white-600);</span>
-<span class="code-line code-var">  --text-quaternary: var(--black-700);</span>
-<span class="code-line code-var">  --text-contrast: var(--black-400);</span>
-<span class="code-line code-var">  --text-light: var(--white-400);</span>
-<span class="code-line code-var">  --text-danger: var(--error-100);</span>
-<span class="code-line code-var">  --text-success: var(--success-100);</span>
-<span class="code-line code-var">  --text-warning: var(--warning-100);</span>
-<span class="code-line code-var">  --text-blue: var(--blue-100);</span>
-<span class="code-line code-var">  --text-purple: var(--purple-100);</span>
-<span class="code-line code-var">  --button-primary: var(--blue-100);</span>
-<span class="code-line code-var">  --button-secondary: var(--black-500);</span>
-<span class="code-line code-var">  --button-tertiary: var(--black-500);</span>
-<span class="code-line code-var">  --button-contrast: var(--blue-100);</span>
-<span class="code-line code-var">  --link-subtle: var(--white-100);</span>
-<span class="code-line code-var">  --icon-contrast: var(--white-100);</span>
-<span class="code-line code-var">  --box-shadow-sm: var(--shadow-sm-dark);</span>
-<span class="code-line code-var">  --box-shadow-md: var(--shadow-md-dark);</span>
-<span class="code-line code-var">  --box-shadow-lg: var(--shadow-lg-dark);</span>
-<span class="code-line code-var">  --box-shadow-xl: var(--shadow-xl-dark);</span>
-<span class="code-line code-key">&#125;</span></code></pre>
+              <!-- <pre>{{ searchResult?.Company | json }}</pre> -->
+              <ngx-json-viewer [json]="searchResult?.Company" [expanded]="false"></ngx-json-viewer>
+            </ng-container>
+            <ng-container *ngSwitchCase="1">
+              <ngx-json-viewer [json]="searchResult?.Logo" [expanded]="false"></ngx-json-viewer>
+            </ng-container>
+            <ng-container *ngSwitchCase="2">
+              <ngx-json-viewer [json]="searchResult?.Colors" [expanded]="false"></ngx-json-viewer>
+            </ng-container>
+            <ng-container *ngSwitchCase="3">
+              <ngx-json-viewer [json]="searchResult?.Fonts" [expanded]="false"></ngx-json-viewer>
+            </ng-container>
+            <ng-container *ngSwitchCase="4">
+              <ngx-json-viewer [json]="searchResult?.Images" [expanded]="false"></ngx-json-viewer>
             </ng-container>
             <ng-container *ngSwitchDefault>
-              <div style="font-size:1.5rem; color:#2563eb; text-align:center; padding:80px 0; font-family: 'Inter', sans-serif; font-weight:600;">Development in progress</div>
+              <div
+                style="font-size:1.5rem; color:#2563eb; text-align:center; padding:80px 0; font-family: 'Inter', sans-serif; font-weight:600;">
+                Development in progress</div>
             </ng-container>
           </ng-container>
         </div>
