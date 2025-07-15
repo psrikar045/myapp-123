@@ -112,7 +112,7 @@
   font-size: 1.1rem;
   font-weight: 600;
   word-break: break-all;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
 }
 
 /* Progress Section */

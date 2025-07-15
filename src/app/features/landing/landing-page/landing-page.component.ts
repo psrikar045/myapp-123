@@ -238,11 +238,11 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   orbitHeadline = 'Trusted by Forward – Thinking Teams';
   orbitSubheadline = 'Polygon absolutely works great with tools in your other existing platform.';
   orbitLogos = [
-    { src: '/company/Item-1.svg', alt: 'Company 1' },
-    { src: '/company/Item-2.svg', alt: 'Company 2' },
-    { src: '/company/Item-3.svg', alt: 'Company 3' },
-    { src: '/company/Item-4.svg', alt: 'Company 4' },
-    { src: '/company/Item.svg', alt: 'Company 5' }
+    { src: '/company/Animalbiome.svg', alt: 'Company 1' },
+    { src: '/company/nutanix.svg', alt: 'Company 2' },
+    { src: '/company/paloalto.svg', alt: 'Company 3' },
+    { src: '/company/xAmplify.svg', alt: 'Company 4' },
+    { src: '/company/people.png', alt: 'Company 5' }
   ];
   // Company logos row section logic (after hero)
   companyLogos = [

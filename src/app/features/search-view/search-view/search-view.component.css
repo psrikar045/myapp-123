@@ -1,5 +1,5 @@
 body, .company-data-body {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   background: linear-gradient(120deg, #f8fafc 0%, #fbeee6 100%);
   color: #23272f;
   margin: 0;
@@ -68,13 +68,13 @@ body, .company-data-body {
   background: #fff;
   border-radius: 18px;
   padding: 6px 20px;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-weight: 500;
   box-shadow: 0 2px 8px rgba(37,99,235,0.06);
 }
 .claimed-btn, .share-btn {
   font-size: 1.05rem;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-weight: 600;
   border: none;
   border-radius: 18px;
@@ -124,7 +124,7 @@ body, .company-data-body {
   font-size: 1.12rem;
   color: #222b45;
   text-align: center;
-  font-family: 'poppins';
+ font-family: "Inter", sans-serif;
   font-weight: 400;
   line-height: 1.6;
   max-width: 900px;
@@ -153,7 +153,7 @@ body, .company-data-body {
   border-radius: 18px;
   padding: 10px 32px;
   font-size: 1.12rem;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-weight: 500;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(37,99,235,0.06);
@@ -178,7 +178,7 @@ body, .company-data-body {
 }
 .company-section h2 {
   font-size: 2.1rem;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-weight: 700;
   color: #181c32;
   margin-bottom: 18px;
@@ -186,7 +186,7 @@ body, .company-data-body {
 .company-section-desc {
   font-size: 1.12rem;
   color: #222b45;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-weight: 400;
   margin-bottom: 12px;
   max-width: 800px;
@@ -228,7 +228,7 @@ body, .company-data-body {
   gap: 10px;
   font-size: 1.05rem;
   color: #2563eb;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-weight: 500;
 }
 
@@ -249,7 +249,7 @@ body, .company-data-body {
   padding: 14px 16px 10px 16px;
   color: #fff;
   font-size: 1.08rem;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-weight: 500;
   box-shadow: 0 2px 12px rgba(37,99,235,0.10);
   position: relative;
@@ -281,7 +281,7 @@ body, .company-data-body {
 .company-typography-table {
   width: 100%;
   border-collapse: collapse;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 1.08rem;
 }
 .company-typography-table th, .company-typography-table td {
@@ -332,7 +332,7 @@ body, .company-data-body {
 .icon-set-title {
   font-size: 1.15rem;
   color: #2563eb;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-weight: 600;
   margin-bottom: 8px;
 }

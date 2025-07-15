@@ -29,7 +29,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: 'poppins';
+ font-family: "Inter", sans-serif;
   color: #2563eb;
   background: #f8fafc;
 }

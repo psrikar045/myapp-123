@@ -5,7 +5,7 @@
   <div class="hero-white-circle position-absolute rounded-circle"></div>
   <!-- Decorative yellow/orange circle on the left behind text/CTAs -->
   <img src="landing/Group 1000003639.svg" alt="Yellow Circle" class="hero-yellow-circle position-absolute" />
-  <div class="container position-relative z-2 py-5 hero-container">
+  <div class="container position-relative z-2 py-5 hero-container CustomContainer">
     <div class="d-flex flex-lg-row flex-column align-items-center justify-content-between hero-row" style="display: flex;">
       <!-- Left: Text and Search -->
       <div class="hero-left" style="display:flex; flex-direction:column; align-items:flex-start;">
@@ -56,8 +56,8 @@
   </div>
 </section>
 
-<section class="company-logos-section w-100" id="blog-section">
-  <div class="company-logos-container container">
+<section class="company-logos-section w-100">
+  <div class="pad100">
     <div class="company-logos-row">
       <img *ngFor="let logo of orbitLogos" [src]="logo.src" [alt]="logo.alt" class="company-logo" />
     </div>

@@ -22,6 +22,7 @@ export class HeaderComponent implements OnInit {
   @Input() showNavigation = true;
   showProfileDropdown = false;
   isVisible = true;
+  isScrolled = false;
   private lastScrollY = 0;
   private showTimeout: any;
   constructor(
@@ -93,6 +94,8 @@ this.authService.checkAuthStatusAndNavigate();
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const currentScrollY = window.scrollY;
+    // Add background if scrolled or if hero section is in view
+    this.isScrolled = currentScrollY > 0 || this.isHeroSectionInView();
     console.log('window.scrollY:', currentScrollY);
     if (currentScrollY <= 70) {
       // Always show at the top or in hero section
@@ -110,7 +113,7 @@ this.authService.checkAuthStatusAndNavigate();
         if (window.scrollY > 70) {
           this.isVisible = false;
         }
-      }, 1000);
+      }, 6000);
     }
     this.lastScrollY = currentScrollY < 0 ? 0 : currentScrollY;
   }

@@ -15,7 +15,7 @@
   text-align: center;
   font-size: 2rem;
   font-weight: 700;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   margin-bottom: 32px;
   color: #181c32;
   letter-spacing: -0.5px;
@@ -63,7 +63,7 @@
   font-size: 1.45rem;
   font-weight: 700;
   margin: 10px 0 18px 0;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   line-height: 1.3;
 }
 .featured-blog-content .blog-meta {
@@ -127,7 +127,7 @@
   font-size: 1.08rem;
   font-weight: 700;
   margin: 0 0 8px 0;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   line-height: 1.3;
   color: #181c32;
 }
@@ -152,7 +152,7 @@
   align-items: center;
   gap: 8px;
   margin-top: 18px;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
 }
 .page-num {
   background: #fff;

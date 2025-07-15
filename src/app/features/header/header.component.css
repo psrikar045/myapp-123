@@ -17,6 +17,11 @@
   transform: translateY(-100%);
   box-shadow: none;
 }
+.header-container.scrolled {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.3s, box-shadow 0.3s;
+}
 
 .header-logo {
   display: flex;
@@ -28,7 +33,7 @@
   font-weight: 500;
   margin-left: 12px;
   color: #222;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   letter-spacing: -0.5px;
 }
 

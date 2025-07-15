@@ -11,7 +11,7 @@
   background-color: transparent; /* Handled by global styles or parent */
   padding: 1rem; /* Approx 14px. Was 1.25rem (20px) */
   box-sizing: border-box;
-  font-family: 'poppins';
+ font-family: "Inter", sans-serif;
   transition: background-color 0.3s ease;
 }
 

@@ -406,7 +406,7 @@
     margin-right: 150px;
     padding: 0px;
 }
-}
+
 
 .hero-row {
      display: flex;
@@ -433,7 +433,7 @@
 
 .hero-headline {
 padding-top: 145px;
- font-family: 'poppins';
+font-family: "Inter", sans-serif;
 font-size: 52px;
 color: #23272f;
 line-height: 1.08;
@@ -455,7 +455,7 @@ width: 100%;
 }
 
 .hero-subheadline {
-  font-family: 'poppins';
+ font-family: "Inter", sans-serif;
   font-size: 1.35rem;
   color: #6b7280;
   /* max-width: 420px; */
@@ -495,7 +495,7 @@ width: 100%;
   width: auto;
 }
 .hero-cta-label {
-  font-family: 'poppins';
+ font-family: "Inter", sans-serif;
   font-size: 1.25rem;
   font-weight: 700;
   color: #23272f;
@@ -710,13 +710,13 @@ width: 100%;
 }
 
 .company-logo {
-  height: 44px;
-  width: auto;
-  object-fit: contain;
-  filter: none;
-  opacity: 1;
-  transition: transform 0.2s;
-  margin: 0 0 0 0;
+    height: 50px;
+    width: 100%;
+    filter: none;
+    opacity: 1;
+    transition: transform 0.2s;
+    margin: 0 0 0 0;
+    object-fit: contain;
 }
 
 @media (max-width: 1200px) {
@@ -802,7 +802,7 @@ width: 100%;
   align-items: flex-start;
 }
 .section-title {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 2.3rem;
   font-weight: 800;
   color: #23272f;
@@ -954,7 +954,7 @@ width: 100%;
   justify-content: center;
 }
 .supercharge-headline {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 2.3rem;
   font-weight: 800;
   color: #23272f;
@@ -987,7 +987,7 @@ width: 100%;
   border: none;
   outline: none;
   font-size: 1.08rem;
-  font-family: 'poppins';
+ font-family: "Inter", sans-serif;
   color: #23272f;
   background: transparent;
   flex: 1 1 0;
@@ -1299,7 +1299,7 @@ width: 100%;
   text-align: center;
 }
 .company-logos-headline {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 2rem;
   font-weight: 700;
   color: #23304A;
@@ -1369,7 +1369,7 @@ width: 100%;
   overflow: hidden;
   padding-top: 96px;
   padding-bottom: 96px;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
 }
 
 .core-capabilities-container {
@@ -1381,7 +1381,7 @@ width: 100%;
 }
 
 .core-capabilities-headline {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 2.7rem;
   font-weight: 900;
   color: #23272f;
@@ -1390,7 +1390,7 @@ width: 100%;
 }
 
 .core-capabilities-subheadline {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 1.08rem;
   color: #6b7280;
   font-weight: 500;
@@ -1449,7 +1449,7 @@ width: 100%;
   justify-content: center;
 }
 .core-capabilities-card-title {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 1.18rem;
   font-weight: 700;
   color: #23272f;
@@ -1460,7 +1460,7 @@ width: 100%;
   background: none;
   border: none;
   color: #23272f;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 1rem;
   font-weight: 600;
   display: flex;
@@ -1543,14 +1543,14 @@ width: 100%;
   margin-bottom: 32px;
 }
 .testimonials-title {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 2.6rem;
   font-weight: 800;
   color: #23272f;
   margin-bottom: 12px;
 }
 .testimonials-subtitle {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 1.13rem;
   color: #6b7280;
   font-weight: 500;
@@ -1591,19 +1591,19 @@ width: 100%;
   margin-bottom: 12px;
 }
 .testimonial-name {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 1.18rem;
   font-weight: 700;
   color: #23272f;
 }
 .testimonial-role {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 1rem;
   color: #6b7280;
   font-weight: 500;
 }
 .testimonial-text {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 1.08rem;
   color: #4b5563;
   margin-top: 8px;
@@ -1648,7 +1648,7 @@ width: 100%;
   background: #2743d2;
   color: #fff;
   padding: 56px 0 0 0;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   letter-spacing: 0;
 }
 .footer-container {
@@ -1848,7 +1848,7 @@ width: 100%;
   background: none;
 }
 .landing-header-logo-text {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 2.1rem;
   font-weight: 500;
   color: #23272f;
@@ -1864,7 +1864,7 @@ width: 100%;
   justify-content: center;
 }
 .landing-header-nav-link {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 1.22rem;
   font-weight: 500;
   color: #23272f;
@@ -1900,7 +1900,7 @@ width: 100%;
   display: block;
 }
 .landing-header-login-btn {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 1.08rem;
   font-weight: 500;
   color: #377DFF;
@@ -1918,7 +1918,7 @@ width: 100%;
   color: #2743d2;
 }
 .landing-header-getstart-btn {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 1.08rem;
   font-weight: 500;
   color: #fff;
@@ -2056,7 +2056,7 @@ width: 100%;
   gap: 18px;
 }
 .landing-header-mobile-link {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 1.22rem;
   font-weight: 500;
   color: #23272f;
@@ -2071,7 +2071,7 @@ width: 100%;
   color: #377DFF;
 }
 .landing-header-mobile-login {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 1.08rem;
   font-weight: 500;
   color: #377DFF;
@@ -2086,7 +2086,7 @@ width: 100%;
   text-align: left;
 }
 .landing-header-mobile-getstart {
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   font-size: 1.08rem;
   font-weight: 500;
   color: #fff;
@@ -2435,7 +2435,7 @@ body.dark-theme .footer-copyright {
   border: none;
   outline: none;
   font-size: 1.25rem;
-   font-family: 'poppins';
+  font-family: "Inter", sans-serif;
   color: #23272f;
   background: transparent;
   flex: 1 1 0;

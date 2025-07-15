@@ -35,7 +35,7 @@ body {
 
 body {
   margin: 0;
-   font-family: "poppins" !important;
+  font-family: "Inter", sans-serif !important;
   line-height: 1.6; /* Slightly increased line-height for better readability on mobile */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -43,7 +43,7 @@ body {
   color: #333; /* Default light theme text color */
   overflow-x: hidden;
 }
-button{font-family: "poppins" !important;}
+button{font-family: "Inter", sans-serif !important;}
 
 /* Basic responsive media elements */
 img,
@@ -415,3 +415,6 @@ body.dark-theme .mat-mdc-menu-item {
 body.dark-theme .mat-mdc-menu-item:hover:not([disabled]) {
   background-color: rgba(255, 255, 255, 0.08) !important;
 }
+.pad100{padding-left:100px;padding-right:100px;}
+.CustomContainer{width:1400px !important;}
+.mar100{margin-left:100px;margin-right:100px;}
