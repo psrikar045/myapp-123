@@ -31,7 +31,7 @@ export class ToolbarService {
   });
 
   private navItems$ = new BehaviorSubject<ToolbarNavItem[]>([
-    { label: 'Brands', route: '', scrollId: 'brands-section' },
+    { label: 'Brands', route: '/all-categories', scrollId: '' },
     { label: 'Developers', route: '', scrollId: 'developers-section' },
     { label: 'Pricing', route: '', scrollId: 'pricing-section' },
     { label: 'Blog', route: '', scrollId: 'blog-section' }
@@ -91,14 +91,14 @@ export class ToolbarService {
       link: '/'
     });
     this.navItems$.next([
-      { label: 'Brands', route: '', scrollId: 'brands-section' },
+      { label: 'Brands', route: '/all-categories', scrollId: '' },
       { label: 'Developers', route: '', scrollId: 'developers-section' },
       { label: 'Pricing', route: '', scrollId: 'pricing-section' },
       { label: 'Blog', route: '/blog', scrollId: '' }
     ]);
     this.actions$.next([
       { type: 'login', label: 'Login', route: '/login' },
-      { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.svg', route: '/all-categories' }
+      { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.svg', route: '' }
     ]);
   }
 }

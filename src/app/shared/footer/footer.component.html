@@ -20,10 +20,16 @@
       <div class="footer-title">TOP BRAND CATEGORIES</div>
       <div class="footer-links-row">
         <ul>
-          <li *ngFor="let cat of brandCategories.slice(0,6)"><a href="#" class="footer-link">{{ cat }}</a></li>
+          <li *ngFor="let cat of brandCategories.slice(0,6)">
+            <a *ngIf="cat !== 'View all categories'" href="#" class="footer-link">{{ cat }}</a>
+            <a *ngIf="cat === 'View all categories'" [routerLink]="'/all-categories'" class="footer-link">{{ cat }}</a>
+          </li>
         </ul>
         <ul>
-          <li *ngFor="let cat of brandCategories.slice(6)"><a href="#" class="footer-link">{{ cat }}</a></li>
+          <li *ngFor="let cat of brandCategories.slice(6)">
+            <a *ngIf="cat !== 'View all categories'" href="#" class="footer-link">{{ cat }}</a>
+            <a *ngIf="cat === 'View all categories'" [routerLink]="'/all-categories'" class="footer-link">{{ cat }}</a>
+          </li>
         </ul>
       </div>
     </div>

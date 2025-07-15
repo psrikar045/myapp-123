@@ -40,6 +40,8 @@ export class AllCategoriesComponent {
     { label: 'Vehicles' }
   ];
   selectedCategory = 'All';
+  expandedCategory: string = 'All';
+  selectedSubCategory: string = '';
 
   subCategoryMap: { [key: string]: string[] } = {
     'Arts and Entertainment': ['Music', 'Movies', 'Performing Arts', 'Visual Arts', 'Events'],
@@ -69,30 +71,37 @@ export class AllCategoriesComponent {
   };
 
   allBrands = [
-    { name: 'Google', user: 'google.com', color: '#ffe9b3', category: 'Technology' },
-    { name: 'Slack', user: 'slack.com', color: '#e0ffe0', category: 'Productivity' },
-    { name: 'Figma', user: 'figma.com', color: '#e0d6ff', category: 'Design' },
-    { name: 'Spotify', user: 'spotify.com', color: '#d4f7d4', category: 'Music & Video' },
-    { name: 'YouTube', user: 'youtube.com', color: '#ffe5e5', category: 'Music & Video' },
-    { name: 'Notion', user: 'notion.so', color: '#f5f5f5', category: 'Productivity' },
-    { name: 'Instagram', user: 'instagram.com', color: '#ffd1e3', category: 'Social Media' },
-    { name: 'Twitter', user: 'twitter.com', color: '#e0f7fa', category: 'Social Media' },
-    { name: 'Dropbox', user: 'dropbox.com', color: '#b3e0ff', category: 'Productivity' },
-    { name: 'Adobe XD', user: 'adobe.com/xd', color: '#ffe0f0', category: 'Design' },
-    { name: 'Discord', user: 'discord.com', color: '#d6eaff', category: 'Social Media' },
-    { name: 'Trello', user: 'trello.com', color: '#b3c6e7', category: 'Productivity' },
-    { name: 'Behance', user: 'behance.net', color: '#cce0ff', category: 'Design' },
-    { name: 'Apple Music', user: 'music.apple.com', color: '#f3e6ff', category: 'Music & Video' },
-    { name: 'GitHub', user: 'github.com', color: '#d3d3e7', category: 'Technology' },
-    { name: 'Facebook', user: 'facebook.com', color: '#f0f0f0', category: 'Social Media' },
-    { name: 'Zoom', user: 'zoom.us', color: '#b3e6ff', category: 'Productivity' },
-    { name: 'Canva', user: 'canva.com', color: '#e0ffe0', category: 'Design' },
-    { name: 'Netflix', user: 'netflix.com', color: '#ffe0e0', category: 'Music & Video' },
-    { name: 'Microsoft Teams', user: 'teams.microsoft.com', color: '#b3c6e7', category: 'Productivity' },
-    { name: 'SoundCloud', user: 'soundcloud.com', color: '#ffd6cc', category: 'Music & Video' },
-    { name: 'Pinterest', user: 'pinterest.com', color: '#ffe0e0', category: 'Design' },
-    { name: 'Snapchat', user: 'snapchat.com', color: '#fff6b3', category: 'Social Media' },
-    { name: 'AWS', user: 'aws.amazon.com', color: '#f5f5f5', category: 'Technology' }
+    // Education
+    { name: 'Google Drive', user: 'theshaaer', color: 'linear-gradient(135deg, #FFF6B7 0%, #F6416C 100%)', category: 'Education', subCategory: 'Resume' },
+    { name: 'Github', user: 'theshaaer', color: 'linear-gradient(135deg, #232526 0%, #414345 100%)', category: 'Education', subCategory: 'Science' },
+    { name: 'Behance', user: 'theshaaer', color: 'linear-gradient(135deg, #00C6FB 0%, #005BEA 100%)', category: 'Education', subCategory: 'Science' },
+    { name: 'Instagram', user: 'theshaaer', color: 'linear-gradient(135deg, #F6416C 0%, #FFB199 100%)', category: 'Education', subCategory: 'Social media' },
+    { name: 'Layers', user: 'theshaaer', color: 'linear-gradient(135deg, #232526 0%, #414345 100%)', category: 'Education', subCategory: 'Physics' },
+    { name: 'Email', user: 'theshaaer', color: 'linear-gradient(135deg, #232526 0%, #005BEA 100%)', category: 'Education', subCategory: 'Math’s' },
+    { name: 'Reddit', user: 'theshaaer', color: 'linear-gradient(135deg, #F6416C 0%, #FFB199 100%)', category: 'Education', subCategory: 'Social media' },
+    { name: 'Discord', user: 'theshaaer', color: 'linear-gradient(135deg, #00C6FB 0%, #005BEA 100%)', category: 'Education', subCategory: 'Social media' },
+    { name: 'Facebook', user: 'theshaaer', color: 'linear-gradient(135deg, #00C6FB 0%, #005BEA 100%)', category: 'Education', subCategory: 'Social media' },
+    { name: 'Medium', user: 'theshaaer', color: 'linear-gradient(135deg, #e0e0e0 0%, #ffffff 100%)', category: 'Education', subCategory: 'Science' },
+    { name: 'Twitter', user: 'theshaaer', color: 'linear-gradient(135deg, #232526 0%, #414345 100%)', category: 'Education', subCategory: 'Social media' },
+    { name: 'Figma', user: 'theshaaer', color: 'linear-gradient(135deg, #232526 0%, #414345 100%)', category: 'Education', subCategory: 'Science' },
+    // Entertainment
+    { name: 'Netflix', user: 'netflix', color: 'linear-gradient(135deg, #e50914 0%, #221f1f 100%)', category: 'Entertainment', subCategory: 'Movie tickets' },
+    { name: 'Spotify', user: 'spotify', color: 'linear-gradient(135deg, #1db954 0%, #191414 100%)', category: 'Entertainment', subCategory: 'Dance studios' },
+    { name: 'YouTube', user: 'youtube', color: 'linear-gradient(135deg, #ff0000 0%, #282828 100%)', category: 'Entertainment', subCategory: 'Photograph' },
+    // Games
+    { name: 'Steam', user: 'steam', color: 'linear-gradient(135deg, #00c6fb 0%, #005bea 100%)', category: 'Games', subCategory: 'Video Games' },
+    { name: 'Epic Games', user: 'epicgames', color: 'linear-gradient(135deg, #232526 0%, #414345 100%)', category: 'Games', subCategory: 'Board Games' },
+    { name: 'Twitch', user: 'twitch', color: 'linear-gradient(135deg, #6441a5 0%, #2a0845 100%)', category: 'Games', subCategory: 'Mobile Games' },
+    // Music & Video
+    { name: 'Apple Music', user: 'applemusic', color: 'linear-gradient(135deg, #f3e6ff 0%, #ffb199 100%)', category: 'Music & Video', subCategory: 'Music' },
+    { name: 'SoundCloud', user: 'soundcloud', color: 'linear-gradient(135deg, #ff5500 0%, #ffb199 100%)', category: 'Music & Video', subCategory: 'Music' },
+    // Fitness
+    { name: 'Fitbit', user: 'fitbit', color: 'linear-gradient(135deg, #00c6fb 0%, #005bea 100%)', category: 'Fitness', subCategory: 'Gyms' },
+    { name: 'Nike Training', user: 'niketraining', color: 'linear-gradient(135deg, #232526 0%, #414345 100%)', category: 'Fitness', subCategory: 'Gyms' },
+    // Hospitals
+    { name: 'Mayo Clinic', user: 'mayoclinic', color: 'linear-gradient(135deg, #00c6fb 0%, #005bea 100%)', category: 'Hospitals', subCategory: 'General' },
+    { name: 'Cleveland Clinic', user: 'clevelandclinic', color: 'linear-gradient(135deg, #232526 0%, #414345 100%)', category: 'Hospitals', subCategory: 'General' },
+    // Add more as needed for other categories/subcategories
   ];
 
   searchTerm = '';
@@ -118,11 +127,16 @@ export class AllCategoriesComponent {
     return result;
   }
 
+  // Filter brands by selected category and subcategory
   get brands() {
     if (this.selectedCategory === 'All') {
       return this.allBrands;
     }
-    return this.allBrands.filter(b => b.category === this.selectedCategory);
+    let filtered = this.allBrands.filter(b => b.category === this.selectedCategory);
+    if (this.selectedSubCategory) {
+      filtered = filtered.filter(b => b.subCategory === this.selectedSubCategory);
+    }
+    return filtered;
   }
 
   currentPage = 1;
@@ -159,6 +173,7 @@ export class AllCategoriesComponent {
   selectCategory(category: string) {
     this.selectedCategory = category;
     this.currentPage = 1;
+    this.selectedSubCategory = '';
     // Reset search and filtered categories to show all
     this.searchTerm = '';
     this.filteredCategories = this.categories;
@@ -199,7 +214,34 @@ export class AllCategoriesComponent {
     return this.subCategoryColors[this.selectedCategory] || '#fafbfc';
   }
 
-  goToSubCategory(tag: string) {
-    this.router.navigate(['/category-list', tag]);
+  // When a subcategory is clicked, filter by it
+  goToSubCategory(sub: string) {
+    if (this.selectedCategory === 'All') {
+      this.selectedSubCategory = '';
+      return;
+    }
+    this.selectedSubCategory = sub;
+    this.currentPage = 1;
+  }
+
+  // Accordion logic for sidebar
+  toggleCategoryAccordion(category: string) {
+    if (category === 'All') {
+      this.expandedCategory = this.expandedCategory === 'All' ? '' : 'All';
+      this.selectedSubCategory = '';
+    } else {
+      this.expandedCategory = this.expandedCategory === category ? '' : category;
+      this.selectedSubCategory = '';
+    }
+  }
+
+  // Explore categories button stub
+  exploreCategories() {
+    alert('Explore categories clicked!');
+  }
+
+  goToBrand(brand: any) {
+    const brandName = encodeURIComponent(brand.name);
+    this.router.navigate(['/search-view', brandName]);
   }
 }
