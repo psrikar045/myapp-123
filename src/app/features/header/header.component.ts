@@ -23,8 +23,10 @@ export class HeaderComponent implements OnInit {
   showProfileDropdown = false;
   isVisible = true;
   isScrolled = false;
+  isLanding = false;
   private lastScrollY = 0;
   private showTimeout: any;
+  private isScrollingUp = false;
   constructor(
     private toolbarService: ToolbarService,
     private authService: AuthService,
@@ -37,6 +39,7 @@ export class HeaderComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         this.currentRoute = event.urlAfterRedirects;
         this.showNavigation = !this.currentRoute.startsWith('/my-profile');
+        this.isLanding = this.currentRoute === '/' || this.currentRoute.startsWith('/landing');
       }
     });
   }
@@ -94,8 +97,13 @@ this.authService.checkAuthStatusAndNavigate();
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const currentScrollY = window.scrollY;
-    // Add background if scrolled or if hero section is in view
-    this.isScrolled = currentScrollY > 0 || this.isHeroSectionInView();
+    this.isScrollingUp = currentScrollY < this.lastScrollY;
+    // On landing: show background only when scrolling up
+    if (this.isLanding) {
+      this.isScrolled = this.isScrollingUp && currentScrollY > 0;
+    } else {
+      this.isScrolled = currentScrollY > 0;
+    }
     console.log('window.scrollY:', currentScrollY);
     if (currentScrollY <= 70) {
       // Always show at the top or in hero section
