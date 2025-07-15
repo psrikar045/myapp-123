@@ -40,7 +40,7 @@
         <h2 class="card-title">{{ selectedCategory }}</h2>
         <div class="subcategories-list">
           <span *ngIf="tags.length === 0" class="empty-text">No subcategories available.</span>
-          <button *ngFor="let tag of getDisplayTags()" class="subcategory-btn">{{ tag }}</button>
+          <button *ngFor="let tag of getDisplayTags()" class="subcategory-btn" (click)="goToSubCategory(tag)">{{ tag }}</button>
         </div>
       </div>
     </div>

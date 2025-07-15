@@ -1,90 +1,77 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HeaderComponent } from '../../header/header.component';
+import { FooterComponent } from '../../../shared/footer/footer.component';
+import { ThemeService } from '../../../core/services/theme.service';
+import { Subscription } from 'rxjs';
+
 @Component({
   selector: 'app-search-view',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HeaderComponent, FooterComponent],
   templateUrl: './search-view.component.html',
   styleUrl: './search-view.component.css'
 })
-export class SearchViewComponent implements OnInit {
- brand = '';
-  brandData: any;
+export class SearchViewComponent implements OnInit, OnDestroy {
+  showBrandDetails = false;
+  activeTab = 0;
+  tabs = ['Company', 'Logo', 'Colors', 'Fonts', 'Images'];
+  
+  isDarkMode = false;
+  private themeSubscription!: Subscription;
+  private readonly themeService = inject(ThemeService);
 
-  brandsData: Record<string, any> = {
-    apple: {
-      name: 'Apple',
-      logos: [
-        { type: 'Light', src: 'apple-light', svg: true },
-        { type: 'Dark', src: 'apple-dark', svg: true }
-      ],
-      illustrations: [
-        { title: 'Illustration Type 01', desc: 'Use for App Store Template Google...', img: 'illustration-1' },
-        { title: 'Illustration Type 02', desc: 'Use for onboarding, empty state...', img: 'illustration-2' },
-        { title: 'Illustration Type 03', desc: 'Use for dashboard, analytics...', img: 'illustration-3' }
-      ],
-      colors: {
-        full: [
-          { name: 'Blue', code: '#2563EB' },
-          { name: 'Indigo', code: '#3730A3' },
-          { name: 'Green', code: '#22A06B' },
-          { name: 'Orange', code: '#F59E42' },
-          { name: 'Red', code: '#F43F5E' },
-          { name: 'Navy', code: '#1E293B' },
-          { name: 'Slate', code: '#64748B' },
-          { name: 'Gray', code: '#E5E7EB' }
-        ],
-        light: [
-          { name: 'Light Blue', code: '#EFF6FF' },
-          { name: 'Light Indigo', code: '#EEF2FF' },
-          { name: 'Light Green', code: '#ECFDF5' },
-          { name: 'Light Orange', code: '#FFF7ED' },
-          { name: 'Light Red', code: '#FEF2F2' },
-          { name: 'Light Navy', code: '#F1F5F9' },
-          { name: 'Light Slate', code: '#F8FAFC' },
-          { name: 'Light Gray', code: '#F3F4F6' }
-        ]
-      },
-      typography: [
-        { category: 'H1', typeface: 'SF Pro Display', font: 'Bold', size: '56px', spacing: '-2%' },
-        { category: 'H2', typeface: 'SF Pro Display', font: 'Semibold', size: '40px', spacing: '-2%' },
-        { category: 'H3', typeface: 'SF Pro Display', font: 'Medium', size: '32px', spacing: '-2%' },
-        { category: 'H4', typeface: 'SF Pro Display', font: 'Regular', size: '24px', spacing: '-2%' },
-        { category: 'H5', typeface: 'SF Pro Display', font: 'Regular', size: '20px', spacing: '-2%' },
-        { category: 'H6', typeface: 'SF Pro Display', font: 'Regular', size: '16px', spacing: '-2%' },
-        { category: 'Body', typeface: 'SF Pro Text', font: 'Regular', size: '16px', spacing: '0%' },
-        { category: 'Caption', typeface: 'SF Pro Text', font: 'Regular', size: '12px', spacing: '0%' }
-      ],
-      iconography: {
-        filled: Array(20).fill('filled-icon'),
-        outline: Array(20).fill('outline-icon')
-      },
-      buttons: [
-        { label: 'Primary', style: 'primary' },
-        { label: 'Info', style: 'info' },
-        { label: 'Success', style: 'success' },
-        { label: 'Warning', style: 'warning' },
-        { label: 'Danger', style: 'danger' },
-        { label: 'Default', style: 'default' }
-      ],
-      form: {
-        fields: [
-          { label: 'First Name', type: 'text', placeholder: 'First' },
-          { label: 'Last Name', type: 'text', placeholder: 'Last' },
-          { label: 'Email', type: 'email', placeholder: 'Email' },
-          { label: 'Phone', type: 'text', placeholder: 'Phone' }
-        ]
-      }
-    }
-  };
+  filters = ['All', 'Logos', 'Colors', 'Images', 'Font', 'Icons'];
+  activeFilter = 'All';
 
-  constructor(private route: ActivatedRoute) {}
+  // Mock data for demonstration
+  logos = [
+    { src: 'assets/images/logo.svg', label: 'Logo', type: 'SVG' },
+    { src: 'assets/images/logo.svg', label: 'Logo', type: 'SVG' },
+    { src: 'assets/images/logo.svg', label: 'Logo', type: 'SVG' },
+    { src: 'assets/images/logo.svg', label: 'Logo', type: 'SVG' },
+    { src: 'assets/images/logo.svg', label: 'Instagram', type: 'SVG' }
+  ];
+  colors = [
+    { color: '#1555DB', label: 'Primary' },
+    { color: '#3F598A', label: 'Secondary' },
+    { color: '#36B37E', label: 'Success' },
+    { color: '#00BBD9', label: 'Info' },
+    { color: '#FAAD13', label: 'Warning' },
+    { color: '#F16141', label: 'Danger' },
+    { color: '#183B56', label: '' },
+    { color: '#5A7184', label: '' },
+    { color: '#B3BAC5', label: '' },
+    { color: '#FFFFFF', label: '' }
+  ];
+  // Add similar mock arrays for images, font, icons if needed
 
-  ngOnInit() {
-    this.route.paramMap.subscribe(params => {
-      this.brand = params.get('brand') || '';
-      this.brandData = this.brandsData[this.brand];
+  ngOnInit(): void {
+    this.themeSubscription = this.themeService.isDarkMode$.subscribe(isDark => {
+      this.isDarkMode = isDark;
     });
+    this.isDarkMode = this.themeService.getIsDarkMode();
+  }
+
+  ngOnDestroy(): void {
+    if (this.themeSubscription) {
+      this.themeSubscription.unsubscribe();
+    }
+  }
+
+  onAnalyzeClick() {
+    this.showBrandDetails = true;
+  }
+
+  setActiveTab(idx: number) {
+    this.activeTab = idx;
+  }
+
+  setFilter(filter: string) {
+    this.activeFilter = filter;
+  }
+
+  showSection(section: string): boolean {
+    return this.activeFilter === 'All' || this.activeFilter === section;
   }
 }

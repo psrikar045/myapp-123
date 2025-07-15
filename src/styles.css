@@ -12,10 +12,14 @@
 /* Set base font size for consistent rem unit behavior.
    This is the default for mobile (<600px). Adjustments can be made in media queries.
 */
+
+
 html {
   font-size: 14px; /* Adjusted base for smaller screens, 1rem = 14px */
   scroll-behavior: smooth;
 }
+
+
 
 /* Apply box-sizing border-box to all elements and their pseudo-elements */
 *,
@@ -31,13 +35,15 @@ body {
 
 body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
+   font-family: "poppins" !important;
   line-height: 1.6; /* Slightly increased line-height for better readability on mobile */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #fff; /* Default light theme background */
   color: #333; /* Default light theme text color */
+  overflow-x: hidden;
 }
+button{font-family: "poppins" !important;}
 
 /* Basic responsive media elements */
 img,

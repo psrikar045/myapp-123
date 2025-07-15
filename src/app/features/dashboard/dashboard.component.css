@@ -6,7 +6,7 @@
   align-items: center;
   min-height: 100vh;
   background-color: #f0f2f5; /* Light background for dashboard */
-  font-family: 'Poppins', sans-serif; /* Keep specific font */
+   font-family: 'poppins'; /* Keep specific font */
   /* color: #333; /* Inherits from body */
   text-align: center;
   padding: 1.42rem; /* approx 20px / 14px */

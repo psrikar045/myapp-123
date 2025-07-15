@@ -1,10 +1,9 @@
 <header class="header-container" [class.header-hidden]="!isVisible">
   <div class="header-logo">
     <a [routerLink]="(logo$ | async)?.link" class="d-flex align-items-center">
-      <span class="logo-img-wrapper">
-        <img [src]="(logo$ | async)?.src" [alt]="(logo$ | async)?.alt" height="44" width="44" />
+      <span class="">
+        <img [src]="(logo$ | async)?.src" [alt]="(logo$ | async)?.alt"  style="cursor: pointer; width: 11.5rem;" />
       </span>
-      <span class="logo-text ms-2">{{ (logo$ | async)?.alt }}</span>
     </a>
   </div>
   <ng-container *ngIf="showNavigation">

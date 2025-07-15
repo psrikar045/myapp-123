@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-all-categories',
@@ -96,6 +97,8 @@ export class AllCategoriesComponent {
 
   searchTerm = '';
   filteredCategories = this.categories;
+
+  constructor(private router: Router) {}
 
   get tags() {
     if (this.selectedCategory === 'All') return [];
@@ -194,5 +197,9 @@ export class AllCategoriesComponent {
 
   getSubCardBgColor(): string {
     return this.subCategoryColors[this.selectedCategory] || '#fafbfc';
+  }
+
+  goToSubCategory(tag: string) {
+    this.router.navigate(['/category-list', tag]);
   }
 }

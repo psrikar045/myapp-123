@@ -13,6 +13,8 @@ import { CompanyDataComponent } from './features/company-data/company-data.compo
 import { SearchApiComponent } from './features/search-api/search-api.component';
 import { LogoLinkComponent } from './features/logo-link/logo-link.component';
 import { AllCategoriesComponent } from './features/all-categories/all-categories.component';
+import { CategoryListComponent } from './features/category-list/category-list.component';
+import { BlogComponent } from './features/blog/blog.component';
 
 export const routes: Routes = [
   // 1. Redirect root path '' to '/login'
@@ -58,6 +60,14 @@ export const routes: Routes = [
   {
     path: 'all-categories',
     component: AllCategoriesComponent
+  },
+  {
+    path: 'category-list/:subcategory',
+    component: CategoryListComponent
+  },
+  {
+    path: 'blog',
+    component: BlogComponent
   },
 
   // 4. Protected Routes

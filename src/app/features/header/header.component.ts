@@ -54,7 +54,9 @@ login() {
 this.authService.checkAuthStatusAndNavigate();
 }
   onNavClick(item: ToolbarNavItem) {
-    if (item.scrollId && this.router.url.startsWith('/landing')) {
+    if (item.label === 'Blog') {
+      this.router.navigate(['/blog']);
+    } else if (item.scrollId && this.router.url.startsWith('/landing')) {
       const el = document.getElementById(item.scrollId);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });

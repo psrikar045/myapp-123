@@ -21,7 +21,7 @@
 }
 
 .categories-title {
-  font-family: 'Poppins', 'Inter', Arial, sans-serif;
+  font-family: 'poppins';
   font-size: 4.2rem;
   font-weight: 800;
   letter-spacing: -2px;
@@ -38,7 +38,7 @@
 }
 
 .categories-desc {
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: 'poppins';
   font-size: 1.35rem;
   color: #23272f;
   font-weight: 500;
@@ -75,7 +75,7 @@
   border: none;
   outline: none;
   font-size: 1.18rem;
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: 'poppins';
   flex: 1;
   background: transparent;
   padding: 0 10px 0 0;
@@ -222,7 +222,7 @@
 
 .category-btn {
   font-size: 1rem;
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: 'poppins';
   background: #fff;
   border: 2px solid #e3e3e3;
   border-radius: 16px;
@@ -355,7 +355,7 @@
 
 .subcategory-btn {
   font-size: 0.97rem;
-  font-family: 'Inter', Arial, sans-serif;
+  font-family: 'poppins';
   background: #f7fafd;
   border: 2px solid #e3e3e3;
   border-radius: 14px;

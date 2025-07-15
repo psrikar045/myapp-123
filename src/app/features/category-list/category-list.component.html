@@ -1,0 +1,53 @@
+<!-- Back Button (outside container) -->
+<button class="back-btn" (click)="goBack()">&#8592; Back to All Categories</button>
+
+<!-- Banner/Header -->
+<div class="category-banner">
+  <h1>{{ subcategory }}</h1>
+  <div class="category-search-bar">
+    <span class="search-icon">
+      <svg width="20" height="20" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="10" cy="10" r="7.5" stroke="#b0b7c3" stroke-width="2"/>
+        <line x1="16.3536" y1="16.6464" x2="20" y2="20.2929" stroke="#b0b7c3" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </span>
+    <input type="text" placeholder="Enter a brand to get started..." />
+    <span class="arrow-icon">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 11H16" stroke="#1976d2" stroke-width="2" stroke-linecap="round"/>
+        <path d="M12 7L16 11L12 15" stroke="#1976d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </span>
+  </div>
+</div>
+
+<div class="category-main-container">
+  <!-- Sub-category Buttons -->
+  <div class="subcategory-buttons">
+    <button *ngFor="let sub of subcategories"
+            [class.selected]="sub === subcategory"
+            (click)="selectSubcategory(sub)">
+      {{ sub }}
+    </button>
+  </div>
+
+  <!-- Result Summary -->
+  <div class="result-summary">
+    Showing 1-{{ brands.length }} brands in {{ subcategory }}.
+  </div>
+
+  <!-- Brand List -->
+  <div class="brand-list">
+    <div class="brand-card" *ngFor="let brand of brands">
+      <img [src]="brand.logo" [alt]="brand.name" class="brand-logo" />
+      <div class="brand-info">
+        <div class="brand-title">
+          {{ brand.name }}
+          <span *ngIf="brand.verified" class="verified-badge">✔</span>
+        </div>
+        <div class="brand-website">{{ brand.website }}</div>
+        <div class="brand-description">{{ brand.description }}</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="blog-page-bg">
+  <div class="blog-container">
+    <h2 class="featured-title">Featured Blogs</h2>
+
+    <!-- Featured Blog Card -->
+    <div class="featured-blog-card">
+      <img class="featured-img" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="Featured Blog" />
+      <div class="featured-blog-content">
+        <span class="blog-category">Technology</span>
+        <h3 class="blog-title">The Impact of Technology on the Workplace: How Technology is Changing</h3>
+        <div class="blog-meta">
+          <img class="author-avatar" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Tracey Wilson" />
+          <span class="author">Tracey Wilson</span>
+          <span class="date">August 20, 2022</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blog Cards Grid -->
+    <div class="blog-cards-grid">
+      <div class="blog-card" *ngFor="let blog of blogs">
+        <img class="blog-img" [src]="blog.img" alt="Blog" />
+        <div class="blog-card-content">
+          <span class="blog-category">{{ blog.category }}</span>
+          <h4 class="blog-title">{{ blog.title }}</h4>
+          <div class="blog-meta">
+            <img class="author-avatar" [src]="blog.authorAvatar" alt="Author" />
+            <span class="author">{{ blog.author }}</span>
+            <span class="date">{{ blog.date }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="blog-pagination">
+      <span class="page-num active">1</span>
+      <span class="page-num">2</span>
+      <span class="page-num">3</span>
+      <span class="page-num">4</span>
+      <span class="page-num">5</span>
+      <span class="page-num">6</span>
+      <span class="page-num">7</span>
+      <span class="page-num">8</span>
+      <span class="page-num">9</span>
+      <span class="page-num">10</span>
+      <span class="page-dot">&#9679;</span>
+    </div>
+  </div>
+</div>

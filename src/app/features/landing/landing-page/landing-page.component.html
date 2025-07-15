@@ -6,11 +6,11 @@
   <!-- Decorative yellow/orange circle on the left behind text/CTAs -->
   <img src="landing/Group 1000003639.svg" alt="Yellow Circle" class="hero-yellow-circle position-absolute" />
   <div class="container position-relative z-2 py-5 hero-container">
-    <div class="d-flex flex-lg-row flex-column align-items-center justify-content-between hero-row">
+    <div class="d-flex flex-lg-row flex-column align-items-center justify-content-between hero-row" style="display: flex;">
       <!-- Left: Text and Search -->
       <div class="hero-left" style="display:flex; flex-direction:column; align-items:flex-start;">
         <h1 class="hero-headline fw-extrabold mb-4">
-          {{ heroHeadline.main }}<br>
+          {{ heroHeadline.main }}<br> {{ heroHeadline.main1 }}<br> 
           <span class="hero-highlight">{{ heroHeadline.highlight }}</span>
           <svg *ngIf="heroHeadline.waveIcon" width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="hero-wave-icon"><path d="M2 12C6.5 2 13.5 2 18 12C22.5 22 29.5 22 34 12" stroke="#377DFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </h1>

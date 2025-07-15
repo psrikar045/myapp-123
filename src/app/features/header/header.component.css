@@ -7,9 +7,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 40px 12px 32px;
-  background: linear-gradient(90deg, #fff6e5 0%, #f5faff 100%);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  padding: 12px 100px 12px 100px;
+  /* box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  background: linear-gradient(90deg, #fff6e5 0%, #f5faff 100%); */
   min-height: 72px;
   transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.2s;
 }
@@ -28,7 +28,7 @@
   font-weight: 500;
   margin-left: 12px;
   color: #222;
-  font-family: 'Poppins', sans-serif;
+   font-family: 'poppins';
   letter-spacing: -0.5px;
 }
 
@@ -42,7 +42,7 @@
 
 .nav-link {
   color: #222;
-  font-size: 1.18rem;
+  font-size: 1rem;
   font-weight: 500;
   text-decoration: none;
   transition: color 0.2s;

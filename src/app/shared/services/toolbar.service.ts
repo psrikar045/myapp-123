@@ -25,8 +25,8 @@ export interface ToolbarAction {
 })
 export class ToolbarService {
   private logo$ = new BehaviorSubject<ToolbarLogo>({
-    src: 'landing/logo icon.png',
-    alt: 'Marketify',
+    src: 'images/logo.svg',
+    alt: '',
     link: '/'
   });
 
@@ -49,8 +49,8 @@ export class ToolbarService {
   constructor() { }
   setProfileHeaderOnly() {
      this.logo$.next({
-      src: 'assets/logo icon.png',
-      alt: 'Marketify',
+      src: 'images/logo.svg',
+      alt: '',
       link: '/'
     });
     this.navItems$.next([]);
@@ -68,8 +68,8 @@ export class ToolbarService {
 
   setLoggedInToolbar(): void {
     this.logo$.next({
-      src: 'landing/logo icon.png',
-      alt: 'Marketify',
+      src: 'images/logo.svg',
+      alt: '',
       link: '/home'
     });
     this.navItems$.next([
@@ -86,15 +86,15 @@ export class ToolbarService {
 
   setLoggedOutToolbar(): void {
     this.logo$.next({
-      src: 'landing/logo icon.png',
-      alt: 'Marketify',
+      src: 'images/logo.svg',
+      alt: '',
       link: '/'
     });
     this.navItems$.next([
       { label: 'Brands', route: '', scrollId: 'brands-section' },
       { label: 'Developers', route: '', scrollId: 'developers-section' },
       { label: 'Pricing', route: '', scrollId: 'pricing-section' },
-      { label: 'Blog', route: '', scrollId: 'blog-section' }
+      { label: 'Blog', route: '/blog', scrollId: '' }
     ]);
     this.actions$.next([
       { type: 'login', label: 'Login', route: '/login' },
