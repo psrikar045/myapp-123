@@ -8,6 +8,7 @@ import { SearchModalService } from '../../../shared/services/search-modal.servic
 import { SearchHistoryService, SearchedBrand } from '../../../shared/services/search-history.service';
 import { SearchModalComponent } from '../../../shared/components/search-modal/search-modal.component';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { UtilService } from '../../../shared/services/util.service';
 @Component({
   selector: 'app-search',
   standalone: true,
@@ -47,6 +48,7 @@ export class SearchComponent {
   private readonly authService = inject(AuthService);
   private readonly validationService = inject(ValidationService);
   private readonly searchModalService = inject(SearchModalService);
+  private readonly utilService = inject(UtilService);
 
  searchDomainNameOrUrl = '';
  isLoading = false;
@@ -284,7 +286,7 @@ handleKeyDown(event:any){
               
               // Add to search history
               this.addToSearchHistory(brandName, finalUrl, data);
-              
+              this.utilService.searchResult = data; // Store result in UtilService for later use
               this.goToResults(brandName);
             } else {
               this.setError('No brand information found for this website');
@@ -295,6 +297,7 @@ handleKeyDown(event:any){
           console.error('API Error:', error);
           this.isLoading = false;
           this.searchModalService.hideModal();
+          this.utilService.searchResult = null; // Clear previous search result
           this.setError('Failed to fetch brand information. Please try again.');
         }
       });

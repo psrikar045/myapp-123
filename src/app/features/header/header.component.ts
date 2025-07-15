@@ -104,7 +104,7 @@ this.authService.checkAuthStatusAndNavigate();
     } else {
       this.isScrolled = currentScrollY > 0;
     }
-    console.log('window.scrollY:', currentScrollY);
+    // console.log('window.scrollY:', currentScrollY);
     if (currentScrollY <= 70) {
       // Always show at the top or in hero section
       this.isVisible = true;

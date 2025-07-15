@@ -4,23 +4,38 @@
   <!-- Top Section -->
   <div class="company-top-card">
     <div class="company-logo-circle">
-      <img src="assets/images/logo.svg" alt="Company Logo" />
-          </div>
+      <img src="{{ searchResult?.Logo?.Logo }}" alt="{{ searchResult?.Company?.Name }} Logo" />
+    </div>
     <div class="company-top-actions">
-      <span class="company-url">www.instagram.com</span>
+      <span class="company-url">
+        <ng-container *ngIf="searchResult?.Company?.Website">
+          <a [href]="searchResult.Company.Website" target="_blank" rel="noopener noreferrer">
+            {{ searchResult.Company.Website }}
+          </a>
+        </ng-container>
+      </span>
       <button class="claimed-btn">Claimed</button>
       <button class="share-btn">Share</button>
       <div class="company-socials">
-        <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
-        <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
-        <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
-        <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
-        </div>
-        </div>
+        <ng-container *ngFor="let social of getSocialLinksArray(searchResult?.Company?.SocialLinks)">
+          <ng-container *ngIf="getSocialIconClass(social.platform)">
+            <a [href]="social.url" target="_blank" rel="noopener noreferrer"
+              [attr.aria-label]="getSocialAriaLabel(social.platform)">
+              <i [class]="getSocialIconClass(social.platform)"></i>
+            </a>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
     <div class="company-description">
-      Aardman is the world famous, four times Academy Award® winning animation studio, creators of Wallace & Gromit, Shaun the Sheep, Chicken Run and Morph. Aardman is the world famous, four times Academy Award® winning animation studio, creators of Wallace & Gromit, Shaun the Sheep, Chicken Run and Morph.Aardman is the world famous, four times Academy Award® winning animation studio, creators of Wallace & Gromit, Shaun the Sheep, Chicken Run and Morph.
-            </div>
-          </div>
+      <ng-container *ngIf="searchResult?.Company?.Description">
+        {{ searchResult.Company.Description }}
+      </ng-container>
+      <ng-container *ngIf="!searchResult?.Company?.Description">
+        No company description available.
+      </ng-container>
+    </div>
+  </div>
 
   <!-- Filter Buttons -->
   <div class="company-filters">
@@ -31,28 +46,96 @@
   <section class="company-section" *ngIf="showSection('Logos')">
     <h2>Logos</h2>
     <div class="company-logos">
-      <div class="logo-card" *ngFor="let logo of logos">
-        <img [src]="logo.src" alt="Logo" />
-        <div class="logo-labels"><span>{{ logo.label }}</span><span>{{ logo.type }}</span></div>
+      <ng-container *ngFor="let logoEntry of getLogoEntries(searchResult?.Logo)">
+        <div class="logo-card" *ngIf="isValidImageUrl(logoEntry.value)">
+          <img [src]="logoEntry.value" [alt]="generateAltText(searchResult?.Company?.Name, logoEntry.key)" />
+          <div class="logo-labels">
+            <span>{{ generateLogoLabel(logoEntry.key) }}</span>
+            <span *ngIf="logoEntry.key !== generateLogoLabel(logoEntry.key)">({{ logoEntry.key }})</span>
           </div>
         </div>
+      </ng-container>
+  
+      <ng-container *ngIf="!hasDisplayableLogos(searchResult?.Logo)">
+        <div class="no-logos-message">
+          No displayable logos found.
+        </div>
+      </ng-container>
+    </div>
   </section>
 
   <!-- Color Section -->
   <section class="company-section" *ngIf="showSection('Colors')">
     <h2>Color</h2>
     <div class="company-section-desc">
-      Color is the cornerstone of Designspace design. It distinguishes our brand and helps us to create consistent experiences across marketing and products. We use color in meaningful ways in all expressions of our brand.
-              </div>
+      Color is the cornerstone of Designspace design. It distinguishes our brand and helps us to create consistent
+      experiences across marketing and products. We use color in meaningful ways in all expressions of our brand.
+    </div>
     <div class="company-color-palette">
-      <div class="color-swatch" *ngFor="let c of colors" [style.background]="c.color" [style.color]="c.color === '#FFFFFF' ? '#222' : ''">
-        <span>{{ c.color }}</span><span *ngIf="c.label">{{ c.label }}</span>
-          </div>
+      <ng-container *ngIf="hasDisplayableColors(searchResult?.Colors)">
+        <div class="color-swatch" *ngFor="let colorItem of searchResult.Colors" [style.background]="colorItem.hex"
+          [style.color]="colorItem.hex && (colorItem.hex.toLowerCase() === '#ffffff' || colorItem.hex.toLowerCase() === '#fff') ? '#222' : '#fff'">
+          <span *ngIf="colorItem.hex">{{ colorItem.hex }}</span>
+          <span *ngIf="colorItem.name && colorItem.name !== ''"
+            [style.color]="colorItem.brightness > 186 ? '#000' : '#fff'">
+            {{ colorItem.name }}</span>
         </div>
+      </ng-container>
+  
+      <ng-container *ngIf="!hasDisplayableColors(searchResult?.Colors)">
+        <p class="no-colors-message">No color palette available.</p>
+      </ng-container>
+    </div>
   </section>
 
-        <!-- Typography Section -->
+        <!-- Font Section -->
   <section class="company-section" *ngIf="showSection('Font')">
+    <div class="company-fonts-display">
+      <h2>Fonts</h2>
+      <ng-container *ngIf="hasDisplayableFonts(searchResult?.Fonts)">
+        <div class="font-preview-card" *ngFor="let fontItem of searchResult.Fonts">
+          <ng-container *ngIf="fontItem.family || fontItem.name">
+            <div class="font-name" [style.font-family]="getFontDisplayName(fontItem)">
+              {{ getFontDisplayName(fontItem) }}
+            </div>
+            <div class="font-sample-text" [style.font-family]="getFontDisplayName(fontItem)">
+              The quick brown fox jumps over the lazy dog.
+              <span *ngIf="getFontDetailsText(fontItem)">
+                {{ getFontDetailsText(fontItem) }}
+              </span>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+  
+      <ng-container *ngIf="!hasDisplayableFonts(searchResult?.Fonts)">
+        <p class="no-fonts-message">No font information available.</p>
+      </ng-container>
+    </div>
+  
+  </section>
+    <!-- Images Section -->
+<section class="company-section" *ngIf="showSection('Images')">
+  <h2>Images</h2>
+  <div class="company-images-gallery">
+    <ng-container *ngIf="hasDisplayableImages(searchResult?.Images)">
+      <div class="image-card" *ngFor="let imageItem of searchResult.Images">
+        <ng-container *ngIf="isValidImageUrl(getImageSource(imageItem))">
+          <img [src]="getImageSource(imageItem)"
+               [alt]="getImageAltText(searchResult?.Company?.Name, imageItem)" />
+        </ng-container>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="!hasDisplayableImages(searchResult?.Images)">
+      <div class="no-images-message">
+        No additional images available.
+      </div>
+    </ng-container>
+  </div>
+</section>
+  <!-- Future Implementation will added to show font, font size combinations -->
+  <!-- <section class="company-section" *ngIf="showSection('Font')">
     <h2>Typography</h2>
     <div class="company-section-desc">
       Color is the cornerstone of Designspace design. It distinguishes our brand and helps us to create consistent experiences across marketing and products. We use color in meaningful ways in all expressions of our brand.
@@ -82,10 +165,11 @@
               </tbody>
             </table>
         </div>
-  </section>
+  </section> -->
 
         <!-- Iconography Section -->
-  <section class="company-section" *ngIf="showSection('Icons')">
+         <!-- Future Implementation -->
+  <!-- <section class="company-section" *ngIf="showSection('Icons')">
     <h2>Iconography</h2>
     <div class="company-section-desc">
       Icons are a part of the illustration family in marketing, but they serve very different purposes. Typically, icons are more literal and are intended to bring clarity to their subject.
@@ -110,7 +194,7 @@
         </div>
         </div>
       </div>
-    </section>
+    </section> -->
 </div>
 
 <app-footer></app-footer>

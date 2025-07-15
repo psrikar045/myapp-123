@@ -33,9 +33,9 @@ body, .company-data-body {
   gap: 24px;
 }
 .company-logo-circle {
-  width: 120px;
-  height: 120px;
-  background: #181c32;
+  width: 140px;
+  height: 140px;
+  /* background: #181c32; *//*commented as the logo text will be also black and not visible on dark background */
   border-radius: 50%;
   box-shadow: 0 8px 32px 0 rgba(37,99,235,0.18), 0 0 0 12px #f3f6fd;
   display: flex;
@@ -419,4 +419,101 @@ body, .company-data-body {
     width: 48px;
     height: 48px;
   }
+}
+
+/* company-data.component.css */
+
+.company-fonts-display {
+  margin-top: 20px;
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.font-preview-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.font-name {
+  font-size: 1.5em; /* Larger font size for the font's name */
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.font-sample-text {
+  font-size: 1.1em; /* Normal font size for sample text */
+  line-height: 1.4;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.font-details {
+  font-size: 0.9em;
+  color: #777;
+}
+
+.no-fonts-message {
+  font-style: italic;
+  color: #777;
+  text-align: center;
+  padding: 15px;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+}
+
+/* company-data.component.css */
+
+.company-images-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Responsive grid */
+  gap: 15px;
+  margin-top: 15px;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background-color: #fcfcfc;
+}
+
+.image-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden; /* Ensures image doesn't overflow rounded corners */
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Pushes labels to bottom */
+}
+
+.image-card img {
+  width: 100%;
+  height: 120px; /* Fixed height for consistency in gallery */
+  object-fit: contain; /* Scales image to fit without cropping */
+  background-color: #f0f0f0; /* Background for transparent images */
+  padding: 5px;
+}
+
+.image-labels {
+  padding: 8px;
+  font-size: 0.85em;
+  color: #555;
+  text-align: center;
+  border-top: 1px solid #eee;
+  background-color: #f5f5f5;
+}
+
+.no-images-message {
+  font-style: italic;
+  color: #777;
+  text-align: center;
+  padding: 15px;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  background-color: #f0f0f0;
 }
