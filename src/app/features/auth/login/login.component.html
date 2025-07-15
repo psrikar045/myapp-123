@@ -15,7 +15,7 @@
           </div>
 
           <form [formGroup]="loginForm" (ngSubmit)="onSubmitLogin()">
-            <mat-form-field appearance="outline" class="full-width">
+            <mat-form-field appearance="outline" class="full-width usernamebotm">
               <mat-label i18n="@@identifierLabel">Email or Username</mat-label>
               <input matInput formControlName="identifier" placeholder="your.email@example.com or username" i18n-placeholder="@@identifierPlaceholder" required autocomplete="off" autofocus>
               <button mat-icon-button matSuffix *ngIf="loginIdentifierCtrl.value" (click)="clearIdentifier()" type="button" aria-label="Clear email or username" i18n-aria-label="@@clearIdentifierAriaLabel">
@@ -29,7 +29,7 @@
               </mat-error>
             </mat-form-field>
 
-            <mat-form-field appearance="outline" class="full-width">
+            <mat-form-field appearance="outline" class="full-width loginPassbotm">
               <mat-label i18n="@@passwordLabel">Password</mat-label>
               <input matInput [type]="hideLoginPassword ? 'password' : 'text'" formControlName="password" placeholder="Enter your password" i18n-placeholder="@@passwordPlaceholder" required autocomplete="off">
               <button mat-icon-button matSuffix (click)="toggleLoginPasswordVisibility()" type="button" [attr.aria-label]="hideLoginPassword ? 'Show password' : 'Hide password'" [attr.i18n-aria-label]="hideLoginPassword ? '@@showPasswordAriaLabel' : '@@hidePasswordAriaLabel'">
@@ -61,7 +61,7 @@
 
         <!-- Registration Form -->
         <div *ngIf="showRegisterForm">
-          <h2 i18n="@@registerTitle">Create an Account</h2>
+          <h2 i18n="@@registerTitle">Sign Up</h2>
           <p class="subtitle" i18n="@@registerSubtitle">Join us and start your journey with TravelWise!</p>
 
           <form [formGroup]="registerForm" (ngSubmit)="onSubmitRegister()">
@@ -119,7 +119,7 @@
               </mat-form-field>
             </div>
 
-            <mat-form-field appearance="outline" class="full-width">
+            <mat-form-field appearance="outline" class="full-width createBottom">
               <mat-label i18n="@@passwordLabelRegister">Create Password</mat-label>
               <input matInput [type]="hideRegisterPassword ? 'password' : 'text'" formControlName="password" placeholder="Enter your password" i18n-placeholder="@@passwordPlaceholderRegister" autocomplete="off" required>
               <button mat-icon-button matSuffix (click)="toggleRegisterPasswordVisibility()" type="button" [attr.aria-label]="hideRegisterPassword ? 'Show password' : 'Hide password'" [attr.i18n-aria-label]="hideRegisterPassword ? '@@showPasswordAriaLabel' : '@@hidePasswordAriaLabel'">
@@ -148,7 +148,7 @@
               </div>
             </div>
 
-            <mat-form-field appearance="outline" class="full-width">
+            <mat-form-field appearance="outline" class="full-width cnfmSignup">
               <mat-label i18n="@@confirmPasswordLabelRegister">Confirm Password</mat-label>
               <input matInput [type]="hideRegisterConfirmPassword ? 'password' : 'text'" formControlName="confirmPassword" placeholder="Re-enter your password" i18n-placeholder="@@confirmPasswordPlaceholderRegister" autocomplete="off" required>
               <button mat-icon-button matSuffix (click)="toggleRegisterConfirmPasswordVisibility()" type="button" [attr.aria-label]="hideRegisterConfirmPassword ? 'Show password' : 'Hide password'" [attr.i18n-aria-label]="hideRegisterConfirmPassword ? '@@showPasswordAriaLabel' : '@@hidePasswordAriaLabel'">
@@ -236,7 +236,7 @@
              [src]="carouselImage"
              alt="Registration image"
              i18n-alt="@@registrationImageAltText"
-             class="carousel-image active"
+             class="carousel-image-signup active"
              loading="lazy">
       </div>
     </div>

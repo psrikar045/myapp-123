@@ -30,7 +30,7 @@
   flex: 1; /* Takes available space, but constrained by login-container's max-width on mobile */
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   padding: 1rem; /* Approx 14px. Was 1.5rem then 2rem */
   box-sizing: border-box;
   width: 100%; /* Ensure it takes full width of parent */
@@ -53,7 +53,7 @@
   box-shadow: none;
   padding: 1rem; /* Approx 14px. Was 1.5rem or 2rem or 0 */
   width: 100%;
-  text-align: center;
+  /* text-align: center; */
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -96,7 +96,7 @@ mat-form-field {
   flex-direction: column; /* Stack on mobile */
   align-items: flex-start;
   gap: 0.75rem; /* Approx 10.5px. Was 0.75rem */
-  margin-bottom: 1.25rem; /* Approx 17.5px. Was 1.5rem */
+  margin-bottom: 9px; /* Approx 17.5px. Was 1.5rem */
   font-size: 0.85rem; /* Approx 12px. Was 0.9rem */
 }
 
@@ -104,7 +104,8 @@ mat-form-field {
   color: var(--primary-color, #4A50E0);
   text-decoration: none;
   font-weight: 500;
-  align-self: flex-start; /* Ensure it stays left when stacked */
+  /* align-self: flex-start; */
+   /* Ensure it stays left when stacked */
 }
 .forgot-password-link:hover {
   text-decoration: underline;
@@ -163,16 +164,20 @@ mat-form-field {
 }
 
 .signup-link, .login-link {
-  margin-top: 1.5rem; /* Approx 21px. Was 2rem or 1.5rem */
+  margin-top: 10px; /* Approx 21px. Was 2rem or 1.5rem */
   font-size: 0.85rem; /* Approx 12px. Was 0.9rem */
   color: var(--text-secondary-color, #555);
+}
+.createBottom{
+  margin-bottom: 3px !important;
 }
 .signup-link a, .login-link a { /* Uses .interactive-link now */
   margin-left: 0.2rem; /* Approx 3px. Was 0.3rem */
 }
 
 .terms-checkbox-container {
-  margin-bottom: 1.25rem; /* Approx 17.5px. Was 1.5rem */
+  /* margin-bottom: 9px; */
+   /* Approx 17.5px. Was 1.5rem */
   text-align: left;
 }
 .terms-checkbox span {
@@ -327,6 +332,29 @@ mat-form-field {
   transition: opacity 0.5s ease-in-out;
   display: block;
 }
+.carousel-image-signup{
+  position: absolute;
+  top: 35px;
+  left: 0;
+  width: 100%;
+  height: 80%;
+  object-fit: contain;
+  object-position: center;
+  border-radius: 0.5rem; /* Approx 7px */
+  box-shadow: none;
+  /* opacity: 0; */
+  transition: opacity 0.5s ease-in-out;
+  display: block;
+}
+.cnfmSignup{
+  margin-bottom: 0px !important;
+}
+.loginPassbotm{
+  margin-bottom: 0px !important;
+}
+.usernamebotm{
+   margin-bottom: 10px !important;
+}
 .carousel-image.active {
   opacity: 1;
   z-index: 1;
@@ -354,7 +382,7 @@ mat-form-field {
 
 /* Password Strength Indicator */
 .password-strength-container {
-  margin-bottom: 1.25rem;
+  margin-bottom: 9px;
   text-align: left;
 }
 
@@ -550,7 +578,8 @@ mat-form-field {
   }
   .login-left {
     padding: 2rem; /* 32px / 16px. Original was 2rem */
-    align-items: center; /* Re-center content if needed */
+    /* align-items: center;  */
+    /* Re-center content if needed */
   }
   .login-panel {
     max-width: 26.25rem; /* 420px original max-width for panel */
@@ -562,10 +591,10 @@ mat-form-field {
   }
   .logo {
     width: 11.5rem; /* 184px / 16px. Original */
-    margin-bottom: 3rem; /* 48px / 16px. Original */
+    margin-bottom: 35px; /* 48px / 16px. Original */
   }
   h2 { font-size: 1.8rem; /* 28.8px / 16px. Original */ }
-  .subtitle { font-size: 1rem; /* 16px. Original */ margin-bottom: 2rem; /* 32px. Original */ }
+  .subtitle { font-size: 1rem; /* 16px. Original */ margin-bottom: 20px; /* 32px. Original */ }
   .login-right {
     display: flex; /* Show image carousel */
     min-height: 35rem; /* 560px. Original */
