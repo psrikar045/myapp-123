@@ -32,6 +32,26 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 import { ThemeService } from '../../../core/services/theme.service';
 import { ToolbarService } from '../../../shared/services/toolbar.service';
 declare var google: any; // Declare google global variable
+// Custom Phone Number Validator
+function phoneNumberValidator(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  
+  if (!value) {
+    return null; // Don't validate empty values here, let required validator handle it
+  }
+  
+  // Check if contains only digits
+  if (!/^\d+$/.test(value)) {
+    return { 'numericOnly': true };
+  }
+  
+  // Check if exactly 10 digits
+  if (value.length !== 10) {
+    return { 'exactLength': true };
+  }
+  
+  return null; // Valid
+}
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -140,7 +160,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
       firstName: this.fb.control('', [Validators.required]),
       lastName: this.fb.control('', [Validators.required]),
       email: this.fb.control('', [Validators.required, Validators.email]),
-      phoneNumber: this.fb.control('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9\+\-\s()]*$/)]), // More flexible phone pattern
+      phoneNumber: this.fb.control('', [Validators.required, phoneNumberValidator]), // More flexible phone pattern
       password: this.fb.control('', [Validators.required, Validators.minLength(8)]),
       confirmPassword: this.fb.control('', [Validators.required]),
       termsAccepted: this.fb.control(false, [Validators.requiredTrue]),
@@ -296,7 +316,46 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   toggleRegisterConfirmPasswordVisibility(): void {
     this.hideRegisterConfirmPassword = !this.hideRegisterConfirmPassword;
   }
+// Method to handle numeric input only for phone number
+  onPhoneNumberInput(event: any): void {
+    const input = event.target;
+    const value = input.value;
+    
+    // Remove any non-digit characters
+    const numericValue = value.replace(/\D/g, '');
+    
+    // Limit to 10 digits
+    const limitedValue = numericValue.slice(0, 10);
+    
+    // Update the form control value
+    this.regPhoneCtrl.setValue(limitedValue);
+    
+    // Update the input element value
+    input.value = limitedValue;
+  }
 
+  // Method to prevent non-numeric key presses
+  onPhoneNumberKeyPress(event: KeyboardEvent): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+    
+    // Allow backspace, delete, tab, escape, enter, and arrow keys
+    if ([8, 9, 27, 13, 46, 37, 38, 39, 40].indexOf(charCode) !== -1 ||
+        // Allow Ctrl+A, Ctrl+C, Ctrl+V, Ctrl+X
+        (charCode === 65 && event.ctrlKey === true) ||
+        (charCode === 67 && event.ctrlKey === true) ||
+        (charCode === 86 && event.ctrlKey === true) ||
+        (charCode === 88 && event.ctrlKey === true)) {
+      return true;
+    }
+    
+    // Ensure that it is a number and stop the keypress
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+      return false;
+    }
+    
+    return true;
+  }
   onSubmitRegister(): void {
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();

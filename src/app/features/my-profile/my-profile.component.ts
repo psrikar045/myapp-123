@@ -2,12 +2,14 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, NgStyle } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
+import { MyPlanComponent } from '../my-plan/my-plan.component';
+import { ChoosePlanComponent } from '../choose-plan/choose-plan.component';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgStyle, HeaderComponent],
+  imports: [CommonModule, FormsModule, NgStyle, HeaderComponent, MyPlanComponent, ChoosePlanComponent],
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.css'
 })
@@ -15,6 +17,7 @@ export class MyProfileComponent {
   sidebarMenu = [
     { label: 'Edit Profile', active: true, disabled: false },
     { label: 'Notifications', active: false, disabled: false },
+    { label: 'My Plan', active: false, disabled: false },
     { label: 'Choose Plan', active: false, disabled: false },
     { label: 'Password & Security', active: false, disabled: false }
   ];
@@ -73,6 +76,14 @@ export class MyProfileComponent {
   }
 
   goToResetPassword() {
-    this.router.navigate(['/forgot-password']);
+    this.router.navigate(['/forgot-password'], { queryParams: { mode: 'profile' } });
+  }
+
+  // Method to handle upgrade button click from my-plan component
+  onUpgradeClicked() {
+    // Set selectedSidebarIndex to 3 to show "Choose Plan" section
+    this.selectedSidebarIndex = 3;
+    // Update sidebar menu active state
+    this.sidebarMenu.forEach((item, i) => item.active = i === 3);
   }
 }

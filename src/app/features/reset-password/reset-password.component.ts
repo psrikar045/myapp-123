@@ -7,7 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule,ActivatedRoute } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription, catchError, of, tap, interval } from 'rxjs';
 import { takeWhile, debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -86,13 +86,17 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   emailForm!: FormGroup<{ email: FormControl<string> }>;
   codeForm!: FormGroup<{ code: FormControl<string> }>;
   passwordForm!: FormGroup<{ newPassword: FormControl<string>; confirmPassword: FormControl<string> }>;
-
+  profilePasswordForm!: FormGroup<{ 
+    email: FormControl<string>; 
+    currentPassword: FormControl<string>; 
+  }>;
   hideNewPassword = true;
   hideConfirmPassword = true;
+  hideCurrentPassword = true;
   isLoading = false;
   carouselImage: string = '';
   buttonState: 'normal' | 'loading' = 'normal';
-  
+  mode:'login' | 'profile' = 'login'
   // Success message state
   showSuccessMessage = false;
   
@@ -108,10 +112,12 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   timerWarning = false;
   private timerSubscription?: Subscription;
   private passwordSubscription?: Subscription;
-
+  private submitTimeoutId?: number;
+  private apiSubscription?: Subscription;
   // Injected services
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly snackBar = inject(MatSnackBar);
@@ -137,6 +143,11 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // Get mode from route query parameters
+    this.route.queryParams.subscribe(params => {
+      this.mode = params['mode'] === 'profile' ? 'profile' : 'login';
+      this.cdr.markForCheck();
+    });
     this.emailForm = this.fb.group({
       email: this.fb.control('', [Validators.required, Validators.email]),
     });
@@ -158,7 +169,11 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       this.checkPasswordStrength(password);
       this.cdr.markForCheck();
     });
-
+// Profile mode form
+    this.profilePasswordForm = this.fb.group({
+      email: this.fb.control('', [Validators.required, Validators.email]),
+      currentPassword: this.fb.control('', [Validators.required]),
+    });
     this.updateCarouselImage();
 
     this.themeSubscription = this.themeService.isDarkMode$.subscribe(isDark => {
@@ -210,18 +225,71 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   toggleConfirmPasswordVisibility(): void {
     this.hideConfirmPassword = !this.hideConfirmPassword;
   }
-
-  back(step: number): void {
+  toggleCurrentPasswordVisibility(): void {
+    this.hideCurrentPassword = !this.hideCurrentPassword;
+  }
+ back(step: number): void {
+    // Clear any pending operations when going back
+    this.clearPendingOperations();
+    
+    // Reset loading state
+    this.isLoading = false;
+    this.buttonState = 'normal';
+    
+    // Reset success message
+    this.showSuccessMessage = false;
+    
+    // Update step and image
     this.currentStep = step;
     this.updateCarouselImage();
+    
+    // Stop timer if going back from step 2
+    if (step < 2) {
+      this.stopCodeExpiryTimer();
+    }
+    
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Clears any pending operations (timeouts, subscriptions)
+   */
+  private clearPendingOperations(): void {
+    // Clear setTimeout if it exists
+    if (this.submitTimeoutId) {
+      clearTimeout(this.submitTimeoutId);
+      this.submitTimeoutId = undefined;
+    }
+    
+    // Unsubscribe from any pending API calls
+    if (this.apiSubscription) {
+      this.apiSubscription.unsubscribe();
+      this.apiSubscription = undefined;
+    }
   }
 
   cancel(): void {
-    this.router.navigate(['/login']);
+    // Clean up any pending operations before navigating away
+    this.clearPendingOperations();
+    this.stopCodeExpiryTimer();
+    
+    if (this.mode === 'profile') {
+      this.router.navigate(['/my-profile']);
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   backToLogin(): void {
-    this.router.navigate(['/login']);
+    // Clean up any pending operations before navigating away
+    this.clearPendingOperations();
+    this.stopCodeExpiryTimer();
+    
+    if (this.mode === 'profile') {
+      this.router.navigate(['/my-profile']);
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
 
   /**
@@ -289,34 +357,44 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       this.updateCarouselImage();
       return;
     }
-    
+    this.clearPendingOperations();
     this.isLoading = true;
     this.buttonState = 'loading';
     
     // Simulate API call
-    setTimeout(() => {
-      this.isLoading = false;
-      this.buttonState = 'normal';
-      this.startCodeExpiryTimer(); // Reset the timer
-      this.snackBar.open('New verification code sent to your email.', 'Close', { duration: 5000 });
-      this.cdr.markForCheck();
+   this.submitTimeoutId = window.setTimeout(() => {
+      // Only proceed if we're still on step 2 (user hasn't navigated away)
+      if (this.currentStep === 2) {
+        this.isLoading = false;
+        this.buttonState = 'normal';
+        this.startCodeExpiryTimer(); // Reset the timer
+        this.snackBar.open('New verification code sent to your email.', 'Close', { duration: 5000 });
+        this.cdr.markForCheck();
+      }
+      this.submitTimeoutId = undefined;
     }, 1000);
     
-    // Actual API call (commented out)
-    this.authService.sendPasswordResetCode(this.emailForm.value.email!)
+    // Actual API call
+    this.apiSubscription = this.authService.sendPasswordResetCode(this.emailForm.value.email!)
       .pipe(
         tap(() => {
-          this.isLoading = false;
-          this.buttonState = 'normal';
-          this.startCodeExpiryTimer(); // Reset the timer
-          this.snackBar.open('New verification code sent to your email.', 'Close', { duration: 5000 });
-          this.cdr.markForCheck();
+          // Only proceed if we're still on step 2 (user hasn't navigated away)
+          if (this.currentStep === 2) {
+            this.isLoading = false;
+            this.buttonState = 'normal';
+            this.startCodeExpiryTimer(); // Reset the timer
+            this.snackBar.open('New verification code sent to your email.', 'Close', { duration: 5000 });
+            this.cdr.markForCheck();
+          }
         }),
         catchError(error => {
-          this.isLoading = false;
-          this.buttonState = 'normal';
-          this.snackBar.open(error.message || 'Failed to send verification code. Please try again.', 'Close', { duration: 7000 });
-          this.cdr.markForCheck();
+          // Only show error if we're still on step 2
+          if (this.currentStep === 2) {
+            this.isLoading = false;
+            this.buttonState = 'normal';
+            this.snackBar.open(error.message || 'Failed to send verification code. Please try again.', 'Close', { duration: 7000 });
+            this.cdr.markForCheck();
+          }
           return of(null);
         })
       ).subscribe();
@@ -327,46 +405,126 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       this.emailForm.markAllAsTouched();
       return;
     }
+    
+    // Clear any existing pending operations before starting new ones
+    this.clearPendingOperations();
+    
     this.isLoading = true;
     this.buttonState = 'loading';
     this.showSuccessMessage = false;
     
-    setTimeout(() => {
-      this.isLoading = false;
-      this.buttonState = 'normal';
-      this.currentStep = 2;
-      this.updateCarouselImage();
-      this.showSuccessMessage = true;
-      this.startCodeExpiryTimer(); // Start the countdown timer
-      this.cdr.markForCheck();
+    // Store the timeout ID so we can clear it if needed
+    this.submitTimeoutId = window.setTimeout(() => {
+      // Only proceed if we're still on step 1 (user hasn't navigated back)
+      if (this.currentStep === 1) {
+        this.isLoading = false;
+        this.buttonState = 'normal';
+        this.currentStep = 2;
+        this.updateCarouselImage();
+        this.showSuccessMessage = true;
+        this.startCodeExpiryTimer(); // Start the countdown timer
+        this.cdr.markForCheck();
+      }
+      this.submitTimeoutId = undefined;
     }, 1000); // Simulate network delay
     
-    this.authService.sendPasswordResetCode(this.emailForm.value.email!)
+    this.apiSubscription = this.authService.forgotPassword(this.emailForm.value.email!)
       .pipe(
         tap(() => {
-          this.isLoading = false;
-          this.buttonState = 'normal';
-          this.currentStep = 2;
-          this.updateCarouselImage();
-          this.showSuccessMessage = true;
-          this.startCodeExpiryTimer(); // Start the countdown timer
-          this.cdr.markForCheck();
+          // Only proceed if we're still on step 1 (user hasn't navigated back)
+          if (this.currentStep === 1) {
+            this.isLoading = false;
+            this.buttonState = 'normal';
+            this.currentStep = 2;
+            this.updateCarouselImage();
+            this.showSuccessMessage = true;
+            this.startCodeExpiryTimer(); // Start the countdown timer
+            this.cdr.markForCheck();
+          }
         }),
         catchError(error => {
-          this.isLoading = false;
-          this.buttonState = 'normal';
-          this.snackBar.open(error.message || 'Failed to send verification code. Please try again.', 'Close', { duration: 7000 });
-          this.cdr.markForCheck();
+          // Only show error if we're still on step 1
+          if (this.currentStep === 1) {
+            this.isLoading = false;
+            this.buttonState = 'normal';
+            this.snackBar.open(error.message || 'Failed to send verification code. Please try again.', 'Close', { duration: 7000 });
+            this.cdr.markForCheck();
+          }
           return of(null); // Prevent error from propagating further if handled
         })
       ).subscribe();
   }
-
+ // Profile mode form submission
+  onSubmitProfilePassword(): void {
+    if (this.profilePasswordForm.invalid) {
+      this.profilePasswordForm.markAllAsTouched();
+      return;
+    }
+    
+    // Clear any existing pending operations before starting new ones
+    this.clearPendingOperations();
+    
+    this.isLoading = true;
+    this.buttonState = 'loading';
+    this.showSuccessMessage = false;
+    
+    const { email, currentPassword } = this.profilePasswordForm.value;
+    
+    // Copy email to emailForm for consistency in step 2
+    this.emailForm.patchValue({ email: email! });
+    
+    // Store the timeout ID so we can clear it if needed
+    this.submitTimeoutId = window.setTimeout(() => {
+      // Only proceed if we're still on step 1 (user hasn't navigated back)
+      if (this.currentStep === 1) {
+        this.isLoading = false;
+        this.buttonState = 'normal';
+        this.currentStep = 2;
+        this.updateCarouselImage();
+        this.showSuccessMessage = true;
+        this.startCodeExpiryTimer(); // Start the countdown timer
+        this.cdr.markForCheck();
+      }
+      this.submitTimeoutId = undefined;
+    }, 1000); // Simulate network delay
+    
+    // TODO: Implement actual API call for profile password change
+    // This would typically verify the current password and send a code
+    console.log('Profile password change initiated:', { email, currentPassword });
+    
+    // For now, using the same forgot password API
+    this.apiSubscription = this.authService.forgotPassword(email!)
+      .pipe(
+        tap(() => {
+          // Only proceed if we're still on step 1 (user hasn't navigated back)
+          if (this.currentStep === 1) {
+            this.isLoading = false;
+            this.buttonState = 'normal';
+            this.currentStep = 2;
+            this.updateCarouselImage();
+            this.showSuccessMessage = true;
+            this.startCodeExpiryTimer(); // Start the countdown timer
+            this.cdr.markForCheck();
+          }
+        }),
+        catchError(error => {
+          // Only show error if we're still on step 1
+          if (this.currentStep === 1) {
+            this.isLoading = false;
+            this.buttonState = 'normal';
+            this.snackBar.open(error.message || 'Failed to send verification code. Please try again.', 'Close', { duration: 7000 });
+            this.cdr.markForCheck();
+          }
+          return of(null);
+        })
+      ).subscribe();
+  }
   onSubmitCode(): void {
     if (this.codeForm.invalid) {
       this.codeForm.markAllAsTouched();
       return;
     }
+    this.clearPendingOperations();
     this.isLoading = true;
     this.buttonState = 'loading';
     
@@ -382,36 +540,46 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         return;
     }
     
-    setTimeout(() => {
-      this.isLoading = false;
-      this.buttonState = 'normal';
-      this.currentStep = 3;
-      this.updateCarouselImage();
-      this.stopCodeExpiryTimer(); // Stop the timer when code is verified
-      this.snackBar.open('Code verified. Please set your new password.', 'Close', { duration: 5000 });
-      this.cdr.markForCheck();
+    this.submitTimeoutId = window.setTimeout(() => {
+      // Only proceed if we're still on step 2 (user hasn't navigated back)
+      if (this.currentStep === 2) {
+        this.isLoading = false;
+        this.buttonState = 'normal';
+        this.currentStep = 3;
+        this.updateCarouselImage();
+        this.stopCodeExpiryTimer(); // Stop the timer when code is verified
+        this.snackBar.open('Code verified. Please set your new password.', 'Close', { duration: 5000 });
+        this.cdr.markForCheck();
+      }
+      this.submitTimeoutId = undefined;
     }, 1000); // Simulate network delay
     
-    this.authService.verifyPasswordResetCode(email, this.codeForm.value.code!)
+    this.apiSubscription = this.authService.verifyPasswordResetCode(email, this.codeForm.value.code!)
       .pipe(
         tap(() => {
-          this.isLoading = false;
-          this.buttonState = 'normal';
-          this.currentStep = 3;
-          this.updateCarouselImage();
-          this.stopCodeExpiryTimer(); // Stop the timer when code is verified
-          this.snackBar.open('Code verified. Please set your new password.', 'Close', { duration: 5000 });
-          this.cdr.markForCheck();
+          // Only proceed if we're still on step 2 (user hasn't navigated back)
+          if (this.currentStep === 2) {
+            this.isLoading = false;
+            this.buttonState = 'normal';
+            this.currentStep = 3;
+            this.updateCarouselImage();
+            this.stopCodeExpiryTimer(); // Stop the timer when code is verified
+            this.snackBar.open('Code verified. Please set your new password.', 'Close', { duration: 5000 });
+            this.cdr.markForCheck();
+          }
         }),
         catchError(error => {
-          this.isLoading = false;
-          this.buttonState = 'normal';
-          this.snackBar.open(error.message || 'Invalid or expired code. Please try again.', 'Close', { duration: 7000 });
-          this.cdr.markForCheck();
+          // Only show error if we're still on step 2
+          if (this.currentStep === 2) {
+            this.isLoading = false;
+            this.buttonState = 'normal';
+            this.snackBar.open(error.message || 'Invalid or expired code. Please try again.', 'Close', { duration: 7000 });
+            this.cdr.markForCheck();
+          }
           return of(null);
         })
       ).subscribe((response: any) => {
-        if (response) {
+        if (response && this.currentStep === 2) {
           this.authService.userDetails = {
             userId: response?.userId,
             email: response?.email,
@@ -429,6 +597,10 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       this.cdr.markForCheck();
       return;
     }
+    
+    // Clear any existing pending operations before starting new ones
+    this.clearPendingOperations();
+    
     this.isLoading = true;
     this.buttonState = 'loading';
     const email = this.emailForm.value.email;
@@ -444,28 +616,49 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         return;
     }
     
-    setTimeout(() => {
-      this.isLoading = false;
-      this.buttonState = 'normal';
-      this.snackBar.open('Password successfully reset. Please login.', 'Close', { duration: 5000 });
-      this.router.navigate(['/login']);
-      this.cdr.markForCheck();
-    }, 1000); // Simulate network delay
-    
-    this.authService.setNewPassword(this.authService.userDetails?.userId, email, code, this.passwordForm.value.newPassword!)
-      .pipe(
-        tap(() => {
-          this.isLoading = false;
-    //       this.buttonState = 'normal';
+    // Store the timeout ID so we can clear it if needed
+    this.submitTimeoutId = window.setTimeout(() => {
+      // Only proceed if we're still on step 3 (user hasn't navigated back)
+      if (this.currentStep === 3) {
+        this.isLoading = false;
+        this.buttonState = 'normal';
+        if (this.mode === 'profile') {
+          this.snackBar.open('Password successfully changed.', 'Close', { duration: 5000 });
+          this.router.navigate(['/my-profile']);
+        } else {
           this.snackBar.open('Password successfully reset. Please login.', 'Close', { duration: 5000 });
           this.router.navigate(['/login']);
-          this.cdr.markForCheck();
+        }
+        this.cdr.markForCheck();
+      }
+      this.submitTimeoutId = undefined;
+    }, 1000); // Simulate network delay
+    
+    this.apiSubscription = this.authService.setNewPassword(this.authService.userDetails?.userId, email, code, this.passwordForm.value.newPassword!)
+      .pipe(
+        tap(() => {
+          // Only proceed if we're still on step 3 (user hasn't navigated back)
+          if (this.currentStep === 3) {
+            this.isLoading = false;
+            this.buttonState = 'normal';
+            if (this.mode === 'profile') {
+              this.snackBar.open('Password successfully changed.', 'Close', { duration: 5000 });
+              this.router.navigate(['/my-profile']);
+            } else {
+              this.snackBar.open('Password successfully reset. Please login.', 'Close', { duration: 5000 });
+              this.router.navigate(['/login']);
+            }
+            this.cdr.markForCheck();
+          }
         }),
         catchError(error => {
-          this.isLoading = false;
-    //       this.buttonState = 'normal';
-          this.snackBar.open(error.message || 'Failed to reset password. Please try again.', 'Close', { duration: 7000 });
-          this.cdr.markForCheck();
+          // Only show error if we're still on step 3
+          if (this.currentStep === 3) {
+            this.isLoading = false;
+            this.buttonState = 'normal';
+            this.snackBar.open(error.message || 'Failed to reset password. Please try again.', 'Close', { duration: 7000 });
+            this.cdr.markForCheck();
+          }
           return of(null);
         })
       ).subscribe();
@@ -502,6 +695,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       clearInterval(this.carouselIntervalId);
     }
     this.stopCodeExpiryTimer(); // Clean up timer subscription
+    this.clearPendingOperations();
   }
 
   // Getter for easier access in template, if needed
@@ -509,5 +703,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   get codeControl() { return this.codeForm.get('code'); }
   get newPasswordControl() { return this.passwordForm.get('newPassword'); }
   get confirmPasswordControl() { return this.passwordForm.get('confirmPassword'); }
-
+// Profile mode getters
+  get profileEmailControl() { return this.profilePasswordForm.get('email'); }
+  get profileCurrentPasswordControl() { return this.profilePasswordForm.get('currentPassword'); }
 }

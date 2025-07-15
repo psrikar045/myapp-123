@@ -91,18 +91,30 @@
                   Email is required.
                 </mat-error>
                 <mat-error *ngIf="regEmailCtrl.hasError('email') && !regEmailCtrl.hasError('required')" i18n="@@emailInvalidErrorRegister">
-                  Please enter a valid email address.
+                  Please enter a valid email.
                 </mat-error>
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="half-width">
                 <mat-label i18n="@@phoneNumberLabel">Phone Number</mat-label>
-                <input matInput type="tel" formControlName="phoneNumber" placeholder="e.g., 1234567890" i18n-placeholder="@@phonePlaceholder" autocomplete="off" required>
+                <input matInput 
+                       type="tel" 
+                       formControlName="phoneNumber" 
+                       placeholder="e.g., 1234567890" 
+                       i18n-placeholder="@@phonePlaceholder" 
+                       autocomplete="off" 
+                       required
+                       maxlength="10"
+                       (input)="onPhoneNumberInput($event)"
+                       (keypress)="onPhoneNumberKeyPress($event)">
                 <mat-error *ngIf="regPhoneCtrl.hasError('required')" i18n="@@phoneRequiredError">
                   Phone number is required.
                 </mat-error>
-                <mat-error *ngIf="regPhoneCtrl.hasError('pattern') && !regPhoneCtrl.hasError('required')" i18n="@@phonePatternError">
-                  Please enter a valid phone number.
+                <mat-error *ngIf="regPhoneCtrl.hasError('numericOnly') && !regPhoneCtrl.hasError('required')" i18n="@@phoneNumericOnlyError">
+                  Enter only numbers.
+                </mat-error>
+                <mat-error *ngIf="regPhoneCtrl.hasError('exactLength') && !regPhoneCtrl.hasError('required') && !regPhoneCtrl.hasError('numericOnly')" i18n="@@phoneExactLengthError">
+                  Phone number must be 10 digits.
                 </mat-error>
               </mat-form-field>
             </div>

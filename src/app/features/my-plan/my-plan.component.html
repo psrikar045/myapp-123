@@ -1,0 +1,107 @@
+<!-- Horizontal Plan Cards Container -->
+<div class="plans-grid">
+  <div *ngFor="let plan of plans; trackBy: trackByPlanId" 
+       class="plan-card"
+       [class.current-plan]="plan.isCurrentPlan"
+       [class.selected-plan]="selectedPlan?.id === plan.id"
+       [class.low-tokens]="plan.isCurrentPlan && getTokenLevel(plan) === 'low'"
+       (click)="onPlanSelect(plan)">
+    
+    <div class="plan-header">
+      <h3 class="plan-title">{{ plan.title }}</h3>
+      <div class="plan-price">{{ plan.price }}</div>
+      <button *ngIf="plan.showDismissButton" 
+              class="plan-dismiss-btn"
+              (click)="onDismissProgress(plan.id); $event.stopPropagation()"
+              type="button"
+              aria-label="Dismiss">
+        ✖
+      </button>
+    </div>
+    
+    <div class="plan-content">
+      <div class="progress-info">
+        <span class="progress-label">{{ plan.progress.label }}</span>
+        <span class="progress-value">
+          {{ plan.progress.current | number:'1.0-0' }}/{{ plan.progress.max | number:'1.0-0' }}
+          <span *ngIf="plan.progress.unit" class="progress-unit">{{ plan.progress.unit }}</span>
+        </span>
+      </div>
+      
+      <div class="progress-bar-container">
+        <div class="progress-bar">
+          <div class="progress-bar-fill" 
+               [style.width.%]="getProgressPercentage(plan)"
+               [class.low-tokens]="getProgressPercentage(plan) < 20"
+               [class.medium-tokens]="getProgressPercentage(plan) >= 20 && getProgressPercentage(plan) < 50"
+               [class.high-tokens]="getProgressPercentage(plan) >= 50">
+          </div>
+        </div>
+      </div>
+      
+      <div class="progress-details">
+        <div class="progress-percentage"
+             [class.low-tokens]="getProgressPercentage(plan) < 20"
+             [class.medium-tokens]="getProgressPercentage(plan) >= 20 && getProgressPercentage(plan) < 50"
+             [class.high-tokens]="getProgressPercentage(plan) >= 50">
+          {{ getProgressPercentage(plan) | number:'1.0-0' }}% remaining
+        </div>
+        <div class="tokens-consumed">
+          {{ (plan.progress.max - plan.progress.current) | number:'1.0-0' }} tokens used
+        </div>
+      </div>
+      
+      <div *ngIf="plan.showUpgradeButton" class="upgrade-button-container">
+        <button class="upgrade-btn"
+                (click)="onUpgradeClick(plan); $event.stopPropagation()"
+                type="button">
+          {{ plan.upgradeText }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Plan Details Section -->
+<div *ngIf="selectedPlan" class="plan-details-section">
+  <div class="plan-details-container">
+    <div class="plan-details-header">
+      <h2 class="plan-details-title">{{ selectedPlan.title }} Plan Details</h2>
+      <span class="plan-details-price">{{ selectedPlan.price }}</span>
+    </div>
+    
+    <div class="plan-details-content">
+      <div class="plan-description">
+        <p>{{ selectedPlan.description }}</p>
+      </div>
+      
+      <div class="plan-features">
+        <h3 class="features-title">Features Included:</h3>
+        <ul class="features-list">
+          <li *ngFor="let feature of selectedPlan.features" class="feature-item">
+            <span class="feature-icon">✓</span>
+            {{ feature }}
+          </li>
+        </ul>
+      </div>
+      
+      <div class="plan-usage-summary">
+        <h3 class="usage-title">Current Usage:</h3>
+        <div class="usage-stats">
+          <div class="usage-stat">
+            <span class="stat-label">Tokens Used:</span>
+            <span class="stat-value">{{ (selectedPlan.progress.max - selectedPlan.progress.current) | number:'1.0-0' }}</span>
+          </div>
+          <div class="usage-stat">
+            <span class="stat-label">Tokens Remaining:</span>
+            <span class="stat-value">{{ selectedPlan.progress.current | number:'1.0-0' }}</span>
+          </div>
+          <div class="usage-stat">
+            <span class="stat-label">Total Tokens:</span>
+            <span class="stat-value">{{ selectedPlan.progress.max | number:'1.0-0' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

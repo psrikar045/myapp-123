@@ -1,0 +1,149 @@
+<div class="choose-plan-container">
+  <!-- Header Section -->
+  <div class="choose-plan-header">
+    <h1 class="choose-plan-title">Choose Your Plan</h1>
+    <p class="choose-plan-subtitle">Select the plan that best fits your needs</p>
+    
+    <!-- Current Plan Status -->
+    <div class="current-plan-status">
+      <span class="current-plan-label">Current Plan:</span>
+      <span class="current-plan-name">{{ currentUserRoleDisplay }}</span>
+    </div>
+  </div>
+
+  <!-- Billing Cycle Toggle -->
+  <div class="billing-toggle-container">
+    <div class="billing-toggle">
+      <span class="billing-label" [class.active]="billingCycle === 'monthly'">Monthly</span>
+      <div class="toggle-switch" (click)="toggleBillingCycle()">
+        <div class="toggle-slider" [class.yearly]="billingCycle === 'yearly'"></div>
+      </div>
+      <span class="billing-label" [class.active]="billingCycle === 'yearly'">
+        Yearly
+        <span class="discount-badge" *ngIf="billingCycle === 'yearly'">Save 16%</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Plans Container -->
+  <div class="plans-container" *ngIf="visiblePlans.length > 0">
+    <div class="plans-grid">
+      <div *ngFor="let plan of visiblePlans" 
+           class="plan-card"
+           [class.popular]="plan.popular">
+        
+        <!-- Popular Badge -->
+        <div class="popular-badge" *ngIf="plan.popular">
+          <span>Most Popular</span>
+        </div>
+
+        <!-- Plan Header -->
+        <div class="plan-header">
+          <h2 class="plan-title">{{ plan.title }}</h2>
+          <div class="plan-pricing">
+            <span class="plan-price">
+              ${{ getCurrentPrice(plan) }}
+            </span>
+            <span class="plan-period">
+              /{{ billingCycle }}
+            </span>
+          </div>
+          <div class="plan-price-details" *ngIf="billingCycle === 'yearly'">
+            <span class="monthly-equivalent">
+              ${{ getMonthlyEquivalent(plan) }}/month
+            </span>
+            <span class="discount-text">
+              ({{ getYearlyDiscount(plan) }}% off)
+            </span>
+          </div>
+        </div>
+
+        <!-- Plan Features -->
+        <div class="plan-features">
+          <h3 class="features-title">What's included:</h3>
+          <ul class="features-list">
+            <li *ngFor="let feature of plan.features" class="feature-item">
+              <span class="feature-icon">✓</span>
+              <span class="feature-text">{{ feature }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Plan Button -->
+        <div class="plan-button-container">
+          <button class="plan-button" 
+                  [class.upgrade-button]="plan.buttonAction === 'upgrade'"
+                  [class.downgrade-button]="plan.buttonAction === 'downgrade'"
+                  (click)="onPlanSelect(plan)">
+            {{ plan.buttonText }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Premium User Message -->
+  <div class="premium-user-message" *ngIf="isOnHighestPlan">
+    <div class="premium-message-card">
+      <div class="premium-message-icon">
+        <span>👑</span>
+      </div>
+      <div class="premium-message-content">
+        <h2 class="premium-message-title">You're on the highest plan!</h2>
+        <p class="premium-message-text">
+          You are already on the Premium plan with all features unlocked.
+        </p>
+        <p class="premium-message-subtext">
+          Are you trying to downgrade? Contact our support team for assistance.
+        </p>
+        <div class="premium-message-actions">
+          <button class="contact-support-button">
+            Contact Support
+          </button>
+          <button class="manage-billing-button">
+            Manage Billing
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Plan Comparison Footer -->
+  <div class="plan-comparison-footer" *ngIf="visiblePlans.length > 0">
+    <div class="comparison-note">
+      <p>All plans include:</p>
+      <ul>
+        <li>SSL security</li>
+        <li>99.9% uptime guarantee</li>
+        <li>Money-back guarantee</li>
+        <li>Cancel anytime</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Developer Testing Section (Remove in production) -->
+  <div class="developer-testing-section">
+    <h3>Developer Testing - User Role Simulation</h3>
+    <p>Current User Role: <strong>{{ currentUserRoleDisplay }}</strong></p>
+    <div class="role-buttons">
+      <button 
+        class="role-test-button" 
+        [class.active]="currentUserRole === 'free'"
+        (click)="changeUserRole('free')">
+        Test Free User
+      </button>
+      <button 
+        class="role-test-button" 
+        [class.active]="currentUserRole === 'pro'"
+        (click)="changeUserRole('pro')">
+        Test Pro User
+      </button>
+      <button 
+        class="role-test-button" 
+        [class.active]="currentUserRole === 'premium'"
+        (click)="changeUserRole('premium')">
+        Test Premium User
+      </button>
+    </div>
+  </div>
+</div>

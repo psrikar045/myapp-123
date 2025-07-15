@@ -1,0 +1,477 @@
+/* Plans Grid Container */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+/* Individual Plan Card */
+.plan-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(37,99,235,0.06);
+  padding: 24px;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.plan-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 24px rgba(37,99,235,0.12);
+}
+
+.plan-card.current-plan {
+  border-color: #2563eb;
+  background: #fafbff;
+  box-shadow: 0 4px 24px rgba(37,99,235,0.12);
+}
+
+.plan-card.selected-plan {
+  border-color: #10b981;
+  background: #f0fdf4;
+  box-shadow: 0 4px 24px rgba(16,185,129,0.15);
+}
+
+.plan-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.plan-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #183153;
+  margin: 0;
+  flex: 1;
+}
+
+.plan-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #10b981;
+  margin-left: 12px;
+}
+
+.plan-card.current-plan .plan-title {
+  color: #2563eb;
+}
+
+.plan-card.selected-plan .plan-title {
+  color: #10b981;
+}
+
+.plan-dismiss-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+  line-height: 1;
+}
+
+.plan-dismiss-btn:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.plan-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.progress-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.progress-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #374151;
+  margin-right: 24px;
+}
+
+.progress-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #183153;
+  padding-left: 16px;
+  white-space: nowrap;
+}
+
+.progress-unit {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #6b7280;
+  margin-left: 2px;
+}
+
+.progress-bar-container {
+  position: relative;
+  width: 100%;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 50px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+  border-radius: 50px;
+  transition: width 0.3s ease;
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.3);
+}
+
+/* Token level indicators */
+.progress-bar-fill.low-tokens {
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+  box-shadow: 0 1px 3px rgba(239, 68, 68, 0.3);
+}
+
+.progress-bar-fill.medium-tokens {
+  background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+  box-shadow: 0 1px 3px rgba(245, 158, 11, 0.3);
+}
+
+.progress-bar-fill.high-tokens {
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 1px 3px rgba(16, 185, 129, 0.3);
+}
+
+.progress-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.progress-percentage {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #059669;
+}
+
+.tokens-consumed {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* Upgrade Button */
+.upgrade-button-container {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.upgrade-btn {
+  background: linear-gradient(90deg, #2563eb 0%, #377dff 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+  min-width: 160px;
+}
+
+.upgrade-btn:hover {
+  background: linear-gradient(90deg, #1d4ed8 0%, #2563eb 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+}
+
+.upgrade-btn:active {
+  transform: translateY(0);
+}
+
+/* Current Plan Badge */
+.plan-card.current-plan::before {
+  content: "Current Plan";
+  position: absolute;
+  top: -8px;
+  left: 16px;
+  background: #2563eb;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  z-index: 1;
+}
+
+/* Selected Plan Badge */
+.plan-card.selected-plan::after {
+  content: "Selected";
+  position: absolute;
+  top: -8px;
+  right: 16px;
+  background: #10b981;
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  z-index: 1;
+}
+
+.plan-card {
+  position: relative;
+}
+
+/* Low token warning */
+.plan-card.current-plan.low-tokens {
+  border-color: #ef4444;
+  background: #fef2f2;
+  box-shadow: 0 4px 24px rgba(239, 68, 68, 0.12);
+}
+
+.plan-card.current-plan.low-tokens .plan-title {
+  color: #ef4444;
+}
+
+.plan-card.current-plan.low-tokens::before {
+  content: "Low Tokens";
+  background: #ef4444;
+}
+
+/* AI Token specific styling */
+.progress-unit {
+  color: #059669;
+  font-weight: 500;
+}
+
+.progress-value {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
+}
+
+/* Token level specific percentage colors */
+.progress-percentage.low-tokens {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.progress-percentage.medium-tokens {
+  color: #f59e0b;
+  font-weight: 600;
+}
+
+.progress-percentage.high-tokens {
+  color: #059669;
+  font-weight: 600;
+}
+
+/* Plan Details Section */
+.plan-details-section {
+  margin-top: 40px;
+  padding: 32px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(37,99,235,0.06);
+  border: 2px solid #e5e7eb;
+}
+
+.plan-details-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.plan-details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.plan-details-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #183153;
+  margin: 0;
+}
+
+.plan-details-price {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.plan-details-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+.plan-description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #374151;
+}
+
+.plan-features {
+  background: #f8fafc;
+  padding: 24px;
+  border-radius: 12px;
+  border-left: 4px solid #10b981;
+}
+
+.features-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #183153;
+  margin: 0 0 16px 0;
+}
+
+.features-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 1rem;
+  color: #374151;
+}
+
+.feature-icon {
+  color: #10b981;
+  font-weight: bold;
+  margin-right: 12px;
+  font-size: 1.1rem;
+}
+
+.plan-usage-summary {
+  background: #fafbff;
+  padding: 24px;
+  border-radius: 12px;
+  border-left: 4px solid #2563eb;
+}
+
+.usage-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #183153;
+  margin: 0 0 16px 0;
+}
+
+.usage-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+
+.usage-stat {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2563eb;
+  font-family: 'Courier New', monospace;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .plans-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .plan-card {
+    padding: 20px;
+  }
+  
+  .plan-title {
+    font-size: 1.2rem;
+  }
+  
+  .plan-price {
+    font-size: 1rem;
+  }
+  
+  .progress-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .progress-label {
+    margin-right: 0;
+  }
+  
+  .progress-value {
+    padding-left: 0;
+  }
+  
+  .upgrade-btn {
+    padding: 10px 24px;
+    font-size: 0.9rem;
+    min-width: 140px;
+  }
+  
+  .plan-details-section {
+    margin-top: 24px;
+    padding: 20px;
+  }
+  
+  .plan-details-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .plan-details-title {
+    font-size: 1.5rem;
+  }
+  
+  .plan-details-price {
+    font-size: 1.2rem;
+  }
+  
+  .usage-stats {
+    grid-template-columns: 1fr;
+  }
+}
