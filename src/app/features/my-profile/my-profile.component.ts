@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, NgStyle } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { MyPlanComponent } from '../my-plan/my-plan.component';
 import { ChoosePlanComponent } from '../choose-plan/choose-plan.component';
 import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-my-profile',
@@ -13,7 +14,7 @@ import { Router } from '@angular/router';
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.css'
 })
-export class MyProfileComponent {
+export class MyProfileComponent implements OnInit {
   sidebarMenu = [
     { label: 'Edit Profile', active: true, disabled: false },
     { label: 'Notifications', active: false, disabled: false },
@@ -21,10 +22,42 @@ export class MyProfileComponent {
     { label: 'Choose Plan', active: false, disabled: false },
     { label: 'Password & Security', active: false, disabled: false }
   ];
-
+userProfile: any;
   selectedSidebarIndex = 0;
+private readonly authService = inject(AuthService);
 
   constructor(private router: Router) {}
+  ngOnInit(): void {
+    this.fetchUserProfile();
+  }
+
+  fetchUserProfile() {
+    this.authService.userProfileFetch().subscribe({
+      next: (response: any) => {
+        console.log('User profile fetched successfully:');
+        this.userProfile = response;
+        this.profile.avatar = response.profilePictureUrl || '/landing/user.jfif';
+        this.profile.name= response.firstName + ' ' + response.lastName || 'User';
+        this.profileForm.firstName = response.firstName || '';
+        this.profileForm.surname = response.lastName || '';
+        this.profileForm.nationalCode = response.futureI1 || '';
+        this.profileForm.dob = response.futureT1 || '';
+        this.profileForm.educationLevel = response.futureV1 || '';
+        this.profileForm.email = response.email || '';
+        this.profileForm.phoneCountry = response.futureV2 || '+91';
+        this.profileForm.phoneNumber = response.phoneNumber || '';
+        this.profileForm.country = response.futureV3 || '';
+        this.profileForm.city = response.futureV4 || '';
+        this.profileForm.updatedAt = response.updatedAt || new Date().toISOString();
+        this.profileForm.username = response.username || '';
+        this.profileForm.emailVerified = response.emailVerified || false;
+        this.profileForm.authProvider = response.authProvider || '';
+      },
+      error: (error: any) => {
+        console.error('Error fetching user profile:', error);
+      }
+    });
+  }
 
   onSidebarSelect(index: number) {
     this.sidebarMenu.forEach((item, i) => item.active = i === index);
@@ -44,10 +77,14 @@ export class MyProfileComponent {
     dob: '',
     educationLevel: 'software',
     email: '',
-    phoneCountry: '+98',
+    phoneCountry: '+91',
     phoneNumber: '',
     country: '',
-    city: 'software'
+    city: 'software',
+    updatedAt: new Date().toISOString(),
+    username:'',
+    emailVerified: false,
+    authProvider: '',
   };
 
   educationLevels = [
@@ -70,9 +107,10 @@ export class MyProfileComponent {
   ];
 
   onSave() {
-    // Save logic here (e.g., show a message or log the form)
+    const data = this.profileForm;
+
     alert('Profile saved!');
-    console.log(this.profileForm);
+    console.log(data);
   }
 
   goToResetPassword() {

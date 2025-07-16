@@ -475,6 +475,12 @@ export class UserAuthService {
     }
     return null;
   }
+  private getUserDetails(): any {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return JSON.parse(localStorage.getItem('user_details') || '{}');
+    }
+    return null;
+  }
 
   /**
    * Handle HTTP errors
@@ -513,6 +519,16 @@ export class UserAuthService {
    */
   getCategories(): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/api/category/hierarchy`, {})
+      .pipe(catchError(this.handleError));
+  }
+  getUserProfile(): Observable<any> {
+    const userId = this.getUserDetails()?.userId; // Assuming the token contains user ID
+    const data = { id: userId };
+        let jwtToken: any = this.getAuthToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${jwtToken}`,
+    });
+    return this.http.post<any>(`${this.baseUrl}/api/users/get-by-id`, data, { headers })
       .pipe(catchError(this.handleError));
   }
 }

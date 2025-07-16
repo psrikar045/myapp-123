@@ -664,4 +664,10 @@ private hasValidToken(): boolean {
       catchError(this.handleError)
     );
   }
+  userProfileFetch(): Observable<any> {
+    return this.userAuthService.getUserProfile().pipe(
+      tap((response:any) => console.log('User profile fetched successfully.',response)),
+      catchError(this.handleError)
+    );
+  }
 }
