@@ -658,4 +658,10 @@ private hasValidToken(): boolean {
       catchError(this.handleError)
     );
   }
+  categoryFetch(): Observable<any> {
+    return this.userAuthService.getCategories().pipe(
+      tap((response:any) => console.log('Category fetched successfully.',response)),
+      catchError(this.handleError)
+    );
+  }
 }

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-all-categories',
@@ -12,63 +13,13 @@ import { Router } from '@angular/router';
   styleUrl: './all-categories.component.css'
 })
 export class AllCategoriesComponent {
-  categories = [
-    { label: 'All' },
-    { label: 'Arts and Entertainment' },
-    { label: 'Community and Society' },
-    { label: 'E-commerce and Shopping' },
-    { label: 'Food and Drink' },
-    { label: 'Games' },
-    { label: 'Heavy Industry and Engineering' },
-    { label: 'Home and Garden' },
-    { label: 'Law and Government' },
-    { label: 'Luxury' },
-    { label: 'Pets and Animals' },
-    { label: 'Science and Education' },
-    { label: 'Travel and Tourism' },
-    { label: 'Business and Consumer Services' },
-    { label: 'Computers Electronics and Technology' },
-    { label: 'Finance' },
-    { label: 'Gambling' },
-    { label: 'Health' },
-    { label: 'Hobbies and Leisure' },
-    { label: 'Jobs and Career' },
-    { label: 'Lifestyle' },
-    { label: 'News and Media' },
-    { label: 'Reference Materials' },
-    { label: 'Sports' },
-    { label: 'Vehicles' }
-  ];
+  categories:any = [];
   selectedCategory = 'All';
+  
   expandedCategory: string = 'All';
   selectedSubCategory: string = '';
 
-  subCategoryMap: { [key: string]: string[] } = {
-    'Arts and Entertainment': ['Music', 'Movies', 'Performing Arts', 'Visual Arts', 'Events'],
-    'Community and Society': ['Nonprofits', 'Religion', 'Social Networks', 'Philanthropy'],
-    'E-commerce and Shopping': ['Online Stores', 'Marketplaces', 'Coupons', 'Reviews'],
-    'Food and Drink': ['Restaurants', 'Recipes', 'Beverages', 'Nutrition'],
-    'Games': ['Video Games', 'Board Games', 'Mobile Games', 'Game Development'],
-    'Heavy Industry and Engineering': ['Manufacturing', 'Construction', 'Mining', 'Energy'],
-    'Home and Garden': ['Home Improvement', 'Gardening', 'Interior Design', 'DIY'],
-    'Law and Government': ['Legal Services', 'Government Agencies', 'Politics', 'Public Safety'],
-    'Luxury': ['Watches', 'Jewelry', 'Fashion', 'Travel'],
-    'Pets and Animals': ['Pet Care', 'Animal Shelters', 'Wildlife', 'Pet Food'],
-    'Science and Education': ['Schools', 'Universities', 'Research', 'Online Learning'],
-    'Travel and Tourism': ['Destinations', 'Hotels', 'Flights', 'Travel Guides'],
-    'Business and Consumer Services': ['Consulting', 'Marketing', 'Customer Service', 'B2B'],
-    'Computers Electronics and Technology': ['Software', 'Hardware', 'Gadgets', 'Programming'],
-    'Finance': ['Banking', 'Investing', 'Insurance', 'Personal Finance'],
-    'Gambling': ['Casinos', 'Betting', 'Lotteries', 'Poker'],
-    'Health': ['Fitness', 'Nutrition', 'Mental Health', 'Medical Services'],
-    'Hobbies and Leisure': ['Collecting', 'Crafts', 'Outdoors', 'Photography'],
-    'Jobs and Career': ['Job Search', 'Recruitment', 'Career Advice', 'Freelancing'],
-    'Lifestyle': ['Fashion', 'Beauty', 'Relationships', 'Wellness'],
-    'News and Media': ['News', 'Magazines', 'Podcasts', 'Broadcasting'],
-    'Reference Materials': ['Dictionaries', 'Encyclopedias', 'Maps', 'Statistics'],
-    'Sports': ['Football', 'Basketball', 'Tennis', 'Running'],
-    'Vehicles': ['Cars', 'Motorcycles', 'Boats', 'Auto Parts']
-  };
+  subCategoryMap: { [key: string]: any[] } = {};
 
   allBrands = [
     // Education
@@ -105,9 +56,39 @@ export class AllCategoriesComponent {
   ];
 
   searchTerm = '';
-  filteredCategories = this.categories;
+  filteredCategories:any = this.categories;
+private readonly authService = inject(AuthService);
+  constructor(private router: Router) {
+    this.getAllCategories();
+  }
+getAllCategories() {
+    this.authService.categoryFetch().subscribe({
+      next : (response: any) => {
+        // this.categories = response.categories || [];
+        // this.filteredCategories = this.categories;
+        // // Initialize selectedCategory if not set
+        // if (!this.selectedCategory || !this.categories.some(cat => cat.label === this.selectedCategory)) {
+        //   this.selectedCategory = this.categories.length ? this.categories[0].label : 'All';
+        // }
+            if (response && response.categories) {
+              this.categories.push({ label: 'All' }); // Add "All" category
+      response.categories.forEach((category: any) => {
+        // Add to categories array
+        this.categories.push({ id: category.id, label: category.name });
 
-  constructor(private router: Router) {}
+        // Populate subCategoryMap
+        if (category.subCategories && category.subCategories.length > 0) {
+          this.subCategoryMap[category.name] = category.subCategories.map((subCat: any) => ({ id: subCat.id, name: subCat.name }));
+        }
+      });
+      this.filteredCategories = this.categories;
+    }
+      },
+      error: (error) => {
+        console.error('Error fetching categories:', error);
+      }
+});
+  }
 
   get tags() {
     if (this.selectedCategory === 'All') return [];
@@ -160,12 +141,12 @@ export class AllCategoriesComponent {
     if (!term) {
       this.filteredCategories = this.categories;
     } else {
-      this.filteredCategories = this.categories.filter(cat =>
+      this.filteredCategories = this.categories.filter((cat:any) =>
         cat.label.toLowerCase().includes(term)
       );
     }
     // Optionally reset selection if not in filtered list
-    if (!this.filteredCategories.some(cat => cat.label === this.selectedCategory)) {
+    if (!this.filteredCategories.some((cat:any) => cat.label === this.selectedCategory)) {
       this.selectedCategory = this.filteredCategories.length ? this.filteredCategories[0].label : '';
     }
   }
@@ -245,3 +226,7 @@ export class AllCategoriesComponent {
     this.router.navigate(['/search-view', brandName]);
   }
 }
+function next(value: any): void {
+  throw new Error('Function not implemented.');
+}
+

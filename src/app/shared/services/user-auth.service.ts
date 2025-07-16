@@ -507,4 +507,12 @@ export class UserAuthService {
     // Return an observable with a user-facing error message
     return throwError(() => new Error(errorMessage));
   };
+  /**http://localhost:8080/myapp/api/category/hierarchy
+   * Fetch categories
+   * GET /api/categories
+   */
+  getCategories(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/api/category/hierarchy`, {})
+      .pipe(catchError(this.handleError));
+  }
 }
