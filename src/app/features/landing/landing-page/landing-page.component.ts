@@ -282,6 +282,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     {
       title: 'For Designers',
       description: 'Instantly access brand assets, color palettes, and typography to streamline your creative workflow. Marketify makes it easy to maintain brand consistency and save hours on manual asset collection.',
+      image: 'landing/Section_1.png',
       cards: [
         { icon: 'bi bi-journal-bookmark', title: 'Brand Guidelines', subtitle: 'Official brand rules at your fingertips' },
         { icon: 'bi bi-palette', title: 'Color Palettes', subtitle: 'Accurate brand color codes instantly' },
@@ -302,6 +303,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     {
       title: 'For Marketers',
       description: 'Ensure your campaigns and content always use the latest brand assets. Marketify helps you maintain consistency and credibility across all channels.',
+      image: 'landing/Section_3.png',
       cards: [
         { icon: 'bi bi-geo-alt', title: 'Social Links', subtitle: 'Find official social profiles' },
         { icon: 'bi bi-bell', title: 'Brand Monitoring', subtitle: 'Get notified on asset changes' },
