@@ -219,9 +219,9 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   ];
   // Hero section logic
   heroHeadline = {
-    main: 'Fetch company',
-    main1: 'brand Data Instantly',
-    highlight: 'with Marketify',
+    main: 'Fetch Company',
+    main1: 'Brand Data Instantly with',
+    highlight: 'Marketify',
     waveIcon: true
   };
   heroSubheadline = 'Access logos, brand colors, fonts and social links by simply entering a domain name';

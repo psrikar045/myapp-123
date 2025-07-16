@@ -38,11 +38,11 @@
 }
 
 .footer-logo-img {
-  width: 44px;
-  height: 44px;
-  background: rgba(255,255,255,0.10);
-  border-radius: 8px;
-  display: block;
+    width: 147px;
+    height: 40px;
+    border-radius: 8px;
+    display: block;
+    object-fit: contain;
 }
 
 .company-name {
@@ -68,7 +68,7 @@
 
 .footer-social-btn i {
   font-size: 2rem;
-  color: #2743d2;
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,22 +81,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #fff;
+  /* background: #fff; */
   border-radius: 8px;
   width: 44px;
   height: 44px;
-  transition: box-shadow 0.2s, background 0.2s;
-  box-shadow: 0 2px 8px 0 rgba(16,30,54,0.06);
+  /* transition: box-shadow 0.2s, background 0.2s;
+  box-shadow: 0 2px 8px 0 rgba(16,30,54,0.06); */
   padding: 0;
+  text-decoration: none;
 }
 
-.footer-social-btn:hover {
+/* .footer-social-btn:hover {
   box-shadow: 0 2px 8px rgba(16,30,54,0.12);
   background: #2743d2;
-}
+} */
 
 .footer-social-btn:hover i {
   color: #fff;
+      opacity: 0.7;
 }
 
 .footer-copyright {
