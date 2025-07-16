@@ -434,3 +434,29 @@ body.dark-theme .mat-mdc-menu-item:hover:not([disabled]) {
   line-height: 1.8 !important;                               /* Adjust spacing */
   font-size: 16px;                                           /* Optional: size */
 }
+html, body {
+  font-family: 'Inter', sans-serif !important;
+}
+:root {
+  font-family: 'Inter', sans-serif !important;
+}
+
+input{
+  font-family: 'Inter', sans-serif !important;  
+}
+mat-label{
+   font-family: 'Inter', sans-serif !important;  
+}
+mat-form-field{
+   font-family: 'Inter', sans-serif !important;  
+}
+/* * {
+  font-family: inherit !important;
+} */
+
+.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{
+  font-family: 'Inter', sans-serif !important; 
+}
+h2{
+  font-family: 'Inter', sans-serif !important; 
+}

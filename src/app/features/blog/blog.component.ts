@@ -120,12 +120,12 @@ export class BlogComponent implements OnInit {
   sidebarCategories = [
     {
       img: '/images/Image.jpg',
-      author: 'John Smith',
+      author: 'Siva kumar',
       title: 'Boost Your Pitch Decks & Reports with Branded Content from Marketify'
     },
     {
       img: '/images/Image (1).jpg',
-      author: 'John Smith',
+      author: 'Srikar',
       title: 'How Agencies Can Save Hours with Marketify’s Brand Asset Automation'
     },
     {
