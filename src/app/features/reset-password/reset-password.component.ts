@@ -428,7 +428,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       this.submitTimeoutId = undefined;
     }, 1000); // Simulate network delay
     
-    this.apiSubscription = this.authService.forgotPassword(this.emailForm.value.email!)
+    this.apiSubscription = this.authService.sendPasswordResetCode(this.emailForm.value.email!)
       .pipe(
         tap(() => {
           // Only proceed if we're still on step 1 (user hasn't navigated back)
