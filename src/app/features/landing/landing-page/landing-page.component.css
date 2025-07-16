@@ -2530,3 +2530,12 @@ body.dark-theme .footer-copyright {
     font-size: 0.95rem;
   }
 }
+
+i.bi.bi-brightness-high {background: #58C27D;color: #fff;padding: 10px;border-radius: 50%;}
+.bi-brightness-high::before {font-size: 30px;}
+i.bi.bi-display {background: #FA8F54;color: #fff;padding: 10px;border-radius: 50%;}
+.bi-display::before {font-size: 30px;}
+i.bi.bi-lightning-charge {background: #c9b000;color: #fff;padding: 10px;border-radius: 50%;}
+.bi-lightning-charge::before {font-size: 30px;}
+i.bi.bi-arrow-repeat {background: #AD3BFE;color: #fff;padding: 10px;border-radius: 50%;}
+.bi-arrow-repeat::before {font-size: 30px;}
