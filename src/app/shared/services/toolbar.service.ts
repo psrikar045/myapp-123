@@ -39,7 +39,7 @@ export class ToolbarService {
 
   private actions$ = new BehaviorSubject<ToolbarAction[]>([
     { type: 'login', label: 'Login', route: '/login' },
-    { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.svg', route: '/my-profile' }
+    { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.svg', route: '/login' }
   ]);
 
   logo = this.logo$.asObservable();
@@ -92,8 +92,8 @@ export class ToolbarService {
     });
     this.navItems$.next([
       { label: 'Brands', route: '/all-categories', scrollId: '' },
-      { label: 'Developers', route: '', scrollId: 'developers-section' },
-      { label: 'Pricing', route: '', scrollId: 'pricing-section' },
+      { label: 'Developers', route: '/developer', scrollId: '' },
+      { label: 'Pricing', route: '/pricing', scrollId: '' },
       { label: 'Blog', route: '/blog', scrollId: '' }
     ]);
     this.actions$.next([

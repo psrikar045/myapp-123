@@ -10,7 +10,7 @@ import {
   ValidationErrors
 } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http'; // <-- Add this to imports array
-import { Router, RouterModule } from '@angular/router'; // <-- Import Router
+import { Router, RouterModule, ActivatedRoute } from '@angular/router'; // <-- Import Router
 import { AuthService, RegisterData } from '../../../core/services/auth.service'; // <-- Import AuthService (adjust path)
 import { emailOrUsernameValidator } from '../../../core/validators/custom-validators'; // Import the custom validator
 import { ValidationService } from '../../../core/services/validation.service';
@@ -98,6 +98,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly snackBar = inject(MatSnackBar); // <-- Inject MatSnackBar
   private readonly validationService = inject(ValidationService);
   private readonly toolbarService = inject(ToolbarService);
+  private readonly route = inject(ActivatedRoute);
 
   // --- Form Definitions ---
   loginForm!: FormGroup<{
@@ -180,6 +181,12 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
       this.cdr.markForCheck();
     });
     this.isDarkMode = this.themeService.getIsDarkMode();
+
+    this.route.queryParams.subscribe(params => {
+      if (params['register'] === 'true') {
+        this.toggleToRegister();
+      }
+    });
 
     if (!this.showRegisterForm) {
       this.startCarousel();

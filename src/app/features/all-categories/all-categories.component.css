@@ -13,7 +13,7 @@ body, .categories-main-layout, .categories-bg, .categories-content, .categories-
 
 .categories-content {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   text-align: center;
   display: flex;
@@ -26,19 +26,18 @@ body, .categories-main-layout, .categories-bg, .categories-content, .categories-
 
 .categories-title {
   font-family: "Inter", sans-serif;
-  font-size: 4.2rem;
+  font-size: 4rem;
   font-weight: 800;
   letter-spacing: -2px;
   color: #181818;
-  margin-bottom: 24px;
-  margin-top: 0;
+  margin : 24px 0px;
   line-height: 1.08;
 }
 
 .categories-title .highlight {
   color: #181818;
   background: none;
-  font-weight: 900;
+  font-weight: 800;
 }
 
 .categories-desc {

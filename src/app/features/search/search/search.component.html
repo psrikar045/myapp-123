@@ -1,6 +1,7 @@
 <div class="search-brands-bg">
-  <div class="search-brands-container">
-    <div class="search-bar-wrapper">
+  <div class="search-brands-container" style="position:relative;">
+    <img src="images/logo.svg" alt="Logo" class="logo"  (click)="navigateToLanding()" />
+    <div class="search-bar-wrapper" [ngClass]="{'marginM':brands.length > 0 , 'marginN':brands.length == 0}">
       <span class="search-icon">
         <!-- Search Icon SVG -->
         <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="7" stroke="#A0AEC0" stroke-width="2"/><path d="M20 20L17 17" stroke="#A0AEC0" stroke-width="2" stroke-linecap="round"/></svg>
@@ -31,7 +32,7 @@
     </div>
     
     <!-- Animation Type Toggle -->
-    <!-- <div class="animation-selector" *ngIf="!isLoading">
+    <div class="animation-selector" *ngIf="!isLoading">
       <button 
         type="button" 
         class="animation-toggle-btn" 
@@ -40,7 +41,7 @@
         <span class="toggle-icon">🎭</span>
         <span class="toggle-text">{{ getToggleText() }}</span>
       </button>
-    </div> -->
+    </div>
     
     <div class="recently-viewed-section" *ngIf="brands.length > 0">
       <div class="recently-viewed-header">
@@ -60,7 +61,7 @@
           <!-- Default Brand Icon SVG -->
           <svg *ngIf="!brand.favicon || brand.faviconError" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="16" cy="16" r="16" fill="#E5E7EB"/>
-            <text x="16" y="20" text-anchor="middle" font-family="" font-size="12" font-weight="bold" fill="#6B7280">
+            <text x="16" y="20" text-anchor="middle" style="font-family: 'Inter', sans-serif;" font-size="12" font-weight="bold" fill="#6B7280">
               {{ brand.name.charAt(0).toUpperCase() }}
             </text>
           </svg>
@@ -75,6 +76,12 @@
         </span>
         <button class="remove-btn" (click)="$event.stopPropagation(); removeBrand(i)" title="Remove from history">&times;</button>
       </div>
+    </div>
+    <div style="width:100%;display:flex;justify-content:center;margin-top:32px;">
+      <button (click)="navigateToLanding()" style="background:none;border:none;display:flex;align-items:center;gap:8px;font-size:1.1rem;color:#377dff;cursor:pointer;">
+        <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 5l-5 5 5 5" stroke="#377dff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back to Home
+      </button>
     </div>
   </div>
 

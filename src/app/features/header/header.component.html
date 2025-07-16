@@ -39,7 +39,7 @@
       <button *ngIf="action.type === 'login'" (click)="login()" class="action-btn get-started-btn">
         {{ action.label }}
       </button>
-      <button *ngIf="action.type === 'get-started'" [routerLink]="action.route" class="action-btn get-started-btn d-flex align-items-center">
+      <button *ngIf="action.type === 'get-started'" [routerLink]="['/login']" [queryParams]="{ register: 'true' }" class="action-btn get-started-btn d-flex align-items-center">
         {{ action.label }}
         <i class="bi bi-arrow-right ms-2" style="font-size: 1.1rem;"></i>
       </button>

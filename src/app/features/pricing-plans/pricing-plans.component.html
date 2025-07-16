@@ -1,0 +1,74 @@
+<app-header></app-header>
+
+<div class="pricing-main-container">
+  <div class="pricing-hero-bg">
+    <div class="pricing-hero-content">
+      <h1 class="pricing-hero-title">{{ hero.title }}</h1>
+      <p class="pricing-hero-subtitle">{{ hero.subtitle }}</p>
+    </div>
+  </div>
+
+  <div class="pricing-toggle-row">
+    <span [class.active]="!isAnnual" (click)="isAnnual = false">Bill Monthly</span>
+    <span class="pricing-toggle-switch">
+      <input type="checkbox" id="billing-toggle" [(ngModel)]="isAnnual" />
+      <label for="billing-toggle"></label>
+    </span>
+    <span [class.active]="isAnnual" (click)="isAnnual = true">Bill Annually</span>
+  </div>
+
+  <div class="pricing-cards-wrapper">
+    <div *ngFor="let plan of displayPlans; let i = index" class="pricing-card" [ngClass]="{ 'highlight': plan.highlight }">
+      <div *ngIf="plan.mostPopular" class="most-popular"> <span>✦</span> Most popular <span>✦</span></div>
+      <div class="plan-title">{{ plan.name }}</div>
+      <div class="plan-description">{{ plan.description }}</div>
+      <div class="plan-price-row">
+        <span class="plan-price">{{ plan.price }}</span><span class="plan-period" *ngIf="plan.period">/ {{ plan.period }}</span>
+      </div>
+      <ul class="plan-features">
+        <li *ngFor="let feature of plan.features"><span class="blue-tick"></span>{{ feature }}</li>
+      </ul>
+      <button class="plan-btn" [ngClass]="{ 'highlight': plan.highlight }">{{ plan.button }}</button>
+    </div>
+  </div>
+
+  <div class="faq-section">
+    <h2 class="faq-title">Frequently asked questions</h2>
+    <p class="faq-subtitle">Everything you need to know about Marketify pricing, plans, and features.</p>
+    <div class="faq-list">
+      <div class="faq-col">
+        <div class="faq-item" *ngFor="let faq of faqsCol1; let i = index" (click)="toggleFaq(0, i)" [class.open]="faq.open">
+          <div class="faq-question">
+            {{ faq.q }}
+            <span class="faq-arrow-icon" [class.open]="faq.open">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </span>
+          </div>
+          <div class="faq-answer" *ngIf="faq.open">{{ faq.a }}</div>
+        </div>
+      </div>
+      <div class="faq-col">
+        <div class="faq-item" *ngFor="let faq of faqsCol2; let i = index" (click)="toggleFaq(1, i)" [class.open]="faq.open">
+          <div class="faq-question">
+            {{ faq.q }}
+            <span class="faq-arrow-icon" [class.open]="faq.open">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/>
+              </svg>
+            </span>
+          </div>
+          <div class="faq-answer" *ngIf="faq.open">{{ faq.a }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <h2 class="cta-title">{{ cta.title }}</h2>
+    <p class="cta-subtitle">{{ cta.subtitle }}</p>
+    <button class="cta-btn">{{ cta.button }}</button>
+  </div>
+</div>
+

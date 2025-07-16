@@ -11,7 +11,7 @@
   /* box-shadow: 0 2px 8px rgba(0,0,0,0.02);
   background: linear-gradient(90deg, #fff6e5 0%, #f5faff 100%); */
   min-height: 72px;
-  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.2s;
+  transition: background 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1);
 }
 .header-container.header-hidden {
   transform: translateY(-100%);
@@ -20,7 +20,7 @@
 .header-container.scrolled {
   background: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  transition: background 0.3s, box-shadow 0.3s;
+   transition: background 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s cubic-bezier(0.4,0,0.2,1);
 }
 
 .header-logo {
@@ -63,7 +63,7 @@
   color: #2563eb;
   font-weight: 700;
   border-bottom: 2.5px solid #2563eb;
-  background: rgba(37,99,235,0.07);
+  /* background: rgba(37,99,235,0.07); */
   border-radius: 6px 6px 0 0;
   padding: 9px 20px 9px 20px;
 }

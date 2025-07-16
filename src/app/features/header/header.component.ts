@@ -97,32 +97,13 @@ this.authService.checkAuthStatusAndNavigate();
   @HostListener('window:scroll', [])
   onWindowScroll() {
     const currentScrollY = window.scrollY;
-    this.isScrollingUp = currentScrollY < this.lastScrollY;
-    // On landing: show background only when scrolling up
+    // Only update isScrolled for background/shadow, but always keep isVisible true
     if (this.isLanding) {
-      this.isScrolled = this.isScrollingUp && currentScrollY > 0;
+      this.isScrolled = currentScrollY > 0;
     } else {
       this.isScrolled = currentScrollY > 0;
     }
-    // console.log('window.scrollY:', currentScrollY);
-    if (currentScrollY <= 70) {
-      // Always show at the top or in hero section
-      this.isVisible = true;
-      if (this.showTimeout) clearTimeout(this.showTimeout);
-    } else if (currentScrollY > this.lastScrollY) {
-      // Scrolling down
-      this.isVisible = false;
-      if (this.showTimeout) clearTimeout(this.showTimeout);
-    } else if (currentScrollY < this.lastScrollY) {
-      // Scrolling up
-      this.isVisible = true;
-      if (this.showTimeout) clearTimeout(this.showTimeout);
-      this.showTimeout = setTimeout(() => {
-        if (window.scrollY > 70) {
-          this.isVisible = false;
-        }
-      }, 6000);
-    }
+    this.isVisible = true;
     this.lastScrollY = currentScrollY < 0 ? 0 : currentScrollY;
   }
 }

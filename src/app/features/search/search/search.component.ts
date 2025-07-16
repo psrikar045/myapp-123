@@ -235,6 +235,11 @@ export class SearchComponent {
   private extractBrandName(companyName: string): string {
     return this.validationService.extractBrandName(companyName);
   }
+
+  navigateToLanding() {
+    this.router.navigate(['/landing']);
+  }
+
 handleKeyDown(event:any){
   if (event.key === 'Enter') {
     this.findBrandInfo(event);
