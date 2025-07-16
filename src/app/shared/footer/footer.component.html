@@ -1,4 +1,14 @@
 <footer class="footer-container">
+  <!-- Back to Top Button -->
+  <button 
+    class="back-to-top-btn" 
+    [class.visible]="showBackToTop"
+    (click)="scrollToTop()" 
+    aria-label="Back to top"
+    title="Back to top">
+    <i class="bi bi-arrow-up"></i>
+  </button>
+  
   <div class="footer-content">
     <!-- Column 1: Logo, description, socials, copyright -->
     <div class="footer-section company-info">

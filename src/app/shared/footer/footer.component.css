@@ -199,3 +199,99 @@
     padding-right: 0;
   }
 }
+
+/* Back to Top Button Styles */
+.back-to-top-btn {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  width: 56px;
+  height: 56px;
+  background: #fff;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 4px 20px rgba(0, 69, 196, 0.15), 0 2px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.8);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.back-to-top-btn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.back-to-top-btn:hover {
+  background: #f8f9ff;
+  box-shadow: 0 6px 24px rgba(0, 69, 196, 0.2), 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px) scale(1.05);
+}
+
+.back-to-top-btn:active {
+  transform: translateY(0) scale(0.95);
+  transition: all 0.1s ease;
+}
+
+.back-to-top-btn i {
+  font-size: 1.5rem;
+  color: #0045c4;
+  transition: all 0.3s ease;
+}
+
+.back-to-top-btn:hover i {
+  color: #003399;
+  transform: translateY(-1px);
+}
+
+/* Dark theme styles for back to top button */
+:host-context(body.dark-theme) .back-to-top-btn {
+  background: #2a2a2a;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1), 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+:host-context(body.dark-theme) .back-to-top-btn:hover {
+  background: #3a3a3a;
+  box-shadow: 0 6px 24px rgba(255, 255, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+:host-context(body.dark-theme) .back-to-top-btn i {
+  color: #e0e7ff;
+}
+
+:host-context(body.dark-theme) .back-to-top-btn:hover i {
+  color: #fff;
+}
+
+/* Responsive styles for back to top button */
+@media (max-width: 768px) {
+  .back-to-top-btn {
+    width: 48px;
+    height: 48px;
+    bottom: 24px;
+    right: 24px;
+  }
+  
+  .back-to-top-btn i {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .back-to-top-btn {
+    width: 44px;
+    height: 44px;
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .back-to-top-btn i {
+    font-size: 1.2rem;
+  }
+}
