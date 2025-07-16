@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, HostListener, Injectable, inject, PLATFORM_ID  } from '@angular/core';
+import { CommonModule, isPlatformBrowser  } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -54,8 +54,14 @@ export class FooterComponent implements OnInit, OnDestroy {
   ];
 
   ngOnInit(): void {
+  if (typeof window !== 'undefined') {
     this.checkScrollPosition();
+
+    window.addEventListener('scroll', () => {
+      this.checkScrollPosition();
+    });
   }
+}
 
   ngOnDestroy(): void {
     // Cleanup if needed
@@ -66,14 +72,12 @@ export class FooterComponent implements OnInit, OnDestroy {
     this.checkScrollPosition();
   }
 
-  private checkScrollPosition(): void {
-    const scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-    const windowHeight = window.innerHeight;
-    const documentHeight = document.documentElement.scrollHeight;
-    
-    // Show button when user has scrolled down 300px or reached footer area
-    this.showBackToTop = scrollPosition > 300 || (scrollPosition + windowHeight >= documentHeight - 200);
+ checkScrollPosition(): void {
+  if (typeof window !== 'undefined') {
+    const scrollY = window.scrollY || window.pageYOffset;
+    this.showBackToTop = scrollY > 200;
   }
+}
 
   scrollToTop(): void {
     window.scrollTo({
@@ -81,4 +85,9 @@ export class FooterComponent implements OnInit, OnDestroy {
       behavior: 'smooth'
     });
   }
+ private platformId = inject(PLATFORM_ID);
+  isBrowser(): boolean {
+    return isPlatformBrowser(this.platformId);
+  }
+
 }
