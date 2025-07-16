@@ -684,11 +684,11 @@ width: 100%;
   }
 }
 
-.company-logos-section {
+.company-logos-section1 {
   width: 100%;
   background: #f8fafc;
-  padding-top: 48px;
-  padding-bottom: 48px;
+  padding-top: 15px;
+  padding-bottom: 15px;
   margin: 0;
   border: none;
 }
@@ -729,10 +729,10 @@ width: 100%;
 }
 
 @media (max-width: 900px) {
-  .company-logos-section {
+  /* .company-logos-section {
     padding-top: 32px;
     padding-bottom: 32px;
-  }
+  } */
   .company-logos-row {
     gap: 24px;
   }
@@ -746,10 +746,10 @@ width: 100%;
 }
 
 @media (max-width: 600px) {
-  .company-logos-section {
+  /* .company-logos-section {
     padding-top: 20px;
     padding-bottom: 20px;
-  }
+  } */
   .company-logos-row {
     gap: 12px;
     flex-wrap: wrap;
@@ -771,7 +771,7 @@ width: 100%;
 }
 .section-row {
   background: transparent;
-  padding: 72px 100px;
+  padding: 70px 100px;
 }
 .section-row:nth-child(1), .section-row:nth-child(3) {
   /* Use a more accurate light blue and a subtle gradient */
@@ -936,7 +936,7 @@ width: 100%;
   justify-content: space-between;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 64px 40px 64px 40px;
+  padding: 69px 40px 69px 40px;
 }
 .supercharge-illustration {
   /* flex: 0 0 54%; */
@@ -1077,10 +1077,10 @@ width: 100%;
   width: 100%;
 }
 .pricing-section-inner {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  text-align: center;
-  padding: 30px;
+    text-align: center;
+    padding: 69px 0px;
 }
 .pricing-headline {
   font-size: 2rem;
