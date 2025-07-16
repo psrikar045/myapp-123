@@ -1,0 +1,63 @@
+<app-header></app-header>
+<div class="blog-details-bg">
+  <div class="blog-details-main-container">
+    <!-- Blog Details (Left) -->
+    <div class="blog-details-main">
+      <div class="blog-details-header">
+        
+        <h1 class="blog-title">{{selectedBlog?.title}}</h1>
+        <div class="blog-meta">
+          <span class="author">{{selectedBlog?.author}}</span>
+          <span class="date">{{selectedBlog?.date}}</span>
+          <span class="blog-category">{{selectedBlog?.category}}</span>
+        </div>
+      </div>
+      <div class="blog-details-image">
+        <img [src]="selectedBlog?.img" [alt]="selectedBlog?.title" />
+      </div>
+      <div class="blog-details-body">
+        <p>If you've ever spent time searching for a company’s logo, brand colors, or social media links, you know how frustrating and time-consuming it can be. That’s why we created Marketify — a simple yet powerful tool that helps you get all the important brand details using just a website link.
+With Marketify, all you need is a company’s domain name, like nike.com or apple.com. In seconds, you’ll get access to their official logo (in SVG or PNG), brand colors, fonts, social media profiles, and even a short company description. Whether you're a developer building an app, a designer creating a presentation, or a marketer managing client content, Marketify makes your job faster and easier.
+What makes Marketify different is its speed and simplicity. It’s built using Java and Angular, which means it’s reliable and developer-friendly. You can explore brands through a clean web interface or use our easy-to-integrate API to automate everything in your own application. You’ll also get access to a personal dashboard where you can manage your API key and track usage.
+Compared to other tools like Brandfetch, Marketify gives you more flexibility and control. You can even suggest or manage your own brand data, making it great for agencies and platforms that deal with multiple brands every day.
+Getting started with Marketify is simple. Just visit marketify.io, sign up for a free account, and start searching by domain. Within minutes, you’ll have all the brand details you need at your fingertips.
+Marketify is built to save you time and help you create faster — whether you're pulling logos for a pitch deck or populating your CRM with brand info. Give it a try and see how easy brand access can be.</p>
+        <h3>Research Your Destination</h3>
+        <p>Before embarking on your journey, take the time to research your destination. This includes understanding the local culture, customs, and laws, as well as identifying top attractions, restaurants, and accommodations. Doing so will help you navigate your destination with confidence and avoid any cultural faux pas.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. In hendrerit gravida rutrum quisque non tellus orci ac auctor. Mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Viverra adipiscing at in tellus.</p>
+        <h3>Plan Your Itinerary</h3>
+        <p>While it's essential to leave room for spontaneity and unexpected adventures, having a rough itinerary can help you make the most of your time and budget. Identify the must-see sights and experiences and prioritize them according to your interests and preferences. This will help you avoid overscheduling and ensure that you have time to relax and enjoy your journey.</p>
+        <p>Vitae sapien pellentesque habitant morbi tristique. Luctus venenatis lectus magna fringilla. Nec ullamcorper sit amet risus nullam eget felis. Tincidunt arcu non sodales neque sodales ut etiam sit amet.</p>
+        <blockquote class="blog-quote">
+          " Traveling can expose you to new environments and potential health risks, so it's crucial to take precautions to stay safe and healthy. "
+        </blockquote>
+        <div class="blog-ad-placeholder">
+          <span>Advertisement</span>
+          <div class="ad-box">You can place ads<br>750x100</div>
+        </div>
+        <h3>Pack Lightly and Smartly</h3>
+        <p>Packing can be a daunting task, but with some careful planning and smart choices, you can pack light and efficiently. Start by making a packing list and choosing the most versatile and comfortable clothing that can be mixed and matched. Invest in luggage and packing organizers to maximize space and minimize wrinkles.</p>
+        <h3>Stay Safe and Healthy</h3>
+        <p>Traveling can expose you to new environments and potential health risks, so it's crucial to take precautions to stay safe and healthy. This includes researching any required vaccinations or medications, staying hydrated, washing your hands frequently, and using sunscreen and insect repellent. It's also essential to keep your valuables safe and secure and to be aware of your surroundings at all times.</p>
+        <h3>Immerse Yourself in the Local Culture</h3>
+        <p>One of the most rewarding aspects of traveling is immersing yourself in the local culture and customs. This includes trying local cuisine, attending cultural events and festivals, and interacting with locals. Learning a few phrases in the local language can also go a long way in making connections and showing respect.</p>
+      </div>
+    </div>
+    <!-- Sidebar (Right) -->
+    <aside class="blog-details-sidebar">
+      <h3 class="sidebar-title">All blog categories</h3>
+      <p class="sidebar-desc">Traveling is an enriching experience that opens up new horizons, exposes us to</p>
+      <div class="sidebar-category-list">
+        <div class="sidebar-category-item" *ngFor="let cat of sidebarCategories">
+          <img class="sidebar-category-img" [src]="cat.img" alt="Category" />
+          <div class="sidebar-category-content">
+            <span class="sidebar-category-author">{{cat.author}}</span>
+            <span class="sidebar-category-time">5min</span>
+            <div class="sidebar-category-title">{{cat.title}}</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+<!-- <app-footer></app-footer> -->

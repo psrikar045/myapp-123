@@ -1,50 +1,79 @@
-<div class="blog-page-bg">
-  <div class="blog-container">
-    <h2 class="featured-title">Featured Blogs</h2>
-
-    <!-- Featured Blog Card -->
-    <div class="featured-blog-card">
-      <img class="featured-img" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80" alt="Featured Blog" />
-      <div class="featured-blog-content">
-        <span class="blog-category">Technology</span>
-        <h3 class="blog-title">The Impact of Technology on the Workplace: How Technology is Changing</h3>
+<app-header></app-header>
+<div class="blog-main-bg">
+  <div class="blog-main-container">
+    <!-- Blog List (Left) -->
+    <div class="blog-list">
+      <!-- <div class="debug-info" style="background: #f0f0f0; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
+        <strong>Debug Info:</strong> Current Page: {{currentPage}} | Total Pages: {{totalPages}} | Items Per Page: {{itemsPerPage}} | Total Blogs: {{blogs.length}} | Paginated Blogs: {{paginatedBlogs.length}}
+        <br>
+        <button (click)="goToPage(1)" style="margin: 5px;">Go to Page 1</button>
+        <button (click)="goToPage(2)" style="margin: 5px;">Go to Page 2</button>
+        <button (click)="testPageClick(1)" style="margin: 5px; background: red; color: white;">Test Page 1</button>
+        <button (click)="testPageClick(2)" style="margin: 5px; background: red; color: white;">Test Page 2</button>
+      </div> -->
+      <div class="blog-post" *ngFor="let blog of paginatedBlogs; let i = index; trackBy: trackByBlog" (click)="navigateToBlogDetails(i)">
+        
+        <h2 class="blog-title">{{blog.title}}</h2>
+        <p class="sidebar-desc summary">Learn how Marketify simplifies brand asset retrieval with a powerful REST API, real-time caching, and developer-first features. Built on Java + Angular, it’s faster and more flexible than Brandfetch.</p>
         <div class="blog-meta">
-          <img class="author-avatar" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Tracey Wilson" />
-          <span class="author">Tracey Wilson</span>
-          <span class="date">August 20, 2022</span>
+          <span class="author">{{blog.author}}</span>
+          <span class="date">{{blog.date}}</span>
+          <span class="blog-category">{{blog.category}}</span>
         </div>
+        <img class="blog-img" [src]="blog.img" alt="Blog Image" />
       </div>
-    </div>
+      <!-- Pagination -->
+      <!-- <div class="blog-pagination" *ngIf="totalPages > 1">
+        <button 
+          class="page-nav" 
+          (click)="goToPreviousPage()" 
+          [class.disabled]="currentPage === 1"
+          [disabled]="currentPage === 1">
+          &#8249;
+        </button>
+        <button 
+          class="page-num" 
+          *ngFor="let page of getPageNumbers()" 
+          [class.active]="page === currentPage"
+          (click)="goToPage(page)">
+          {{page}}
+        </button>
+        <button 
+          class="page-nav" 
+          (click)="goToNextPage()" 
+          [class.disabled]="currentPage === totalPages"
+          [disabled]="currentPage === totalPages">
+          &#8250;
+        </button>
+      </div> -->
+      <!-- <div *ngFor="let blog of blogs | paginate: { itemsPerPage: itemsPerPage, currentPage: page }">
+  Blog card content here
+  {{ blog.title }}
+</div> -->
 
-    <!-- Blog Cards Grid -->
-    <div class="blog-cards-grid">
-      <div class="blog-card" *ngFor="let blog of blogs">
-        <img class="blog-img" [src]="blog.img" alt="Blog" />
-        <div class="blog-card-content">
-          <span class="blog-category">{{ blog.category }}</span>
-          <h4 class="blog-title">{{ blog.title }}</h4>
-          <div class="blog-meta">
-            <img class="author-avatar" [src]="blog.authorAvatar" alt="Author" />
-            <span class="author">{{ blog.author }}</span>
-            <span class="date">{{ blog.date }}</span>
+<!-- Pagination controls -->
+<!-- <pagination-controls 
+  (pageChange)="page = $event"
+  previousLabel="‹"
+  nextLabel="›"
+  [autoHide]="true">
+</pagination-controls> -->
+    </div>
+    <!-- Sidebar (Right) -->
+    <aside class="blog-sidebar">
+      <h3 class="sidebar-title">All blog categories</h3>
+      <p class="sidebar-desc">Traveling is an enriching experience that opens up new horizons, exposes us to</p>
+      <div class="sidebar-category-list">
+        <div class="sidebar-category-item" *ngFor="let cat of sidebarCategories">
+          <img class="sidebar-category-img" [src]="cat.img" alt="Category" />
+          <div class="sidebar-category-content">
+            <span class="sidebar-category-author">{{cat.author}}</span>
+            <span class="sidebar-category-time">5min</span>
+            <div class="sidebar-category-title">{{cat.title}}</div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!-- Pagination -->
-    <div class="blog-pagination">
-      <span class="page-num active">1</span>
-      <span class="page-num">2</span>
-      <span class="page-num">3</span>
-      <span class="page-num">4</span>
-      <span class="page-num">5</span>
-      <span class="page-num">6</span>
-      <span class="page-num">7</span>
-      <span class="page-num">8</span>
-      <span class="page-num">9</span>
-      <span class="page-num">10</span>
-      <span class="page-dot">&#9679;</span>
-    </div>
+    </aside>
   </div>
 </div>
+<!-- <app-footer></app-footer> -->

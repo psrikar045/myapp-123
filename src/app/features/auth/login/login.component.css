@@ -17,6 +17,8 @@
 
 .login-container {
   display: flex;
+  border: 1px solid #cccc;
+    border-radius: 20px;
   flex-direction: column; /* Mobile first: stacked */
   width: 100%;
   max-width: 26.25rem; /* Approx 420px for the form panel itself on mobile */
@@ -310,8 +312,10 @@ mat-form-field {
   width: 100%;
   height: 100%;
   display: flex;
+  margin-left: 60px;
   align-items: center;
   justify-content: center;
+  background: #efefef;
   position: relative;
   padding: 1rem; /* Approx 14px. Was 1.25rem */
   box-sizing: border-box;
@@ -334,7 +338,7 @@ mat-form-field {
 }
 .carousel-image-signup{
   position: absolute;
-  top: 35px;
+  top: 70px;
   left: 0;
   width: 100%;
   height: 80%;
@@ -614,4 +618,7 @@ mat-form-field {
   .login-container {
     /* max-width: 80rem; /* Example: slightly wider on very large screens */
   }
+}
+#googleSignInButton * {
+  font-family: 'Inter', sans-serif !important;
 }
