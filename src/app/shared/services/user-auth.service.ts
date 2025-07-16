@@ -302,11 +302,11 @@ export class UserAuthService {
    * Get all brands with pagination
    * GET /api/brands
    */
-  getAllBrands(page: number = 0, size: number = 20): Observable<PageBrandDataResponse> {
+  getAllBrands(page: number = 0, size: number = 20): Observable<any> {
     const params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
-    return this.http.get<PageBrandDataResponse>(`${this.baseUrl}/api/brands`, { params })
+    return this.http.get<any>(`${this.baseUrl}/api/brands/all`)
       .pipe(catchError(this.handleError));
   }
 

@@ -215,3 +215,33 @@ export interface ApiError {
   timestamp: string;
   path: string;
 }
+
+// Brand Search Filters
+export interface BrandSearchFilters {
+  industry?: string;
+  location?: string;
+  companyType?: string;
+  isClaimed?: boolean;
+  needsUpdate?: boolean;
+  minFreshnessScore?: number;
+}
+
+// Brand Data Summary
+export interface BrandDataSummary {
+  id: number;
+  name: string;
+  website: string;
+  industry: string;
+  location: string;
+  isBrandClaimed: boolean;
+  freshnessScore: number;
+  needsUpdate: boolean;
+  lastExtractionTimestamp: string;
+}
+
+// Brand Extraction Request
+export interface BrandExtractionRequest {
+  url: string;
+  mockResponse?: string;
+  forceReExtraction?: boolean;
+}

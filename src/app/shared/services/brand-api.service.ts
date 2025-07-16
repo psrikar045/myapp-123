@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
 import { environment } from '../../../environments/environment';
 import {
   BrandDataResponse,
@@ -14,6 +15,7 @@ import {
 })
 export class BrandApiService {
   private readonly baseUrl = environment.baseApiUrl;
+  private readonly platformId = inject(PLATFORM_ID);
 
   constructor(private http: HttpClient) {}
 
@@ -145,7 +147,10 @@ export class BrandApiService {
   private handleError = (error: any): Observable<never> => {
     let errorMessage = 'An unexpected error occurred. Please try again later.';
     
-    if (error.error instanceof ErrorEvent) {
+    // Check if we're in browser environment and ErrorEvent is available
+    if (isPlatformBrowser(this.platformId) && 
+        typeof ErrorEvent !== 'undefined' && 
+        error.error instanceof ErrorEvent) {
       // Client-side or network error
       console.error('Client-side error:', error.error.message);
       errorMessage = `Network error: ${error.error.message}`;

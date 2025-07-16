@@ -4,6 +4,7 @@ import { HeaderComponent } from '../header/header.component';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { BrandDataResponse, BrandSearchFilters, BrandDataSummary } from '../../shared/models/api.models';
 
 @Component({
   selector: 'app-all-categories',
@@ -21,6 +22,13 @@ export class AllCategoriesComponent {
 
   subCategoryMap: { [key: string]: any[] } = {};
 
+  // Brand data from API
+  brandData: BrandDataResponse[] = [];
+  brandStatistics: any = {};
+  isLoadingBrands = false;
+  brandSearchFilters: BrandSearchFilters = {};
+
+  // Static brand data for fallback/demo purposes
   allBrands = [
     // Education
     { name: 'Google Drive', user: 'theshaaer', color: 'linear-gradient(135deg, #FFF6B7 0%, #F6416C 100%)', category: 'Education', subCategory: 'Resume' },
@@ -60,6 +68,8 @@ export class AllCategoriesComponent {
 private readonly authService = inject(AuthService);
   constructor(private router: Router) {
     this.getAllCategories();
+    this.loadBrandData();
+    // this.loadBrandStatistics();
   }
 getAllCategories() {
     this.authService.categoryFetch().subscribe({
@@ -224,6 +234,344 @@ getAllCategories() {
   goToBrand(brand: any) {
     const brandName = encodeURIComponent(brand.name);
     this.router.navigate(['/search-view', brandName]);
+  }
+
+  // ==================== NEW BRAND DATA API METHODS ====================
+
+  /**
+   * Load brand data from API
+   */
+  loadBrandData(): void {
+    this.isLoadingBrands = true;
+    this.authService.getAllBrands(0, 20).subscribe({
+      next: (response: any) => {
+        this.brandData = response.content || [];
+        this.isLoadingBrands = false;
+        console.log('Brand data loaded:', this.brandData);
+      },
+      error: (error) => {
+        console.error('Error loading brand data:', error);
+        this.isLoadingBrands = false;
+      }
+    });
+  }
+
+  /**
+   * Load brand statistics
+   */
+  loadBrandStatistics(): void {
+    this.authService.getBrandStatistics().subscribe({
+      next: (response: any) => {
+        this.brandStatistics = response;
+        console.log('Brand statistics loaded:', this.brandStatistics);
+      },
+      error: (error) => {
+        console.error('Error loading brand statistics:', error);
+      }
+    });
+  }
+
+  /**
+   * Search brands by name
+   */
+  searchBrandsByName(query: string): void {
+    if (!query.trim()) {
+      this.loadBrandData();
+      return;
+    }
+
+    this.isLoadingBrands = true;
+    this.authService.searchBrands(query, 0, 50).subscribe({
+      next: (response: any) => {
+        this.brandData = response.content || [];
+        this.isLoadingBrands = false;
+        console.log('Brand search results:', this.brandData);
+      },
+      error: (error) => {
+        console.error('Error searching brands:', error);
+        this.isLoadingBrands = false;
+      }
+    });
+  }
+
+  /**
+   * Get brand by website
+   */
+  getBrandByWebsite(website: string): void {
+    this.authService.getBrandByWebsite(website).subscribe({
+      next: (response: any) => {
+        console.log('Brand found by website:', response);
+        // Handle the response as needed
+      },
+      error: (error) => {
+        console.error('Error finding brand by website:', error);
+      }
+    });
+  }
+
+  /**
+   * Extract brand data from URL
+   */
+  extractBrandData(url: string): void {
+    this.authService.extractBrandData(url).subscribe({
+      next: (response: any) => {
+        console.log('Brand data extracted:', response);
+        // Refresh the brand data after extraction
+        this.loadBrandData();
+      },
+      error: (error) => {
+        console.error('Error extracting brand data:', error);
+      }
+    });
+  }
+
+  /**
+   * Claim a brand
+   */
+  claimBrand(brandId: number): void {
+    this.authService.claimBrand(brandId).subscribe({
+      next: (response: any) => {
+        console.log('Brand claimed successfully:', response);
+        // Refresh the brand data after claiming
+        this.loadBrandData();
+      },
+      error: (error) => {
+        console.error('Error claiming brand:', error);
+      }
+    });
+  }
+
+  /**
+   * Get brand asset URL
+   */
+  getBrandAssetUrl(assetId: number): string {
+    return this.authService.getBrandAssetUrl(assetId);
+  }
+
+  /**
+   * Get brand image URL
+   */
+  getBrandImageUrl(imageId: number): string {
+    return this.authService.getBrandImageUrl(imageId);
+  }
+
+  /**
+   * Filter brands by industry
+   */
+  filterBrandsByIndustry(industry: string): void {
+    this.isLoadingBrands = true;
+    this.authService.searchBrandsByIndustry(industry, 0, 50).subscribe({
+      next: (response: any) => {
+        this.brandData = response.content || [];
+        this.isLoadingBrands = false;
+        console.log('Brands filtered by industry:', this.brandData);
+      },
+      error: (error) => {
+        console.error('Error filtering brands by industry:', error);
+        this.isLoadingBrands = false;
+      }
+    });
+  }
+
+  /**
+   * Filter brands by location
+   */
+  filterBrandsByLocation(location: string): void {
+    this.isLoadingBrands = true;
+    this.authService.searchBrandsByLocation(location, 0, 50).subscribe({
+      next: (response: any) => {
+        this.brandData = response.content || [];
+        this.isLoadingBrands = false;
+        console.log('Brands filtered by location:', this.brandData);
+      },
+      error: (error) => {
+        console.error('Error filtering brands by location:', error);
+        this.isLoadingBrands = false;
+      }
+    });
+  }
+
+  /**
+   * Get claimed brands only
+   */
+  getClaimedBrands(): void {
+    this.isLoadingBrands = true;
+    this.authService.getClaimedBrands(0, 50).subscribe({
+      next: (response: any) => {
+        this.brandData = response.content || [];
+        this.isLoadingBrands = false;
+        console.log('Claimed brands:', this.brandData);
+      },
+      error: (error) => {
+        console.error('Error getting claimed brands:', error);
+        this.isLoadingBrands = false;
+      }
+    });
+  }
+
+  /**
+   * Get unclaimed brands only
+   */
+  getUnclaimedBrands(): void {
+    this.isLoadingBrands = true;
+    this.authService.getUnclaimedBrands(0, 50).subscribe({
+      next: (response: any) => {
+        this.brandData = response.content || [];
+        this.isLoadingBrands = false;
+        console.log('Unclaimed brands:', this.brandData);
+      },
+      error: (error) => {
+        console.error('Error getting unclaimed brands:', error);
+        this.isLoadingBrands = false;
+      }
+    });
+  }
+
+  /**
+   * Get recently updated brands
+   */
+  getRecentlyUpdatedBrands(): void {
+    this.isLoadingBrands = true;
+    this.authService.getRecentlyUpdatedBrands(0, 50).subscribe({
+      next: (response: any) => {
+        this.brandData = response.content || [];
+        this.isLoadingBrands = false;
+        console.log('Recently updated brands:', this.brandData);
+      },
+      error: (error) => {
+        console.error('Error getting recently updated brands:', error);
+        this.isLoadingBrands = false;
+      }
+    });
+  }
+
+  /**
+   * Check if a brand is claimed
+   */
+  async checkIfBrandIsClaimed(brandId: number): Promise<boolean> {
+    try {
+      return await this.authService.isBrandClaimed(brandId);
+    } catch (error) {
+      console.error('Error checking brand claim status:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Get brand freshness score
+   */
+  async getBrandFreshnessScore(brandId: number): Promise<number> {
+    try {
+      return await this.authService.getBrandFreshnessScore(brandId);
+    } catch (error) {
+      console.error('Error getting brand freshness score:', error);
+      return 0;
+    }
+  }
+
+  /**
+   * Get brand colors
+   */
+  async getBrandColors(brandId: number): Promise<any[]> {
+    try {
+      return await this.authService.getBrandColors(brandId);
+    } catch (error) {
+      console.error('Error getting brand colors:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Get brand fonts
+   */
+  async getBrandFonts(brandId: number): Promise<any[]> {
+    try {
+      return await this.authService.getBrandFonts(brandId);
+    } catch (error) {
+      console.error('Error getting brand fonts:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Get brand social links
+   */
+  async getBrandSocialLinks(brandId: number): Promise<any[]> {
+    try {
+      return await this.authService.getBrandSocialLinks(brandId);
+    } catch (error) {
+      console.error('Error getting brand social links:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Get brand assets
+   */
+  async getBrandAssets(brandId: number): Promise<any[]> {
+    try {
+      return await this.authService.getBrandAssets(brandId);
+    } catch (error) {
+      console.error('Error getting brand assets:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Get brand images
+   */
+  async getBrandImages(brandId: number): Promise<any[]> {
+    try {
+      return await this.authService.getBrandImages(brandId);
+    } catch (error) {
+      console.error('Error getting brand images:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Enhanced brand search with filters
+   */
+  searchBrandsWithFilters(filters: BrandSearchFilters): void {
+    this.isLoadingBrands = true;
+    this.brandSearchFilters = filters;
+    
+    // You can extend this to use different search endpoints based on filters
+    let searchObservable;
+    
+    if (filters.industry) {
+      searchObservable = this.authService.searchBrandsByIndustry(filters.industry, 0, 50);
+    } else if (filters.location) {
+      searchObservable = this.authService.searchBrandsByLocation(filters.location, 0, 50);
+    } else if (filters.companyType) {
+      searchObservable = this.authService.searchBrandsByCompanyType(filters.companyType, 0, 50);
+    } else if (filters.isClaimed === true) {
+      searchObservable = this.authService.getClaimedBrands(0, 50);
+    } else if (filters.isClaimed === false) {
+      searchObservable = this.authService.getUnclaimedBrands(0, 50);
+    } else {
+      searchObservable = this.authService.getAllBrands(0, 50);
+    }
+    
+    searchObservable.subscribe({
+      next: (response: any) => {
+        this.brandData = response.content || [];
+        this.isLoadingBrands = false;
+        console.log('Brands filtered:', this.brandData);
+      },
+      error: (error) => {
+        console.error('Error filtering brands:', error);
+        this.isLoadingBrands = false;
+      }
+    });
+  }
+
+  /**
+   * Reset brand filters
+   */
+  resetBrandFilters(): void {
+    this.brandSearchFilters = {};
+    this.loadBrandData();
   }
 }
 function next(value: any): void {

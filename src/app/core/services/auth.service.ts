@@ -670,4 +670,371 @@ private hasValidToken(): boolean {
       catchError(this.handleError)
     );
   }
+  
+  // ==================== BRAND DATA METHODS ====================
+
+  /**
+   * Get all brands with pagination
+   * @param page Page number (default: 0)
+   * @param size Page size (default: 20)
+   * @returns Observable of paginated brand data
+   */
+  getAllBrands(page: number = 0, size: number = 20): Observable<any> {
+    return this.userAuthService.getAllBrands(page, size).pipe(
+      tap((response: any) => console.log('Brands fetched successfully.', response)),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Get brand by ID
+   * @param id Brand ID
+   * @returns Observable of brand data
+   */
+  getBrandById(id: number): Observable<any> {
+    return this.userAuthService.getBrandById(id).pipe(
+      tap((response: any) => console.log('Brand fetched successfully.', response)),
+      catchError(this.handleError)
+    );
+  }
+
+  // ==================== BRAND SEARCH AND FILTERING METHODS ====================
+
+  /**
+   * Search brands by query
+   * @param query Search query
+   * @param page Page number (default: 0)
+   * @param size Page size (default: 20)
+   * @returns Observable of paginated search results
+   */
+  searchBrands(query: string, page: number = 0, size: number = 20): Observable<any> {
+    return this.userAuthService.searchBrands(query, page, size).pipe(
+      tap((response: any) => console.log('Brand search completed successfully.', response)),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Get brand by website URL
+   * @param website Website URL
+   * @returns Observable of brand data
+   */
+  getBrandByWebsite(website: string): Observable<any> {
+    return this.userAuthService.getBrandByWebsite(website).pipe(
+      tap((response: any) => console.log('Brand fetched by website successfully.', response)),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Get brand by name
+   * @param name Brand name
+   * @returns Observable of brand data
+   */
+  getBrandByName(name: string): Observable<any> {
+    return this.userAuthService.getBrandByName(name).pipe(
+      tap((response: any) => console.log('Brand fetched by name successfully.', response)),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Get brands by domain
+   * @param domain Domain name
+   * @returns Observable of brand data array
+   */
+  getBrandsByDomain(domain: string): Observable<any> {
+    return this.userAuthService.getBrandsByDomain(domain).pipe(
+      tap((response: any) => console.log('Brands fetched by domain successfully.', response)),
+      catchError(this.handleError)
+    );
+  }
+
+  // ==================== BRAND EXTRACTION AND CLAIMING METHODS ====================
+
+  /**
+   * Extract brand data from URL
+   * @param url Website URL to extract brand data from
+   * @param mockResponse Optional mock response for testing
+   * @returns Observable of extraction result
+   */
+  extractBrandData(url: string, mockResponse?: string): Observable<any> {
+    return this.userAuthService.extractBrandData(url, mockResponse).pipe(
+      tap((response: any) => console.log('Brand data extraction completed successfully.', response)),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Claim a brand
+   * @param brandId Brand ID to claim
+   * @returns Observable of claim result
+   */
+  claimBrand(brandId: number): Observable<any> {
+    return this.userAuthService.claimBrand(brandId).pipe(
+      tap((response: any) => console.log('Brand claimed successfully.', response)),
+      catchError(this.handleError)
+    );
+  }
+
+  // ==================== BRAND ASSET AND IMAGE SERVING METHODS ====================
+
+  /**
+   * Get brand asset file
+   * @param assetId Asset ID
+   * @returns Observable of asset blob
+   */
+  getBrandAsset(assetId: number): Observable<Blob> {
+    return this.userAuthService.serveBrandAsset(assetId).pipe(
+      tap(() => console.log('Brand asset retrieved successfully.')),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Get brand image file
+   * @param imageId Image ID
+   * @returns Observable of image blob
+   */
+  getBrandImage(imageId: number): Observable<Blob> {
+    return this.userAuthService.serveBrandImage(imageId).pipe(
+      tap(() => console.log('Brand image retrieved successfully.')),
+      catchError(this.handleError)
+    );
+  }
+
+  /**
+   * Get brand asset URL for direct access
+   * @param assetId Asset ID
+   * @returns Full URL to the asset
+   */
+  getBrandAssetUrl(assetId: number): string {
+    return `${this.API_BASE_URL}/api/brands/assets/${assetId}`;
+  }
+
+  /**
+   * Get brand image URL for direct access
+   * @param imageId Image ID
+   * @returns Full URL to the image
+   */
+  getBrandImageUrl(imageId: number): string {
+    return `${this.API_BASE_URL}/api/brands/images/${imageId}`;
+  }
+
+  // ==================== BRAND STATISTICS AND ANALYTICS METHODS ====================
+
+  /**
+   * Get brand statistics
+   * @returns Observable of brand statistics
+   */
+  getBrandStatistics(): Observable<any> {
+    return this.userAuthService.getBrandStatistics().pipe(
+      tap((response: any) => console.log('Brand statistics fetched successfully.', response)),
+      catchError(this.handleError)
+    );
+  }
+
+  // ==================== ADDITIONAL BRAND UTILITY METHODS ====================
+
+  /**
+   * Check if a brand is claimed
+   * @param brandId Brand ID
+   * @returns Promise<boolean> indicating if brand is claimed
+   */
+  async isBrandClaimed(brandId: number): Promise<boolean> {
+    try {
+      const brand = await this.getBrandById(brandId).toPromise();
+      return brand?.isBrandClaimed || false;
+    } catch (error) {
+      console.error('Error checking brand claim status:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Get brand freshness score
+   * @param brandId Brand ID
+   * @returns Promise<number> brand freshness score
+   */
+  async getBrandFreshnessScore(brandId: number): Promise<number> {
+    try {
+      const brand = await this.getBrandById(brandId).toPromise();
+      return brand?.freshnessScore || 0;
+    } catch (error) {
+      console.error('Error getting brand freshness score:', error);
+      return 0;
+    }
+  }
+
+  /**
+   * Check if brand needs update
+   * @param brandId Brand ID
+   * @returns Promise<boolean> indicating if brand needs update
+   */
+  async doesBrandNeedUpdate(brandId: number): Promise<boolean> {
+    try {
+      const brand = await this.getBrandById(brandId).toPromise();
+      return brand?.needsUpdate || false;
+    } catch (error) {
+      console.error('Error checking brand update status:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Get brand colors
+   * @param brandId Brand ID
+   * @returns Promise<any[]> array of brand colors
+   */
+  async getBrandColors(brandId: number): Promise<any[]> {
+    try {
+      const brand = await this.getBrandById(brandId).toPromise();
+      return brand?.colors || [];
+    } catch (error) {
+      console.error('Error getting brand colors:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Get brand fonts
+   * @param brandId Brand ID
+   * @returns Promise<any[]> array of brand fonts
+   */
+  async getBrandFonts(brandId: number): Promise<any[]> {
+    try {
+      const brand = await this.getBrandById(brandId).toPromise();
+      return brand?.fonts || [];
+    } catch (error) {
+      console.error('Error getting brand fonts:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Get brand social links
+   * @param brandId Brand ID
+   * @returns Promise<any[]> array of brand social links
+   */
+  async getBrandSocialLinks(brandId: number): Promise<any[]> {
+    try {
+      const brand = await this.getBrandById(brandId).toPromise();
+      return brand?.socialLinks || [];
+    } catch (error) {
+      console.error('Error getting brand social links:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Get brand assets
+   * @param brandId Brand ID
+   * @returns Promise<any[]> array of brand assets
+   */
+  async getBrandAssets(brandId: number): Promise<any[]> {
+    try {
+      const brand = await this.getBrandById(brandId).toPromise();
+      return brand?.assets || [];
+    } catch (error) {
+      console.error('Error getting brand assets:', error);
+      return [];
+    }
+  }
+
+  /**
+   * Get brand images
+   * @param brandId Brand ID
+   * @returns Promise<any[]> array of brand images
+   */
+  async getBrandImages(brandId: number): Promise<any[]> {
+    try {
+      const brand = await this.getBrandById(brandId).toPromise();
+      return brand?.images || [];
+    } catch (error) {
+      console.error('Error getting brand images:', error);
+      return [];
+    }
+  }
+
+  // ==================== BRAND SEARCH UTILITY METHODS ====================
+
+  /**
+   * Search brands by industry
+   * @param industry Industry name
+   * @param page Page number (default: 0)
+   * @param size Page size (default: 20)
+   * @returns Observable of filtered brand results
+   */
+  searchBrandsByIndustry(industry: string, page: number = 0, size: number = 20): Observable<any> {
+    return this.searchBrands(`industry:${industry}`, page, size);
+  }
+
+  /**
+   * Search brands by location
+   * @param location Location name
+   * @param page Page number (default: 0)
+   * @param size Page size (default: 20)
+   * @returns Observable of filtered brand results
+   */
+  searchBrandsByLocation(location: string, page: number = 0, size: number = 20): Observable<any> {
+    return this.searchBrands(`location:${location}`, page, size);
+  }
+
+  /**
+   * Search brands by company type
+   * @param companyType Company type
+   * @param page Page number (default: 0)
+   * @param size Page size (default: 20)
+   * @returns Observable of filtered brand results
+   */
+  searchBrandsByCompanyType(companyType: string, page: number = 0, size: number = 20): Observable<any> {
+    return this.searchBrands(`companyType:${companyType}`, page, size);
+  }
+
+  /**
+   * Get recently updated brands
+   * @param page Page number (default: 0)
+   * @param size Page size (default: 20)
+   * @returns Observable of recently updated brands
+   */
+  getRecentlyUpdatedBrands(page: number = 0, size: number = 20): Observable<any> {
+    return this.getAllBrands(page, size).pipe(
+      map((response: any) => ({
+        ...response,
+        content: response.content?.sort((a: any, b: any) => 
+          new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+        )
+      }))
+    );
+  }
+
+  /**
+   * Get claimed brands only
+   * @param page Page number (default: 0)
+   * @param size Page size (default: 20)
+   * @returns Observable of claimed brands
+   */
+  getClaimedBrands(page: number = 0, size: number = 20): Observable<any> {
+    return this.getAllBrands(page, size).pipe(
+      map((response: any) => ({
+        ...response,
+        content: response.content?.filter((brand: any) => brand.isBrandClaimed)
+      }))
+    );
+  }
+
+  /**
+   * Get unclaimed brands only
+   * @param page Page number (default: 0)
+   * @param size Page size (default: 20)
+   * @returns Observable of unclaimed brands
+   */
+  getUnclaimedBrands(page: number = 0, size: number = 20): Observable<any> {
+    return this.getAllBrands(page, size).pipe(
+      map((response: any) => ({
+        ...response,
+        content: response.content?.filter((brand: any) => !brand.isBrandClaimed)
+      }))
+    );
+  }
 }
