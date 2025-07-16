@@ -11,7 +11,7 @@
   /* box-shadow: 0 2px 8px rgba(0,0,0,0.02);
   background: linear-gradient(90deg, #fff6e5 0%, #f5faff 100%); */
   min-height: 72px;
-  transition: background 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s cubic-bezier(0.4,0,0.2,1), transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  transition: none;
 }
 .header-container.header-hidden {
   transform: translateY(-100%);
@@ -20,7 +20,7 @@
 .header-container.scrolled {
   background: #fff;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-   transition: background 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.4s cubic-bezier(0.4,0,0.2,1);
+  transition: none;
 }
 
 .header-logo {

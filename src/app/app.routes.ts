@@ -16,8 +16,7 @@ import { AllCategoriesComponent } from './features/all-categories/all-categories
 import { CategoryListComponent } from './features/category-list/category-list.component';
 import { BlogComponent } from './features/blog/blog.component';
 import { PricingPlansComponent } from './features/pricing-plans/pricing-plans.component';
-import { BlogDetailsComponent } from './features/blog-details/blog-details.component';
-// import { DeveloperComponent } from './features/developer/developer.component';
+import { DeveloperComponent } from './features/developer/developer.component';
 
 export const routes: Routes = [
   // 1. Redirect root path '' to '/login'
@@ -76,21 +75,16 @@ export const routes: Routes = [
     path: 'blog',
     component: BlogComponent
   },
-  
-  {
-    path: 'blog-details/:id',
-    component: BlogDetailsComponent
-  },
-  // {
-  //   path: 'developer',
-  //   component: DeveloperComponent
-  // },
 
   // 4. Protected Routes
   {
     path: 'home',
     component: HomePageComponent,
     canActivate: [authGuard]
+  },
+    {
+    path: 'developer',
+    component: DeveloperComponent
   },
   {
     path: 'dashboard',

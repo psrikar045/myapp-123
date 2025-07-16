@@ -20,7 +20,7 @@
   </nav>
   <div class="header-actions">
     <ng-container *ngFor="let action of actions$ | async as actions">
-      <button *ngIf="action.type === 'upgrade'" class="action-btn upgrade-btn d-flex align-items-center" (click)="onUpgradeClick()">
+      <button *ngIf="action.type === 'upgrade'" class="action-btn upgrade-btn d-flex align-items-center upgradebtn" (click)="onUpgradeClick()">
         Upgrade
       </button>
       <span *ngIf="action.type === 'profile'" class="header-profile-avatar ms-3" [matMenuTriggerFor]="profileMenu" style="cursor:pointer;">

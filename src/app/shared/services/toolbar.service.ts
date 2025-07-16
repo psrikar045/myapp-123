@@ -74,9 +74,11 @@ export class ToolbarService {
     });
     this.navItems$.next([
       { label: 'Home', route: '/home', scrollId: '' },
+      { label: 'Brands', route: '/all-categories', scrollId: '' },
       { label: 'Brand API', route: '/brandApi', scrollId: '' },
-      { label: 'Logo link', route: '/logo-link', scrollId: '' },
-      { label: 'Search API', route: '/search-api', scrollId: '' }
+      { label: 'Developers', route: '/developer', scrollId: '' },
+      // { label: 'Logo link', route: '/logo-link', scrollId: '' },
+      // { label: 'Search API', route: '/search-api', scrollId: '' }
     ]);
     this.actions$.next([
       { type: 'upgrade', label: 'Upgrade' },

@@ -38,8 +38,12 @@ export class HeaderComponent implements OnInit {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.currentRoute = event.urlAfterRedirects;
-        this.showNavigation = !this.currentRoute.startsWith('/my-profile');
+        this.showNavigation = true;
         this.isLanding = this.currentRoute === '/' || this.currentRoute.startsWith('/landing');
+        // Force white header for /developer and /my-profile
+        if (this.currentRoute.startsWith('/developer') || this.currentRoute.startsWith('/my-profile')) {
+          this.isScrolled = true;
+        }
       }
     });
   }
@@ -100,6 +104,8 @@ this.authService.checkAuthStatusAndNavigate();
     // Only update isScrolled for background/shadow, but always keep isVisible true
     if (this.isLanding) {
       this.isScrolled = currentScrollY > 0;
+    } else if (this.currentRoute.startsWith('/developer') || this.currentRoute.startsWith('/my-profile')) {
+      this.isScrolled = true;
     } else {
       this.isScrolled = currentScrollY > 0;
     }

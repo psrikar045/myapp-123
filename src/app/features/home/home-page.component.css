@@ -70,7 +70,7 @@
   align-items: flex-start;
 }
 .card-feature-1 mat-card {
-  background: linear-gradient(135deg, #e3d6ff 0%, #a18aff 100%);
+  background: linear-gradient(135deg, #e6dff7 0%, #d2c8fb 100%);
   color: #23272f;
   box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
   display: flex;
@@ -157,7 +157,7 @@
   margin-left: 0;
 }
 .card-feature-2 mat-card {
-  background: linear-gradient(178deg, #d6e6ff 0% 0%, #0050c1 75%);
+  background: linear-gradient(178deg, #d6e6ff 0% 0%, #a8cafb 75%);
   color: #23272f;
   box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
 }
@@ -210,17 +210,17 @@
   align-items: flex-start;
 }
 .api-card-purple mat-card {
-  background: linear-gradient(135deg, #c471f5 0%, #fa71cd 100%);
+  background: linear-gradient(135deg, #f9d4ee 0%, #f49bda 100%);
   color: #23272f;
   box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
 }
 .api-card-teal mat-card {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      background: linear-gradient(135deg, #aeebc2 0%, #61c7b5 100%);  
   color: #23272f;
   box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
 }
 .api-card-brown mat-card {
-  background: linear-gradient(135deg, #b79891 0%, #e8d5b5 100%);
+      background: linear-gradient(135deg, #f9e5e1 0%, #e8d5b5 100%);
   color: #23272f;
   box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
 }

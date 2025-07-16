@@ -6,6 +6,9 @@ import { MyPlanComponent } from '../my-plan/my-plan.component';
 import { ChoosePlanComponent } from '../choose-plan/choose-plan.component';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import {  NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { ToolbarService } from '../../shared/services/toolbar.service'
 
 @Component({
   selector: 'app-my-profile',
@@ -26,9 +29,24 @@ userProfile: any;
   selectedSidebarIndex = 0;
 private readonly authService = inject(AuthService);
 
-  constructor(private router: Router) {}
-  ngOnInit(): void {
-    this.fetchUserProfile();
+    constructor(private router: Router, private toolbarService: ToolbarService) {
+    // Listen for route changes and set logged-in toolbar if on /my-profile
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      if (event.urlAfterRedirects.startsWith('/my-profile')) {
+        this.toolbarService.setLoggedInToolbar();
+      }
+    });
+  }
+
+
+  // ngOnInit(): void {
+  //   this.fetchUserProfile();
+  // }
+    ngOnInit(): void {
+      this.fetchUserProfile();
+    this.toolbarService.setLoggedInToolbar();
   }
 
   fetchUserProfile() {
