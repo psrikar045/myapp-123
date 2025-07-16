@@ -16,7 +16,7 @@ import { AllCategoriesComponent } from './features/all-categories/all-categories
 import { CategoryListComponent } from './features/category-list/category-list.component';
 import { BlogComponent } from './features/blog/blog.component';
 import { PricingPlansComponent } from './features/pricing-plans/pricing-plans.component';
-import { DeveloperComponent } from './features/developer/developer.component';
+// import { DeveloperComponent } from './features/developer/developer.component';
 
 export const routes: Routes = [
   // 1. Redirect root path '' to '/login'
@@ -75,10 +75,10 @@ export const routes: Routes = [
     path: 'blog',
     component: BlogComponent
   },
-  {
-    path: 'developer',
-    component: DeveloperComponent
-  },
+  // {
+  //   path: 'developer',
+  //   component: DeveloperComponent
+  // },
 
   // 4. Protected Routes
   {
