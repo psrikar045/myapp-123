@@ -460,3 +460,6 @@ mat-form-field{
 h2{
   font-family: 'Inter', sans-serif !important; 
 }
+.mat-typography h2 {
+  font-family: 'Inter', sans-serif !important;
+}
