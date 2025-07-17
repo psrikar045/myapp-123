@@ -670,7 +670,12 @@ private hasValidToken(): boolean {
       catchError(this.handleError)
     );
   }
-  
+  userProfileUpdate(data:any): Observable<any> {
+    return this.userAuthService.updateUserProfile(data).pipe(
+      tap((response:any) => console.log('User profile updated successfully.',response)),
+      catchError(this.handleError)
+    );
+  }
   // ==================== BRAND DATA METHODS ====================
 
   /**

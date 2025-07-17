@@ -26,6 +26,7 @@ import {
   ApiResponse,
   ApiError
 } from '../models/api.models';
+import { UserBackendResponse, UserProfileUpdateRequest } from '../models/user-profile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -530,5 +531,12 @@ export class UserAuthService {
     });
     return this.http.post<any>(`${this.baseUrl}/api/users/get-by-id`, data, { headers })
       .pipe(catchError(this.handleError));
+  }
+   updateUserProfile(profileData: UserProfileUpdateRequest): Observable<UserBackendResponse> {
+        let jwtToken: any = this.getAuthToken();
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${jwtToken}`,
+    });
+    return this.http.put<UserBackendResponse>(`http://localhost:8080/myapp/api/users/profile`, profileData, { headers });
   }
 }
