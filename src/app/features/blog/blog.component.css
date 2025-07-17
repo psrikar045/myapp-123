@@ -197,7 +197,8 @@
 }
 .blog-card-image-container :hover{
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  /* box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); */
 }
 .sidebar-category-content {
   display: flex;

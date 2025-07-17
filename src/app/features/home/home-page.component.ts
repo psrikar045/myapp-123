@@ -42,4 +42,17 @@ export class HomePageComponent implements OnInit {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+
+  // Navigation methods for the cards
+  navigateToBrands(): void {
+    this.router.navigate(['/all-categories']);
+  }
+
+  navigateToBrandApi(): void {
+    this.router.navigate(['/brandApi']);
+  }
+
+  navigateToDevelopers(): void {
+    this.router.navigate(['/developer']);
+  }
 }
