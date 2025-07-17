@@ -25,15 +25,9 @@ export class BlogComponent implements OnInit {
   private toolbar = inject(ToolbarService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
-  // blogs: any[] = []; // Your full data list
-  page: number = 1;  // Current page
-  itemsPerPage: number = 5; // You can adjust this
-
-  // Pagination properties
-  currentPage: number = 1;
-  // itemsPerPage: number = 5;
-  totalPages: number = 0;
-  paginatedBlogs: BlogCard[] = [];
+  // Pagination properties (matching AllCategoriesComponent)
+  currentPage = 1;
+  pageSize = 5; // 5 items per page as requested
 
   blogs: BlogCard[] = [
     {
@@ -118,13 +112,31 @@ export class BlogComponent implements OnInit {
       authorAvatar: 'assets/author4.png'
     },
     {
-      img: '/images/Image (1).jpg',
+      img: '/images/Image.jpg',
       author: 'John Smith',
       date: 'June 18, 2022',
       title: 'Boost Your Pitch Decks & Reports with Branded Content from Marketify',
       summary:'Learn how you can use Marketify to enhance investor decks, reports, or presentations by auto-embedding verified brand assets using only a company domain.',
       category: 'Design',
       authorAvatar: 'assets/author2.png'
+    },
+    {
+      img: '/images/Image (1).jpg',
+      author: 'John Smith',
+      date: 'July 18, 2022',
+      title: 'Behind the Scenes: How Marketify Builds a Fast, Accurate Brand Lookup Engine',
+      summary:'Dive into the architecture of Marketify — including Java Spring Boot backend, PostgreSQL data modeling, caching, and asset delivery — built for performance.',
+      category: 'Design',
+      authorAvatar: 'assets/author2.jpg'
+    },
+    {
+      img: '/images/Image (3).jpg',
+      author: 'John Smith',
+      date: 'July 18, 2022',
+      title: 'Behind the Scenes: How Marketify Builds a Fast, Accurate Brand Lookup Engine',
+      summary:'Dive into the architecture of Marketify — including Java Spring Boot backend, PostgreSQL data modeling, caching, and asset delivery — built for performance.',
+      category: 'Design',
+      authorAvatar: 'assets/author2.jpg'
     }
   ];
 
@@ -197,54 +209,29 @@ export class BlogComponent implements OnInit {
 
   ngOnInit(): void {
     // this.toolbar.setLoggedOutToolbar();
-    this.calculateTotalPages();
-    this.updatePaginatedBlogs();
   }
 
-  calculateTotalPages(): void {
-    this.totalPages = Math.ceil(this.blogs.length / this.itemsPerPage);
+  // Pagination methods (matching AllCategoriesComponent)
+  get pagedBlogs() {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.blogs.slice(start, start + this.pageSize);
   }
 
-  updatePaginatedBlogs(): void {
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    this.paginatedBlogs = this.blogs.slice(startIndex, endIndex);
+  get totalPages() {
+    return Math.ceil(this.blogs.length / this.pageSize) || 1;
   }
 
-  goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
-      this.updatePaginatedBlogs();
-      this.cdr.detectChanges(); // Force change detection
-    }
+  get pages() {
+    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
   }
 
-  goToNextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.currentPage++;
-      this.updatePaginatedBlogs();
-    }
-  }
-
-  goToPreviousPage(): void {
-    if (this.currentPage > 1) {
-      this.currentPage--;
-      this.updatePaginatedBlogs();
-    }
-  }
-
-  getPageNumbers(): number[] {
-    const pages: number[] = [];
-    for (let i = 1; i <= this.totalPages; i++) {
-      pages.push(i);
-    }
-    console.log('getPageNumbers called, returning:', pages);
-    return pages;
+  selectPage(page: number) {
+    this.currentPage = page;
   }
 
   navigateToBlogDetails(blogIndex: number): void {
     // Calculate the actual index in the full blogs array
-    const actualIndex = (this.currentPage - 1) * this.itemsPerPage + blogIndex;
+    const actualIndex = (this.currentPage - 1) * this.pageSize + blogIndex;
     // Immediate position to top before navigation
     this.resetScrollPosition();
     this.router.navigate(['/blog-details', actualIndex]);
