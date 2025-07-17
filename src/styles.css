@@ -16,7 +16,12 @@
 
 html {
   font-size: 14px; /* Adjusted base for smaller screens, 1rem = 14px */
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
+}
+
+/* Ensure immediate positioning for route changes */
+html, body {
+  scroll-behavior: auto !important;
 }
 
 

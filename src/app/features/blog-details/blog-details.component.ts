@@ -24,6 +24,11 @@ export class BlogDetailsComponent implements OnInit {
   blogId: number = 0;
   selectedBlog: BlogCard | null = null;
 
+  constructor() {
+    // Immediately position at top when component is created
+    this.forceTopPosition();
+  }
+
   // Same blog data as in the blog component (ideally this would come from a service)
   blogs: BlogCard[] = [
     {
@@ -137,5 +142,12 @@ export class BlogDetailsComponent implements OnInit {
       this.blogId = Number(params.get('id'));
       this.selectedBlog = this.blogs[this.blogId] || null;
     });
+  }
+
+  private forceTopPosition(): void {
+    // Simple immediate positioning
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo(0, 0);
   }
 }

@@ -1,29 +1,52 @@
 <app-header></app-header>
+<!-- Hero Section -->
+<div class="blog-hero-bg gradient-bg">
+  <!-- <div class="blog-hero-content">
+    <h1 class="hero-title">Cut Costs, Not Corners<br>on Utilities</h1>
+    <p class="hero-subtitle">Running a business is difficult enough without overpaying for essential utility services like gas, electricity, water, internet, and more.</p>
+    <button class="hero-cta-btn">Explore Brands</button>
+  </div> -->
+  <div class="blog-hero-icons-row">
+    <!-- Example icons, replace src with your actual icon paths -->
+    <!-- <img src="/assets/icons/apple.svg" alt="icon" class="hero-icon"> -->
+  </div>
+</div>
+
 <div class="blog-main-bg">
+  <!-- Header Section -->
+  <div class="blog-header-card">
+    <div class="blog-header-section">
+      <div class="blog-category-center-header">
+        <div class="blog-category-header">All blog categories</div>
+        <div class="blog-category-desc">Traveling is an enriching experience that opens up new horizons, exposes us to experience that opens up new horizons, exposes us to</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
   <div class="blog-main-container">
     <!-- Blog List (Left) -->
+    
+    
     <div class="blog-list">
-      <!-- <div class="debug-info" style="background: #f0f0f0; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
-        <strong>Debug Info:</strong> Current Page: {{currentPage}} | Total Pages: {{totalPages}} | Items Per Page: {{itemsPerPage}} | Total Blogs: {{blogs.length}} | Paginated Blogs: {{paginatedBlogs.length}}
-        <br>
-        <button (click)="goToPage(1)" style="margin: 5px;">Go to Page 1</button>
-        <button (click)="goToPage(2)" style="margin: 5px;">Go to Page 2</button>
-        <button (click)="testPageClick(1)" style="margin: 5px; background: red; color: white;">Test Page 1</button>
-        <button (click)="testPageClick(2)" style="margin: 5px; background: red; color: white;">Test Page 2</button>
-      </div> -->
-      <div class="blog-post" *ngFor="let blog of paginatedBlogs; let i = index; trackBy: trackByBlog" (click)="navigateToBlogDetails(i)">
-        
-        <h2 class="blog-title">{{blog.title}}</h2>
-        <p class="sidebar-desc summary">Learn how Marketify simplifies brand asset retrieval with a powerful REST API, real-time caching, and developer-first features. Built on Java + Angular, it’s faster and more flexible than Brandfetch.</p>
-        <div class="blog-meta">
-          <span class="author">{{blog.author}}</span>
-          <span class="date">{{blog.date}}</span>
-          <span class="blog-category">{{blog.category}}</span>
+      <div class="blog-post-card" *ngFor="let blog of paginatedBlogs; let i = index; trackBy: trackByBlog" (click)="navigateToBlogDetails(i)">
+        <div class="blog-card-image-container">
+          <div class="blog-card-content">
+          <h2 class="blog-card-title"><b>{{blog.title}}</b></h2>
+          <p class="blog-card-summary">{{blog.summary}}</p>
+          <div class="blog-card-meta">
+            <span class="blog-card-author">{{blog.author}}</span>
+            <span class="blog-card-date">{{blog.date}}</span>
+            <span class="blog-card-category">{{blog.category}}</span>
+          </div>
         </div>
-        <img class="blog-img" [src]="blog.img" alt="Blog Image" />
+          <img class="blog-card-img" [src]="blog.img" alt="Blog Image" />
+        </div>
+        
       </div>
+      
       <!-- Pagination -->
-      <!-- <div class="blog-pagination" *ngIf="totalPages > 1">
+      <div class="blog-pagination" *ngIf="totalPages > 1">
         <button 
           class="page-nav" 
           (click)="goToPreviousPage()" 
@@ -45,35 +68,28 @@
           [disabled]="currentPage === totalPages">
           &#8250;
         </button>
-      </div> -->
-      <!-- <div *ngFor="let blog of blogs | paginate: { itemsPerPage: itemsPerPage, currentPage: page }">
-  Blog card content here
-  {{ blog.title }}
-</div> -->
-
-<!-- Pagination controls -->
-<!-- <pagination-controls 
-  (pageChange)="page = $event"
-  previousLabel="‹"
-  nextLabel="›"
-  [autoHide]="true">
-</pagination-controls> -->
+      </div>
     </div>
-    <!-- Sidebar (Right) -->
+    <div class="blog-vertical-divider"></div>
     <aside class="blog-sidebar">
-      <h3 class="sidebar-title">All blog categories</h3>
-      <p class="sidebar-desc">Traveling is an enriching experience that opens up new horizons, exposes us to</p>
       <div class="sidebar-category-list">
-        <div class="sidebar-category-item" *ngFor="let cat of sidebarCategories">
-          <img class="sidebar-category-img" [src]="cat.img" alt="Category" />
-          <div class="sidebar-category-content">
-            <span class="sidebar-category-author">{{cat.author}}</span>
-            <span class="sidebar-category-time">5min</span>
-            <div class="sidebar-category-title">{{cat.title}}</div>
+        <div class="sidebar-category-item" *ngFor="let cat of sidebarCategories" (click)="navigateToBlogDetailsFromSidebar(cat.id)">
+          <div class="sidebar-card-image-container" style="display: flex;">
+             
+            <img class="sidebar-category-img" [src]="cat.img" alt="Category" />
+            <div class="sidebar-category-content">
+            <div class="sidebar-category-title"><b>{{cat.title}}</b></div>
+            <div class="sidebar-category-desc">{{cat.description}}</div>
+            <div class="sidebar-category-meta">
+              <span class="sidebar-category-author">{{cat.author}}</span>
+              <span class="sidebar-category-date">{{cat.date}}</span>
+            </div>
           </div>
+          </div>
+         
         </div>
       </div>
     </aside>
   </div>
 </div>
-<!-- <app-footer></app-footer> -->
+
