@@ -261,6 +261,11 @@ body.dark-theme .mat-mdc-menu-panel { /* Added for menus */
   color: #e0e0e0;
 }
 
+.mat-mdc-menu-panel {
+    min-width: 200px !important;
+    max-width: 280px;
+}
+
 /* Form field styles for dark theme */
 body.dark-theme .mat-mdc-text-field-wrapper, /* For form fields */
 body.dark-theme .mat-mdc-select-value,
@@ -495,6 +500,19 @@ h2{
 
 /* Force my-profile dropdown to right: 100px, override Angular Material overlay positioning */
 .cdk-overlay-connected-position-bounding-box {
+  right: 100px !important;
+  left: auto !important;
+   width: 160px !important;
+}
+
+/* Default width for all overlays */
+.cdk-overlay-connected-position-bounding-box {
+  width: 140px !important;
+}
+
+/* On my-profile page, override width and position using body attribute */
+body[data-profile-page='true'] ~ .cdk-overlay-container .cdk-overlay-connected-position-bounding-box {
+  width: 160px !important;
   right: 100px !important;
   left: auto !important;
 }

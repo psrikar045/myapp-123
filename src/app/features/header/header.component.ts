@@ -44,11 +44,11 @@ export class HeaderComponent implements OnInit {
         if (this.currentRoute.startsWith('/developer') || this.currentRoute.startsWith('/my-profile')) {
           this.isScrolled = true;
         }
-        // Add or remove body class for my-profile page
+        // Add or remove body attribute for my-profile page
         if (this.currentRoute.startsWith('/my-profile')) {
-          document.body.classList.add('my-profile-page');
+          document.body.setAttribute('data-profile-page', 'true');
         } else {
-          document.body.classList.remove('my-profile-page');
+          document.body.removeAttribute('data-profile-page');
         }
       }
     });
