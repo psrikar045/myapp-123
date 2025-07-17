@@ -392,7 +392,14 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
           if (this.currentStep === 2) {
             this.isLoading = false;
             this.buttonState = 'normal';
-            this.snackBar.open(error.message || 'Failed to send verification code. Please try again.', 'Close', { duration: 7000 });
+            // Extract the error message from the response
+            let errorMessage = 'Failed to send verification code. Please try again.';
+            if (error.error && error.error.message) {
+              errorMessage = error.error.message;
+            } else if (error.message) {
+              errorMessage = error.message;
+            }
+            this.snackBar.open(errorMessage, 'Close', { duration: 7000 });
             this.cdr.markForCheck();
           }
           return of(null);
@@ -447,7 +454,16 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
           if (this.currentStep === 1) {
             this.isLoading = false;
             this.buttonState = 'normal';
-            this.snackBar.open(error.message || 'Failed to send verification code. Please try again.', 'Close', { duration: 7000 });
+            
+            // Extract the error message from the response
+            let errorMessage = 'Failed to send verification code. Please try again.';
+            if (error.error && error.error.message) {
+              errorMessage = error.error.message;
+            } else if (error.message) {
+              errorMessage = error.message;
+            }
+            
+            this.snackBar.open(errorMessage, 'Close', { duration: 7000 });
             this.cdr.markForCheck();
           }
           return of(null); // Prevent error from propagating further if handled
@@ -512,7 +528,14 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
           if (this.currentStep === 1) {
             this.isLoading = false;
             this.buttonState = 'normal';
-            this.snackBar.open(error.message || 'Failed to send verification code. Please try again.', 'Close', { duration: 7000 });
+            // Extract the error message from the response
+            let errorMessage = 'Failed to send verification code. Please try again.';
+            if (error.error && error.error.message) {
+              errorMessage = error.error.message;
+            } else if (error.message) {
+              errorMessage = error.message;
+            }
+            this.snackBar.open(errorMessage, 'Close', { duration: 7000 });
             this.cdr.markForCheck();
           }
           return of(null);
@@ -540,19 +563,19 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         return;
     }
     
-    this.submitTimeoutId = window.setTimeout(() => {
-      // Only proceed if we're still on step 2 (user hasn't navigated back)
-      if (this.currentStep === 2) {
-        this.isLoading = false;
-        this.buttonState = 'normal';
-        this.currentStep = 3;
-        this.updateCarouselImage();
-        this.stopCodeExpiryTimer(); // Stop the timer when code is verified
-        this.snackBar.open('Code verified. Please set your new password.', 'Close', { duration: 5000 });
-        this.cdr.markForCheck();
-      }
-      this.submitTimeoutId = undefined;
-    }, 1000); // Simulate network delay
+    // this.submitTimeoutId = window.setTimeout(() => {
+    //   // Only proceed if we're still on step 2 (user hasn't navigated back)
+    //   if (this.currentStep === 2) {
+    //     this.isLoading = false;
+    //     this.buttonState = 'normal';
+    //     this.currentStep = 3;
+    //     this.updateCarouselImage();
+    //     this.stopCodeExpiryTimer(); // Stop the timer when code is verified
+    //     this.snackBar.open('Code verified. Please set your new password.', 'Close', { duration: 5000 });
+    //     this.cdr.markForCheck();
+    //   }
+    //   this.submitTimeoutId = undefined;
+    // }, 1000); // Simulate network delay
     
     this.apiSubscription = this.authService.verifyPasswordResetCode(email, this.codeForm.value.code!)
       .pipe(
@@ -573,7 +596,15 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
           if (this.currentStep === 2) {
             this.isLoading = false;
             this.buttonState = 'normal';
-            this.snackBar.open(error.message || 'Invalid or expired code. Please try again.', 'Close', { duration: 7000 });
+            // Extract the error message from the response
+            let errorMessage = 'Invalid or expired code. Please try again.';
+            if (error.error && error.error.message) {
+              errorMessage = error.error.message;
+            } else if (error.message) {
+              errorMessage = error.message;
+            }
+            
+            this.snackBar.open(errorMessage, 'Close', { duration: 7000 });
             this.cdr.markForCheck();
           }
           return of(null);
@@ -581,9 +612,9 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       ).subscribe((response: any) => {
         if (response && this.currentStep === 2) {
           this.authService.userDetails = {
-            userId: response?.userId,
-            email: response?.email,
-            code: response?.code
+userId: response?.userId,
+          email: response?.email,
+          code: response?.code
           }
         }
       });
@@ -634,7 +665,8 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
       this.submitTimeoutId = undefined;
     }, 1000); // Simulate network delay
     
-    this.apiSubscription = this.authService.setNewPassword(this.authService.userDetails?.userId, email, code, this.passwordForm.value.newPassword!)
+    const currentUserDetails:any = this.authService.getCurrentUserDetails();
+    this.apiSubscription = this.authService.setNewPassword(currentUserDetails?.userId, email, code, this.passwordForm.value.newPassword!)
       .pipe(
         tap(() => {
           // Only proceed if we're still on step 3 (user hasn't navigated back)
@@ -656,7 +688,14 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
           if (this.currentStep === 3) {
             this.isLoading = false;
             this.buttonState = 'normal';
-            this.snackBar.open(error.message || 'Failed to reset password. Please try again.', 'Close', { duration: 7000 });
+            // Extract the error message from the response
+            let errorMessage = 'Failed to reset password. Please try again.';
+            if (error.error && error.error.message) {
+              errorMessage = error.error.message;
+            } else if (error.message) {
+              errorMessage = error.message;
+            }
+            this.snackBar.open(errorMessage, 'Close', { duration: 7000 });
             this.cdr.markForCheck();
           }
           return of(null);

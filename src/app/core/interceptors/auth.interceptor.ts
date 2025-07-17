@@ -24,11 +24,20 @@ export const authInterceptor: HttpInterceptorFn = (
     '/auth/check-email',
     '/auth/google',
     '/auth/public-forward',
-    '/test/'
+    '/test/',
+    '/api/category/hierarchy',
+    '/api/brands/all',
+    '/api/brands/statistics',
+    '/api/brands/search',
+    '/api/brands/by-website',
+    '/api/brands/by-name',
+    '/api/brands/by-domain'
   ];
 
   // Check if the request URL is public
-  const isPublicUrl = publicUrls.some(url => req.url.includes(url));
+  const isPublicUrl = publicUrls.some(url => req.url.includes(url)) || 
+                     // Allow access to individual brand endpoints (GET only)
+                     (req.method === 'GET' && req.url.match(/\/api\/brands\/\d+$/));
 
   let authReq = req;
 
@@ -56,39 +65,45 @@ export const authInterceptor: HttpInterceptorFn = (
     catchError((error: HttpErrorResponse) => {
       // Handle 401 Unauthorized errors
       if (error.status === 401) {
-        console.warn('Unauthorized request detected. Attempting token refresh...');
-        
-        // Try to refresh token if available
-        const refreshToken = authService.getRefreshToken();
-        if (refreshToken && !req.url.includes('/auth/refresh')) {
-          return authService.refreshToken().pipe(
-            switchMap(() => {
-              // Retry the original request with new token
-              const newToken = authService.getToken();
-              if (newToken) {
-                const retryReq = authReq.clone({
-                  setHeaders: {
-                    ...authReq.headers,
-                    'Authorization': `Bearer ${newToken}`
-                  }
-                });
-                return next(retryReq);
-              }
-              return throwError(() => error);
-            }),
-            catchError(() => {
-              // Refresh failed, redirect to login
-              console.error('Token refresh failed. Redirecting to login.');
-              authService.logout();
-              router.navigate(['/login']);
-              return throwError(() => error);
-            })
-          );
+        // Only redirect to login for protected endpoints, not public ones
+        if (!isPublicUrl) {
+          console.warn('Unauthorized request detected for protected endpoint. Attempting token refresh...');
+          
+          // Try to refresh token if available
+          const refreshToken = authService.getRefreshToken();
+          if (refreshToken && !req.url.includes('/auth/refresh')) {
+            return authService.refreshToken().pipe(
+              switchMap(() => {
+                // Retry the original request with new token
+                const newToken = authService.getToken();
+                if (newToken) {
+                  const retryReq = authReq.clone({
+                    setHeaders: {
+                      ...authReq.headers,
+                      'Authorization': `Bearer ${newToken}`
+                    }
+                  });
+                  return next(retryReq);
+                }
+                return throwError(() => error);
+              }),
+              catchError(() => {
+                // Refresh failed, redirect to login
+                console.error('Token refresh failed. Redirecting to login.');
+                authService.logout();
+                router.navigate(['/login']);
+                return throwError(() => error);
+              })
+            );
+          } else {
+            // No refresh token available, redirect to login
+            console.error('No refresh token available. Redirecting to login.');
+            authService.logout();
+            router.navigate(['/login']);
+          }
         } else {
-          // No refresh token available, redirect to login
-          console.error('No refresh token available. Redirecting to login.');
-          authService.logout();
-          router.navigate(['/login']);
+          // For public URLs, just log the error and continue
+          console.warn('401 error on public endpoint:', req.url, '- This is normal for unauthenticated requests');
         }
       }
 

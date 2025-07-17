@@ -67,37 +67,123 @@ export class AllCategoriesComponent {
   filteredCategories:any = this.categories;
 private readonly authService = inject(AuthService);
   constructor(private router: Router) {
-    this.getAllCategories();
-    this.loadBrandData();
-    // this.loadBrandStatistics();
+    console.log('AllCategoriesComponent constructor called');
+    
+    // Initialize with default categories immediately
+    this.setDefaultCategories();
+    
+    // Then try to load from API
+    try {
+      this.getAllCategories();
+      this.loadBrandData();
+      // this.loadBrandStatistics();
+    } catch (error) {
+      console.error('Error in AllCategoriesComponent constructor:', error);
+    }
   }
+setDefaultCategories() {
+    // Set default categories for public access
+    this.categories = [
+      { label: 'All' },
+      { id: 1, label: 'Education' },
+      { id: 2, label: 'Entertainment' },
+      { id: 3, label: 'Games' },
+      { id: 4, label: 'Music & Video' },
+      { id: 5, label: 'Fitness' },
+      { id: 6, label: 'Hospitals' },
+      { id: 7, label: 'Business' },
+      { id: 8, label: 'Technology' },
+      { id: 9, label: 'Food & Drink' },
+      { id: 10, label: 'Travel' }
+    ];
+    
+    // Set default subcategories
+    this.subCategoryMap = {
+      'Education': [
+        { id: 1, name: 'Resume' },
+        { id: 2, name: 'Science' },
+        { id: 3, name: 'Social media' },
+        { id: 4, name: 'Physics' },
+        { id: 5, name: 'Math\'s' }
+      ],
+      'Entertainment': [
+        { id: 6, name: 'Movie tickets' },
+        { id: 7, name: 'Dance studios' },
+        { id: 8, name: 'Photograph' }
+      ],
+      'Games': [
+        { id: 9, name: 'Video Games' },
+        { id: 10, name: 'Board Games' },
+        { id: 11, name: 'Mobile Games' }
+      ],
+      'Music & Video': [
+        { id: 12, name: 'Music' },
+        { id: 13, name: 'Streaming' },
+        { id: 14, name: 'Podcasts' }
+      ],
+      'Fitness': [
+        { id: 15, name: 'Gyms' },
+        { id: 16, name: 'Personal Training' },
+        { id: 17, name: 'Yoga' }
+      ],
+      'Hospitals': [
+        { id: 18, name: 'General' },
+        { id: 19, name: 'Specialized' },
+        { id: 20, name: 'Emergency' }
+      ],
+      'Business': [
+        { id: 21, name: 'Services' },
+        { id: 22, name: 'Consulting' },
+        { id: 23, name: 'Finance' }
+      ],
+      'Technology': [
+        { id: 24, name: 'Software' },
+        { id: 25, name: 'Hardware' },
+        { id: 26, name: 'AI/ML' }
+      ],
+      'Food & Drink': [
+        { id: 27, name: 'Restaurants' },
+        { id: 28, name: 'Cafes' },
+        { id: 29, name: 'Delivery' }
+      ],
+      'Travel': [
+        { id: 30, name: 'Hotels' },
+        { id: 31, name: 'Airlines' },
+        { id: 32, name: 'Tourism' }
+      ]
+    };
+    
+    this.filteredCategories = this.categories;
+  }
+
 getAllCategories() {
     this.authService.categoryFetch().subscribe({
       next : (response: any) => {
-        // this.categories = response.categories || [];
-        // this.filteredCategories = this.categories;
-        // // Initialize selectedCategory if not set
-        // if (!this.selectedCategory || !this.categories.some(cat => cat.label === this.selectedCategory)) {
-        //   this.selectedCategory = this.categories.length ? this.categories[0].label : 'All';
-        // }
-            if (response && response.categories) {
-              this.categories.push({ label: 'All' }); // Add "All" category
-      response.categories.forEach((category: any) => {
-        // Add to categories array
-        this.categories.push({ id: category.id, label: category.name });
+        console.log('Categories API response:', response);
+        if (response && response.categories) {
+          // Clear existing categories and rebuild from API
+          this.categories = [{ label: 'All' }];
+          this.subCategoryMap = {};
+          
+          response.categories.forEach((category: any) => {
+            // Add to categories array
+            this.categories.push({ id: category.id, label: category.name });
 
-        // Populate subCategoryMap
-        if (category.subCategories && category.subCategories.length > 0) {
-          this.subCategoryMap[category.name] = category.subCategories.map((subCat: any) => ({ id: subCat.id, name: subCat.name }));
+            // Populate subCategoryMap
+            if (category.subCategories && category.subCategories.length > 0) {
+              this.subCategoryMap[category.name] = category.subCategories.map((subCat: any) => ({ id: subCat.id, name: subCat.name }));
+            }
+          });
+          this.filteredCategories = this.categories;
+          console.log('Categories loaded from API:', this.categories);
         }
-      });
-      this.filteredCategories = this.categories;
-    }
       },
       error: (error) => {
         console.error('Error fetching categories:', error);
+        console.log('Using default categories due to API error');
+        // Default categories are already set, so no need to do anything
       }
-});
+    });
   }
 
   get tags() {
@@ -247,11 +333,13 @@ getAllCategories() {
       next: (response: any) => {
         this.brandData = response.content || [];
         this.isLoadingBrands = false;
-        console.log('Brand data loaded:', this.brandData);
+        console.log('Brand data loaded from API:', this.brandData);
       },
       error: (error) => {
         console.error('Error loading brand data:', error);
         this.isLoadingBrands = false;
+        console.log('Using static brand data due to API error');
+        // The component already has static brand data from the allBrands array
       }
     });
   }
