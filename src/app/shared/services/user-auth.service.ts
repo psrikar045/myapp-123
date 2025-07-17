@@ -518,7 +518,7 @@ export class UserAuthService {
    * GET /api/categories
    */
   getCategories(): Observable<any> {
-    return this.http.get<any>(`${this.baseUrl}/api/category/hierarchy`, {})
+    return this.http.get<any>(`${this.baseUrl}/api/category/hierarchy`)
       .pipe(catchError(this.handleError));
   }
   getUserProfile(): Observable<any> {

@@ -29,7 +29,7 @@ export class AllCategoriesComponent {
   brandSearchFilters: BrandSearchFilters = {};
 
   // Static brand data for fallback/demo purposes
-  allBrands = [
+  allBrands:any = [
     // Education
     { name: 'Google Drive', user: 'theshaaer', color: 'linear-gradient(135deg, #FFF6B7 0%, #F6416C 100%)', category: 'Education', subCategory: 'Resume' },
     { name: 'Github', user: 'theshaaer', color: 'linear-gradient(135deg, #232526 0%, #414345 100%)', category: 'Education', subCategory: 'Science' },
@@ -209,9 +209,9 @@ getAllCategories() {
     if (this.selectedCategory === 'All') {
       return this.allBrands;
     }
-    let filtered = this.allBrands.filter(b => b.category === this.selectedCategory);
+    let filtered = this.allBrands.filter((b:any)=> b.category === this.selectedCategory);
     if (this.selectedSubCategory) {
-      filtered = filtered.filter(b => b.subCategory === this.selectedSubCategory);
+      filtered = filtered.filter((b:any) => b.subCategory === this.selectedSubCategory);
     }
     return filtered;
   }
@@ -331,7 +331,8 @@ getAllCategories() {
     this.isLoadingBrands = true;
     this.authService.getAllBrands(0, 20).subscribe({
       next: (response: any) => {
-        this.brandData = response.content || [];
+        this.brandData = response.data || [];
+        this.allBrands = JSON.parse(JSON.stringify(this.brandData));
         this.isLoadingBrands = false;
         console.log('Brand data loaded from API:', this.brandData);
       },

@@ -45,12 +45,17 @@
   </div>
 </aside>
         <!-- Main Brand Cards Grid -->
-        <div class="categories-main-layout-right">
+        <div class="categories-main-layout-right" *ngIf="!isLoadingBrands" >
           <section class="brand-cards-grid">
-            <div *ngFor="let brand of pagedBrands" class="brand-card" [ngStyle]="{ 'background': brand.color }" (click)="goToBrand(brand)">
+            <div *ngFor="let brand of pagedBrands" class="brand-card" [ngStyle]="{ 'background': brand.colors[0]?.hexCode }" (click)="goToBrand(brand)">
               <div class="brand-card-icon">
                 <!-- Placeholder for logo/icon -->
-                <span>{{ brand.name.charAt(0) }}</span>
+                <ng-container *ngIf="brand.images && brand.images.length > 0; else defaultLogoTemplate">
+                  <img src="{{ brand.images[0].accessUrl }}" alt="brand.name.charAt(0)" />
+                </ng-container>
+                <ng-template #defaultLogoTemplate>
+                  <span>{{ brand.name.charAt(0) }}</span>
+                </ng-template>
               </div>
               <div class="brand-card-title">{{ brand.name }}</div>
               <div class="brand-card-sub">&#64;{{ brand.user }}</div>
