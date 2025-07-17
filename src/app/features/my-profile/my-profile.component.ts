@@ -9,6 +9,8 @@ import { AuthService } from '../../core/services/auth.service';
 import {  NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ToolbarService } from '../../shared/services/toolbar.service'
+import { UserProfileUpdateRequest } from '../../shared/models/user-profile.model';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-my-profile',
@@ -25,10 +27,10 @@ export class MyProfileComponent implements OnInit {
     { label: 'Choose Plan', active: false, disabled: false },
     { label: 'Password & Security', active: false, disabled: false }
   ];
-userProfile: any;
+  userProfile: any;
   selectedSidebarIndex = 0;
-private readonly authService = inject(AuthService);
-
+  private readonly authService = inject(AuthService);
+  private readonly snackBar = inject(MatSnackBar); // <-- Inject MatSnackBar
     constructor(private router: Router, private toolbarService: ToolbarService) {
     // Listen for route changes and set logged-in toolbar if on /my-profile
     this.router.events.pipe(
@@ -126,9 +128,38 @@ private readonly authService = inject(AuthService);
 
   onSave() {
     const data = this.profileForm;
-
-    alert('Profile saved!');
-    console.log(data);
+//"dob": "2000-01-15T12:00:00.000Z",
+    const updateRequest: UserProfileUpdateRequest = {
+      firstName: this.profileForm.firstName,
+      surname: this.profileForm.surname, // Maps to backend's lastName
+      nationalCode: this.profileForm.nationalCode,
+      educationLevel: this.profileForm.educationLevel,
+      phoneCountry: this.profileForm.phoneCountry,
+      phoneNumber: this.profileForm.phoneNumber,
+      country: this.profileForm.country,
+      city: this.profileForm.city,
+      username: this.profileForm.username,
+      dob: this.profileForm.dob ? this.profileForm.dob: null // Convert to ISO string
+    };
+ this.authService.userProfileUpdate( updateRequest).subscribe({
+      next: (response: any) => {
+       this._openSnackBar(`Profile update successful!`, 'Dismiss');
+       this.profileForm.updatedAt = response.updatedAt || new Date().toISOString(); // Update timestamp
+        // Optionally, re-fetch profile to ensure UI reflects latest state or update form values
+        // this.fetchUserProfile(this.userId!);
+      },
+      error: (err) => {
+        console.error('Failed to update user profile:', err);
+        // Handle specific error codes or validation errors from backend
+        if (err.status === 400 && err.error && err.error.message) {
+          this._openSnackBar(`Update failed: ${err.error.message}`);
+        } else if (err.status === 404) {
+          this._openSnackBar('User not found for update.');
+        } else {
+          this._openSnackBar('Failed to update profile. Please try again.');
+        }
+      }
+    });
   }
 
   goToResetPassword() {
@@ -141,5 +172,12 @@ private readonly authService = inject(AuthService);
     this.selectedSidebarIndex = 3;
     // Update sidebar menu active state
     this.sidebarMenu.forEach((item, i) => item.active = i === 3);
+  }
+    private _openSnackBar(message: string, action: string = 'Close', duration: number = 3000) {
+    this.snackBar.open(message, action, {
+      duration: duration,
+      verticalPosition: 'bottom', // Can be 'top' or 'bottom'
+      horizontalPosition: 'center', // Can be 'start', 'center', 'end', 'left', or 'right'
+    });
   }
 }

@@ -17,6 +17,7 @@ import { CategoryListComponent } from './features/category-list/category-list.co
 import { BlogComponent } from './features/blog/blog.component';
 import { PricingPlansComponent } from './features/pricing-plans/pricing-plans.component';
 import { DeveloperComponent } from './features/developer/developer.component';
+import { BlogDetailsComponent } from './features/blog-details/blog-details.component';
 
 export const routes: Routes = [
   // 1. Redirect root path '' to '/login'
@@ -105,6 +106,11 @@ export const routes: Routes = [
     path: 'admin',
     canActivate: [authGuard, roleGuard],
     loadChildren: () => import('./features/admin/admin.module').then((m) => m.AdminModule)
+  },
+  
+  {
+    path: 'blog-details/:id',
+    component: BlogDetailsComponent
   },
 
   // 5. Wildcard Route (Must be the last route!)

@@ -29,7 +29,7 @@
     
     
     <div class="blog-list">
-      <div class="blog-post-card" *ngFor="let blog of paginatedBlogs; let i = index; trackBy: trackByBlog" (click)="navigateToBlogDetails(i)">
+      <div class="blog-post-card" *ngFor="let blog of pagedBlogs; let i = index; trackBy: trackByBlog" (click)="navigateToBlogDetails(i)">
         <div class="blog-card-image-container">
           <div class="blog-card-content">
           <h2 class="blog-card-title"><b>{{blog.title}}</b></h2>
@@ -37,7 +37,7 @@
           <div class="blog-card-meta">
             <span class="blog-card-author">{{blog.author}}</span>
             <span class="blog-card-date">{{blog.date}}</span>
-            <span class="blog-card-category">{{blog.category}}</span>
+            <span class="blog-category">{{blog?.category}}</span>
           </div>
         </div>
           <img class="blog-card-img" [src]="blog.img" alt="Blog Image" />
@@ -45,28 +45,14 @@
         
       </div>
       
-      <!-- Pagination -->
-      <div class="blog-pagination" *ngIf="totalPages > 1">
-        <button 
-          class="page-nav" 
-          (click)="goToPreviousPage()" 
-          [class.disabled]="currentPage === 1"
-          [disabled]="currentPage === 1">
-          &#8249;
+      <!-- Pagination (matching AllCategoriesComponent) -->
+      <div class="blog-pagination">
+        <button class="page nav" [disabled]="currentPage === 1" (click)="selectPage(currentPage - 1)">
+          <i class="bi bi-chevron-left"></i>
         </button>
-        <button 
-          class="page-num" 
-          *ngFor="let page of getPageNumbers()" 
-          [class.active]="page === currentPage"
-          (click)="goToPage(page)">
-          {{page}}
-        </button>
-        <button 
-          class="page-nav" 
-          (click)="goToNextPage()" 
-          [class.disabled]="currentPage === totalPages"
-          [disabled]="currentPage === totalPages">
-          &#8250;
+        <button *ngFor="let page of pages" class="page" [class.active]="page === currentPage" (click)="selectPage(page)">{{ page }}</button>
+        <button class="page nav" [disabled]="currentPage === pages.length" (click)="selectPage(currentPage + 1)">
+          <i class="bi bi-chevron-right"></i>
         </button>
       </div>
     </div>

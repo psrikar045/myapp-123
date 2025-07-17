@@ -1,21 +1,33 @@
 <app-header></app-header>
 
 <div class="company-data-body">
-  <!-- Top Section -->
-  <div class="company-top-card">
-    <div class="company-logo-circle">
-      <img src="{{ searchResult?.Logo?.Logo }}" alt="{{ searchResult?.Company?.Name }} Logo" />
+  <!-- Banner Section -->
+  <div class="company-banner-wrapper">
+    <div class="company-banner">
+      <img class="banner-bg-img" [src]="searchResult?.Logo?.Banner || 'assets/images/banner-placeholder.png'" alt="Banner" />
+      <div class="banner-overlay"></div>
+      <div class="banner-content">
+        
+        <!-- <div class="banner-text">{{ searchResult?.BannerText || '' }}</div> -->
+      </div>
     </div>
-    <div class="company-top-actions">
-      <span class="company-url">
-        <ng-container *ngIf="searchResult?.Company?.Website">
-          <a [href]="searchResult.Company.Website" target="_blank" rel="noopener noreferrer">
-            {{ searchResult.Company.Website }}
-          </a>
-        </ng-container>
-      </span>
-      <button class="claimed-btn">Claimed</button>
-      <button class="share-btn">Share</button>
+    <div class="banner-logo-circle">
+          <img class="banner-logo" [src]="searchResult?.Logo?.Logo" alt="{{ searchResult?.Company?.Name }} Logo" />
+        </div>
+  </div>
+  <!-- Brand Info Section -->
+  <div class="brand-info-row" *ngIf="searchResult?.Company">
+    <div class="brand-info-main">
+      <div class="brand-title-row">
+        <span class="brand-title">{{ searchResult?.Company?.Name }}</span>
+        <span class="claimed-badge"><i class="bi bi-patch-check-fill"></i> Claimed Brand</span>
+      </div>
+      <div class="brand-description">
+        {{ searchResult?.Company?.Description || 'No company description available.' }}
+      </div>
+    </div>
+    <div class="brand-info-actions">
+      <button class="share-btn"><i class="bi bi-share"></i> Share</button>
       <div class="company-socials">
         <ng-container *ngFor="let social of getSocialLinksArray(searchResult?.Company?.SocialLinks)">
           <ng-container *ngIf="getSocialIconClass(social.platform)">
@@ -27,18 +39,10 @@
         </ng-container>
       </div>
     </div>
-    <div class="company-description">
-      <ng-container *ngIf="searchResult?.Company?.Description">
-        {{ searchResult.Company.Description }}
-      </ng-container>
-      <ng-container *ngIf="!searchResult?.Company?.Description">
-        No company description available.
-      </ng-container>
-    </div>
   </div>
 
   <!-- Filter Buttons -->
-  <div class="company-filters">
+  <div class="company-filters" [ngClass]="{'no-brand-margin': !searchResult?.Company}">
     <button *ngFor="let filter of filters" class="filter-btn" [class.active]="activeFilter === filter" (click)="setFilter(filter)">{{ filter }}</button>
         </div>
 

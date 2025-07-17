@@ -1,6 +1,6 @@
 <header class="header-container" [class.header-hidden]="!isVisible" [ngClass]="{ 'scrolled': isScrolled }">
   <div class="header-logo">
-    <a [routerLink]="(logo$ | async)?.link" class="d-flex align-items-center">
+    <a (click)="onLogoClick()" class="d-flex align-items-center" style="cursor:pointer;">
       <span class="">
         <img [src]="(logo$ | async)?.src" [alt]="(logo$ | async)?.alt"  style="cursor: pointer; width: 11.5rem;" />
       </span>
@@ -20,14 +20,14 @@
   </nav>
   <div class="header-actions">
     <ng-container *ngFor="let action of actions$ | async as actions">
-      <button *ngIf="action.type === 'upgrade'" class="action-btn upgrade-btn d-flex align-items-center upgradebtn" (click)="onUpgradeClick()">
+      <button *ngIf="action.type === 'upgrade'" class="action-btn get-started-btn d-flex align-items-center upgradebtn" (click)="onUpgradeClick()">
         Upgrade
       </button>
       <span *ngIf="action.type === 'profile'" class="header-profile-avatar ms-3" [matMenuTriggerFor]="profileMenu" style="cursor:pointer;">
         <img src="/landing/user.jfif" alt="User Avatar" />
       </span>
       <mat-menu #profileMenu="matMenu">
-        <button mat-menu-item (click)="goToProfile($event)">
+        <button mat-menu-item (click)="goToProfile($event)" *ngIf="!currentRoute.startsWith('/my-profile')">
           <mat-icon>person</mat-icon>
           <span>My Profile</span>
         </button>

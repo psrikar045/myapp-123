@@ -354,6 +354,260 @@ body, .company-data-body {
   box-shadow: 0 2px 8px rgba(37,99,235,0.10);
 }
 
+.company-banner-wrapper {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  left: 0;
+  right: 0;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 32px;
+}
+.company-banner {
+  width: 100%;
+  max-width: 1400px;
+  height: 260px;
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
+  background: #181c32;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  margin: 0 auto;
+  z-index: 1;
+}
+.banner-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  filter: grayscale(1) brightness(0.7);
+}
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.35);
+  z-index: 2;
+}
+.banner-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 32px 48px;
+  width: 100%;
+}
+.banner-logo-circle {
+    width: 110px;
+    height: 110px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 8px 32px 0 rgba(37, 99, 235, 0.18), 0 0 0 8px #f3f6fd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: -55px;
+    z-index: 10;
+    border: 4px solid #fff;
+    margin-left: 20%;
+    left: -14%;
+}
+.banner-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 12px #2563eb33);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  position: static;
+}
+.banner-text {
+  color: #fff;
+  font-size: 2.6rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  margin-left: 180px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  align-self: center;
+}
+.brand-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 80px;
+  margin-bottom: 24px;
+  gap: 32px;
+}
+.brand-info-main {
+  flex: 1 1 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 40px;
+}
+.brand-title-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 8px;
+}
+.brand-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #181c32;
+  font-family: 'Inter', sans-serif;
+  text-align: left;
+}
+.claimed-badge {
+  display: flex;
+  align-items: center;
+  background: #e6f7fa;
+  color: #2563eb;
+  border-radius: 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 4px 14px 4px 10px;
+  margin-left: 8px;
+  gap: 6px;
+}
+.claimed-badge i {
+  font-size: 1.2rem;
+  margin-right: 4px;
+}
+.brand-description {
+  font-size: 1.15rem;
+  color: #23272f;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  margin-bottom: 0;
+  text-align: left;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  margin-left: 0;
+}
+.brand-info-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+  min-width: 180px;
+}
+.share-btn {
+  background: #fff;
+  color: #2563eb;
+  border: 1.5px solid #2563eb;
+  border-radius: 18px;
+  padding: 7px 18px;
+  font-size: 1.05rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+.share-btn i {
+  font-size: 1.2rem;
+}
+.share-btn:hover {
+  background: #2563eb;
+  color: #fff;
+}
+.company-socials {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+.company-socials a {
+  text-decoration: none;
+  margin: 0 4px;
+  display: inline-flex;
+  align-items: center;
+}
+.company-socials i.bi {
+  font-size: 1.7rem;
+  color: #2563eb;
+  background: #fff;
+  border-radius: 50%;
+  padding: 4px;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.10);
+  transition: color 0.2s, transform 0.2s, filter 0.2s;
+  vertical-align: middle;
+}
+.company-socials a[aria-label="Instagram"] i { color: #E1306C; }
+.company-socials a[aria-label="LinkedIn"] i { color: #0077B5; }
+.company-socials a[aria-label="Facebook"] i { color: #1877F3; }
+.company-socials a[aria-label="Twitter"] i { color: #1DA1F2; }
+.company-socials a:hover i {
+  filter: brightness(1.2);
+  transform: scale(1.15);
+}
+@media (max-width: 900px) {
+  .company-banner {
+    height: 140px;
+    max-width: 98vw;
+    border-radius: 18px;
+  }
+  .banner-content {
+    padding: 16px 12px;
+    gap: 16px;
+  }
+  .banner-logo {
+    width: 60px;
+    height: 60px;
+    left: 16px;
+    top: 80px;
+    border-width: 2px;
+  }
+  .banner-text {
+    font-size: 1.2rem;
+    margin-left: 80px;
+  }
+  .banner-logo-circle {
+    width: 60px;
+    height: 60px;
+    left: 16px;
+    bottom: -60px;
+  }
+  .banner-logo {
+    width: 36px;
+    height: 36px;
+  }
+  .brand-title {
+    font-size: 1.3rem;
+  }
+  .brand-info-row {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 30px;
+  }
+  .brand-info-main {
+    padding-left: 10px;
+  }
+  .brand-info-actions {
+    min-width: 100px;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
 @media (max-width: 900px) {
   .company-data-body {
     padding: 0 4px 32px 4px;
@@ -516,4 +770,8 @@ body, .company-data-body {
   border: 1px dashed #ccc;
   border-radius: 8px;
   background-color: #f0f0f0;
+}
+
+.no-brand-margin {
+  margin-top: 28px !important;
 }

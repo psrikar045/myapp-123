@@ -298,6 +298,26 @@
   margin-right: 10px;
 }
 
+/* Ensure profile dropdown uses Inter font */
+::ng-deep .mat-menu-panel, ::ng-deep .mat-menu-item {
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* Position profile dropdown/menu to the right */
+::ng-deep .mat-menu-panel {
+  right: 0 !important;
+  left: auto !important;
+}
+
+.logoutPo {
+  right: 100px !important;
+  left: auto !important;
+}
+.cdk-overlay-connected-position-bounding-box{
+  right: 100px !important;
+  left: auto !important;
+}
+
 /*
   IMPORTANT: To prevent content from being hidden behind the fixed header,
   add padding-top: 80px; (or the header's height) to your main content container.
