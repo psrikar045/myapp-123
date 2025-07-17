@@ -468,3 +468,33 @@ h2{
 .mat-typography h2 {
   font-family: 'Inter', sans-serif !important;
 }
+
+/* Force Inter font on all Angular Material menus and overlays */
+.cdk-overlay-container .mat-menu-panel,
+.cdk-overlay-container .mat-menu-item,
+.mat-menu-panel,
+.mat-menu-item,
+::ng-deep .mat-menu-panel,
+::ng-deep .mat-menu-item,
+[style*='font-family: Roboto'],
+[style*='font-family: "Roboto"'],
+[style*='font-family:Roboto'] {
+  font-family: "Inter", sans-serif !important;
+}
+
+/* Force Inter font on overlay text, but NOT on icons */
+.cdk-overlay-container *:not(.mat-icon):not([class*="material-icons"]) {
+  font-family: "Inter", sans-serif !important;
+}
+
+/* Ensure my-profile dropdown is positioned at right: 100px */
+.logoutPo {
+  right: 100px !important;
+  left: auto !important;
+}
+
+/* Force my-profile dropdown to right: 100px, override Angular Material overlay positioning */
+.cdk-overlay-connected-position-bounding-box {
+  right: 100px !important;
+  left: auto !important;
+}

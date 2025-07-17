@@ -44,6 +44,12 @@ export class HeaderComponent implements OnInit {
         if (this.currentRoute.startsWith('/developer') || this.currentRoute.startsWith('/my-profile')) {
           this.isScrolled = true;
         }
+        // Add or remove body class for my-profile page
+        if (this.currentRoute.startsWith('/my-profile')) {
+          document.body.classList.add('my-profile-page');
+        } else {
+          document.body.classList.remove('my-profile-page');
+        }
       }
     });
   }
@@ -87,7 +93,17 @@ this.authService.checkAuthStatusAndNavigate();
   }
   
   onUpgradeClick() {
-    this.router.navigate(['/all-categories']);
+    this.router.navigate(['/pricing']);
+  }
+
+  onLogoClick() {
+    if (this.currentRoute.startsWith('/landing')) {
+      this.router.navigate(['/landing']);
+    } else if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/home']);
+    } else {
+      this.router.navigate(['/landing']);
+    }
   }
   
   private isHeroSectionInView(): boolean {

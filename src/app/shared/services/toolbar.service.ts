@@ -81,7 +81,7 @@ export class ToolbarService {
       // { label: 'Search API', route: '/search-api', scrollId: '' }
     ]);
     this.actions$.next([
-      { type: 'upgrade', label: 'Upgrade' },
+      { type: 'upgrade', label: 'Upgrade'  },
       { type: 'profile', label: 'Profile', route: '/my-profile' }
     ]);
   }

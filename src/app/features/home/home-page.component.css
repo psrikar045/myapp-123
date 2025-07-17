@@ -414,3 +414,11 @@ footer {
   border: none;
   padding: 0;
 }
+
+:host, .home-page-root {
+  font-family: 'Inter', sans-serif;
+}
+
+.home-container, .main-content, .home-container * {
+  font-family: 'Inter', sans-serif !important;
+}
