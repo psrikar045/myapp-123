@@ -346,3 +346,84 @@ p{
 .back-button i {
   font-size: 1.1rem;
 }
+
+/* Blog Navigation Section */
+.blog-nav-section {
+  border-top: 1px solid #eee;
+  margin-top: 32px;
+  padding-top: 24px;
+}
+.blog-nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.blog-nav-item {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  max-width: 45%;
+  background: none;
+  transition: background 0.2s, box-shadow 0.2s;
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+.blog-nav-item:hover {
+  background: #f6fcfe;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+}
+.blog-nav-item.prev .nav-arrow {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  color: #888;
+}
+.blog-nav-item.next .nav-arrow {
+  font-size: 1.5rem;
+  margin-left: 1rem;
+  color: #888;
+}
+.nav-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.nav-label {
+  font-size: 0.85rem;
+  color: #888;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+.nav-title {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #181c32;
+  line-height: 1.3;
+  font: 600 1.1rem/ 25px "Inter", Roboto, sans-serif;
+}
+.nav-thumb {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-left: 1rem;
+  border: 1px solid #eee;
+}
+@media (max-width: 900px) {
+  .blog-nav-container {
+    flex-direction: column;
+    gap: 18px;
+  }
+  .blog-nav-item {
+    max-width: 100%;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .nav-thumb {
+    width: 40px;
+    height: 40px;
+    margin-left: 0.5rem;
+  }
+}

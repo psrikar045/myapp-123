@@ -13,6 +13,9 @@ import { HeaderComponent } from '../header/header.component';
 })
 export class BlogDetailsComponent implements OnInit {
   selectedBlog: BlogCard | null = null;
+  currentIndex: number = 0;
+  prevBlog: BlogCard | null = null;
+  nextBlog: BlogCard | null = null;
   
   constructor(
     private route: ActivatedRoute,
@@ -147,11 +150,27 @@ export class BlogDetailsComponent implements OnInit {
     // Get the blog ID from route parameters
     this.route.params.subscribe(params => {
       const blogId = +params['id'];
+      this.currentIndex = blogId;
       this.selectedBlog = this.blogs[blogId] || this.blogs[0];
+      this.updateNavigation();
     });
     
     // Force scroll to top when component initializes
     this.forceTopPosition();
+  }
+
+  updateNavigation(): void {
+    this.prevBlog = this.currentIndex > 0 ? this.blogs[this.currentIndex - 1] : null;
+    this.nextBlog = this.currentIndex < this.blogs.length - 1 ? this.blogs[this.currentIndex + 1] : null;
+  }
+
+  navigateToBlog(index: number): void {
+    this.router.navigate(['/blog-details', index]).then(() => {
+      this.currentIndex = index;
+      this.selectedBlog = this.blogs[index] || this.blogs[0];
+      this.updateNavigation();
+      this.forceTopPosition();
+    });
   }
 
   onBackToList(): void {

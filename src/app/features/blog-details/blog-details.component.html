@@ -22,11 +22,11 @@
           <img [src]="selectedBlog.img" [alt]="selectedBlog.title" />
         </div>
       <div class="blog-details-body">
-        <p>If you've ever spent time searching for a company’s logo, brand colors, or social media links, you know how frustrating and time-consuming it can be. That’s why we created Marketify — a simple yet powerful tool that helps you get all the important brand details using just a website link.
-With Marketify, all you need is a company’s domain name, like nike.com or apple.com. In seconds, you’ll get access to their official logo (in SVG or PNG), brand colors, fonts, social media profiles, and even a short company description. Whether you're a developer building an app, a designer creating a presentation, or a marketer managing client content, Marketify makes your job faster and easier.
-What makes Marketify different is its speed and simplicity. It’s built using Java and Angular, which means it’s reliable and developer-friendly. You can explore brands through a clean web interface or use our easy-to-integrate API to automate everything in your own application. You’ll also get access to a personal dashboard where you can manage your API key and track usage.
+        <p>If you've ever spent time searching for a company's logo, brand colors, or social media links, you know how frustrating and time-consuming it can be. That's why we created Marketify — a simple yet powerful tool that helps you get all the important brand details using just a website link.
+With Marketify, all you need is a company's domain name, like nike.com or apple.com. In seconds, you'll get access to their official logo (in SVG or PNG), brand colors, fonts, social media profiles, and even a short company description. Whether you're a developer building an app, a designer creating a presentation, or a marketer managing client content, Marketify makes your job faster and easier.
+What makes Marketify different is its speed and simplicity. It's built using Java and Angular, which means it's reliable and developer-friendly. You can explore brands through a clean web interface or use our easy-to-integrate API to automate everything in your own application. You'll also get access to a personal dashboard where you can manage your API key and track usage.
 Compared to other tools like Brandfetch, Marketify gives you more flexibility and control. You can even suggest or manage your own brand data, making it great for agencies and platforms that deal with multiple brands every day.
-Getting started with Marketify is simple. Just visit marketify.io, sign up for a free account, and start searching by domain. Within minutes, you’ll have all the brand details you need at your fingertips.
+Getting started with Marketify is simple. Just visit marketify.io, sign up for a free account, and start searching by domain. Within minutes, you'll have all the brand details you need at your fingertips.
 Marketify is built to save you time and help you create faster — whether you're pulling logos for a pitch deck or populating your CRM with brand info. Give it a try and see how easy brand access can be.</p>
         <h3>Research Your Destination</h3>
         <p>Before embarking on your journey, take the time to research your destination. This includes understanding the local culture, customs, and laws, as well as identifying top attractions, restaurants, and accommodations. Doing so will help you navigate your destination with confidence and avoid any cultural faux pas.</p>
@@ -47,6 +47,27 @@ Marketify is built to save you time and help you create faster — whether you'r
         <p>Traveling can expose you to new environments and potential health risks, so it's crucial to take precautions to stay safe and healthy. This includes researching any required vaccinations or medications, staying hydrated, washing your hands frequently, and using sunscreen and insect repellent. It's also essential to keep your valuables safe and secure and to be aware of your surroundings at all times.</p>
         <h3>Immerse Yourself in the Local Culture</h3>
         <p>One of the most rewarding aspects of traveling is immersing yourself in the local culture and customs. This includes trying local cuisine, attending cultural events and festivals, and interacting with locals. Learning a few phrases in the local language can also go a long way in making connections and showing respect.</p>
+        </div>
+
+        <!-- Blog Navigation Section (moved inside blog-details-main) -->
+        <div class="blog-nav-section">
+          <div class="blog-nav-container">
+            <div class="blog-nav-item prev" *ngIf="prevBlog" (click)="navigateToBlog(currentIndex - 1)">
+              <span class="nav-arrow">&#8592;</span>
+              <div class="nav-content">
+                <div class="nav-label">Previous</div>
+                <div class="nav-title">{{ prevBlog.title }}</div>
+              </div>
+            </div>
+            <div class="blog-nav-item next" *ngIf="nextBlog" (click)="navigateToBlog(currentIndex + 1)">
+              <div class="nav-content">
+                <div class="nav-label">Next</div>
+                <div class="nav-title">{{ nextBlog.title }}</div>
+              </div>
+              <img *ngIf="nextBlog.img" [src]="nextBlog.img" alt="Next blog image" class="nav-thumb" />
+              <span class="nav-arrow">&#8594;</span>
+            </div>
+          </div>
         </div>
       </div></div>
       
