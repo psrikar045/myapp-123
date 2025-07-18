@@ -15,6 +15,10 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     /* margin-left: 150px;
     margin-right: 150px; */
+    flex: 0 0 65%;
+    overflow: hidden;
+    box-sizing: border-box;
+    margin-right: 14px;
 }
 .blog-side-card{
    background-color: #f6fcfe;
@@ -24,6 +28,9 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     /* margin-left: 150px;
     margin-right: 150px; */
+    /* flex: 0 0 30%; */
+    overflow: hidden;
+    box-sizing: border-box;
 }
 .blog-details-main-container {
  max-width: 1500px;
@@ -155,7 +162,9 @@ span{
   background: none;
   border-radius: 18px;
   padding: 0;
-  min-width: 320px;
+  min-width: 280px;
+  width: 100%;
+  overflow: hidden;
 }
 .sidebar-title {
   font-size: 1.25rem;
@@ -194,16 +203,18 @@ p{
   transform: translateY(-2px) scale(1.02);
 }
 .sidebar-category-img {
-  width: 160px;
-    height: 110px;
+  width: 120px;
+    height: 80px;
     border-radius: 8px;
-    object-fit: fill;
+    object-fit: cover;
     flex-shrink: 0;
 }
 .sidebar-category-content {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  flex: 1;
+  overflow: hidden;
 }
 .sidebar-category-author {
   font-size: 0.92rem;
@@ -223,6 +234,9 @@ p{
   font-weight: 500;
   margin-top: 2px;
   font: 400 14px / 20px "Inter", Roboto, sans-serif !important;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.3;
 }
 
 /* Popular Tags Section */
@@ -247,21 +261,26 @@ p{
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .popular-tag {
   display: inline-block;
   background: #ffffff;
   color: #2563eb;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 500;
-  padding: 8px 16px;
+  padding: 6px 12px;
   border: 1px solid #2563eb;
   border-radius: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: "Inter", sans-serif;
   white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 100%;
 }
 
 .popular-tag:hover {
@@ -275,6 +294,16 @@ p{
   .blog-details-main-container {
     flex-direction: column;
     gap: 24px;
+  }
+  .blog-details-content {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .blog-main-card {
+    flex: 1;
+  }
+  .blog-side-card {
+    flex: 1;
   }
   .blog-details-sidebar {
     min-width: 0;
@@ -311,7 +340,7 @@ p{
 
 .blog-details-content {
   display: flex;
-  gap: 30px;
+  gap: 20px;
 }
 
 .back-button-container {
