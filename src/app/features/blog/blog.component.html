@@ -61,7 +61,8 @@
         <div class="blog-vertical-divider"></div>
         <aside class="blog-sidebar">
           <div class="sidebar-category-list">
-            <div class="sidebar-category-item" *ngFor="let cat of sidebarCategories; let i = index" (click)="navigateToBlogDetailsFromSidebar(i)">
+            <div class="sidebar-category-item" *ngFor="let cat of sidebarCategories; let i = index">
+              <!-- (click)="navigateToBlogDetailsFromSidebar(i)" -->
               <div class="sidebar-card-image-container" style="display: flex;">
                  
                 <img class="sidebar-category-img" [src]="cat.img" alt="Category" />

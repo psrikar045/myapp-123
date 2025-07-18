@@ -51,6 +51,49 @@ export class BlogDetailsComponent implements OnInit {
     }
   ];
 
+  popularTags = [
+    'Best Diploma Course For Fashion',
+    'Best Fashion Academy In Hyderabad',
+    'Best Fashion Courses',
+    'Best Fashion Design Training',
+    'Best Fashion Institute',
+    'Best Fashion Trends',
+    'Boutique Business',
+    'Certificate Course In Boutique Management',
+    'Certificate Course In Fashion Design',
+    'Certification Course For Fashion',
+    'Certification Course For Fashion Designing',
+    'Diploma In Fashion',
+    'Diploma In Fashion Design',
+    'Diploma In Fashion Designing',
+    'Fashion',
+    'Fashion Design',
+    'Fashion Design Course',
+    'Fashion Design Courses',
+    'Fashion Design Course Training',
+    'Fashion Design Curriculum',
+    'Fashion Designer',
+    'Fashion Designers With Technical Skills',
+    'Fashion Designing Colleges In Hyderabad',
+    'Fashion Designing In India',
+    'Fashion Design Training',
+    'Fashion Journalism',
+    'Fashion Quotes',
+    'Fashion Trends',
+    'Global Certification In Fashion Design',
+    'Global Certified Fashion Designers',
+    'Hitmls',
+    'Hyderabad\'s Best Fashion Institute',
+    'Hyderabad\'s Best Interior Designing Course Institute',
+    'Importance Of Photography In The Digital Era',
+    'Interior Designing Institute',
+    'International Certified Fashion Design Course',
+    'Masters In Fashion Designing',
+    'Pg Diploma In Fashion Designing',
+    'Style',
+    'The Fashion Industry'
+  ];
+
   // Blog data - same as in BlogComponent
   blogs: BlogCard[] = [
     {
