@@ -3,7 +3,7 @@ import { ToolbarService, ToolbarLogo, ToolbarNavItem, ToolbarAction } from '../.
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -27,6 +27,7 @@ export class HeaderComponent implements OnInit {
   private lastScrollY = 0;
   private showTimeout: any;
   private isScrollingUp = false;
+  private authSubscription: Subscription | undefined;
   constructor(
     private toolbarService: ToolbarService,
     private authService: AuthService,
@@ -55,14 +56,17 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.authService.isAuthenticated$.subscribe(isAuthenticated => {
-    //   if (isAuthenticated) {
-    //     this.toolbarService.setLoggedInToolbar();
-    //   } else {
-    //     this.toolbarService.setLoggedOutToolbar();
-    //   }
-    // });
-    
+    this.authSubscription = this.authService.isAuthenticated$.subscribe(isAuthenticated => {
+      if (isAuthenticated) {
+        this.toolbarService.setLoggedInToolbar();
+      } else {
+        this.toolbarService.setLoggedOutToolbar();
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.authSubscription?.unsubscribe();
   }
 login() {
 this.authService.checkAuthStatusAndNavigate();
@@ -127,5 +131,13 @@ this.authService.checkAuthStatusAndNavigate();
     }
     this.isVisible = true;
     this.lastScrollY = currentScrollY < 0 ? 0 : currentScrollY;
+  }
+
+  isUpgradeActive(): boolean {
+    return this.authService.isAuthenticated() && this.currentRoute.startsWith('/pricing');
+  }
+
+  onGetStartedClick() {
+    this.router.navigate(['/login'], { queryParams: { register: 'true' } });
   }
 }
