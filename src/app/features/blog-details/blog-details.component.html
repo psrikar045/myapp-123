@@ -8,6 +8,7 @@
     <!-- Main content area -->
     <div class="blog-details-content">
       <!-- Blog Details (Left) -->
+       <div  class="blog-main-card">
       <div class="blog-details-main">
         <div class="blog-details-header" *ngIf="selectedBlog">
           <h1 class="blog-title">{{selectedBlog.title}}</h1>
@@ -47,13 +48,14 @@ Marketify is built to save you time and help you create faster — whether you'r
         <h3>Immerse Yourself in the Local Culture</h3>
         <p>One of the most rewarding aspects of traveling is immersing yourself in the local culture and customs. This includes trying local cuisine, attending cultural events and festivals, and interacting with locals. Learning a few phrases in the local language can also go a long way in making connections and showing respect.</p>
         </div>
-      </div>
+      </div></div>
       
       <!-- Sidebar Card -->
       <!-- <div class="blog-details-sidebar-card" style="flex: 1;"> -->
         <!-- Sidebar (Right) -->
+         <div class="blog-side-card">
         <aside class="blog-details-sidebar">
-      <h3 class="sidebar-title">All blog categories</h3>
+      <h3 class="sidebar-title">Recent Posts</h3>
       <p class="sidebar-desc">Traveling is an enriching experience that opens up new horizons, exposes us to</p>
       <div class="sidebar-category-list">
         <div class="sidebar-category-item" *ngFor="let cat of sidebarCategories">
@@ -65,14 +67,14 @@ Marketify is built to save you time and help you create faster — whether you'r
           </div>
         </div>
       </div>
-        </aside>
+        </aside></div>
       <!-- </div> -->
     </div> <!-- Close blog-details-content -->
-    <div class="back-button-container">
+    <!-- <div class="back-button-container">
       <button class="back-button" (click)="onBackToList()">
         <i class="bi bi-arrow-left"></i> Back to Blog List
       </button>
-    </div>
+    </div> -->
     </div> <!-- Close blog-details-main-card -->
   </div>
 </div>
