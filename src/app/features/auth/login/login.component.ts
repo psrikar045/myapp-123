@@ -465,20 +465,22 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-   // Initialize Google Sign-In
-    // Ensure google object is available
-    if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-      google.accounts.id.initialize({
-        client_id: '28315114628-i0gj4eg0kfjr3b2g6cb8f62rmkrhtm22.apps.googleusercontent.com',
-        callback: this.handleGoogleSignIn.bind(this)
-      });
-      google.accounts.id.renderButton(
-        this.document.getElementById('googleSignInButton'),
-        { theme: 'outline', size: 'large', width: '250' } // Customize button options as needed
-      );
-      // google.accounts.id.prompt(); // Optionally, display One Tap prompt
-    } else {
-      console.log('Google Identity Services script not loaded.');
+   // Initialize Google Sign-In only in browser
+    if (isPlatformBrowser(this.platformId)) {
+      // Ensure google object is available
+      if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+        google.accounts.id.initialize({
+          client_id: '28315114628-i0gj4eg0kfjr3b2g6cb8f62rmkrhtm22.apps.googleusercontent.com',
+          callback: this.handleGoogleSignIn.bind(this)
+        });
+        google.accounts.id.renderButton(
+          this.document.getElementById('googleSignInButton'),
+          { theme: 'outline', size: 'large', width: '250' } // Customize button options as needed
+        );
+        // google.accounts.id.prompt(); // Optionally, display One Tap prompt
+      } else {
+        console.log('Google Identity Services script not loaded.');
+      }
     }
   }
 

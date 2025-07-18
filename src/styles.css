@@ -463,16 +463,29 @@ mat-form-field{
 /* * {
   font-family: inherit !important;
 } */
-
+.sidebar-title{
+   font-weight: 700 !important;
+}
 .nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{
   font-family: 'Inter', sans-serif !important; 
 }
 h2{
   font-family: 'Inter', sans-serif !important; 
+  font: 500 20px / 32px "Inter", Roboto, sans-serif !important;
 }
 .mat-typography h2 {
   font-family: 'Inter', sans-serif !important;
+  font: 500 20px / 32px "Inter", Roboto, sans-serif !important;
 }
+
+.mat-typography h3 {
+  font-family: 'Inter', sans-serif !important;
+  font: 723 20px / 26px "Inter", Roboto, sans-serif !important;
+}
+ .mat-typography{
+  font-family: 'Inter', sans-serif !important;
+  font: "Inter", Roboto, sans-serif !important;
+ }
 
 /* Force Inter font on all Angular Material menus and overlays */
 .cdk-overlay-container .mat-menu-panel,

@@ -3,7 +3,7 @@
   width: 100%;
   /* background: linear-gradient(120deg, #eaf6ff 0%, #fffbe5 100%); */
   /* background: linear-gradient(120deg, #95bddc 0%, #d1ccad 100%); */
-  background: linear-gradient(99deg, #ffffff 0%, #75b8d6 100%);
+  background: linear-gradient(99deg, #ffffff 0%, #91EFFE 100%);
   padding-bottom: 40px;
   padding-top: 30px;
 }
@@ -13,7 +13,7 @@
   margin: 0 auto;
   display: flex;
   gap: 10px;
-  padding: 75px 16px 0 16px;
+  padding: 30px 16px 0 16px;
   align-items: flex-start;
 }
 
@@ -148,6 +148,7 @@
 }
 .summary{
   padding: 10px;
+
 }
 .author{
   margin-left: 10px;
@@ -178,14 +179,15 @@
 }
 .sidebar-category-item {
   display: flex;
-  align-items: center;
-  background: #d2e3f2;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(37,99,235,0.08);
-  padding: 7px 10px;
-  gap: 12px;
-  cursor: pointer;
-  transition: box-shadow 0.2s, transform 0.2s;
+    align-items: center;
+    background: #f6fcfe;
+    border-radius: 12px;
+    /* box-shadow: 0 2px 12px rgba(37, 99, 235, 0.08); */
+    padding: 7px 10px;
+    gap: 12px;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.2s;
+    border: 1px solid #dce5e9;
 }
 .sidebar-category-item:hover {
   box-shadow: 0 6px 24px rgba(37,99,235,0.13);
@@ -199,8 +201,9 @@
     flex-shrink: 0;
 }
 .blog-card-image-container{
-  background: #d2e3f2;
+  background: #f6fcfe;
     border-radius: 16px;
+    border: 1px solid #dce5e9;
 }
 .blog-card-image-container :hover{
   transform: translateY(-2px);
@@ -299,11 +302,12 @@
   max-width: 100%;
     height: auto;
     display: block;
-    padding: 20px;
+    padding: 25px;
     border-radius: 39px;
+    padding-top: 11px !important
 }
 .blog-card-content{
-  padding-left: 20px;
+  padding-left: 25px;
   padding-top: 20px;
   padding-right: 20px;
 }
@@ -377,4 +381,18 @@
   margin: 0 24px;
   align-self: stretch;
 }
-
+.blog-card-title{
+  margin-bottom: 10px;
+}
+.blog-card-summary{
+  margin-bottom: 5px;
+}
+.blog-main-card{
+  background-color: #fefefe;
+    /* margin: 20px; */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-left: 150px;
+    margin-right: 150px;
+}

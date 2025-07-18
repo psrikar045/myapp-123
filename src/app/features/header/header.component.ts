@@ -1,6 +1,6 @@
-import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { ToolbarService, ToolbarLogo, ToolbarNavItem, ToolbarAction } from '../../shared/services/toolbar.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { Observable, Subscription } from 'rxjs';
@@ -31,7 +31,8 @@ export class HeaderComponent implements OnInit {
   constructor(
     private toolbarService: ToolbarService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.logo$ = this.toolbarService.logo;
     this.navItems$ = this.toolbarService.navItems;
@@ -46,10 +47,12 @@ export class HeaderComponent implements OnInit {
           this.isScrolled = true;
         }
         // Add or remove body attribute for my-profile page
-        if (this.currentRoute.startsWith('/my-profile')) {
-          document.body.setAttribute('data-profile-page', 'true');
-        } else {
-          document.body.removeAttribute('data-profile-page');
+        if (isPlatformBrowser(this.platformId)) {
+          if (this.currentRoute.startsWith('/my-profile')) {
+            document.body.setAttribute('data-profile-page', 'true');
+          } else {
+            document.body.removeAttribute('data-profile-page');
+          }
         }
       }
     });
@@ -75,9 +78,11 @@ this.authService.checkAuthStatusAndNavigate();
     if (item.label === 'Blog') {
       this.router.navigate(['/blog']);
     } else if (item.scrollId && this.router.url.startsWith('/landing')) {
-      const el = document.getElementById(item.scrollId);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+      if (isPlatformBrowser(this.platformId)) {
+        const el = document.getElementById(item.scrollId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
       }
     } else if (item.route) {
       this.router.navigate([item.route]);
@@ -111,6 +116,7 @@ this.authService.checkAuthStatusAndNavigate();
   }
   
   private isHeroSectionInView(): boolean {
+    if (!isPlatformBrowser(this.platformId)) return false;
     const hero = document.getElementById('hero');
     if (!hero) return false;
     const rect = hero.getBoundingClientRect();

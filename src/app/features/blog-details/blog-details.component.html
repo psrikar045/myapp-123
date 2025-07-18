@@ -1,20 +1,25 @@
 <app-header></app-header>
 <div class="blog-details-bg">
-  <div class="blog-details-main-container">
-    <!-- Blog Details (Left) -->
-    <div class="blog-details-main">
-      <div class="blog-details-header">
-        
-        <h1 class="blog-title">{{selectedBlog?.title}}</h1>
-        <div class="blog-meta">
-          <span class="author">{{selectedBlog?.author}}</span>
-          <span class="date">{{selectedBlog?.date}}</span>
-          <span class="blog-category">{{selectedBlog?.category}}</span>
+  <!-- Card Container with Light Blue Background -->
+  <div class="blog-details-main-container" >
+    <div class="blog-details-main-card">
+    <!-- Back Button -->
+    
+    <!-- Main content area -->
+    <div class="blog-details-content">
+      <!-- Blog Details (Left) -->
+      <div class="blog-details-main">
+        <div class="blog-details-header" *ngIf="selectedBlog">
+          <h1 class="blog-title">{{selectedBlog.title}}</h1>
+          <div class="blog-meta">
+            <span class="author">{{selectedBlog.author}}</span>
+            <span class="date">{{selectedBlog.date}}</span>
+            <span class="blog-category">{{selectedBlog.category}}</span>
+          </div>
         </div>
-      </div>
-      <div class="blog-details-image">
-        <img [src]="selectedBlog?.img" [alt]="selectedBlog?.title" />
-      </div>
+        <div class="blog-details-image" *ngIf="selectedBlog">
+          <img [src]="selectedBlog.img" [alt]="selectedBlog.title" />
+        </div>
       <div class="blog-details-body">
         <p>If you've ever spent time searching for a company’s logo, brand colors, or social media links, you know how frustrating and time-consuming it can be. That’s why we created Marketify — a simple yet powerful tool that helps you get all the important brand details using just a website link.
 With Marketify, all you need is a company’s domain name, like nike.com or apple.com. In seconds, you’ll get access to their official logo (in SVG or PNG), brand colors, fonts, social media profiles, and even a short company description. Whether you're a developer building an app, a designer creating a presentation, or a marketer managing client content, Marketify makes your job faster and easier.
@@ -31,9 +36,9 @@ Marketify is built to save you time and help you create faster — whether you'r
         <blockquote class="blog-quote">
           " Traveling can expose you to new environments and potential health risks, so it's crucial to take precautions to stay safe and healthy. "
         </blockquote>
-        <div class="blog-ad-placeholder">
-          <span>Advertisement</span>
-          <div class="ad-box">You can place ads<br>750x100</div>
+        <div >
+          <!-- <span>Advertisement</span> -->
+          <div class="blog-details-image" *ngFor="let cat of advertisements"><img  [src]="cat.img" alt="Category" /></div>
         </div>
         <h3>Pack Lightly and Smartly</h3>
         <p>Packing can be a daunting task, but with some careful planning and smart choices, you can pack light and efficiently. Start by making a packing list and choosing the most versatile and comfortable clothing that can be mixed and matched. Invest in luggage and packing organizers to maximize space and minimize wrinkles.</p>
@@ -41,10 +46,13 @@ Marketify is built to save you time and help you create faster — whether you'r
         <p>Traveling can expose you to new environments and potential health risks, so it's crucial to take precautions to stay safe and healthy. This includes researching any required vaccinations or medications, staying hydrated, washing your hands frequently, and using sunscreen and insect repellent. It's also essential to keep your valuables safe and secure and to be aware of your surroundings at all times.</p>
         <h3>Immerse Yourself in the Local Culture</h3>
         <p>One of the most rewarding aspects of traveling is immersing yourself in the local culture and customs. This includes trying local cuisine, attending cultural events and festivals, and interacting with locals. Learning a few phrases in the local language can also go a long way in making connections and showing respect.</p>
+        </div>
       </div>
-    </div>
-    <!-- Sidebar (Right) -->
-    <aside class="blog-details-sidebar">
+      
+      <!-- Sidebar Card -->
+      <!-- <div class="blog-details-sidebar-card" style="flex: 1;"> -->
+        <!-- Sidebar (Right) -->
+        <aside class="blog-details-sidebar">
       <h3 class="sidebar-title">All blog categories</h3>
       <p class="sidebar-desc">Traveling is an enriching experience that opens up new horizons, exposes us to</p>
       <div class="sidebar-category-list">
@@ -52,12 +60,20 @@ Marketify is built to save you time and help you create faster — whether you'r
           <img class="sidebar-category-img" [src]="cat.img" alt="Category" />
           <div class="sidebar-category-content">
             <span class="sidebar-category-author">{{cat.author}}</span>
-            <span class="sidebar-category-time">5min</span>
+            <!-- <span class="sidebar-category-time">5min</span> -->
             <div class="sidebar-category-title">{{cat.title}}</div>
           </div>
         </div>
       </div>
-    </aside>
+        </aside>
+      <!-- </div> -->
+    </div> <!-- Close blog-details-content -->
+    <div class="back-button-container">
+      <button class="back-button" (click)="onBackToList()">
+        <i class="bi bi-arrow-left"></i> Back to Blog List
+      </button>
+    </div>
+    </div> <!-- Close blog-details-main-card -->
   </div>
 </div>
 <!-- <app-footer></app-footer> -->

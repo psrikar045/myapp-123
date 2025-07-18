@@ -1,23 +1,14 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ToolbarService } from '../../shared/services/toolbar.service';
 import { Router } from '@angular/router';
+import { ToolbarService } from '../../shared/services/toolbar.service';
 import { HeaderComponent } from '../header/header.component';
-
-interface BlogCard {
-  img: string;
-  author: string;
-  date: string;
-  title: string;
-  category: string;
-  authorAvatar: string;
-  summary?: string;
-}
+import { BlogCard } from '../../shared/interfaces/blog-card.interface';
 
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [CommonModule,HeaderComponent],
+  imports: [CommonModule, HeaderComponent],
   templateUrl: './blog.component.html',
   styleUrl: './blog.component.css'
 })
@@ -31,7 +22,7 @@ export class BlogComponent implements OnInit {
 
   blogs: BlogCard[] = [
     {
-      img: '/images/Image.jpg',
+      img: '/images/Image (1).jpg',
       author: 'Tracey Wilson',
       date: 'june 20, 2025',
       title: 'Introducing Marketify: The Ultimate API to Access Brand Assets by Domain',
@@ -40,7 +31,7 @@ export class BlogComponent implements OnInit {
       authorAvatar: 'assets/author1.png'
     },
     {
-      img: '/images/Image (1).jpg',
+      img: '/images/Image.jpg ',
       author: 'John Smith',
       date: 'june 28, 2025',
       title: '5 Reasons Marketify Is the Perfect Alternative to Brandfetch',
@@ -232,22 +223,25 @@ export class BlogComponent implements OnInit {
   navigateToBlogDetails(blogIndex: number): void {
     // Calculate the actual index in the full blogs array
     const actualIndex = (this.currentPage - 1) * this.pageSize + blogIndex;
-    // Immediate position to top before navigation
-    this.resetScrollPosition();
     this.router.navigate(['/blog-details', actualIndex]);
   }
 
-  navigateToBlogDetailsFromSidebar(categoryId: number): void {
-    // Immediate position to top before navigation
-    this.resetScrollPosition();
-    this.router.navigate(['/blog-details', categoryId]);
+  navigateToBlogDetailsFromSidebar(index: number): void {
+    // For sidebar navigation, navigate to the blog details
+    this.router.navigate(['/blog-details', index]);
   }
 
   private resetScrollPosition(): void {
     // Simple immediate positioning
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
-    window.scrollTo(0, 0);
+    if (typeof window !== 'undefined' && typeof document !== 'undefined') {
+      try {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      } catch (error) {
+        // Silently handle any scroll errors
+      }
+    }
   }
 
   trackByBlog(index: number, blog: BlogCard): string {
