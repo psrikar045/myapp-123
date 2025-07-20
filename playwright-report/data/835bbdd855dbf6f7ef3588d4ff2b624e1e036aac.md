@@ -1,0 +1,175 @@
+# Page snapshot
+
+```yaml
+- banner:
+  - navigation: Brands Developers Pricing Blog
+  - button "Login"
+  - button "Get Started "
+- img "Yellow Circle"
+- heading "Fetch Company Brand Data Instantly with Marketify" [level=1]:
+  - text: Fetch Company Brand Data Instantly with Marketify
+  - img
+- paragraph: Access logos, brand colors, fonts and social links by simply entering a domain name
+- img
+- textbox "Search a brand"
+- button:
+  - img
+- text: Our customers say Excellent
+- img
+- img
+- img
+- img
+- img
+- text: 4.7 out of 5 on 194 reviews
+- img "Main Illustration"
+- img "Company 1"
+- img "Company 2"
+- img "Company 3"
+- img "Company 4"
+- img "Company 5"
+- heading "Discover Marketify’s Core Capabilities" [level=2]
+- paragraph: Everything you need to build powerful brand integrations
+- text:  Logos and Brand Assets
+- button "Learn More "
+- text:  Brand colors & Fonts
+- button "Learn More "
+- text:  Real time API
+- button "Learn More "
+- text:  Always Update
+- button "Learn More "
+- img "Illustration"
+- heading "For Designers" [level=2]
+- paragraph: Instantly access brand assets, color palettes, and typography to streamline your creative workflow. Marketify makes it easy to maintain brand consistency and save hours on manual asset collection.
+- text:  Brand Guidelines Official brand rules at your fingertips  Color Palettes Accurate brand color codes instantly  Typography Discover and use brand fonts  Design Assets Download logos, icons, and more
+- img "Card Illustration"
+- img "Card Illustration"
+- heading "For Developers" [level=2]
+- paragraph: Integrate real-time brand data into your apps and websites with our robust API and SDKs. Marketify empowers you to automate branding, onboarding, and more.
+- text:  REST API Fetch brand assets programmatically  SDKs Available Quick integration in your language  Code Examples Ready-to-use code snippets  Real-Time Data Always up-to-date brand info
+- heading "For Marketers" [level=2]
+- paragraph: Ensure your campaigns and content always use the latest brand assets. Marketify helps you maintain consistency and credibility across all channels.
+- text:  Social Links Find official social profiles  Brand Monitoring Get notified on asset changes  Asset Library Centralized brand visuals  Campaign Ready Assets for every platform
+- img "Card Illustration"
+- img "Workflow Illustration"
+- heading "Ready to Supercharge Your Workflow" [level=2]
+- paragraph: Start fetching brand data in minutes with Marketify.
+- textbox "Your Email here.."
+- button "Get Started"
+- heading "Expand your options with a subscription" [level=2]
+- paragraph: Graphs displaying your performance for metrics like follower evolution, average rate per post and reach and impressions to give you the insights.
+- text: Bill Monthly
+- checkbox
+- text: Bill Anually Base Free start for your project on our platform. $0 Per User / Monthly
+- list:
+  - listitem:  Access to editing all blocks
+  - listitem:  Editing blocks together
+  - listitem:  Access to all premium icons
+  - listitem:  A dedicated domain
+  - listitem:  Ability to integrate with CMS
+- button "Get started free"
+- text: Standard For a small company that wants to show what it's worth. $30 Per User / Monthly
+- list:
+  - listitem:  Access to editing all blocks
+  - listitem:  Editing blocks together
+  - listitem:  Access to all premium icons
+  - listitem:  A dedicated domain
+  - listitem:  Ability to integrate with CMS
+- button "Start Standard"
+- text: Unlimited For a large company that wants to achieve maximum returns $60 Per User / Monthly
+- list:
+  - listitem:  Access to editing all blocks
+  - listitem:  Editing blocks together
+  - listitem:  Access to all premium icons
+  - listitem:  A dedicated domain
+  - listitem:  Ability to integrate with CMS
+- button "Start Premium"
+- img
+- heading "Trusted by Forward – Thinking Teams" [level=2]
+- paragraph: Polygon absolutely works great with tools in your other existing platform.
+- img "Company 1"
+- img "Company 2"
+- img "Company 3"
+- img "Company 4"
+- img "Company 5"
+- contentinfo:
+  - img "Logo"
+  - text: Access logos, brand colors, fonts and social links by simply entering a domain name
+  - link "":
+    - /url: https://instagram.com/
+  - link "":
+    - /url: https://linkedin.com/
+  - link "":
+    - /url: https://facebook.com/
+  - link "":
+    - /url: https://twitter.com/
+  - text: © Copyright 2021 Duxo.io All rights reserved. TOP BRAND CATEGORIES
+  - list:
+    - listitem:
+      - link "Computers Electronics":
+        - /url: "#"
+    - listitem:
+      - link "Finance":
+        - /url: "#"
+    - listitem:
+      - link "Vehicles":
+        - /url: "#"
+    - listitem:
+      - link "E-Commerce":
+        - /url: "#"
+    - listitem:
+      - link "News and Media":
+        - /url: "#"
+    - listitem:
+      - link "Luxury":
+        - /url: "#"
+  - list:
+    - listitem:
+      - link "Arts and Entertainment":
+        - /url: "#"
+    - listitem:
+      - link "Food and Drink":
+        - /url: "#"
+    - listitem:
+      - link "Travel and Tourism":
+        - /url: "#"
+    - listitem:
+      - link "Business and Services":
+        - /url: "#"
+    - listitem:
+      - link "Lifestyle":
+        - /url: "#"
+    - listitem:
+      - link "View all categories":
+        - /url: /all-categories
+  - text: FOR DEVELOPERS
+  - list:
+    - listitem:
+      - link "Developers":
+        - /url: "#"
+    - listitem:
+      - link "Pricing":
+        - /url: "#"
+    - listitem:
+      - link "Docs":
+        - /url: "#"
+  - text: COMPANY
+  - list:
+    - listitem:
+      - link "Home":
+        - /url: "#"
+    - listitem:
+      - link "For Brands":
+        - /url: "#"
+    - listitem:
+      - link "Plugins":
+        - /url: "#"
+    - listitem:
+      - link "Terms and conditions":
+        - /url: "#"
+    - listitem:
+      - link "Privacy policy":
+        - /url: "#"
+    - listitem:
+      - link "Blog":
+        - /url: "#"
+```
