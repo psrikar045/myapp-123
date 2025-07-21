@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, HostListener, Injectable, inject, PLATFORM_ID  } from '@angular/core';
 import { CommonModule, isPlatformBrowser  } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
@@ -24,39 +24,54 @@ export class FooterComponent implements OnInit, OnDestroy {
   ];
 
   brandCategories = [
-    'Computers Electronics',
-    'Finance',
-    'Vehicles',
-    'E-Commerce',
-    'News and Media',
-    'Luxury',
-    'Arts and Entertainment',
-    'Food and Drink',
-    'Travel and Tourism',
-    'Business and Services',
-    'Lifestyle',
-    'View all categories',
+    { name: 'Computers Electronics', route: 'computers-electronics' },
+    { name: 'Finance', route: 'finance' },
+    { name: 'Vehicles', route: 'vehicles' },
+    { name: 'E-Commerce', route: 'e-commerce' },
+    { name: 'News and Media', route: 'news-media' },
+    { name: 'Luxury', route: 'luxury' },
+    { name: 'Arts and Entertainment', route: 'arts-entertainment' },
+    { name: 'Food and Drink', route: 'food-drink' },
+    { name: 'Travel and Tourism', route: 'travel-tourism' },
+    { name: 'Business and Services', route: 'business-services' },
+    { name: 'Lifestyle', route: 'lifestyle' },
+    { name: 'View all categories', route: '' }
   ];
 
   developerLinks = [
-    { label: 'Developers', url: '#' },
-    { label: 'Pricing', url: '#' },
+    { label: 'Developers', route: '/developer' },
+    { label: 'Plugins', url: '#' },
+    { label: 'Pricing', route: '/pricing' },
     { label: 'Docs', url: '#' },
   ];
 
   companyLinks = [
-    { label: 'Home', url: '#' },
-    { label: 'For Brands', url: '#' },
-    { label: 'Plugins', url: '#' },
+    { label: 'Brands', route: '/all-categories' },
+    { label: 'Blog', route: '/blog' },
+    { label: 'Contact Us', route: '' },
     { label: 'Terms and conditions', url: '#' },
     { label: 'Privacy policy', url: '#' },
-    { label: 'Blog', url: '#' },
   ];
+
+  constructor(private router: Router) {}
+
+  navigateToCategory(category: { name: string, route: string }, event?: MouseEvent): void {
+    if (event) {
+      event.preventDefault();
+    }
+    
+    if (category.name === 'View all categories') {
+      this.router.navigate(['/all-categories']);
+    } else {
+      this.router.navigate(['/all-categories'], {
+        queryParams: { category: category.route }
+      });
+    }
+  }
 
   ngOnInit(): void {
   if (typeof window !== 'undefined') {
     this.checkScrollPosition();
-
     window.addEventListener('scroll', () => {
       this.checkScrollPosition();
     });
@@ -85,9 +100,9 @@ export class FooterComponent implements OnInit, OnDestroy {
       behavior: 'smooth'
     });
   }
+
  private platformId = inject(PLATFORM_ID);
   isBrowser(): boolean {
     return isPlatformBrowser(this.platformId);
   }
-
 }

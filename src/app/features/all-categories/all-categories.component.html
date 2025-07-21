@@ -32,15 +32,22 @@
         <!-- Sidebar Accordion -->
 <aside class="categories-sidebar">
   <div *ngFor="let cat of filteredCategories" class="sidebar-category">
-    <button class="sidebar-category-btn" [class.active]="cat.label === expandedCategory" (click)="toggleCategoryAccordion(cat.label)">
+    <button class="sidebar-category-btn" 
+      [class.active]="cat.label === selectedCategory"
+      [class.expanded]="cat.label === expandedCategory"
+      (click)="toggleCategoryAccordion(cat.label)">
       {{ cat.label }}
       <span class="accordion-arrow" [class.open]="cat.label === expandedCategory">
         <i class="bi bi-chevron-down"></i>
       </span>
     </button>
     <div class="sidebar-subcategories" *ngIf="cat.label === expandedCategory && cat.label !== 'All' && subCategoryMap[cat.label]">
-      <button *ngFor="let sub of subCategoryMap[cat.label]" class="sidebar-subcategory-btn" (click)="goToSubCategory(sub)">
-        {{ sub.name }} </button>
+      <button *ngFor="let sub of subCategoryMap[cat.label]" 
+        class="sidebar-subcategory-btn"
+        [class.active]="selectedSubCategory === sub.name"
+        (click)="goToSubCategory(sub.name)">
+        {{ sub.name }}
+      </button>
     </div>
   </div>
 </aside>
@@ -63,11 +70,11 @@
           </section>
           <!-- Pagination inside the card layout -->
           <div class="categories-pagination">
-            <button class="page nav" [disabled]="currentPage === 1" (click)="selectPage(currentPage - 1)">
+            <button class="page nav" (click)="selectPage(currentPage === 1 ? 1 : currentPage - 1)">
               <i class="bi bi-chevron-left"></i>
             </button>
             <button *ngFor="let page of pages" class="page" [class.active]="page === currentPage" (click)="selectPage(page)">{{ page }}</button>
-            <button class="page nav" [disabled]="currentPage === pages.length" (click)="selectPage(currentPage + 1)">
+            <button class="page nav" (click)="selectPage(currentPage === pages.length ? pages.length : currentPage + 1)">
               <i class="bi bi-chevron-right"></i>
             </button>
           </div>

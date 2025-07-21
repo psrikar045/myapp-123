@@ -34,7 +34,7 @@ ngOnInit() {
       map(event => (event as NavigationEnd).urlAfterRedirects)
     ).subscribe(url => {
       // Define routes where footer should be hidden (e.g., login, signup)
-      const authRoutes = ['/login', '/reset-password', '/forgot-password', '/search', '/search-view', '/my-profile', '/home', '/brandApi', '/logo-link']; // Add more routes if needed
+      const authRoutes = ['/login', '/reset-password', '/forgot-password', '/search',]; // Add more routes if needed
       const hideFooter = authRoutes.some(route => url.includes(route));
       this.toolbarService.setShowFooter(!hideFooter); // Update the service's state
     });

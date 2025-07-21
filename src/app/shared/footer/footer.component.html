@@ -31,14 +31,12 @@
       <div class="footer-links-row">
         <ul>
           <li *ngFor="let cat of brandCategories.slice(0,6)">
-            <a *ngIf="cat !== 'View all categories'" href="#" class="footer-link">{{ cat }}</a>
-            <a *ngIf="cat === 'View all categories'" [routerLink]="'/all-categories'" class="footer-link">{{ cat }}</a>
+            <a [href]="'/all-categories?category=' + cat.route" (click)="navigateToCategory(cat, $event)" class="footer-link" style="cursor: pointer;">{{ cat.name }}</a>
           </li>
         </ul>
         <ul>
           <li *ngFor="let cat of brandCategories.slice(6)">
-            <a *ngIf="cat !== 'View all categories'" href="#" class="footer-link">{{ cat }}</a>
-            <a *ngIf="cat === 'View all categories'" [routerLink]="'/all-categories'" class="footer-link">{{ cat }}</a>
+            <a [href]="'/all-categories?category=' + cat.route" (click)="navigateToCategory(cat, $event)" class="footer-link" style="cursor: pointer;">{{ cat.name }}</a>
           </li>
         </ul>
       </div>
@@ -48,7 +46,10 @@
     <div class="footer-section footer-developers">
       <div class="footer-title">FOR DEVELOPERS</div>
       <ul>
-        <li *ngFor="let link of developerLinks"><a [href]="link.url" class="footer-link">{{ link.label }}</a></li>
+        <li *ngFor="let link of developerLinks">
+          <a *ngIf="link.route" [routerLink]="link.route" class="footer-link">{{ link.label }}</a>
+          <a *ngIf="link.url && !link.route" [href]="link.url" class="footer-link">{{ link.label }}</a>
+        </li>
       </ul>
     </div>
 
@@ -56,7 +57,10 @@
     <div class="footer-section footer-company">
       <div class="footer-title">COMPANY</div>
       <ul>
-        <li *ngFor="let link of companyLinks"><a [href]="link.url" class="footer-link">{{ link.label }}</a></li>
+        <li *ngFor="let link of companyLinks">
+          <a *ngIf="link.route" [routerLink]="link.route" class="footer-link">{{ link.label }}</a>
+          <a *ngIf="link.url && !link.route" [href]="link.url" class="footer-link">{{ link.label }}</a>
+        </li>
       </ul>
     </div>
   </div>

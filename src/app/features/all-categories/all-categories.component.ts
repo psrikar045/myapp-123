@@ -1,10 +1,20 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { BrandDataResponse, BrandSearchFilters, BrandDataSummary } from '../../shared/models/api.models';
+
+interface Category {
+  id?: number;
+  label: string;
+}
+
+interface SubCategory {
+  id: number;
+  name: string;
+}
 
 @Component({
   selector: 'app-all-categories',
@@ -13,7 +23,7 @@ import { BrandDataResponse, BrandSearchFilters, BrandDataSummary } from '../../s
   templateUrl: './all-categories.component.html',
   styleUrl: './all-categories.component.css'
 })
-export class AllCategoriesComponent {
+export class AllCategoriesComponent implements OnInit {
   categories:any = [];
   selectedCategory = 'All';
   
@@ -65,8 +75,11 @@ export class AllCategoriesComponent {
 
   searchTerm = '';
   filteredCategories:any = this.categories;
-private readonly authService = inject(AuthService);
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private authService: AuthService
+  ) {
     console.log('AllCategoriesComponent constructor called');
     
     // Initialize with default categories immediately
@@ -76,80 +89,138 @@ private readonly authService = inject(AuthService);
     try {
       this.getAllCategories();
       this.loadBrandData();
-      // this.loadBrandStatistics();
     } catch (error) {
       console.error('Error in AllCategoriesComponent constructor:', error);
     }
   }
+
+  ngOnInit() {
+    // Subscribe to query parameters
+    this.route.queryParams.subscribe(params => {
+      if (params['category']) {
+        // Convert route-friendly category name back to display name
+        const categoryParam = params['category'];
+        const categoryMap: { [key: string]: string } = {
+          'computers-electronics': 'Computers, Electronics and Technology',
+          'finance': 'Finance',
+          'vehicles': 'Vehicles',
+          'e-commerce': 'E-commerce and Shopping',
+          'news-media': 'News and Media',
+          'luxury': 'Luxury',
+          'arts-entertainment': 'Arts and Entertainment',
+          'food-drink': 'Food and Drink',
+          'travel-tourism': 'Travel and Tourism',
+          'business-services': 'Business and Consumer Services',
+          'lifestyle': 'Lifestyle'
+        };
+
+        const categoryName = categoryMap[categoryParam] || categoryParam;
+        
+        // Find the category in our list
+        const foundCategory = this.categories.find((cat: Category) => 
+          cat.label.toLowerCase() === categoryName.toLowerCase()
+        );
+
+        if (foundCategory) {
+          this.selectedCategory = foundCategory.label;
+          this.expandedCategory = foundCategory.label;
+          this.selectedSubCategory = '';
+          this.searchTerm = '';
+          this.filteredCategories = this.categories;
+        }
+      } else {
+        // If no category in URL, reset to default state
+        this.selectedCategory = 'All';
+        this.expandedCategory = 'All';
+        this.selectedSubCategory = '';
+      }
+    });
+  }
+
 setDefaultCategories() {
-    // Set default categories for public access
+    // Set default categories to match footer categories
     this.categories = [
       { label: 'All' },
-      { id: 1, label: 'Education' },
-      { id: 2, label: 'Entertainment' },
-      { id: 3, label: 'Games' },
-      { id: 4, label: 'Music & Video' },
-      { id: 5, label: 'Fitness' },
-      { id: 6, label: 'Hospitals' },
-      { id: 7, label: 'Business' },
-      { id: 8, label: 'Technology' },
-      { id: 9, label: 'Food & Drink' },
-      { id: 10, label: 'Travel' }
+      { label: 'Computers Electronics' },
+      { label: 'Finance' },
+      { label: 'Vehicles' },
+      { label: 'E-Commerce' },
+      { label: 'News and Media' },
+      { label: 'Luxury' },
+      { label: 'Arts and Entertainment' },
+      { label: 'Food and Drink' },
+      { label: 'Travel and Tourism' },
+      { label: 'Business and Services' },
+      { label: 'Lifestyle' }
     ];
     
     // Set default subcategories
     this.subCategoryMap = {
-      'Education': [
-        { id: 1, name: 'Resume' },
-        { id: 2, name: 'Science' },
-        { id: 3, name: 'Social media' },
-        { id: 4, name: 'Physics' },
-        { id: 5, name: 'Math\'s' }
+      'Computers Electronics': [
+        { id: 1, name: 'Hardware' },
+        { id: 2, name: 'Software' },
+        { id: 3, name: 'Mobile Devices' },
+        { id: 4, name: 'Networking' }
       ],
-      'Entertainment': [
-        { id: 6, name: 'Movie tickets' },
-        { id: 7, name: 'Dance studios' },
-        { id: 8, name: 'Photograph' }
+      'Finance': [
+        { id: 5, name: 'Banking' },
+        { id: 6, name: 'Investment' },
+        { id: 7, name: 'Insurance' },
+        { id: 8, name: 'Fintech' }
       ],
-      'Games': [
-        { id: 9, name: 'Video Games' },
-        { id: 10, name: 'Board Games' },
-        { id: 11, name: 'Mobile Games' }
+      'Vehicles': [
+        { id: 9, name: 'Cars' },
+        { id: 10, name: 'Motorcycles' },
+        { id: 11, name: 'Commercial Vehicles' },
+        { id: 12, name: 'Auto Parts' }
       ],
-      'Music & Video': [
-        { id: 12, name: 'Music' },
-        { id: 13, name: 'Streaming' },
-        { id: 14, name: 'Podcasts' }
+      'E-Commerce': [
+        { id: 13, name: 'Retail' },
+        { id: 14, name: 'Marketplace' },
+        { id: 15, name: 'Digital Products' },
+        { id: 16, name: 'Subscription Services' }
       ],
-      'Fitness': [
-        { id: 15, name: 'Gyms' },
-        { id: 16, name: 'Personal Training' },
-        { id: 17, name: 'Yoga' }
+      'News and Media': [
+        { id: 17, name: 'News Outlets' },
+        { id: 18, name: 'Digital Media' },
+        { id: 19, name: 'Broadcasting' },
+        { id: 20, name: 'Publishing' }
       ],
-      'Hospitals': [
-        { id: 18, name: 'General' },
-        { id: 19, name: 'Specialized' },
-        { id: 20, name: 'Emergency' }
+      'Luxury': [
+        { id: 21, name: 'Fashion' },
+        { id: 22, name: 'Jewelry' },
+        { id: 23, name: 'Watches' },
+        { id: 24, name: 'Premium Services' }
       ],
-      'Business': [
-        { id: 21, name: 'Services' },
-        { id: 22, name: 'Consulting' },
-        { id: 23, name: 'Finance' }
+      'Arts and Entertainment': [
+        { id: 25, name: 'Music' },
+        { id: 26, name: 'Movies' },
+        { id: 27, name: 'Gaming' },
+        { id: 28, name: 'Live Events' }
       ],
-      'Technology': [
-        { id: 24, name: 'Software' },
-        { id: 25, name: 'Hardware' },
-        { id: 26, name: 'AI/ML' }
+      'Food and Drink': [
+        { id: 29, name: 'Restaurants' },
+        { id: 30, name: 'Beverages' },
+        { id: 31, name: 'Food Delivery' },
+        { id: 32, name: 'Catering' }
       ],
-      'Food & Drink': [
-        { id: 27, name: 'Restaurants' },
-        { id: 28, name: 'Cafes' },
-        { id: 29, name: 'Delivery' }
+      'Travel and Tourism': [
+        { id: 33, name: 'Hotels' },
+        { id: 34, name: 'Airlines' },
+        { id: 35, name: 'Travel Services' },
+        { id: 36, name: 'Tourism Activities' }
       ],
-      'Travel': [
-        { id: 30, name: 'Hotels' },
-        { id: 31, name: 'Airlines' },
-        { id: 32, name: 'Tourism' }
+      'Business and Services': [
+        { id: 37, name: 'Consulting' },
+        { id: 38, name: 'Professional Services' },
+        { id: 39, name: 'B2B Services' },
+        { id: 40, name: 'Office Services' }
+      ],
+      'Lifestyle': [
+        { id: 41, name: 'Health & Wellness' },
+        { id: 42, name: 'Sports' },
+        { id: 43, name: 'Personal Care' },
+        { id: 44, name: 'Home & Living' }
       ]
     };
     
@@ -247,13 +318,32 @@ getAllCategories() {
     }
   }
 
+  // Update selectCategory to handle navigation
   selectCategory(category: string) {
     this.selectedCategory = category;
+    this.expandedCategory = category; // Expand the selected category in side nav
     this.currentPage = 1;
     this.selectedSubCategory = '';
     // Reset search and filtered categories to show all
     this.searchTerm = '';
     this.filteredCategories = this.categories;
+
+    // Update URL with the selected category
+    if (category !== 'All') {
+      const routeCategory = category.toLowerCase().replace(/\s+/g, '-');
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { category: routeCategory },
+        queryParamsHandling: 'merge'
+      });
+    } else {
+      // Remove category parameter when 'All' is selected
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {},
+        queryParamsHandling: 'merge'
+      });
+    }
   }
 
   selectPage(page: number) {
@@ -305,10 +395,25 @@ getAllCategories() {
   toggleCategoryAccordion(category: string) {
     if (category === 'All') {
       this.expandedCategory = this.expandedCategory === 'All' ? '' : 'All';
+      this.selectedCategory = 'All';
       this.selectedSubCategory = '';
+      // Remove category from URL
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: {},
+        queryParamsHandling: 'merge'
+      });
     } else {
       this.expandedCategory = this.expandedCategory === category ? '' : category;
+      this.selectedCategory = category;
       this.selectedSubCategory = '';
+      // Update URL with selected category
+      const routeCategory = category.toLowerCase().replace(/\s+/g, '-');
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: { category: routeCategory },
+        queryParamsHandling: 'merge'
+      });
     }
   }
 
@@ -662,8 +767,5 @@ getAllCategories() {
     this.brandSearchFilters = {};
     this.loadBrandData();
   }
-}
-function next(value: any): void {
-  throw new Error('Function not implemented.');
 }
 
