@@ -171,6 +171,7 @@ span{
   font-weight: 700;
   margin-bottom: 8px;
   color: #181c32;
+  font: 400 20px / 26px "Inter", Roboto, sans-serif !important;
 }
 .sidebar-desc {
   color: #444;
