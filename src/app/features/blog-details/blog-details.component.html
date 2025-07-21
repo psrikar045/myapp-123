@@ -52,14 +52,14 @@ Marketify is built to save you time and help you create faster — whether you'r
         <!-- Blog Navigation Section (moved inside blog-details-main) -->
         <div class="blog-nav-section">
           <div class="blog-nav-container">
-            <div class="blog-nav-item prev" *ngIf="prevBlog" (click)="navigateToBlog(currentIndex - 1)">
+            <div class="blog-nav-item prev" *ngIf="prevBlog" (click)="navigateToPrevious()">
               <span class="nav-arrow">&#8592;</span>
               <div class="nav-content">
                 <div class="nav-label">Previous</div>
                 <div class="nav-title">{{ prevBlog.title }}</div>
               </div>
             </div>
-            <div class="blog-nav-item next" *ngIf="nextBlog" (click)="navigateToBlog(currentIndex + 1)">
+            <div class="blog-nav-item next" *ngIf="nextBlog" (click)="navigateToNext()">
               <div class="nav-content">
                 <div class="nav-label">Next</div>
                 <div class="nav-title">{{ nextBlog.title }}</div>

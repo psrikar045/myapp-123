@@ -3,6 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BlogCard } from '../../shared/interfaces/blog-card.interface';
 import { HeaderComponent } from '../header/header.component';
+import { BlogService } from '../../shared/services/blog.service';
 
 @Component({
   selector: 'app-blog-details',
@@ -17,9 +18,14 @@ export class BlogDetailsComponent implements OnInit {
   prevBlog: BlogCard | null = null;
   nextBlog: BlogCard | null = null;
   
+  // Pagination context - contains the IDs of blogs in current page
+  pagedBlogIds: number[] = [];
+  currentPagedIndex: number = 0; // Position within the current page
+  
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private blogService: BlogService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
@@ -97,62 +103,27 @@ export class BlogDetailsComponent implements OnInit {
     'The Fashion Industry'
   ];
 
-  // Blog data - same as in BlogComponent
-  blogs: BlogCard[] = [
-    {
-      img: '/images/Image (1).jpg',
-      author: 'Tracey Wilson',
-      date: 'june 20, 2025',
-      title: 'Introducing Marketify: The Ultimate API to Access Brand Assets by Domain',
-      summary: 'Learn how Marketify simplifies brand asset retrieval with a powerful REST API, real-time caching, and developer-first features. Built on Java + Angular, it is faster and more flexible than Brandfetch.',
-      category: 'Technology',
-      authorAvatar: 'assets/author1.png'
-    },
-    {
-      img: '/images/Image.jpg',
-      author: 'John Smith',
-      date: 'june 28, 2025',
-      title: '5 Reasons Marketify Is the Perfect Alternative to Brandfetch',
-      summary: 'Tired of limitations or API bottlenecks with Brandfetch? Discover why Marketify is the next-gen brand intelligence tool your dev team will love — from API control to self-hosted flexibility.',
-      category: 'Design',
-      authorAvatar: 'assets/author2.png'
-    },
-    {
-      img: '/images/Image (2).jpg',
-      author: 'july 20, 2025',
-      date: 'August 15, 2022',
-      title: 'How to Automatically Fetch Logos, Brand Colors & Fonts Using Marketify API',
-      summary: 'Step-by-step guide on how to integrate Marketify with your application and automatically pull visual brand assets from any domain in seconds.',
-      category: 'Development',
-      authorAvatar: 'assets/author3.png'
-    },
-    {
-      img: '/images/Image (3).jpg',
-      author: 'Mike Johnson',
-      date: 'june 20, 2025',
-      title: 'Building a CRM That Auto-Fills Brand Profiles Using Marketify',
-      summary: 'Discover how to enrich your CRM by using Marketify API to auto-fill company logos, industries, and social links — giving your sales and marketing teams an edge.',
-      category: 'UX/UI',
-      authorAvatar: 'assets/author4.png'
-    },
-    {
-      img: '/images/Image (1).jpg',
-      author: 'John Smith',
-      date: 'April 18, 2022',
-      title: 'From Domain to Design: Using Marketify for Instant Brand Kits',
-      summary: 'Designers and marketers can now generate instant brand kits using just a domain. Learn how Marketify helps streamline your creative workflow.',
-      category: 'Design',
-      authorAvatar: 'assets/author2.png'
-    }
-  ];
-
   ngOnInit(): void {
     // Get the blog ID from route parameters
     this.route.params.subscribe(params => {
       const blogId = +params['id'];
       this.currentIndex = blogId;
-      this.selectedBlog = this.blogs[blogId] || this.blogs[0];
-      this.updateNavigation();
+      this.selectedBlog = this.blogService.getBlog(blogId) || this.blogService.getBlog(0);
+      
+      // Get pagination context from route params or service
+      this.route.queryParams.subscribe(queryParams => {
+        if (queryParams['page'] && queryParams['pageSize']) {
+          // Use query params to set pagination context
+          const page = +queryParams['page'];
+          const pageSize = +queryParams['pageSize'];
+          this.blogService.setPaginationContext(page, pageSize);
+        }
+        
+        // Get pagination context and set up navigation
+        const paginationContext = this.blogService.getCurrentPaginationContext();
+        this.pagedBlogIds = paginationContext.pagedBlogIds;
+        this.updateNavigation();
+      });
     });
     
     // Force scroll to top when component initializes
@@ -160,21 +131,54 @@ export class BlogDetailsComponent implements OnInit {
   }
 
   updateNavigation(): void {
-    this.prevBlog = this.currentIndex > 0 ? this.blogs[this.currentIndex - 1] : null;
-    this.nextBlog = this.currentIndex < this.blogs.length - 1 ? this.blogs[this.currentIndex + 1] : null;
+    // Find current position within the paginated data
+    this.currentPagedIndex = this.pagedBlogIds.indexOf(this.currentIndex);
+    
+    if (this.currentPagedIndex === -1) {
+      // If current blog is not in paginated context, allow navigation through all blogs
+      this.prevBlog = this.currentIndex > 0 ? this.blogService.getBlog(this.currentIndex - 1) : null;
+      this.nextBlog = this.blogService.getBlog(this.currentIndex + 1);
+    } else {
+      // Navigate only within the current page's blogs
+      const prevIndex = this.currentPagedIndex > 0 ? this.pagedBlogIds[this.currentPagedIndex - 1] : -1;
+      const nextIndex = this.currentPagedIndex < this.pagedBlogIds.length - 1 ? this.pagedBlogIds[this.currentPagedIndex + 1] : -1;
+      
+      this.prevBlog = prevIndex >= 0 ? this.blogService.getBlog(prevIndex) : null;
+      this.nextBlog = nextIndex >= 0 ? this.blogService.getBlog(nextIndex) : null;
+    }
   }
 
   navigateToBlog(index: number): void {
     this.router.navigate(['/blog-details', index]).then(() => {
       this.currentIndex = index;
-      this.selectedBlog = this.blogs[index] || this.blogs[0];
+      this.selectedBlog = this.blogService.getBlog(index) || this.blogService.getBlog(0);
       this.updateNavigation();
       this.forceTopPosition();
     });
   }
 
+  navigateToPrevious(): void {
+    if (this.currentPagedIndex > 0) {
+      const prevIndex = this.pagedBlogIds[this.currentPagedIndex - 1];
+      this.navigateToBlog(prevIndex);
+    }
+  }
+
+  navigateToNext(): void {
+    if (this.currentPagedIndex < this.pagedBlogIds.length - 1) {
+      const nextIndex = this.pagedBlogIds[this.currentPagedIndex + 1];
+      this.navigateToBlog(nextIndex);
+    }
+  }
+
   onBackToList(): void {
-    this.router.navigate(['/blog']);
+    // Get current pagination context to return to correct page
+    const paginationContext = this.blogService.getCurrentPaginationContext();
+    this.router.navigate(['/blog'], {
+      queryParams: { 
+        page: paginationContext.currentPage 
+      }
+    });
   }
 
   private forceTopPosition(): void {
