@@ -109,6 +109,7 @@
   font-weight: 700;
   margin: 28px 0 10px 0;
   color: #181c32;
+  font: 700 1.15rem / 28px "Inter", Roboto, sans-serif;
 }
 .blog-details-body p {
   margin-bottom: 20px;
@@ -171,7 +172,7 @@ span{
   font-weight: 700;
   margin-bottom: 8px;
   color: #181c32;
-  font: 400 20px / 26px "Inter", Roboto, sans-serif !important;
+  font: 700 1.25rem / 26px "Inter", Roboto, sans-serif !important;
 }
 .sidebar-desc {
   color: #444;
@@ -256,6 +257,7 @@ p{
   margin-bottom: 16px;
   color: #181c32;
   font-family: "Inter", sans-serif;
+  font: 700 1.25rem / 28px "Inter", roboto, sans-serif;
 }
 
 .popular-tags-container {
@@ -425,6 +427,7 @@ p{
   text-transform: uppercase;
   margin-bottom: 0.25rem;
   font-weight: 500;
+  font: 500 0.85rem / 20px "Inter", Roboto, sans-serif;
 }
 .nav-title {
   font-weight: bold;
