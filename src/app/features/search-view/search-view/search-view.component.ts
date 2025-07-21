@@ -5,6 +5,7 @@ import { FooterComponent } from '../../../shared/footer/footer.component';
 import { ThemeService } from '../../../core/services/theme.service';
 import { Subscription } from 'rxjs';
 import { UtilService } from '../../../shared/services/util.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-view',
@@ -24,6 +25,8 @@ export class SearchViewComponent implements OnInit, OnDestroy {
   private readonly utilService = inject(UtilService);
   filters = ['All', 'Logos', 'Colors', 'Font', 'Images'];//, 'Icons'
   activeFilter = 'All';
+
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.themeSubscription = this.themeService.isDarkMode$.subscribe(isDark => {
@@ -158,5 +161,9 @@ hasDisplayableImages(imagesArray: any[]): boolean {
 
   showSection(section: string): boolean {
     return this.activeFilter === 'All' || this.activeFilter === section;
+  }
+
+  goBackToSearch() {
+    this.router.navigate(['/search']);
   }
 }

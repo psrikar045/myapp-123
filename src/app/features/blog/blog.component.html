@@ -48,31 +48,34 @@
           </div>
           
           <!-- Pagination (matching AllCategoriesComponent) -->
-          <div class="blog-pagination">
-            <button class="page nav" [disabled]="currentPage === 1" (click)="selectPage(currentPage - 1)">
-              <i class="bi bi-chevron-left"></i>
-            </button>
-            <button *ngFor="let page of pages" class="page" [class.active]="page === currentPage" (click)="selectPage(page)">{{ page }}</button>
-            <button class="page nav" [disabled]="currentPage === pages.length" (click)="selectPage(currentPage + 1)">
-              <i class="bi bi-chevron-right"></i>
-            </button>
+          <div class="pagination-bottom-center-wrapper">
+            <!-- Pagination (matching AllCategoriesComponent) -->
+            <div class="blog-pagination">
+              <button class="page nav" (click)="selectPage(currentPage === 1 ? 1 : currentPage - 1)">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <button *ngFor="let page of pages" class="page" [class.active]="page === currentPage" (click)="selectPage(page)">{{ page }}</button>
+              <button class="page nav" (click)="selectPage(currentPage === pages.length ? pages.length : currentPage + 1)">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
           </div>
-        </div>
         <div class="blog-vertical-divider"></div>
         <aside class="blog-sidebar">
           <div class="sidebar-category-list">
             <div class="sidebar-category-item" *ngFor="let cat of sidebarCategories; let i = index">
               <!-- (click)="navigateToBlogDetailsFromSidebar(i)" -->
-              <div class="sidebar-card-container">
-                <div class="sidebar-category-content">
-                  <div class="sidebar-category-title">{{cat.title}}</div>
-                  <div class="sidebar-category-desc">{{cat.description}}</div>
-                  <div class="sidebar-category-meta">
-                    <span class="sidebar-category-author">{{cat.author}}</span>
-                    <span class="sidebar-category-date">{{cat.date}}</span>
-                  </div>
-                </div>
+              <div class="sidebar-card-image-container" style="display: flex;">
+                 
                 <img class="sidebar-category-img" [src]="cat.img" alt="Category" />
+                <div class="sidebar-category-content">
+                <div class="sidebar-category-title"><b>{{cat.title}}</b></div>
+                <div class="sidebar-category-desc">{{cat.description}}</div>
+                <div class="sidebar-category-meta">
+                  <span class="sidebar-category-author">{{cat.author}}</span>
+                  <span class="sidebar-category-date">{{cat.date}}</span>
+                </div>
+              </div>
               </div>
              
             </div>

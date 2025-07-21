@@ -775,3 +775,23 @@ body, .company-data-body {
 .no-brand-margin {
   margin-top: 28px !important;
 }
+
+.back-arrow-btn {
+    display: flex
+;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    color: #2563eb;
+    border: none;
+    /* border-radius: 18px; */
+    /* padding: 8px 20px; */
+    font-size: 1.1rem;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    /* box-shadow: 0 2px 8px rgba(37, 99, 235, 0.08); */
+    /* margin-bottom: 18px; */
+    /* margin-left: 0; */
+    /* /* transition: background 0.2s, color 0.2s; */
+}

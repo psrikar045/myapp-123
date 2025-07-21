@@ -42,6 +42,13 @@ export class ToolbarService {
     { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.svg', route: '/login' }
   ]);
 
+  private profileAvatar$ = new BehaviorSubject<string>('assets/user-small.png');
+  public profileAvatar = this.profileAvatar$.asObservable();
+
+  setProfileAvatar(url: string) {
+    this.profileAvatar$.next(url);
+  }
+
   logo = this.logo$.asObservable();
   navItems = this.navItems$.asObservable();
   actions = this.actions$.asObservable();

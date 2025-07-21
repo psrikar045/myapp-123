@@ -28,6 +28,8 @@ export class HeaderComponent implements OnInit {
   private showTimeout: any;
   private isScrollingUp = false;
   private authSubscription: Subscription | undefined;
+  profileAvatarUrl: string = '/landing/user.jfif';
+  private avatarSubscription: Subscription | undefined;
   constructor(
     private toolbarService: ToolbarService,
     private authService: AuthService,
@@ -66,10 +68,14 @@ export class HeaderComponent implements OnInit {
         this.toolbarService.setLoggedOutToolbar();
       }
     });
+    this.avatarSubscription = this.toolbarService.profileAvatar.subscribe(url => {
+      this.profileAvatarUrl = url;
+    });
   }
 
   ngOnDestroy(): void {
     this.authSubscription?.unsubscribe();
+    this.avatarSubscription?.unsubscribe();
   }
 login() {
 this.authService.checkAuthStatusAndNavigate();

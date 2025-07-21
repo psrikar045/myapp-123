@@ -1,3 +1,27 @@
+body, html, app-root {
+  height: 100%;
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  flex: 1 0 auto;
+  margin-top: 70px;
+}
+
+.footer-container {
+  flex-shrink: 0;
+  margin-top: 0 !important;
+  position: relative;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
 .brand-analyzer-hero {
   width: 100%;
   min-height: 420px;
@@ -10,9 +34,6 @@
   max-width: 100vw;
   box-shadow: 0 2px 16px rgba(37,99,235,0.06);
 }
-.container {
-  margin-top: 115px;
-}
 .brand-analyzer-content {
   width: 100%;
   max-width: 1400px;
@@ -24,13 +45,16 @@
 
 .brand-analyzer-title {
   font-size: 4rem;
-  font-weight: 700;
-  color: #183B56;
+  /* font-weight: 700;
+  color: #183B56; */
   margin-bottom: 12px;
   text-align: center;
  font-family: "Inter", sans-serif;
   letter-spacing: -2px;
   line-height: 1.1;
+  color: #181818;
+  background: none;
+  font-weight: 800;
 }
 
 .dark-theme .brand-analyzer-title {
@@ -38,13 +62,17 @@
 }
 
 .brand-analyzer-subtitle {
-  font-size: 1.5rem;
-  color: #5A7184;
+  /* font-size: 1.5rem;
+  color: #5A7184; */
   margin-bottom: 48px;
   text-align: center;
  font-family: "Inter", sans-serif;
   font-weight: 400;
   line-height: 1.3;
+  font-family: "Inter", sans-serif;
+  font-size: 1.10rem;
+  color: #23272f;
+  font-weight: 500;
 }
 
 .dark-theme .brand-analyzer-subtitle {
@@ -102,6 +130,7 @@
   padding: 0 44px;
   height: 56px;
   margin-left: 18px;
+  margin-right: 5px;
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 8px rgba(37,99,235,0.10);

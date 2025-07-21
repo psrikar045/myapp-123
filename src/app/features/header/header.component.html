@@ -24,7 +24,7 @@
         Upgrade
       </button>
       <span *ngIf="action.type === 'profile'" class="header-profile-avatar ms-3" [matMenuTriggerFor]="profileMenu" style="cursor:pointer;">
-        <img src="/landing/user.jfif" alt="User Avatar" />
+        <img [src]="profileAvatarUrl" alt="User Avatar" />
       </span>
       <mat-menu #profileMenu="matMenu">
         <button mat-menu-item (click)="goToProfile($event)" *ngIf="!currentRoute.startsWith('/my-profile')">

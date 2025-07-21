@@ -12,7 +12,7 @@ import { RouterModule, Router } from '@angular/router';
 export class FooterComponent implements OnInit, OnDestroy {
   companyName = 'Marketify';
   companyDescription = 'Access logos, brand colors, fonts and social links by simply entering a domain name';
-  copyright = '© Copyright 2021 Duxo.io All rights reserved.';
+  copyright = '© Copyright 2025 Marketify. All rights reserved.';
   
   showBackToTop = false;
 

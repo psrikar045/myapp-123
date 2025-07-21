@@ -428,3 +428,12 @@
     margin-left: 150px;
     margin-right: 150px;
 }
+.pagination-bottom-center-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  min-height: 60px;
+  margin-top: auto;
+  margin-bottom: 0;
+}

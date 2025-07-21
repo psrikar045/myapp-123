@@ -473,8 +473,8 @@ body, .categories-main-layout, .categories-bg, .categories-content, .categories-
   display: flex;
   flex-direction: column;
   gap: 4px;
-  max-height: 400px;
-  overflow: hidden;
+  max-height: 300px;
+  overflow-y: auto;
   transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
 }
 
@@ -662,6 +662,16 @@ body, .categories-main-layout, .categories-bg, .categories-content, .categories-
 .page.nav:disabled {
   color: #e3eaf1;
   background: transparent;
+}
+
+.pagination-bottom-center-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  min-height: 60px;
+  margin-top: auto;
+  margin-bottom: 0;
 }
 
 @media (max-width: 1100px) {
