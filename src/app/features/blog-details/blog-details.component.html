@@ -8,7 +8,7 @@
     <!-- Main content area -->
     <div class="blog-details-content">
       <!-- Blog Details (Left) -->
-       <div  class="blog-main-card">
+       <!-- <div  class="blog-main-card"> -->
       <div class="blog-details-main">
         <div class="blog-details-header" *ngIf="selectedBlog">
           <h1 class="blog-title">{{selectedBlog.title}}</h1>
@@ -69,23 +69,27 @@ Marketify is built to save you time and help you create faster — whether you'r
             </div>
           </div>
         </div>
-      </div></div>
-      
+      </div>
+    <!-- </div> -->
+       <div class="blog-vertical-divider"></div>
       <!-- Sidebar Card -->
       <!-- <div class="blog-details-sidebar-card" style="flex: 1;"> -->
         <!-- Sidebar (Right) -->
-         <div class="blog-side-card">
+         <!-- <div class="blog-side-card"> -->
         <aside class="blog-details-sidebar">
       <h3 class="sidebar-title">Recent Posts</h3>
       <p class="sidebar-desc">Traveling is an enriching experience that opens up new horizons, exposes us to</p>
       <div class="sidebar-category-list">
         <div class="sidebar-category-item" *ngFor="let cat of sidebarCategories">
-          <img class="sidebar-category-img" [src]="cat.img" alt="Category" />
           <div class="sidebar-category-content">
-            <span class="sidebar-category-author">{{cat.author}}</span>
-            <!-- <span class="sidebar-category-time">5min</span> -->
             <div class="sidebar-category-title">{{cat.title}}</div>
+            <!-- <div class="sidebar-category-desc">{{cat.description}}</div> -->
+            <div class="sidebar-category-meta">
+              <span class="sidebar-category-author">{{cat.author}}</span>
+              <!-- <span class="sidebar-category-date">{{cat.date}}</span> -->
+            </div>
           </div>
+          <img class="sidebar-category-img" [src]="cat.img" alt="Category" />
         </div>
       </div>
       
@@ -96,7 +100,8 @@ Marketify is built to save you time and help you create faster — whether you'r
           <span class="popular-tag" *ngFor="let tag of popularTags">{{tag}}</span>
         </div>
       </div>
-        </aside></div>
+        </aside>
+      <!-- </div> -->
       <!-- </div> -->
     </div> <!-- Close blog-details-content -->
     <!-- <div class="back-button-container">
