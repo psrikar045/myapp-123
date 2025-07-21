@@ -1,229 +1,315 @@
 <app-header [showNavigation]="true"></app-header>
-<!-- Notification Bar -->
-<div class="notification-bar">
-  <span class="notification-dot"></span>
-  <span class="notification-title">Introducing GitHub Copilot X</span>
-  <span class="notification-desc">Your AI pair programmer is leveling up</span>
-  <span class="notification-arrow">→</span>
+<div class="developer-label-header">Developer</div>
+
+<!-- Header Section (Hero) -->
+<div class="header-section hero-section">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="header-title">Unlock Brand Data Instantly with Marketify</h1>
+                <p class="header-subtitle">Enter any company domain and get logos, brand colors, fonts, and company metadata in seconds.</p>
+                <button class="get-started-btn">Try Marketify</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cards Section -->
+    <div class="bgColor">
+    <div class="dev-cards-section">
+            <!-- How to Get Involved Card -->
+        <div class="dev-card code-card feature-card">
+            <div class="dev-card-header">
+                    <div class="code-editor">
+                        <div class="code-header">
+                            <span>// Marketify API Example</span>
+                            <div class="code-dots">
+                                <div class="dot red"></div>
+                                <div class="dot yellow"></div>
+                                <div class="dot green"></div>
+                            </div>
+                        </div>
+                        <div class="code-content">
+                            <div class="code-line">
+                                <span class="code-number">1</span>
+                                <span class="keyword">import</span> <span class="variable">&#123; fetchBrandData &#125;</span> <span class="keyword">from</span> <span class="string">'marketify-sdk'</span>;
+                            </div>
+                            <div class="code-line">
+                                <span class="code-number">2</span>
+                                <span class="comment">// Fetch brand data for a company domain</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-number">3</span>
+                                <span class="function">fetchBrandData</span><span class="string">'openai.com'</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-number">4</span>
+                                &nbsp;&nbsp;<span class="function">console</span>.<span class="function">log</span>(data.logo, data.colors, data.fonts, data.metadata);
+                            </div>
+                            <div class="code-line">
+                                <span class="code-number">5</span>
+                                &#125;);
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <div class="dev-card-content">
+                <h3 class="dev-card-title">How to Get Involved</h3>
+                <p class="dev-card-description">Start using Marketify’s API to power your apps with real-time brand data. Sign up to get your API key and access docs, SDKs, and support.</p>
+                <button class="dev-card-btn">Get API Key</button>
+                </div>
+            </div>
+
+            <!-- Developer Resources Card -->
+        <div class="dev-card resources-card feature-card">
+            <div class="dev-card-header">
+                    <div class="resources-grid">
+                        <div class="resource-icon">🎨</div>
+                        <div class="resource-icon">🔤</div>
+                        <div class="resource-icon">🖼️</div>
+                        <div class="resource-icon">🌐</div>
+                        <div class="resource-icon active">📦</div>
+                        <div class="resource-icon">📊</div>
+                        <div class="resource-icon">🔗</div>
+                        <div class="resource-icon">📝</div>
+                        <div class="resource-icon">⚙️</div>
+                    </div>
+                </div>
+            <div class="dev-card-content">
+                <h3 class="dev-card-title">Developer Resources</h3>
+                <p class="dev-card-description">Access docs, SDKs, and code samples to integrate Marketify into your workflow. Explore guides for Node.js, Python, React, and more.</p>
+                <button class="dev-card-btn">View Docs</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trusted Companies Section -->
+<div class="dev-container">
+        <div class="trusted-section">
+            <p class="trusted-text">Trusted by teams building with brand data</p>
+            <div class="companies-grid">
+            <img class="company-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/512px-Stripe_Logo%2C_revised_2016.svg.png" alt="Stripe">
+            <img class="company-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Pinterest-logo.png/600px-Pinterest-logo.png" alt="Pinterest">
+            <img class="company-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/KPMG_logo.svg/512px-KPMG_logo.svg.png" alt="KPMG">
+            <img class="company-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Mercedes-Logo.svg/512px-Mercedes-Logo.svg.png" alt="Mercedes-Benz">
+            <img class="company-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/P%26G_Logo.svg/512px-P%26G_Logo.svg.png" alt="P&G">
+            <img class="company-logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Telus_logo.svg/512px-Telus_logo.svg.png" alt="Telus">
+        </div>
+    </div>
 </div>
 
-<!-- Hero Section -->
-<section class="hero">
-  <div class="hero-content">
-    <h1>Let's build from here</h1>
-    <p class="hero-subheading">
-      Harnessed for productivity. Designed for collaboration.<br />
-      Celebrated for built-in security. Welcome to the platform developers love.
+<!-- Blue Section (IDE Support) -->
+<div class="dev-blue-section">
+    <div class="dev-container">
+            <h2 class="blue-section-title">Integrate Marketify with Your Favorite Tools</h2>
+            <p class="blue-section-subtitle">SDKs and plugins for Node.js, Python, React, and more. Use Marketify in VS Code, Postman, or your own stack.</p>
+            <p class="blue-section-description">Seamlessly integrate our API into your workflow and fetch brand assets in seconds.</p>
+            <div style="text-align: left; max-width: 1000px; margin: 0 auto;">
+                <h3 class="environments-title">Supported Tools & Languages</h3>
+                <p class="environments-description">Marketify supports a wide range of languages and tools to fit your stack.</p>
+                <div class="environments-grid">
+                <div class="environment-card feature-card">
+                        <div class="environment-icon vs-code">📝</div>
+                        <h4 class="environment-title">Node.js</h4>
+                        <p class="environment-description">NPM package for easy integration in JavaScript/TypeScript projects.</p>
+                    </div>
+                <div class="environment-card feature-card">
+                        <div class="environment-icon pycharm">🐍</div>
+                        <h4 class="environment-title">Python</h4>
+                        <p class="environment-description">Python SDK for fetching brand data in your scripts and apps.</p>
+                    </div>
+                <div class="environment-card feature-card">
+                        <div class="environment-icon intellij">⚛️</div>
+                        <h4 class="environment-title">React</h4>
+                        <p class="environment-description">React hooks and components for seamless UI integration.</p>
+                    </div>
+                <div class="environment-card feature-card">
+                        <div class="environment-icon sublime">🔗</div>
+                        <h4 class="environment-title">Postman</h4>
+                        <p class="environment-description">Test and explore the Marketify API with our Postman collection.</p>
+                    </div>
+                <div class="environment-card feature-card">
+                        <div class="environment-icon atom">💻</div>
+                        <h4 class="environment-title">VS Code</h4>
+                        <p class="environment-description">Use Marketify directly in your IDE with our VS Code extension.</p>
+                    </div>
+                <div class="environment-card feature-card">
+                        <div class="environment-icon vim">🌐</div>
+                        <h4 class="environment-title">REST API</h4>
+                        <p class="environment-description">Integrate with any stack using our RESTful API endpoints.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Workflow Section (Automate Brand Data Collection) -->
+<div class="workflow-section-mock">
+  <div class="workflow-content-mock">
+    <h2 class="workflow-title-mock">
+      Supercharge your <span>workflow</span>.
+    </h2>
+    <p class="workflow-subtitle-mock">
+      Stay ahead of the competition by quickly identifying trends and patterns in your data with our innovative algorithms.
     </p>
-    <div class="hero-actions">
-      <input type="email" class="hero-input" placeholder="Email address" />
-      <button class="btn-primary">Sign up for GitHub</button>
-      <button class="btn-secondary">Start a free enterprise trial →</button>
-    </div>
-    <div class="trusted-by">Trusted by the world's leading organizations</div>
-    <div class="company-logos">
-      <span class="company-logo">stripe</span>
-      <span class="company-logo">Pinterest</span>
-      <span class="company-logo">KPMG</span>
-      <span class="company-logo">Mercedes-Benz</span>
-      <span class="company-logo">P&amp;G</span>
-      <span class="company-logo">TELUS</span>
-    </div>
-  </div>
-</section>
+    <div class="workflow-code-block">
+      <pre>
+<span class="code-comment">// Type some code -&gt;</span>
+<span class="code-default">console.log("code still g9gCGQ ~~~&gt;");</span>
+<span class="code-comment">// á é ü ñ ø ç Á É Æ œ</span>
+<span class="code-keyword">function</span> <span class="code-function">updateGutters</span>
+  <span class="code-default">var gutters = cm.display.gutters,</span>
+      <span class="code-default">specs = cm.options.gutters;</span>
+  <span class="code-default">removeChildren(gutters);</span>
+  <span class="code-keyword">for</span> <span class="code-default">var i = 0; i &lt; specs.length; ++i</span>
+    <span class="code-default">var gutterClass = specs[i];</span>
+    <span class="code-default">var gElt = gutters.appendChild</span>
+      <span class="code-string">"div"</span>,
+      <span class="code-default">null,</span>
+      <span class="code-string">"CodeMirror-gutter " + gutterClass</span>
+    
+    <span class="code-keyword">if</span> <span class="code-string">"CodeMirror-linenumbers"</span>
+      <span class="code-default">cm.display.lineGutter = gElt;</span>
+      <span class="code-default">gElt.style.width = (cm.display.lineNumWidth || 0) + "px";</span>
+    
+  
+  <span class="code-default">gutters.style.display = i ? "" : "none";</span>
+  <span class="code-default">updateGutterSpace(cm);</span>
+  <span class="code-keyword">return</span> <span class="code-literal">false</span>
 
-<!-- Development Section (Pixel-perfect replica) -->
-<section class="dev-velocity-section">
-  <div class="dev-velocity-bg"></div>
-  <div class="dev-velocity-content">
-    <div class="dev-velocity-header">
-      <h2>Accelerate high-quality software development.<br>Our platform drives innovation<br>with tools that boost developer velocity.</h2>
+      </pre>
     </div>
-    <div class="dev-velocity-main">
-      <div class="dev-velocity-image-overlay-wrap">
-        <img src="/developer img/Frame.png" alt="Code editor and globe" class="dev-velocity-image" />
-        <img src="/developer img/op.png" alt="Open in Browser" class="dev-velocity-side-image op1" />
-        <img src="/developer img/op2.png" alt="Ports Panel" class="dev-velocity-side-image op2" />
-        <div class="dev-velocity-stat-overlay">
-          <div class="dev-velocity-didyouknow">
-            <span class="dev-velocity-purple-bar"></span>
-            <span class="dev-velocity-didyouknow-label">Did you know?</span>
-          </div>
-          <div class="dev-velocity-stat">
-            <span class="dev-velocity-stat-number">22% increase</span>
-            <span class="dev-velocity-stat-desc">in developer productivity<br>after three years with GitHub</span>
-          </div>
-        </div>
+    <div class="workflow-feature-cards">
+      <div class="workflow-feature-card">
+        <div class="workflow-feature-icon">🧠</div>
+        <div class="workflow-feature-title">Brand API</div>
+        <div class="workflow-feature-desc">Utilize our state-of-the-art AI programming assistant and other powerful development tools to enhance your coding projects.</div>
       </div>
-    </div>
-    <div class="dev-velocity-bottom">
-      <div class="dev-velocity-bottom-left">
-        <div class="dev-velocity-desc">
-          GitHub Codespaces offers a complete dev environment in seconds, so you can code, build, test, and open pull requests from any repo anywhere.
-        </div>
-        <a href="#" class="dev-velocity-link">Check out GitHub Codespaces <span class="arrow">→</span></a>
+      <div class="workflow-feature-card">
+        <div class="workflow-feature-icon">🔍</div>
+        <div class="workflow-feature-title">Logo Search</div>
+        <div class="workflow-feature-desc">Work alongside a vibrant community of developers, share insights, and collaborate on innovative projects.</div>
+      </div>
+      <div class="workflow-feature-card">
+        <div class="workflow-feature-icon">⚡</div>
+        <div class="workflow-feature-title">Code Generation</div>
+        <div class="workflow-feature-desc">Stay ahead of the curve with access to the latest resources, tutorials, and best practices in AI and software development.</div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- Collaboration Section -->
-<section class="collaboration-section">
-    <div class="container">
-        <div class="collab-content">
-            <div class="collab-text">
-                <h2>GitHub Copilot offers a complete dev environment in seconds</h2>
-                <p>so you can code, build, test, and open pull requests from any repo anywhere.</p>
-                <ul class="feature-list">
-                    <li>Write code faster with AI-powered suggestions</li>
-                    <li>Create pull requests and manage code reviews</li>
-                    <li>Collaborate with team members in real-time</li>
-                    <li>Deploy applications with one click</li>
-                </ul>
-                <div class="stats-card">
-                    <div class="stats-number">22%</div>
-                    <div class="stats-label">increase in developer productivity</div>
-                </div>
-            </div>
-            <div class="dashboard-preview">
-                <div class="dashboard-header">
-                    <div class="dashboard-title">GitHub Copilot</div>
-                    <div class="dashboard-actions">
-                        <button class="dashboard-btn">Enable</button>
-                        <button class="dashboard-btn">Configure</button>
-                    </div>
-                </div>
-                <div class="tool-preview">
-                    <div class="code-line"><span class="code-comment">// AI-powered code completion</span></div>
-                    <div class="code-line"><span class="code-keyword">function</span> <span class="code-function">calculateTotal</span>(items) &#123;</div>
-                    <div class="code-line">  <span class="code-keyword">return</span> items.reduce((sum, item) =&gt; sum + item.price, 0)</div>
-                    <div class="code-line">&#125;</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Tools Section -->
-<section class="tools-section">
-    <div class="container">
-        <div class="section-header">
-            <h2>Build and deploy applications with confidence</h2>
-            <p>Comprehensive tools for modern development workflows.</p>
-        </div>
-        <div class="tools-grid">
-            <div class="tool-card">
-                <h3>GitHub Copilot</h3>
-                <p>AI-powered code completion and generation for faster development.</p>
-                <button class="btn-secondary">Explore GitHub Copilot</button>
-                <div class="tool-preview">
-                    <div class="code-line"><span class="code-comment">// Generate function to sort array</span></div>
-                    <div class="code-line"><span class="code-keyword">const</span> <span class="code-function">sortArray</span> = (arr) =&gt; &#123;</div>
-                    <div class="code-line">  <span class="code-keyword">return</span> arr.sort((a, b) =&gt; a - b)</div>
-                    <div class="code-line">&#125;</div>
-                </div>
-            </div>
-            <div class="tool-card">
-                <h3>GitHub Actions</h3>
-                <p>Automate your workflow from idea to production with CI/CD.</p>
-                <button class="btn-secondary">Get GitHub Actions</button>
-                <div class="tool-preview">
-                    <div class="code-line"><span class="code-keyword">name</span>: CI/CD Pipeline</div>
-                    <div class="code-line"><span class="code-keyword">on</span>: [push, pull_request]</div>
-                    <div class="code-line"><span class="code-keyword">jobs</span>:</div>
-                    <div class="code-line">  <span class="code-keyword">test</span>:</div>
-                    <div class="code-line">    <span class="code-keyword">runs-on</span>: ubuntu-latest</div>
-                </div>
-            </div>
-            <div class="tool-card">
-                <h3>GitHub Mobile</h3>
-                <p>Take your projects with you. Review code, manage issues, and collaborate on the go.</p>
-                <button class="btn-secondary">Get GitHub Mobile</button>
-                <div class="mobile-preview">
-                    <div class="mobile-screen">
-                        <div style="background: #4f46e5; padding: 10px; border-radius: 6px; margin-bottom: 10px; color: white; font-size: 12px;">
-                            📱 GitHub Mobile
-                        </div>
-                        <div style="background: #333; padding: 8px; border-radius: 4px; margin-bottom: 8px; font-size: 11px;">
-                            🔄 Pull Request #123
-                        </div>
-                        <div style="background: #333; padding: 8px; border-radius: 4px; margin-bottom: 8px; font-size: 11px;">
-                            🐛 Issue #456
-                        </div>
-                        <div style="background: #333; padding: 8px; border-radius: 4px; font-size: 11px;">
-                            ✅ Build Status: Passing
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Repository Section -->
-<section class="repository-section">
-    <div class="container">
-        <div class="section-header">
-            <h2>Supercharge collaboration</h2>
-            <p>We provide unlimited repositories, best-in-class version control, and the world's most powerful open source community—so your team can work more efficiently together.</p>
+<!-- Features Section -->
+<div class="features-section">
+    <div class="features-content">
+        <div class="features-header">
+            <h2 class="features-title">Features That Empower Your Development</h2>
+            <p class="features-subtitle">Marketify’s suite of features is designed to enhance every aspect of your brand data workflow.</p>
         </div>
-        <div class="repo-showcase">
-            <div class="repo-table">
-                <div class="table-header">
-                    <div>Repository</div>
-                    <div>Status</div>
-                    <div>Build</div>
-                    <div>Deploy</div>
-                </div>
-                <div class="table-row">
-                    <div>🔧 frontend-app</div>
-                    <div><span class="status-badge status-success">Active</span></div>
-                    <div><span class="status-badge status-success">Passing</span></div>
-                    <div><span class="status-badge status-success">Deployed</span></div>
-                </div>
-                <div class="table-row">
-                    <div>⚡ api-service</div>
-                    <div><span class="status-badge status-success">Active</span></div>
-                    <div><span class="status-badge status-warning">Building</span></div>
-                    <div><span class="status-badge status-warning">Pending</span></div>
-                </div>
-                <div class="table-row">
-                    <div>📱 mobile-app</div>
-                    <div><span class="status-badge status-success">Active</span></div>
-                    <div><span class="status-badge status-error">Failed</span></div>
-                    <div><span class="status-badge status-error">Failed</span></div>
-                </div>
-                <div class="table-row">
-                    <div>🛠️ admin-panel</div>
-                    <div><span class="status-badge status-success">Active</span></div>
-                    <div><span class="status-badge status-success">Passing</span></div>
-                    <div><span class="status-badge status-success">Deployed</span></div>
-                </div>
-            </div>
+
+        <div class="features-grid">
             <div>
-                <p style="font-size: 1.25rem; color: #555; margin-bottom: 30px;">
-                    GitHub focuses on GitHub Projects and GitHub Issues to help you stay organized and work efficiently with your team. Build your own workflows to accelerate your team alongside our code.
-                </p>
-                <div class="github-integration">
-                    <div class="github-header">
-                        <div class="github-icon">⚡</div>
-                        <div>
-                            <h3>GitHub Integration</h3>
-                            <p style="color: #a0a0a0; margin: 0;">Auto-deploy when code is committed</p>
-                        </div>
-                    </div>
-                    <div class="tool-preview">
-                        <div class="code-line"><span class="code-comment">// Auto-deployment configuration</span></div>
-                        <div class="code-line"><span class="code-keyword">trigger</span>: push to main</div>
-                        <div class="code-line"><span class="code-keyword">action</span>: deploy to production</div>
-                        <div class="code-line"><span class="code-keyword">status</span>: ✅ automated</div>
-                    </div>
+                <div class="tech-tags">
+                    <span class="tech-tag">Brand Logos</span>
+                    <span class="tech-tag">Color Palettes</span>
+                    <span class="tech-tag">Font Detection</span>
+                    <span class="tech-tag">Company Metadata</span>
+                    <span class="tech-tag">Batch Processing</span>
+                    <span class="tech-tag">Webhooks</span>
+                    <span class="tech-tag">Open Source SDKs</span>
+                    <span class="tech-tag">REST API</span>
+                </div>
+
+                <div class="api-library-card">
+                    <h3 class="api-library-title">Extensive Brand Database</h3>
+                    <p class="api-library-description">Access a vast and growing database of company brand assets and metadata, updated in real time.</p>
                 </div>
             </div>
-            <div class="reduction-stat">
-                <div class="reduction-number">80%</div>
-                <div class="reduction-label">reduction in debugging time with GitHub</div>
+
+            <div class="marketplace-card">
+                <h3 class="marketplace-title">Marketplace</h3>
+                <p class="marketplace-description">Discover and share integrations, plugins, and tools built with Marketify’s API.</p>
+                
+                <div class="marketplace-icons">
+                    <div class="marketplace-icon icon-1">🖼️</div>
+                    <div class="marketplace-icon icon-2">🎨</div>
+                    <div class="marketplace-icon icon-3">🔤</div>
+                    <div class="marketplace-icon icon-4">🌐</div>
+                    <div class="marketplace-icon icon-5">📦</div>
+                    <div class="marketplace-icon icon-6">⚡</div>
+                    <div class="marketplace-icon icon-7">🔗</div>
+                    <div class="marketplace-icon icon-8">📝</div>
+                    <div class="marketplace-icon icon-9">📊</div>
+                    <div class="marketplace-icon icon-10">💻</div>
+                    <div class="marketplace-icon icon-11">🔍</div>
+                    <div class="marketplace-icon icon-12">💡</div>
+                </div>
             </div>
         </div>
     </div>
-</section>
+    <!-- Marketing Section -->
+<div class="marketing-section">
+    <div class="marketing-content">
+        <h2 class="marketing-text">Marketify is the fastest way to get accurate, up-to-date brand assets and metadata for any company. Perfect for designers, developers, and marketers.</h2>
+    </div>
+</div>
+</div>
+
+
+
+<!-- Innovation Section -->
+<div class="innovation-section">
+    <div class="world-map">🌍</div>
+    <div class="innovation-content">
+        <div class="innovation-text">
+            <h2 class="innovation-title">Build Smarter with Marketify</h2>
+        </div>
+    </div>
+
+    <div class="tools-grid">
+        <div class="tool-card feature-card">
+            <h3>Brand API</h3>
+            <p>Fetch logos, colors, fonts, and metadata for any company domain.</p>
+            <a href="#" class="tool-link">Read API Docs →</a>
+        </div>
+
+        <div class="tool-card feature-card">
+            <h3>Batch Processing</h3>
+            <p>Get brand data for multiple domains at once with a single request.</p>
+            <a href="#" class="tool-link">See Batch Guide →</a>
+        </div>
+
+        <div class="tool-card feature-card">
+            <h3>Webhooks</h3>
+            <p>Get notified when brand data changes for domains you track.</p>
+            <a href="#" class="tool-link">Learn About Webhooks →</a>
+        </div>
+
+        <div class="tool-card feature-card">
+            <h3>Dashboard</h3>
+            <p>Visualize and manage your brand data requests in one place.</p>
+            <a href="#" class="tool-link">Open Dashboard →</a>
+        </div>
+    </div>
+</div>
+
+<!-- Final Hero/Footer Section -->
+<div class="final-hero-section">
+  <div class="final-hero-content">
+    <h1 class="final-hero-title">
+      The place for anyone from<br>
+      anywhere to build anything
+    </h1>
+    <p class="final-hero-subtitle">
+      Whether you’re building a design tool, CRM, or marketing platform, Marketify gives you the brand data you need.
+    </p>
+    <div class="final-hero-buttons">
+      <button class="final-hero-btn primary">Sign up for Marketify →</button>
+      <button class="final-hero-btn secondary">Start a free API trial →</button>
+    </div>
+    <div class="final-hero-images">
+      <img src="/developer img/globe.png" alt="Globe" class="final-hero-globe">
+      <img src="/developer img/astro.png" alt="Astronaut" class="final-hero-astro">
+    </div>
+  </div>
+</div>

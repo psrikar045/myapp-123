@@ -445,20 +445,20 @@ body.dark-theme .mat-mdc-menu-item:hover:not([disabled]) {
   font-size: 16px;                                           /* Optional: size */
 }
 html, body {
-  font-family: 'Inter', sans-serif !important;
+  font-family: "Inter", sans-serif !important;
 }
 :root {
-  font-family: 'Inter', sans-serif !important;
+  font-family: "Inter", sans-serif !important;
 }
 
 input{
-  font-family: 'Inter', sans-serif !important;  
+  font-family: "Inter", sans-serif !important;  
 }
 mat-label{
-   font-family: 'Inter', sans-serif !important;  
+   font-family: "Inter", sans-serif !important;  
 }
 mat-form-field{
-   font-family: 'Inter', sans-serif !important;  
+   font-family: "Inter", sans-serif !important;  
 }
 /* * {
   font-family: inherit !important;
@@ -467,24 +467,24 @@ mat-form-field{
    font-weight: 700 !important;
 }
 .nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{
-  font-family: 'Inter', sans-serif !important; 
+  font-family: "Inter", sans-serif !important; 
 }
 h2{
-  font-family: 'Inter', sans-serif !important; 
-  font: 500 20px / 32px "Inter", Roboto, sans-serif !important;
+  font-family: "Inter", sans-serif !important; 
+  /* font: 500 20px / 32px "Inter", Roboto, sans-serif !important; */
 }
 .mat-typography h2 {
-  font-family: 'Inter', sans-serif !important;
-  font: 500 20px / 32px "Inter", Roboto, sans-serif !important;
+  font-family: "Inter", sans-serif !important;
+  /* font: 500 20px / 32px "Inter", Roboto, sans-serif !important; */
 }
 
 .mat-typography h3 {
-  font-family: 'Inter', sans-serif !important;
-  font: 723 20px / 26px "Inter", Roboto, sans-serif !important;
+  font-family: "Inter", sans-serif !important;
+  /* font: 723 20px / 26px "Inter", Roboto, sans-serif !important; */
 }
  .mat-typography{
-  font-family: 'Inter', sans-serif !important;
-  font: "Inter", Roboto, sans-serif !important;
+  font-family: "Inter", sans-serif !important;
+  /* font: "Inter", Roboto, sans-serif !important; */
  }
 
 /* Force Inter font on all Angular Material menus and overlays */
