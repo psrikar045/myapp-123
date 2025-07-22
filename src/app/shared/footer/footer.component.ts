@@ -35,7 +35,7 @@ export class FooterComponent implements OnInit, OnDestroy {
     { name: 'Travel and Tourism', route: 'travel-tourism' },
     { name: 'Business and Services', route: 'business-services' },
     { name: 'Lifestyle', route: 'lifestyle' },
-    { name: 'View all categories', route: '' }
+    { name: 'View all categories →', route: '' }
   ];
 
   developerLinks = [

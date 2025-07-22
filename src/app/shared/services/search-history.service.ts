@@ -17,17 +17,7 @@ export interface SearchedBrand {
 })
 export class SearchHistoryService {
   private readonly maxHistoryItems = 10; // Limit history to 10 items
-  private searchHistorySubject = new BehaviorSubject<SearchedBrand[]>([
-    // Default demo item
-    {
-      name: 'Apple',
-      url: 'https://apple.com',
-      domain: 'apple.com',
-      searchedAt: new Date(),
-      verified: true,
-      icon: 'apple'
-    }
-  ]);
+  private searchHistorySubject = new BehaviorSubject<SearchedBrand[]>([]);
 
   public searchHistory$: Observable<SearchedBrand[]> = this.searchHistorySubject.asObservable();
 

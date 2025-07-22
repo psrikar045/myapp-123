@@ -55,7 +55,7 @@ export class SearchComponent {
  errorMessage = '';
  
  // Animation type selector - change this to switch between animations
- selectedAnimationType: 'default' | 'card-based' | 'minimalist' = 'default';
+ selectedAnimationType: 'default' | 'card-based' | 'minimalist' = 'card-based';
  
  // Analysis type selector
  selectedAnalysisType: 'quick' | 'standard' | 'deep' = 'standard';
@@ -114,15 +114,15 @@ export class SearchComponent {
   }
 
   // Method to toggle animation type
-  toggleAnimationType(): void {
-    if (this.selectedAnimationType === 'default') {
-      this.selectedAnimationType = 'card-based';
-    } else if (this.selectedAnimationType === 'card-based') {
-      this.selectedAnimationType = 'minimalist';
-    } else {
-      this.selectedAnimationType = 'default';
-    }
-  }
+  // toggleAnimationType(): void {
+  //   if (this.selectedAnimationType === 'default') {
+  //     this.selectedAnimationType = 'card-based';
+  //   } else if (this.selectedAnimationType === 'card-based') {
+  //     this.selectedAnimationType = 'minimalist';
+  //   } else {
+  //     this.selectedAnimationType = 'default';
+  //   }
+  // }
 
   // Method to toggle analysis type
   toggleAnalysisType(): void {
@@ -132,20 +132,6 @@ export class SearchComponent {
       this.selectedAnalysisType = 'deep';
     } else {
       this.selectedAnalysisType = 'quick';
-    }
-  }
-
-  // Get toggle button text
-  getToggleText(): string {
-    switch (this.selectedAnimationType) {
-      case 'default':
-        return 'Switch to Cards';
-      case 'card-based':
-        return 'Switch to Minimal';
-      case 'minimalist':
-        return 'Switch to Default';
-      default:
-        return 'Switch Mode';
     }
   }
 
@@ -268,7 +254,7 @@ handleKeyDown(event:any){
       // Start brand analysis with progressive updates
       this.searchModalService.startBrandAnalysis({
         url: finalUrl,
-        title: '🔍 Brand Analysis in Progress',
+        title: 'Brand Analysis in Progress',
         description: `We're performing deep analysis on your website to extract comprehensive brand information`,
         estimatedTime: this.getEstimatedTimeForAnalysisType(),
         isDarkMode: false, // You can detect user's preference here

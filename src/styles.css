@@ -1,3 +1,4 @@
+
 /* You can add global styles to this file, and also import other style files */
 
 /*
@@ -502,6 +503,11 @@ h2{
 
 /* Force Inter font on overlay text, but NOT on icons */
 .cdk-overlay-container *:not(.mat-icon):not([class*="material-icons"]) {
+  font-family: "Inter", sans-serif !important;
+}
+
+/* Force Inter font on all Angular Material headings */
+.mat-h1, .mat-headline-5, .mat-typography .mat-h1, .mat-typography .mat-headline-5, .mat-typography h1 {
   font-family: "Inter", sans-serif !important;
 }
 

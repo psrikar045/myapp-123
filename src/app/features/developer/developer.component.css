@@ -1,3 +1,7 @@
+        * {
+            font-family: "Inter", sans-serif;
+        }
+        
         .dev-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -1241,10 +1245,10 @@ img.codeImgcu {
   .workflow-code-block { font-size: 0.95rem; }
 }
 :host {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 body, .dev-container, .container, .features-section, .marketing-section, .innovation-section, .workflow-section-mock, .final-hero-section {
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 /* .BGlastSection{background: linear-gradient(180deg, #0550D2 0%, #003184 100%);} */
 .BGlastSection{

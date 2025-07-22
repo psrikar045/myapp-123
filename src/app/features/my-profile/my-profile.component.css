@@ -156,23 +156,24 @@ span.bannerFont2 { font-size: 35px;color:#9DCA3C;}
     border-right: 4px solid #FFFFFF;
 }
 .sidebar-edit-btn-mockup {
-  background: #2563eb;
-  color: #fff;
+  background: transparent;
+  color: #2563eb;
   border: none;
   border-radius: 12px;
   padding: 15px 15px;
   font-size: 1.08rem;
-  font-weight: 700;
+  font-weight: 500;
   margin-bottom: 8px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
-  transition: background 0.18s;
+  box-shadow: none;
+  transition: background 0.18s, color 0.18s;
   width: 200px;
   text-align: left;
 }
 .sidebar-edit-btn-mockup.active,
 .sidebar-edit-btn-mockup:hover {
-  background: #1e40af;
+  background: #2563eb;
+  color: #ffffff;
 }
 .sidebar-link-mockup {
   background: transparent;

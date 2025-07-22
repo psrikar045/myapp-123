@@ -27,10 +27,10 @@
       <div class="profile-main-mockup">
         <aside class="profile-sidebar-mockup">
           <button class="sidebar-edit-btn-mockup" [class.active]="selectedSidebarIndex === 0" (click)="onSidebarSelect(0)">Edit Profile</button>
-          <button class="sidebar-link-mockup" [class.active]="selectedSidebarIndex === 1" (click)="onSidebarSelect(1)">Notifications</button>
-          <button class="sidebar-link-mockup" [class.active]="selectedSidebarIndex === 2" (click)="onSidebarSelect(2)">My Plan</button>
-          <button class="sidebar-link-mockup" [class.active]="selectedSidebarIndex === 3" (click)="onSidebarSelect(3)">Choose Plan</button>
-          <button class="sidebar-link-mockup" [class.active]="selectedSidebarIndex === 4" (click)="onSidebarSelect(4)">Password & Security</button>
+          <button class="sidebar-edit-btn-mockup" [class.active]="selectedSidebarIndex === 1" (click)="onSidebarSelect(1)">Notifications</button>
+          <button class="sidebar-edit-btn-mockup" [class.active]="selectedSidebarIndex === 2" (click)="onSidebarSelect(2)">My Plan</button>
+          <button class="sidebar-edit-btn-mockup" [class.active]="selectedSidebarIndex === 3" (click)="onSidebarSelect(3)">Choose Plan</button>
+          <button class="sidebar-edit-btn-mockup" [class.active]="selectedSidebarIndex === 4" (click)="onSidebarSelect(4)">Password & Security</button>
         </aside>
         <section class="profile-content-mockup">
           <ng-container *ngIf="selectedSidebarIndex === 0">

@@ -21,7 +21,7 @@
   padding: 48px;
   width: 100%;
   max-width: 520px;
-  max-height: 90vh;
+  max-height: 98vh;
   overflow: hidden;
   box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
   text-align: center;
@@ -51,12 +51,16 @@
 
 /* Modal Header */
 .search-modal-header {
-  margin-bottom: 36px;
+  margin-bottom: 14px;
   flex-shrink: 0;
 }
 
 .search-modal-icon {
-  margin-bottom: 20px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+      gap: 4px;
+
 }
 
 .search-spinner {
@@ -73,6 +77,7 @@
   font-weight: 700;
   margin: 0;
   letter-spacing: -0.02em;
+  width: 100%;
 }
 
 /* Modal Content */
@@ -466,6 +471,7 @@
   border-radius: 50%;
   padding: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  vertical-align: middle;
 }
 
 .step-card-info {
@@ -547,7 +553,7 @@
 }
 
 .light-theme .badge-in-progress {
-  background: #dbeafe;
+  /* background: #d74133; */
   color: #1d4ed8;
 }
 
@@ -597,7 +603,7 @@
 }
 
 .dark-theme .badge-in-progress {
-  background: #1e40af;
+  /* background: #1e40af; */
   color: #bfdbfe;
 }
 
