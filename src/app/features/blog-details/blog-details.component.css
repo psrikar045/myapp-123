@@ -3,9 +3,10 @@
   width: 100%;
   /* background: linear-gradient(120deg, #95bddc 0%, #d1ccad 100%); */
   /* background: linear-gradient(120deg, #e4e9ed 0%, #8fc1de 100%); */
-      background: linear-gradient(99deg, #ffffff 0%, #91EFFE 100%);
+      /* background: linear-gradient(99deg, #ffffff 0%, #91EFFE 100%); */
   padding-bottom: 15px;
   margin-top: 75px;
+  background-color: #CFD7E8;
 }
 .blog-main-card{
   background-color: #f6fcfe;
@@ -193,7 +194,7 @@ p{
   flex-direction: column;
   align-items: stretch;
   background: #ffffff;
-  border: 1px solid #e8f4f8;
+  border: 1px solid #d7e1e4;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   padding: 0;
@@ -266,7 +267,7 @@ p{
 .popular-tags-section {
   margin-top: 30px;
   padding: 20px;
-  background: #f6fcfe;
+  background: #ffffff;
   border: 1px solid #dce5e9;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(37, 99, 235, 0.08);
@@ -370,7 +371,11 @@ p{
   }
 }
 .blog-details-main-card{
-  background-color: #ffffff; margin: 20px; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); display: flex; gap: 30px; flex-direction: column;
+   /* background: linear-gradient(157deg, #0550D233 0%, #00318433 100%); */
+   background: #ffffff;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  margin: 20px; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); display: flex; gap: 30px; flex-direction: column;
 }
 
 .blog-details-content {
@@ -495,7 +500,7 @@ p{
 .blog-vertical-divider {
   width: 2px;
   min-height: 500px;
-  background: linear-gradient(to bottom, #e0eafc, #cfdef3);
+  background: #FFFFFF;
   border-radius: 1px;
   margin: 0 24px;
   align-self: stretch;

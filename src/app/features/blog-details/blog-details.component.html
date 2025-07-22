@@ -39,7 +39,9 @@ Marketify is built to save you time and help you create faster — whether you'r
         </blockquote>
         <div >
           <!-- <span>Advertisement</span> -->
-          <div class="blog-details-image" *ngFor="let cat of advertisements"><img  [src]="cat.img" alt="Category" /></div>
+          <div class="blog-details-image" *ngFor="let cat of advertisements">
+            <img  [src]="cat.img" alt="Category" />
+          </div>
         </div>
         <h3>Pack Lightly and Smartly</h3>
         <p>Packing can be a daunting task, but with some careful planning and smart choices, you can pack light and efficiently. Start by making a packing list and choosing the most versatile and comfortable clothing that can be mixed and matched. Invest in luggage and packing organizers to maximize space and minimize wrinkles.</p>
@@ -72,10 +74,6 @@ Marketify is built to save you time and help you create faster — whether you'r
       </div>
     <!-- </div> -->
        <div class="blog-vertical-divider"></div>
-      <!-- Sidebar Card -->
-      <!-- <div class="blog-details-sidebar-card" style="flex: 1;"> -->
-        <!-- Sidebar (Right) -->
-         <!-- <div class="blog-side-card"> -->
         <aside class="blog-details-sidebar">
       <h3 class="sidebar-title">Recent Posts</h3>
       <p class="sidebar-desc">Traveling is an enriching experience that opens up new horizons, exposes us to</p>
@@ -104,11 +102,6 @@ Marketify is built to save you time and help you create faster — whether you'r
       <!-- </div> -->
       <!-- </div> -->
     </div> <!-- Close blog-details-content -->
-    <!-- <div class="back-button-container">
-      <button class="back-button" (click)="onBackToList()">
-        <i class="bi bi-arrow-left"></i> Back to Blog List
-      </button>
-    </div> -->
     </div> <!-- Close blog-details-main-card -->
   </div>
 </div>
