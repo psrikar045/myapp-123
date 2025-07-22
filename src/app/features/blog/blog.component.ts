@@ -24,6 +24,9 @@ export class BlogComponent implements OnInit {
   currentPage = 1;
   pageSize = 5;
 
+  // Sidebar management properties
+  showAllSidebarCategories = false;
+
   blogs: BlogCard[] = [];
  hero = {
     title: 'Get started with Marketify to make your work flow easier',
@@ -125,6 +128,8 @@ export class BlogComponent implements OnInit {
 
   selectPage(page: number) {
     this.currentPage = page;
+    // Reset the sidebar toggle when changing pages
+    this.showAllSidebarCategories = false;
   }
 
   navigateToBlogDetails(blogIndex: number): void {
@@ -163,6 +168,40 @@ export class BlogComponent implements OnInit {
 
   trackByBlog(index: number, blog: BlogCard): string {
     return blog.title + index;
+  }
+
+  // Sidebar category management
+  get displayedSidebarCategories() {
+    const leftSideCount = this.pagedBlogs.length;
+    const rightSideCount = this.sidebarCategories.length;
+    const isLastPage = this.currentPage === this.totalPages;
+    
+    // Only limit on the last page
+    if (isLastPage && !this.showAllSidebarCategories && rightSideCount > leftSideCount) {
+      return this.sidebarCategories.slice(0, leftSideCount);
+    }
+    return this.sidebarCategories;
+  }
+
+  get shouldShowMoreButton(): boolean {
+    const leftSideCount = this.pagedBlogs.length;
+    const rightSideCount = this.sidebarCategories.length;
+    const isLastPage = this.currentPage === this.totalPages;
+    
+    // Only show button on last page when right side has more cards than left
+    return isLastPage && rightSideCount > leftSideCount;
+  }
+
+  get hasMoreCategories(): boolean {
+    const leftSideCount = this.pagedBlogs.length;
+    const rightSideCount = this.sidebarCategories.length;
+    const isLastPage = this.currentPage === this.totalPages;
+    
+    return isLastPage && rightSideCount > leftSideCount && !this.showAllSidebarCategories;
+  }
+
+  toggleSidebarCategories(): void {
+    this.showAllSidebarCategories = !this.showAllSidebarCategories;
   }
 
   testPageClick(pageNumber: number): void {

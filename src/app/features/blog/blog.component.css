@@ -274,6 +274,46 @@
   margin: 0;
 }
 
+/* More/Less Button Styles */
+.sidebar-more-button-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
+.sidebar-more-button {
+ background: #ffffff;
+    color: #9bb1e0;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+    outline: none;
+    font-size: 1.2rem;
+}
+
+.sidebar-more-button:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.sidebar-more-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+}
+
+.sidebar-more-button i {
+  line-height: 1;
+}
+
 @media (max-width: 1100px) {
   .blog-main-container {
     flex-direction: column;

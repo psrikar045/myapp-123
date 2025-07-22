@@ -52,7 +52,7 @@
         <!-- <div class="blog-vertical-divider"></div> -->
         <aside class="blog-sidebar">
           <div class="sidebar-category-list">
-            <div class="sidebar-category-item" *ngFor="let cat of sidebarCategories; let i = index">
+            <div class="sidebar-category-item" *ngFor="let cat of displayedSidebarCategories; let i = index">
               <!-- (click)="navigateToBlogDetailsFromSidebar(i)" -->
               <div class="sidebar-card-container">
                 <div class="sidebar-category-content">
@@ -67,6 +67,13 @@
               </div>
              
             </div>
+          </div>
+          
+          <!-- More/Less Button -->
+          <div class="sidebar-more-button-container" *ngIf="shouldShowMoreButton">
+            <button class="sidebar-more-button" (click)="toggleSidebarCategories()">
+              <i class="bi" [ngClass]="hasMoreCategories ? 'bi-chevron-down' : 'bi-chevron-up'"></i>
+            </button>
           </div>
         </aside>
       </div>
