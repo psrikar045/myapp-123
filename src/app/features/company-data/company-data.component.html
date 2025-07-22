@@ -14,7 +14,7 @@
           type="text" 
           placeholder="https://dribbble.com/" 
           [(ngModel)]="websiteUrl"
-          [disabled]="isLoading" />
+          [disabled]="isLoading" (keydown.enter)="onAnalyzeClick()" />
         <button 
           class="brand-analyzer-analyze-btn" 
           (click)="onAnalyzeClick()"
