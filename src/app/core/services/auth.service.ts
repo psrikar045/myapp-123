@@ -15,7 +15,9 @@ import {
   VerifyCodeRequest,
   SetNewPasswordRequest,
   GoogleSignInRequest,
-  PublicForwardRequest
+  PublicForwardRequest,
+  AuthRequest,
+  LoginRequest
 } from '../../shared/models/api.models';
 import { jwtDecode } from 'jwt-decode';
 // Define interfaces for clarity
@@ -376,7 +378,33 @@ private hasValidToken(): boolean {
       catchError(this.handleError)
     );
   }
-
+   /**
+   * Login with username or email
+   * @param username User's username or email
+   * @param password User's password
+   * @returns Observable of AuthResponse
+   */
+loginWithEmailOrUserName(emailOrUserName: string, password: string): Observable<AuthResponse> {
+    const request: LoginRequest = { username: emailOrUserName, password };
+    return this.userAuthService.login(request).pipe(
+      tap(response => {
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('jwt_token', response.token);
+          if (response.refreshToken) {
+            localStorage.setItem('refresh_token', response.refreshToken);
+          }
+          if (response.brandId) {
+            localStorage.setItem('brand_id', response.brandId);
+          }
+          this.isAuthenticatedSubject.next(true);
+          // Store user details from the response
+          this.storeUserDetails(response);
+          console.log('Login successful, token and user details stored.');
+        }
+      }),
+      catchError(this.handleError)
+    );
+  }
   /**
    * Login with username
    * @param username User's username
@@ -614,18 +642,32 @@ private hasValidToken(): boolean {
         `Backend returned code ${error.status}, ` +
         `body was: ${JSON.stringify(error.error)}`);
 
-      if (error.status === 401 || error.status === 400) {
-        // Specific errors for invalid credentials or bad request
-        errorMessage = error.error?.message || 'Invalid email/username or password.';
-      } else if (error.status === 403) {
-        errorMessage = 'Access denied. You do not have permission to perform this action.';
-      } else if (error.status === 500) {
-        errorMessage = 'Server error. Please try again or contact support.';
-      } else if (error.error && error.error.message) {
-        // Generic error message from backend if available
+      // Enhanced error message extraction
+      if (error.error?.message) {
+        // First priority: error.error.message
         errorMessage = error.error.message;
+      } else if (error.error?.error) {
+        // Second priority: error.error.error
+        errorMessage = error.error.error;
+      } else if (typeof error.error === 'string') {
+        // Third priority: error.error as string
+        errorMessage = error.error;
+      } else if (error.message) {
+        // Fourth priority: error.message
+        errorMessage = error.message;
+      } else {
+        // Fallback based on status codes
+        if (error.status === 401 || error.status === 400) {
+          errorMessage = 'Invalid email/username or password.';
+        } else if (error.status === 403) {
+          errorMessage = 'Access denied. You do not have permission to perform this action.';
+        } else if (error.status === 500) {
+          errorMessage = 'Server error. Please try again or contact support.';
+        }
       }
     }
+    
+    console.error('AuthService handleError - Final error message:', errorMessage);
     // Return an observable with a user-facing error message
     return throwError(() => new Error(errorMessage));
   };
@@ -686,7 +728,7 @@ private hasValidToken(): boolean {
    */
   getAllBrands(page: number = 0, size: number = 20): Observable<any> {
     return this.userAuthService.getAllBrands(page, size).pipe(
-      tap((response: any) => console.log('Brands fetched successfully.', response)),
+      tap((response: any) => console.log('Brands fetched successfully.')),
       catchError(this.handleError)
     );
   }

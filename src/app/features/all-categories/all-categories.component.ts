@@ -439,7 +439,7 @@ getAllCategories() {
         this.brandData = response.data || [];
         this.allBrands = JSON.parse(JSON.stringify(this.brandData));
         this.isLoadingBrands = false;
-        console.log('Brand data loaded from API:', this.brandData);
+        // console.log('Brand data loaded from API:', this.brandData);
       },
       error: (error) => {
         console.error('Error loading brand data:', error);

@@ -24,7 +24,8 @@ import {
   BrandStatistics,
   PublicForwardRequest,
   ApiResponse,
-  ApiError
+  ApiError,
+  LoginRequest
 } from '../models/api.models';
 import { UserBackendResponse, UserProfileUpdateRequest } from '../models/user-profile.model';
 
@@ -60,7 +61,7 @@ export class UserAuthService {
    * Legacy login endpoint
    * POST /auth/login
    */
-  login(request: AuthRequest): Observable<AuthResponse> {
+  login(request: LoginRequest): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(`${this.baseUrl}/auth/login`, request)
       .pipe(catchError(this.handleError));
   }

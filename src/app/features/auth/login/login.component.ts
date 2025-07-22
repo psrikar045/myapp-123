@@ -284,7 +284,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isLoading = true;
     this.buttonState = 'loading';
     const { identifier, password } = this.loginForm.getRawValue();
-    this.authService.loginWithEmail(identifier, password)
+    this.authService.loginWithEmailOrUserName(identifier, password)
       .pipe(
         tap(response => {
           console.log('Login API success!', response);
@@ -293,8 +293,24 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
           this.toolbarService.setLoggedInToolbar(); // <-- Set logged-in toolbar
         }),
         catchError(error => {
-          this.errorMessage = error.message || 'Login failed. Please try again.';
-          console.error('Login API error:', error);
+          // Enhanced error message extraction
+          console.error('Full Login API error object:', error);
+          
+          let errorMessage = 'Login failed. Please try again.';
+          
+          // Try to extract the actual backend error message
+          if (error.message) {
+            errorMessage = error.message;
+          } else if (error.error?.message) {
+            errorMessage = error.error.message;
+          } else if (error.error?.error) {
+            errorMessage = error.error.error;
+          } else if (typeof error.error === 'string') {
+            errorMessage = error.error;
+          }
+          
+          this.errorMessage = errorMessage;
+          console.error('Extracted error message:', errorMessage);
           this.loginPasswordCtrl.setValue('');
           this._openSnackBar(this.errorMessage, 'Retry');
           return of(null); // Consumed error
@@ -393,8 +409,24 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
           this.registerForm.reset(); // Reset register form
         }),
         catchError(error => {
-          this.snackBar.open(error.message || 'Registration failed. Please try again.', 'Close', { duration: 7000 });
-          console.error('Register API error:', error);
+          // Enhanced error message extraction
+          console.error('Full Register API error object:', error);
+          
+          let errorMessage = 'Registration failed. Please try again.';
+          
+          // Try to extract the actual backend error message
+          if (error.message) {
+            errorMessage = error.message;
+          } else if (error.error?.message) {
+            errorMessage = error.error.message;
+          } else if (error.error?.error) {
+            errorMessage = error.error.error;
+          } else if (typeof error.error === 'string') {
+            errorMessage = error.error;
+          }
+          
+          console.error('Extracted error message:', errorMessage);
+          this.snackBar.open(errorMessage, 'Close', { duration: 7000 });
           return of(null); // Consumed error
         })
       )

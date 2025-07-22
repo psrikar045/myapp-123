@@ -2,7 +2,11 @@
 export interface AuthRequest {
   username: string;
   password: string;
-  brandId?: string;
+  // brandId?: string;
+}
+export interface LoginRequest {
+  username: string;
+  password: string;
 }
 
 export interface EmailLoginRequest {
