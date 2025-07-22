@@ -29,8 +29,8 @@ export class BlogComponent implements OnInit {
 
   blogs: BlogCard[] = [];
  hero = {
-    title: 'Get started with Marketify to make your work flow easier',
-    subtitle: 'Choose a plan that fits your workflow. Instantly access logos, brand colors, fonts, and social links for any company. Upgrade for advanced integrations, asset libraries, and team features.'
+    title: 'Get started with Marketify to simplify your workflow',
+    subtitle: 'Choose a plan that fits your needs and instantly access logos, brand colors, fonts, and social links for any company.'
   };
   sidebarCategories = [
     {
