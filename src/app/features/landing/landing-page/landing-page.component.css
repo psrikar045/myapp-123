@@ -976,7 +976,7 @@ width: 100%;
   text-align: left;
   max-width: 420px;
 }
-.supercharge-form-row {
+/* .supercharge-form-row {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -988,7 +988,7 @@ width: 100%;
   max-width: 513px;
   width: 100%;
   gap: 12px;
-}
+} */
 .supercharge-email-input {
   border: none;
   outline: none;
@@ -1016,7 +1016,7 @@ width: 100%;
   cursor: pointer;
   transition: background 0.2s;
   outline: none;
-  margin-left: 8px;
+  /* margin-left: 8px; */
   white-space: nowrap;
 }
 .supercharge-cta-btn:hover {
@@ -1059,11 +1059,11 @@ width: 100%;
     font-size: 1rem;
     margin-bottom: 24px;
   }
-  .supercharge-form-row {
+  /* .supercharge-form-row {
     min-width: 0;
     max-width: 100%;
     padding: 8px 8px 8px 16px;
-  }
+  } */
   .supercharge-cta-btn {
     font-size: 1rem;
     padding: 10px 18px;
@@ -2541,3 +2541,41 @@ i.bi.bi-lightning-charge {background: #c9b000;color: #fff;padding: 10px;border-r
 .bi-lightning-charge::before {font-size: 30px;}
 i.bi.bi-arrow-repeat {background: #AD3BFE;color: #fff;padding: 10px;border-radius: 50%;}
 .bi-arrow-repeat::before {font-size: 30px;}
+
+.action-btn {
+  border: none;
+  outline: none;
+  background: #2563eb;
+  color: #fff;
+  border-radius: 24px;
+  padding: 12px 28px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+  min-width: 80px;
+  justify-content: center;
+}
+.get-started-btn {
+  background: linear-gradient(90deg, #2563eb 60%, #377dff 100%);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 24px;
+  box-shadow: 0 2px 12px rgba(37,99,235,0.13);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+  border: none;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+.get-started-btn:hover {
+  background: linear-gradient(90deg, #377dff 60%, #2563eb 100%);
+  box-shadow: 0 6px 20px rgba(37,99,235,0.22);
+  transform: translateY(-2px) scale(1.06);
+}
+.pricing-card-cta:hover{
+  background: #1a2343 !important;
+  color: #fff;
+}
