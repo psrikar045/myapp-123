@@ -22,7 +22,7 @@ export class BlogComponent implements OnInit {
   
   // Pagination properties (matching AllCategoriesComponent)
   currentPage = 1;
-  pageSize = 5; // 5 items per page as requested
+  pageSize = 5;
 
   blogs: BlogCard[] = [];
  hero = {
@@ -111,11 +111,12 @@ export class BlogComponent implements OnInit {
 
   // Pagination methods (matching AllCategoriesComponent)
   get pagedBlogs() {
-    return this.blogService.getPagedBlogs(this.currentPage, this.pageSize);
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.blogs.slice(start, start + this.pageSize);
   }
 
   get totalPages() {
-    return this.blogService.getTotalPages(this.pageSize);
+    return Math.ceil(this.blogs.length / this.pageSize) || 1;
   }
 
   get pages() {

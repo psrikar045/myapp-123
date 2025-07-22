@@ -77,76 +77,91 @@
     margin-top: 10px;
 }
 
-.blog-pagination {
+/* --- Pagination styles from all-categories for consistency --- */
+.categories-pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 18px;
   margin: 32px 0 0 0;
   width: 100%;
 }
 .page {
-  background: #fff;
-  border: 2px solid #e3e3e3;
-  border-radius: 999px;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
   font-size: 1.15rem;
   font-family: "Inter", sans-serif;
   font-weight: 600;
   color: #23272f;
-  padding: 8px 20px;
-  cursor: pointer;
-  transition: background 0.18s, color 0.18s, border 0.18s, box-shadow 0.18s, transform 0.18s;
-  min-width: 44px;
-  min-height: 44px;
+  padding: 0;
+  min-width: 36px;
+  min-height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: none;
   outline: none;
+  transition: background 0.18s, color 0.18s, border 0.18s, transform 0.18s;
 }
 .page.active, .page:active {
   background: #2563eb;
   color: #fff;
-  border-color: #2563eb;
-  box-shadow: 0 2px 8px 0 rgba(55,125,255,0.13);
-  transform: scale(1.08);
-  z-index: 1;
+  border-radius: 50%;
+  min-width: 36px;
+  min-height: 36px;
+  font-weight: 700;
+  box-shadow: none;
+  border: none;
+  transform: none;
+}
+.page:not(.active):not(:disabled) {
+  background: transparent;
+  color: #23272f;
+  border: none;
+  box-shadow: none;
 }
 .page:hover:not(.active):not(:disabled) {
   background: #e3f0ff;
   color: #2563eb;
-  border-color: #2563eb;
 }
 .page:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
-  background: #f8fafc;
+  background: transparent;
   color: #b0b7c3;
-  border-color: #e3eaf1;
+  border: none;
 }
 .page.nav {
-  padding: 0 14px;
-  min-width: 44px;
-  min-height: 44px;
+  padding: 0;
+  min-width: 36px;
+  min-height: 36px;
   font-size: 1.3rem;
-  background: #f8fafc;
-  border: 2px solid #e3eaf1;
-  color: #2563eb;
+  background: transparent;
+  border: none;
+  color: #b0b7c3;
   box-shadow: none;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+.page.nav:not(:disabled) {
+  color: #23272f;
+}
 .page.nav:disabled {
-  color: #b0b7c3;
-  background: #f8fafc;
-  border-color: #e3eaf1;
+  color: #e3eaf1;
+  background: transparent;
 }
-.page.nav:hover:not(:disabled) {
-  background: #e3f0ff;
-  color: #2563eb;
-  border-color: #2563eb;
+.pagination-bottom-center-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  min-height: 60px;
+  margin-top: auto;
+  margin-bottom: 0;
 }
+/* --- End all-categories pagination styles --- */
 .summary{
   padding: 10px;
 
