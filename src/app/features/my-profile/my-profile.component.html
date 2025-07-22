@@ -1,113 +1,121 @@
 <app-header></app-header>
-<div class="profile-mockup-wrapper">
-  <div class="profile-banner-mockup">
-    <div class="profile-banner-content-mockup">
-      <div class="profile-banner-greeting">
-        Hello, my name is <span class="profile-banner-highlight">{{ profile.name || 'Jon Doe' }}</span>
-      </div>
-      <div class="profile-banner-role">I am front end developer</div>
-    </div>
-    <div class="profile-banner-identity-mockup">
-      <div class="profile-banner-avatar-mockup">
-        <img [src]="profile.avatar" alt="Profile" class="profile-banner-avatar-img-mockup" />
-        <!-- <span class="profile-avatar-edit-btn-mockup"><img src="assets/icons/camera.svg" alt="Edit" /></span> -->
-      </div>
-      <div class="profile-banner-info-mockup">
-        <div class="profile-banner-name-mockup">{{ profile.name }}</div>
-        <div class="profile-banner-status-mockup">{{ profile.status }}</div>
-      </div>
-    </div>
-  </div>
-  <div class="profile-main-mockup">
-    <aside class="profile-sidebar-mockup">
-      <button class="sidebar-edit-btn-mockup" [class.active]="selectedSidebarIndex === 0" (click)="onSidebarSelect(0)">Edit Profile</button>
-      <button class="sidebar-link-mockup" [class.active]="selectedSidebarIndex === 1" (click)="onSidebarSelect(1)">Notifications</button>
-      <button class="sidebar-link-mockup" [class.active]="selectedSidebarIndex === 2" (click)="onSidebarSelect(2)">My Plan</button>
-      <button class="sidebar-link-mockup" [class.active]="selectedSidebarIndex === 3" (click)="onSidebarSelect(3)">Choose Plan</button>
-      <button class="sidebar-link-mockup" [class.active]="selectedSidebarIndex === 4" (click)="onSidebarSelect(4)">Password & Security</button>
-    </aside>
-    <section class="profile-content-mockup">
-      <ng-container *ngIf="selectedSidebarIndex === 0">
-        <div class="profile-content-header-mockup">
-          <div>
-            <div class="profile-content-title-mockup">Edit Profile</div>
-            <div class="profile-content-status-mockup">Your account is ready, you can now apply for advice.</div>
-          </div>
-          <div class="profile-content-update-mockup">last update {{ profileForm.updatedAt | date:'MMM-d-yyyy' }}</div>
-        </div>
-        <form (ngSubmit)="onSave()" #profileFormRef="ngForm" class="profile-form-mockup">
-          <div class="profile-form-columns-mockup">
-            <div class="profile-form-col-mockup">
-              <div class="profile-form-section-title-mockup">Personal</div>
-              <div class="form-group-mockup">
-                <label>First Name</label>
-                <input type="text" [(ngModel)]="profileForm.firstName" name="firstName" />
-              </div>
-              <div class="form-group-mockup">
-                <label>Surname</label>
-                <input type="text" [(ngModel)]="profileForm.surname" name="surname" />
-              </div>
-              <div class="form-group-mockup">
-                <label>National Code</label>
-                <input type="text" [(ngModel)]="profileForm.nationalCode" name="nationalCode" placeholder="Enter Value" />
-              </div>
-              <div class="form-group-mockup">
-                <label>Date of birth</label>
-                <input type="date" [(ngModel)]="profileForm.dob" name="dob" />
-              </div>
-              <div class="form-group-mockup">
-                <label>Education level</label>
-                <input type="text" [(ngModel)]="profileForm.educationLevel" name="educationLevel" placeholder="software" />
-              </div>
+
+
+<div class="pad100 ProfilePageBG">
+  <div class="container">
+    <div class="profile-mockup-wrapper">
+      <div class="profile-banner-mockup">
+        <div class="profile-banner-content-mockup">
+          <div class="profilebannerFonts">
+            <div class="profile-banner-greeting">
+              <span class="bannerFont1">Hello, my name is </span> <span class="profile-banner-highlight bannerFont2">{{ profile.name || 'Jon Doe' }}</span>
             </div>
-            <div class="profile-form-col-mockup">
-              <div class="profile-form-section-title-mockup">Contact</div>
-              <div class="form-group-mockup">
-                <label>Email</label>
-                <input type="email" [(ngModel)]="profileForm.email" name="email" placeholder="Enter Value" disabled />
+            <div class="profile-banner-role bannerFont3">I am front end developer</div>
+          </div>
+        </div>
+        <div class="profile-banner-identity-mockup">
+          <div class="profile-banner-avatar-mockup">
+            <img [src]="profile.avatar" alt="Profile" class="profile-banner-avatar-img-mockup" />
+            <!-- <span class="profile-avatar-edit-btn-mockup"><img src="assets/icons/camera.svg" alt="Edit" /></span> -->
+          </div>
+          <div class="profile-banner-info-mockup">
+            <div class="profile-banner-name-mockup">{{ profile.name }}</div>
+            <div class="profile-banner-status-mockup">{{ profile.status }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="profile-main-mockup">
+        <aside class="profile-sidebar-mockup">
+          <button class="sidebar-edit-btn-mockup" [class.active]="selectedSidebarIndex === 0" (click)="onSidebarSelect(0)">Edit Profile</button>
+          <button class="sidebar-link-mockup" [class.active]="selectedSidebarIndex === 1" (click)="onSidebarSelect(1)">Notifications</button>
+          <button class="sidebar-link-mockup" [class.active]="selectedSidebarIndex === 2" (click)="onSidebarSelect(2)">My Plan</button>
+          <button class="sidebar-link-mockup" [class.active]="selectedSidebarIndex === 3" (click)="onSidebarSelect(3)">Choose Plan</button>
+          <button class="sidebar-link-mockup" [class.active]="selectedSidebarIndex === 4" (click)="onSidebarSelect(4)">Password & Security</button>
+        </aside>
+        <section class="profile-content-mockup">
+          <ng-container *ngIf="selectedSidebarIndex === 0">
+            <div class="profile-content-header-mockup">
+              <div>
+                <div class="profile-content-title-mockup">Edit Profile</div>
+                <div class="profile-content-status-mockup">Your account is ready, you can now apply for advice.</div>
               </div>
-              <div class="form-group-mockup">
-                <label>Phone Number</label>
-                <div class="phone-input-group-mockup">
-                  <select [(ngModel)]="profileForm.phoneCountry" name="phoneCountry">
-                    <option value="+98">+98</option>
-                    <option value="+1">+1</option>
-                  </select>
-                  <input type="tel" [(ngModel)]="profileForm.phoneNumber" name="phoneNumber" placeholder="9120000000" />
+              <div class="profile-content-update-mockup">last update {{ profileForm.updatedAt | date:'MMM-d-yyyy' }}</div>
+            </div>
+            <form (ngSubmit)="onSave()" #profileFormRef="ngForm" class="profile-form-mockup">
+              <div class="profile-form-columns-mockup">
+                <div class="profile-form-col-mockup">
+                  <div class="profile-form-section-title-mockup">Personal</div>
+                  <div class="form-group-mockup">
+                    <label>First Name</label>
+                    <input type="text" [(ngModel)]="profileForm.firstName" name="firstName" />
+                  </div>
+                  <div class="form-group-mockup">
+                    <label>Surname</label>
+                    <input type="text" [(ngModel)]="profileForm.surname" name="surname" />
+                  </div>
+                  <div class="form-group-mockup">
+                    <label>National Code</label>
+                    <input type="text" [(ngModel)]="profileForm.nationalCode" name="nationalCode" placeholder="Enter Value" />
+                  </div>
+                  <div class="form-group-mockup">
+                    <label>Date of birth</label>
+                    <input type="date" [(ngModel)]="profileForm.dob" name="dob" />
+                  </div>
+                  <div class="form-group-mockup">
+                    <label>Education level</label>
+                    <input type="text" [(ngModel)]="profileForm.educationLevel" name="educationLevel" placeholder="software" />
+                  </div>
+                </div>
+                <div class="profile-form-col-mockup">
+                  <div class="profile-form-section-title-mockup">Contact</div>
+                  <div class="form-group-mockup">
+                    <label>Email</label>
+                    <input type="email" [(ngModel)]="profileForm.email" name="email" placeholder="Enter Value" disabled />
+                  </div>
+                  <div class="form-group-mockup">
+                    <label>Phone Number</label>
+                    <div class="phone-input-group-mockup">
+                      <select [(ngModel)]="profileForm.phoneCountry" name="phoneCountry">
+                        <option value="+98">+98</option>
+                        <option value="+1">+1</option>
+                      </select>
+                      <input type="tel" [(ngModel)]="profileForm.phoneNumber" name="phoneNumber" placeholder="9120000000" />
+                    </div>
+                  </div>
+                  <div class="form-group-mockup">
+                    <label>Country</label>
+                    <input type="text" [(ngModel)]="profileForm.country" name="country" placeholder="Select" />
+                  </div>
+                  <div class="form-group-mockup">
+                    <label>City</label>
+                    <input type="text" [(ngModel)]="profileForm.city" name="city" placeholder="software" />
+                  </div>
                 </div>
               </div>
-              <div class="form-group-mockup">
-                <label>Country</label>
-                <input type="text" [(ngModel)]="profileForm.country" name="country" placeholder="Select" />
+              <div class="profile-form-save-row-mockup">
+                <button type="submit" class="save-btn-mockup">Save</button>
               </div>
-              <div class="form-group-mockup">
-                <label>City</label>
-                <input type="text" [(ngModel)]="profileForm.city" name="city" placeholder="software" />
-              </div>
+            </form>
+          </ng-container>
+          <ng-container *ngIf="selectedSidebarIndex === 1">
+            <div class="dev-progress-message">
+              <h2>Notifications</h2>
+              <p>This feature is under development. Please check back later.</p>
             </div>
-          </div>
-          <div class="profile-form-save-row-mockup">
-            <button type="submit" class="save-btn-mockup">Save</button>
-          </div>
-        </form>
-      </ng-container>
-      <ng-container *ngIf="selectedSidebarIndex === 1">
-        <div class="dev-progress-message">
-          <h2>Notifications</h2>
-          <p>This feature is under development. Please check back later.</p>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="selectedSidebarIndex === 2">
-        <app-my-plan (upgradeClicked)="onUpgradeClicked()"></app-my-plan>
-      </ng-container>
-      <ng-container *ngIf="selectedSidebarIndex === 3">
-        <app-choose-plan></app-choose-plan>
-      </ng-container>
-      <ng-container *ngIf="selectedSidebarIndex === 4">
-        <div class="dev-progress-message">
-          <button class="change-password-btn" (click)="goToResetPassword()">Change Password</button>
-        </div>
-      </ng-container>
-    </section>
+          </ng-container>
+          <ng-container *ngIf="selectedSidebarIndex === 2">
+            <app-my-plan (upgradeClicked)="onUpgradeClicked()"></app-my-plan>
+          </ng-container>
+          <ng-container *ngIf="selectedSidebarIndex === 3">
+            <app-choose-plan></app-choose-plan>
+          </ng-container>
+          <ng-container *ngIf="selectedSidebarIndex === 4">
+            <div class="dev-progress-message">
+              <button class="change-password-btn" (click)="goToResetPassword()">Change Password</button>
+            </div>
+          </ng-container>
+        </section>
+      </div>
+    </div>
   </div>
 </div>

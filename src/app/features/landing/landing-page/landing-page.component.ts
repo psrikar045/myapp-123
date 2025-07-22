@@ -160,6 +160,11 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     this.router.navigate(['/login']);
   }
 
+  // Add this method for navigation to signup
+  navigateToSignup(): void {
+    this.router.navigate(['/login'], { queryParams: { register: 'true' } });
+  }
+
   scrollToSection(sectionId: string): void {
     console.log(`LandingPageComponent: Attempting to scroll to section: ${sectionId}`);
     this.closeSidenav(); // Close sidenav before scrolling

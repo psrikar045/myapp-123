@@ -22,10 +22,16 @@ export class BlogComponent implements OnInit {
   
   // Pagination properties (matching AllCategoriesComponent)
   currentPage = 1;
-  pageSize = 5; // 5 items per page as requested
+  pageSize = 5;
+
+  // Sidebar management properties
+  showAllSidebarCategories = false;
 
   blogs: BlogCard[] = [];
-
+ hero = {
+    title: 'Get started with Marketify to make your work flow easier',
+    subtitle: 'Choose a plan that fits your workflow. Instantly access logos, brand colors, fonts, and social links for any company. Upgrade for advanced integrations, asset libraries, and team features.'
+  };
   sidebarCategories = [
     {
       id: 1,
@@ -108,11 +114,12 @@ export class BlogComponent implements OnInit {
 
   // Pagination methods (matching AllCategoriesComponent)
   get pagedBlogs() {
-    return this.blogService.getPagedBlogs(this.currentPage, this.pageSize);
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.blogs.slice(start, start + this.pageSize);
   }
 
   get totalPages() {
-    return this.blogService.getTotalPages(this.pageSize);
+    return Math.ceil(this.blogs.length / this.pageSize) || 1;
   }
 
   get pages() {
@@ -121,6 +128,8 @@ export class BlogComponent implements OnInit {
 
   selectPage(page: number) {
     this.currentPage = page;
+    // Reset the sidebar toggle when changing pages
+    this.showAllSidebarCategories = false;
   }
 
   navigateToBlogDetails(blogIndex: number): void {
@@ -159,6 +168,40 @@ export class BlogComponent implements OnInit {
 
   trackByBlog(index: number, blog: BlogCard): string {
     return blog.title + index;
+  }
+
+  // Sidebar category management
+  get displayedSidebarCategories() {
+    const leftSideCount = this.pagedBlogs.length;
+    const rightSideCount = this.sidebarCategories.length;
+    const isLastPage = this.currentPage === this.totalPages;
+    
+    // Only limit on the last page
+    if (isLastPage && !this.showAllSidebarCategories && rightSideCount > leftSideCount) {
+      return this.sidebarCategories.slice(0, leftSideCount);
+    }
+    return this.sidebarCategories;
+  }
+
+  get shouldShowMoreButton(): boolean {
+    const leftSideCount = this.pagedBlogs.length;
+    const rightSideCount = this.sidebarCategories.length;
+    const isLastPage = this.currentPage === this.totalPages;
+    
+    // Only show button on last page when right side has more cards than left
+    return isLastPage && rightSideCount > leftSideCount;
+  }
+
+  get hasMoreCategories(): boolean {
+    const leftSideCount = this.pagedBlogs.length;
+    const rightSideCount = this.sidebarCategories.length;
+    const isLastPage = this.currentPage === this.totalPages;
+    
+    return isLastPage && rightSideCount > leftSideCount && !this.showAllSidebarCategories;
+  }
+
+  toggleSidebarCategories(): void {
+    this.showAllSidebarCategories = !this.showAllSidebarCategories;
   }
 
   testPageClick(pageNumber: number): void {

@@ -3,18 +3,19 @@
   width: 100%;
   /* background: linear-gradient(120deg, #eaf6ff 0%, #fffbe5 100%); */
   /* background: linear-gradient(120deg, #95bddc 0%, #d1ccad 100%); */
-  background: linear-gradient(99deg, #ffffff 0%, #91EFFE 100%);
+  /* background: linear-gradient(99deg, #ffffff 0%, #91EFFE 100%); */
+  background: #CFD7E8;
   padding-bottom: 40px;
   padding-top: 30px;
 }
 
 .blog-main-container {
-  max-width: 1300px;
-  margin: 0 auto;
-  display: flex;
-  gap: 10px;
-  padding: 30px 16px 0 16px;
-  align-items: flex-start;
+ max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    gap: 30px;
+    padding: 30px 16px 0 16px;
+    align-items: flex-start;
 }
 
 .blog-list {
@@ -76,76 +77,91 @@
     margin-top: 10px;
 }
 
-.blog-pagination {
+/* --- Pagination styles from all-categories for consistency --- */
+.categories-pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 18px;
   margin: 32px 0 0 0;
   width: 100%;
 }
 .page {
-  background: #fff;
-  border: 2px solid #e3e3e3;
-  border-radius: 999px;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
   font-size: 1.15rem;
   font-family: "Inter", sans-serif;
   font-weight: 600;
   color: #23272f;
-  padding: 8px 20px;
-  cursor: pointer;
-  transition: background 0.18s, color 0.18s, border 0.18s, box-shadow 0.18s, transform 0.18s;
-  min-width: 44px;
-  min-height: 44px;
+  padding: 0;
+  min-width: 36px;
+  min-height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: none;
   outline: none;
+  transition: background 0.18s, color 0.18s, border 0.18s, transform 0.18s;
 }
 .page.active, .page:active {
   background: #2563eb;
   color: #fff;
-  border-color: #2563eb;
-  box-shadow: 0 2px 8px 0 rgba(55,125,255,0.13);
-  transform: scale(1.08);
-  z-index: 1;
+  border-radius: 50%;
+  min-width: 36px;
+  min-height: 36px;
+  font-weight: 700;
+  box-shadow: none;
+  border: none;
+  transform: none;
+}
+.page:not(.active):not(:disabled) {
+  background: transparent;
+  color: #23272f;
+  border: none;
+  box-shadow: none;
 }
 .page:hover:not(.active):not(:disabled) {
   background: #e3f0ff;
   color: #2563eb;
-  border-color: #2563eb;
 }
 .page:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
-  background: #f8fafc;
+  background: transparent;
   color: #b0b7c3;
-  border-color: #e3eaf1;
+  border: none;
 }
 .page.nav {
-  padding: 0 14px;
-  min-width: 44px;
-  min-height: 44px;
+  padding: 0;
+  min-width: 36px;
+  min-height: 36px;
   font-size: 1.3rem;
-  background: #f8fafc;
-  border: 2px solid #e3eaf1;
-  color: #2563eb;
+  background: transparent;
+  border: none;
+  color: #b0b7c3;
   box-shadow: none;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+.page.nav:not(:disabled) {
+  color: #23272f;
+}
 .page.nav:disabled {
-  color: #b0b7c3;
-  background: #f8fafc;
-  border-color: #e3eaf1;
+  color: #e3eaf1;
+  background: transparent;
 }
-.page.nav:hover:not(:disabled) {
-  background: #e3f0ff;
-  color: #2563eb;
-  border-color: #2563eb;
+.pagination-bottom-center-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  min-height: 60px;
+  margin-top: auto;
+  margin-bottom: 0;
 }
+/* --- End all-categories pagination styles --- */
 .summary{
   padding: 10px;
 
@@ -199,7 +215,7 @@
 }
 .sidebar-category-img {
      width: 100%;
-    height: 180px;
+    height: 200px;
     /* border-radius: 0 0 16px 16px; */
     object-fit: cover;
     flex-shrink: 0;
@@ -207,7 +223,7 @@
     border-radius: 32px;
 }
 .blog-card-image-container{
-  background: #f6fcfe;
+  background: #ffffff;
     border-radius: 16px;
     border: 1px solid #dce5e9;
 }
@@ -220,7 +236,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 20px 20px 16px 20px;
+  padding: 20px 20px 0px 20px;
   flex: 1;
   justify-content: flex-start;
 }
@@ -256,6 +272,46 @@
   color: #718096;
   font-weight: 400;
   margin: 0;
+}
+
+/* More/Less Button Styles */
+.sidebar-more-button-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  padding-bottom: 10px;
+}
+
+.sidebar-more-button {
+ background: #ffffff;
+    color: #9bb1e0;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.2);
+    outline: none;
+    font-size: 1.2rem;
+}
+
+.sidebar-more-button:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.sidebar-more-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.2);
+}
+
+.sidebar-more-button i {
+  line-height: 1;
 }
 
 @media (max-width: 1100px) {
@@ -294,7 +350,7 @@
 .blog-hero-bg {
   position: relative;
   width: 100%;
-  min-height: 567px;
+  min-height: 361px;
   background: linear-gradient(180deg, #3887f7 0%, #1a237e 100%);
   background-image: url('/images/blog section.png'), linear-gradient(180deg, #3887f7 0%, #1a237e 100%);
   background-size: cover;
@@ -420,20 +476,42 @@
   margin-bottom: 5px;
 }
 .blog-main-card{
-  background-color: #fefefe;
-    /* margin: 20px; */
+    background: linear-gradient(157deg, #0550D233 0%, #00318433 100%);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     padding: 30px;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-left: 150px;
     margin-right: 150px;
 }
-.pagination-bottom-center-wrapper {
-  width: 100%;
+.blog-hero-content {
+  position: relative;
+  z-index: 3;
+  /* max-width: 700px; */
+  margin: 0 auto;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  align-items: flex-end;
-  min-height: 60px;
-  margin-top: auto;
-  margin-bottom: 0;
+}
+.blog-hero-title {
+  font-size: 3.2rem;
+  font-weight: 700;
+  margin-bottom: 22px;
+   max-width: 700px;
+  letter-spacing: -1.2px;
+  line-height: 1.12;
+  font-family: "Inter", sans-serif;
+      font: 700 3.2rem / 50px "Inter", Roboto, sans-serif;
+}
+.blog-hero-subtitle {
+  font-size: 1.25rem;
+  font-weight: 400;
+  max-width: 1000px;
+  margin: 0 auto;
+  color: #e0e6f7;
+  line-height: 1.6;
+  font-family: "Inter", sans-serif;
+      font: 400 1.25rem / 32px "Inter", Roboto, sans-serif;
 }

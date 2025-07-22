@@ -131,9 +131,9 @@
     <div class="supercharge-content">
       <h2 class="supercharge-headline">{{ superchargeHeadline }}</h2>
       <p class="supercharge-subheadline">{{ superchargeSubheadline }}</p>
-      <div class="supercharge-form-row">
-        <input type="email" class="supercharge-email-input" placeholder="Your Email here.." />
-        <button class="supercharge-cta-btn">{{ superchargeCta }}</button>
+      <div class="supercharge-form-row ">
+        <!-- <input type="email" class="supercharge-email-input" placeholder="Your Email here.." /> -->
+        <button class="supercharge-cta-btn action-btn get-started-btn" (click)="navigateToSignup()">{{ superchargeCta }}</button>
       </div>
     </div>
   </div>
@@ -196,7 +196,7 @@
           <li><i class="bi bi-check-circle-fill"></i><span>A dedicated domain</span></li>
           <li><i class="bi bi-check-circle-fill"></i><span>Ability to integrate with CMS</span></li>
         </ul>
-        <button class="pricing-card-cta">Get started free</button>
+        <button class="pricing-card-cta" (click)="navigateToSignup()">Get started free</button>
       </div>
       <div class="pricing-card highlight">
         <div class="pricing-card-header">
@@ -216,7 +216,7 @@
           <li><i class="bi bi-check-circle-fill"></i><span>A dedicated domain</span></li>
           <li><i class="bi bi-check-circle-fill"></i><span>Ability to integrate with CMS</span></li>
         </ul>
-        <button class="pricing-card-cta highlight-btn">Start Standard</button>
+        <button class="pricing-card-cta highlight-btn" (click)="navigateToSignup()">Start Standard</button>
       </div>
       <div class="pricing-card" [ngClass]="{ 'highlight': false }">
         <div class="pricing-card-header">
@@ -236,7 +236,7 @@
           <li><i class="bi bi-check-circle-fill"></i><span>A dedicated domain</span></li>
           <li><i class="bi bi-check-circle-fill"></i><span>Ability to integrate with CMS</span></li>
         </ul>
-        <button class="pricing-card-cta">Start Premium</button>
+        <button class="pricing-card-cta " (click)="navigateToSignup()">Start Premium</button>
       </div>
     </div>
   </div>
