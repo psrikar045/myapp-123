@@ -1,19 +1,22 @@
 /* Wrapper */
 .profile-mockup-wrapper {
   min-height: 100vh;
-  background: #f4f7fb;
   padding-bottom: 48px;
   padding-top:104px;
 }
+.ProfilePageBG{background: #F2F7FF;}
+span.bannerFont1 {font-size: 35px;}
+span.bannerFont2 { font-size: 35px;color:#9DCA3C;}
+.bannerFont3 { font-size: 25px;}
+.profile-banner-greeting {padding-bottom: 10px;}
 
 /* Banner */
 .profile-banner-mockup {
   position: relative;
   width: 100%;
-  max-width: 1200px;
   margin: 0 auto;
   height: 210px;
-  background: linear-gradient(90deg, #1e293b 0%, #6366f1 100%);
+  background: #000;
   border-radius: 32px;
   box-shadow: 0 8px 32px 0 rgba(30,41,59,0.18);
   display: flex;
@@ -22,14 +25,23 @@
   overflow: visible;
 }
 .profile-banner-content-mockup {
-  padding: 40px 0 40px 56px;
+  padding: 40px;
   flex: 1;
   z-index: 1;
+  background-image:  url('/login/coverpage.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 100%;
+  background-position: center;
+  color:#fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .profile-banner-identity-mockup {
   position: absolute;
   left: 56px;
-  bottom: -64px;
+  top: 135px;
   z-index: 2;
   display: flex;
   flex-direction: row;
@@ -52,8 +64,8 @@
   align-items: center;
 }
 .profile-banner-avatar-img-mockup {
-  width: 128px;
-  height: 128px;
+  width: 170px;
+  height: 170px;
   border-radius: 50%;
   border: 6px solid #fff;
   object-fit: cover;
@@ -125,8 +137,7 @@
 /* Main Layout */
 .profile-main-mockup {
   display: flex;
-  max-width: 1200px;
-  margin: 100px auto 0 auto;
+  margin: 135px auto 0 auto;
   background: none;
   min-height: 600px;
   gap: 32px;
@@ -135,25 +146,21 @@
 
 /* Sidebar */
 .profile-sidebar-mockup {
-  width: 260px;
-  background: #fff;
-  border-radius: 24px;
-  box-shadow: 0 2px 16px rgba(37,99,235,0.06);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 0 40px 0;
-  /* margin-top: 64px; */
-  gap: 12px;
-  min-height: 420px;
-  height: 82vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-right: 20px;
+    gap: 12px;
+    min-height: 420px;
+    height: 82vh;
+    border-right: 4px solid #FFFFFF;
 }
 .sidebar-edit-btn-mockup {
   background: #2563eb;
   color: #fff;
   border: none;
   border-radius: 12px;
-  padding: 14px 36px;
+  padding: 15px 15px;
   font-size: 1.08rem;
   font-weight: 700;
   margin-bottom: 8px;
@@ -172,7 +179,7 @@
   color: #2563eb;
   border: none;
   border-radius: 12px;
-  padding: 14px 36px;
+  padding: 15px 15px;
   font-size: 1.08rem;
   font-weight: 500;
   margin-bottom: 8px;
@@ -189,15 +196,14 @@
 
 /* Content */
 .profile-content-mockup {
-  flex: 1;
-  background: #fff;
-  border-radius: 24px;
-  box-shadow: 0 2px 16px rgba(37,99,235,0.06);
-  padding: 48px 48px 48px 48px;
-  display: flex;
-  flex-direction: column;
-  /* margin-top: 64px; */
-  min-width: 0;
+    flex: 1;
+    /* background: #fff; */
+    border-radius: 24px;
+    /* box-shadow: 0 2px 16px rgba(37, 99, 235, 0.06); */
+    /* padding: 48px 48px 48px 48px; */
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
 }
 .profile-content-header-mockup {
   display: flex;
@@ -218,7 +224,7 @@
   margin-bottom: 0;
 }
 .profile-content-update-mockup {
-  color: #b0b7c3;
+  color: #000;
   font-size: 1rem;
   margin-top: 4px;
   white-space: nowrap;
@@ -377,10 +383,10 @@
     margin-top: 32px;
     min-height: unset;
   }
-  .profile-content-mockup {
+  /* .profile-content-mockup {
     padding: 32px 4vw 24px 4vw;
     margin-top: 0;
-  }
+  } */
   .profile-form-columns-mockup {
   flex-direction: column;
     gap: 32px;
