@@ -40,17 +40,17 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   developerLinks = [
     { label: 'Developers', route: '/developer' },
-    { label: 'Plugins', url: '#' },
+    { label: 'Plugins', route: '#' },
     { label: 'Pricing', route: '/pricing' },
-    { label: 'Docs', url: '#' },
+    { label: 'Docs', route: '#' },
   ];
 
   companyLinks = [
     { label: 'Brands', route: '/all-categories' },
     { label: 'Blog', route: '/blog' },
-    { label: 'Contact Us', route: '' },
-    { label: 'Terms and conditions', url: '#' },
-    { label: 'Privacy policy', url: '#' },
+    { label: 'Contact Us', route: '#' },
+    { label: 'Terms and conditions', route: '#' },
+    { label: 'Privacy policy', route: '#' },
   ];
 
   constructor(private router: Router) {}

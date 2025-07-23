@@ -48,7 +48,7 @@
       <ul>
         <li *ngFor="let link of developerLinks">
           <a *ngIf="link.route" [routerLink]="link.route" class="footer-link">{{ link.label }}</a>
-          <a *ngIf="link.url && !link.route" [href]="link.url" class="footer-link">{{ link.label }}</a>
+          <!-- <a *ngIf="link.url && !link.route" [href]="link.url" class="footer-link">{{ link.label }}</a> -->
         </li>
       </ul>
     </div>
@@ -59,7 +59,7 @@
       <ul>
         <li *ngFor="let link of companyLinks">
           <a *ngIf="link.route" [routerLink]="link.route" class="footer-link">{{ link.label }}</a>
-          <a *ngIf="link.url && !link.route" [href]="link.url" class="footer-link">{{ link.label }}</a>
+          <!-- <a *ngIf="link.url && !link.route" [href]="link.url" class="footer-link">{{ link.label }}</a> -->
         </li>
       </ul>
     </div>

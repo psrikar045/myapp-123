@@ -445,6 +445,34 @@ getAllCategories() {
     return { background: '#e0e7ef' };
   }
 
+  getNonWhiteColor(brand: any): string {
+    if (brand.colors && brand.colors.length > 0) {
+      const nonWhite = brand.colors.find((c: any) => {
+        const hex = (c.hexCode || '').toLowerCase();
+        return hex !== '#fff' && hex !== '#ffffff';
+      });
+      return nonWhite ? nonWhite.hexCode : '#e0e7ef';
+    }
+    return '#e0e7ef';
+  }
+
+  getNonWhiteColorWithOpacity(brand: any, opacity: number): string {
+    const hex = this.getNonWhiteColor(brand);
+    // Convert hex to rgba
+    const hexVal = hex.replace('#', '');
+    let r = 0, g = 0, b = 0;
+    if (hexVal.length === 3) {
+      r = parseInt(hexVal[0] + hexVal[0], 16);
+      g = parseInt(hexVal[1] + hexVal[1], 16);
+      b = parseInt(hexVal[2] + hexVal[2], 16);
+    } else if (hexVal.length === 6) {
+      r = parseInt(hexVal.substring(0, 2), 16);
+      g = parseInt(hexVal.substring(2, 4), 16);
+      b = parseInt(hexVal.substring(4, 6), 16);
+    }
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+  }
+
   // ==================== NEW BRAND DATA API METHODS ====================
 
   /**

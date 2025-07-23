@@ -26,7 +26,23 @@
         <span class="brand-title">{{ searchResult?.Company?.Name }}</span>
         <!-- <span class="claimed-badge"><i class="bi bi-patch-check-fill"></i> Claimed Brand</span> -->
       </div>
-      <div class="brand-description">
+
+    </div>
+    <div class="brand-info-actions">
+      <!-- <button class="share-btn"><i class="bi bi-share"></i> Share</button> -->
+      <div class="company-socials">
+        <ng-container *ngFor="let social of getCombinedSocialLinks()">
+          <ng-container *ngIf="getSocialIconClass(social.platform)">
+            <a [href]="social.url" target="_blank" rel="noopener noreferrer"
+              [attr.aria-label]="getSocialAriaLabel(social.platform)">
+              <i [class]="getSocialIconClass(social.platform)"></i>
+            </a>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+        <div class="brand-description">
         <ng-container *ngIf="!showFullDescription">
           <span>{{ getFirstNLines(searchResult?.Company?.Description, 3) }}</span>
           <ng-container *ngIf="shouldShowViewMore">
@@ -50,21 +66,6 @@
           </ng-container>
         </ng-container>
       </div>
-    </div>
-    <div class="brand-info-actions">
-      <!-- <button class="share-btn"><i class="bi bi-share"></i> Share</button> -->
-      <div class="company-socials">
-        <ng-container *ngFor="let social of getCombinedSocialLinks()">
-          <ng-container *ngIf="getSocialIconClass(social.platform)">
-            <a [href]="social.url" target="_blank" rel="noopener noreferrer"
-              [attr.aria-label]="getSocialAriaLabel(social.platform)">
-              <i [class]="getSocialIconClass(social.platform)"></i>
-            </a>
-          </ng-container>
-        </ng-container>
-      </div>
-    </div>
-  </div>
 
   <!-- Filter Buttons -->
   <div class="company-filters" [ngClass]="{'no-brand-margin': !searchResult?.Company}">
