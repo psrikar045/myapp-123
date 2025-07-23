@@ -100,7 +100,15 @@
                   </div>
                   <div class="form-group-mockup">
                     <label>Country</label>
-                    <input type="text" [(ngModel)]="profileForm.country" name="country" placeholder="Enter country" />
+                    <select 
+                      [(ngModel)]="profileForm.country" 
+                      name="country" 
+                      (change)="onCountryChange(profileForm.country)"
+                      class="form-input">
+                      <option *ngFor="let country of allCountries" [value]="country">
+                        {{ country }}
+                      </option>
+                    </select>
                   </div>
                   <div class="form-group-mockup">
                     <label>City</label>

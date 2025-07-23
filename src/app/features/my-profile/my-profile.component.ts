@@ -163,6 +163,30 @@ export class MyProfileComponent implements OnInit {
     }
   }
 
+  // Handle country change and update phone code automatically
+  onCountryChange(countryName: string) {
+    this.profileForm.country = countryName;
+    
+    // Use service to get phone code for this country
+    const phoneCode = this.phoneService.getCodeByCountry(countryName);
+    if (phoneCode) {
+      this.profileForm.phoneCountry = phoneCode;
+    }
+  }
+
+  // Get all countries for country dropdown
+  get allCountries(): string[] {
+    return this.phoneService.getPhoneCodes()
+      .map(pc => pc.country)
+      .filter((country, index, arr) => arr.indexOf(country) === index) // Remove duplicates
+      .sort((a, b) => {
+        // Put India first, then sort alphabetically
+        if (a === 'India') return -1;
+        if (b === 'India') return 1;
+        return a.localeCompare(b);
+      });
+  }
+
   onSave() {
     const data = this.profileForm;
 //"dob": "2000-01-15T12:00:00.000Z",
