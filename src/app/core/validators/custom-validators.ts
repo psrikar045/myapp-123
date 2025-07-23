@@ -9,7 +9,7 @@ export function emailOrUsernameValidator(): ValidatorFn {
     // Email validation regex (simplified)
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     // Username validation regex (alphanumeric, hyphens, underscores, 3-20 characters)
-    const usernameRegex = /^[a-zA-Z0-9_-]{3,20}$/;
+    const usernameRegex = /^[a-zA-Z0-9_-]{2,20}$/;
 
     const isEmail = emailRegex.test(value);
     const isUsername = usernameRegex.test(value);

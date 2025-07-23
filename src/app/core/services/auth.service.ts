@@ -677,16 +677,39 @@ loginWithEmailOrUserName(emailOrUserName: string, password: string): Observable<
    * @param lastName The user's last name
    * @returns Generated username string
    */
-  generateUsername(firstName: string, lastName: string): string {
-    if (!firstName || !lastName) {
-      return '';
-    }
-    
-    const firstInitial = firstName.charAt(0).toLowerCase();
-    const sanitizedLastName = lastName.toLowerCase().replace(/\s+/g, '');
-    
-    return `${firstInitial}${sanitizedLastName}`;
+generateUsername(firstName: string, lastName: string): string {
+  if (!firstName || !lastName) {
+    return '';
   }
+  // Clean and prepare names
+  const cleanFirstName = firstName.toLowerCase().replace(/\s+/g, '');
+  const cleanLastName = lastName.toLowerCase().replace(/\s+/g, '');
+  
+  let username = '';
+  
+  // Scenario 1: Normal case (lastName length > 1)
+  if (cleanLastName.length > 1) {
+    username = `${cleanFirstName.charAt(0)}${cleanLastName}`;
+  } 
+  // Scenario 2: Single character lastName
+  else {
+    username = `${cleanLastName.charAt(0)}${cleanFirstName}`;
+  }
+  
+  // Validation: Ensure minimum length of 3
+  if (username.length < 3) {
+    // Fallback: use more characters from firstName if available
+    if (cleanFirstName.length >= 2 && cleanLastName.length >= 1) {
+      username = `${cleanFirstName.substring(0, 2)}${cleanLastName}`;
+    } else if (cleanFirstName.length >= 3) {
+      username = cleanFirstName.substring(0, 3);
+    } else {
+      // If still too short, pad with numbers or return as is
+      username = username.padEnd(3, '1');
+    }
+  }
+  return username;
+}
    publicForward(url: any): Observable<any> {
     const request: PublicForwardRequest = { url };
     return this.userAuthService.publicForward(request).pipe(
