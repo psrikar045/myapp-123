@@ -11,11 +11,19 @@ import { filter } from 'rxjs/operators';
 import { ToolbarService } from '../../shared/services/toolbar.service'
 import { UserProfileUpdateRequest } from '../../shared/models/user-profile.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PhoneService } from '../../shared/services/phone.service';
 
 @Component({
   selector: 'app-my-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgStyle, HeaderComponent, MyPlanComponent, ChoosePlanComponent],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    NgStyle, 
+    HeaderComponent, 
+    MyPlanComponent, 
+    ChoosePlanComponent
+  ],
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.css'
 })
@@ -30,7 +38,8 @@ export class MyProfileComponent implements OnInit {
   userProfile: any;
   selectedSidebarIndex = 0;
   private readonly authService = inject(AuthService);
-  private readonly snackBar = inject(MatSnackBar); // <-- Inject MatSnackBar
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly phoneService = inject(PhoneService);
     constructor(private router: Router, private toolbarService: ToolbarService) {
     // Listen for route changes and set logged-in toolbar if on /my-profile
     this.router.events.pipe(
@@ -40,6 +49,9 @@ export class MyProfileComponent implements OnInit {
         this.toolbarService.setLoggedInToolbar();
       }
     });
+    
+    // Set default values
+    this.profileForm.country = 'India';
   }
 
 
@@ -67,7 +79,10 @@ export class MyProfileComponent implements OnInit {
         this.profileForm.email = response.email || '';
         this.profileForm.phoneCountry = response.futureV2 || '+91';
         this.profileForm.phoneNumber = response.phoneNumber || '';
-        this.profileForm.country = response.futureV3 || '';
+        
+        // Set country based on phone code using comprehensive service
+        const countryFromPhoneCode = this.phoneService.getCountryByCode(response.futureV2 || '+91');
+        this.profileForm.country = response.futureV3 || countryFromPhoneCode || 'India';
         this.profileForm.city = response.futureV4 || '';
         this.profileForm.updatedAt = response.updatedAt || new Date().toISOString();
         this.profileForm.username = response.username || '';
@@ -100,13 +115,23 @@ export class MyProfileComponent implements OnInit {
     email: '',
     phoneCountry: '+91',
     phoneNumber: '',
-    country: '',
+    country: 'India',
     city: 'software',
     updatedAt: new Date().toISOString(),
     username:'',
     emailVerified: false,
     authProvider: '',
   };
+
+  // Get all phone codes - supports 150+ countries!
+  get allPhoneCodes() {
+    // Get all countries with India first, then rest alphabetically
+    const allCodes = this.phoneService.getPhoneCodes();
+    const indiaCode = allCodes.find(pc => pc.country === 'India');
+    const otherCodes = allCodes.filter(pc => pc.country !== 'India');
+    
+    return indiaCode ? [indiaCode, ...otherCodes] : allCodes;
+  }
 
   educationLevels = [
     { value: 'software', label: 'software' },
@@ -126,6 +151,17 @@ export class MyProfileComponent implements OnInit {
     { value: 'hardware', label: 'hardware' },
     { value: 'other', label: 'other' }
   ];
+
+  // Handle phone code change using comprehensive service
+  onPhoneCodeChange(phoneCode: string) {
+    this.profileForm.phoneCountry = phoneCode;
+    
+    // Use service to get country name - supports 150+ countries
+    const countryName = this.phoneService.getCountryByCode(phoneCode);
+    if (countryName) {
+      this.profileForm.country = countryName;
+    }
+  }
 
   onSave() {
     const data = this.profileForm;
