@@ -470,6 +470,8 @@ body, .company-data-body {
   color: #181c32;
   font-family: 'Inter', sans-serif;
   text-align: left;
+  line-break: auto;
+  line-height: 1;
 }
 .claimed-badge {
   display: flex;
@@ -499,6 +501,7 @@ body, .company-data-body {
   box-shadow: none;
   padding: 0;
   margin-left: 0;
+  margin-top: 10px;
 }
 .brand-info-actions {
   display: flex;

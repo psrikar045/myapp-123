@@ -5,7 +5,7 @@ import { FooterComponent } from '../../../shared/footer/footer.component';
 import { ThemeService } from '../../../core/services/theme.service';
 import { Subscription } from 'rxjs';
 import { UtilService } from '../../../shared/services/util.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-search-view',
@@ -26,22 +26,108 @@ export class SearchViewComponent implements OnInit, OnDestroy {
   filters = ['All', 'Logos', 'Colors', 'Font', 'Images'];//, 'Icons'
   activeFilter = 'All';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.themeSubscription = this.themeService.isDarkMode$.subscribe(isDark => {
       this.isDarkMode = isDark;
     });
     this.isDarkMode = this.themeService.getIsDarkMode();
-    this.searchResult = this.utilService.searchResult; // Get search result from UtilService
+    const rawResult = this.utilService.searchResult;
+    // If coming from all-categories, map BrandDataResponse to expected structure
+    if (rawResult && !rawResult.Company) {
+      // Try to get logo from assets where assetType is 'logo', then images, then any asset
+      let logoUrl = '';
+      let bannerUrl = '';
+      let fontAssets: any[] = [];
+      let imageAssets: any[] = [];
+      if (rawResult.assets && rawResult.assets.length > 0) {
+        const logoAsset = rawResult.assets.find((a: any) => a.assetType && a.assetType.toLowerCase() === 'logo');
+        if (logoAsset && logoAsset.originalUrl) {
+          logoUrl = logoAsset.originalUrl;
+        }
+        const bannerAsset = rawResult.assets.find((a: any) => a.assetType && a.assetType.toLowerCase() === 'banner');
+        if (bannerAsset && bannerAsset.originalUrl) {
+          bannerUrl = bannerAsset.originalUrl;
+        }
+        fontAssets = rawResult.assets.filter((a: any) => a.assetType && a.assetType.toLowerCase() === 'font');
+        imageAssets = rawResult.assets.filter((a: any) => a.assetType && a.assetType.toLowerCase() === 'image');
+      }
+      if (!logoUrl && rawResult.images && rawResult.images.length > 0 && rawResult.images[0].accessUrl) {
+        logoUrl = rawResult.images[0].accessUrl;
+      }
+      if (!logoUrl && rawResult.assets && rawResult.assets.length > 0) {
+        logoUrl = rawResult.assets[0].accessUrl || rawResult.assets[0].originalUrl || '';
+      }
+      // Map fonts to expected structure for the template
+      const fonts = (rawResult.fonts || []).map((f: any) => ({
+        ...f,
+        family: f.fontName || f.family || '',
+        name: f.fontName || f.name || ''
+      }));
+      // Combine image assets and any images array
+      const images = [...imageAssets, ...(rawResult.images || [])];
+      let socialLinks = rawResult.socialLinks || {};
+      // If socialLinks is an array (from search page API), convert to object for compatibility
+      if (Array.isArray(socialLinks)) {
+        socialLinks = socialLinks.reduce((acc: any, link: any) => {
+          if (link && link.platform && link.url) {
+            acc[link.platform.toLowerCase()] = link.url;
+          }
+          return acc;
+        }, {});
+      }
+      this.searchResult = {
+        Company: {
+          Name: rawResult.name,
+          Description: rawResult.description,
+          Industry: rawResult.industry,
+          Location: rawResult.location,
+          Founded: rawResult.founded,
+          CompanyType: rawResult.companyType,
+          Employees: rawResult.employees,
+          Website: rawResult.website,
+        },
+        Logo: {
+          ...(logoUrl ? { Logo: logoUrl } : {}),
+          ...(bannerUrl ? { Banner: bannerUrl } : {})
+        },
+        Colors: rawResult.colors ? rawResult.colors.map((c: any) => ({ hex: c.hexCode, name: c.colorName, brightness: c.brightness })) : [],
+        Fonts: fonts,
+        Images: images,
+        SocialLinks: socialLinks,
+      };
+    } else if (rawResult && rawResult.Company && Array.isArray(rawResult.SocialLinks)) {
+      // If API returns SocialLinks as an array (from search page), convert to object
+      const socialLinksObj = rawResult.SocialLinks.reduce((acc: any, link: any) => {
+        if (link && link.platform && link.url) {
+          acc[link.platform.toLowerCase()] = link.url;
+        }
+        return acc;
+      }, {});
+      this.searchResult = {
+        ...rawResult,
+        SocialLinks: socialLinksObj,
+      };
+    } else {
+      this.searchResult = rawResult;
+    }
+    // Remove sessionStorage usage; just read the query param when needed
   }
   getSocialLinksArray(socialLinks: any): { platform: string, url: string }[] {
     if (!socialLinks) {
       return [];
     }
+    // If already an array (from search page API), return as is (filtering for valid links)
+    if (Array.isArray(socialLinks)) {
+      return socialLinks
+        .filter(link => link && typeof link.url === 'string' && link.url.startsWith('http'))
+        .map(link => ({ platform: link.platform, url: link.url }));
+    }
+    // Otherwise, treat as object
     return Object.entries(socialLinks)
-      .filter(([key, value]) => typeof value === 'string' && value.startsWith('http')) // Ensure it's a string URL
-      .map(([platform, url]) => ({ platform: platform, url: url as string }));
+      .filter(([key, value]) => typeof value === 'string' && value.startsWith('http'))
+      .map(([platform, url]) => ({ platform, url: url as string }));
   }
   getSocialIconClass(platform: string): string | null {
     switch (platform.toLowerCase()) {
@@ -107,8 +193,20 @@ getImageSource(imageItem: any): string | null {
   if (typeof imageItem === 'string') {
     return imageItem;
   }
-  if (typeof imageItem === 'object' && imageItem !== null && imageItem.src) {
+  if (typeof imageItem === 'object' && imageItem !== null) {
+    // Always prioritize sourceUrl
+    if (imageItem.sourceUrl) {
+      return imageItem.sourceUrl;
+    }
+    if (imageItem.accessUrl) {
+      return imageItem.accessUrl;
+    }
+    if (imageItem.originalUrl) {
+      return imageItem.originalUrl;
+    }
+    if (imageItem.src) {
     return imageItem.src;
+    }
   }
   return null;
 }
@@ -141,6 +239,34 @@ hasDisplayableImages(imagesArray: any[]): boolean {
     return this.isValidImageUrl(src);
   });
 }
+  // Add this method to support array-based socialLinks
+  getSocialLinksArrayFromList(socialLinks: any[]): { platform: string, url: string }[] {
+    if (!Array.isArray(socialLinks)) {
+      return [];
+    }
+    return socialLinks
+      .filter(link => link && typeof link.url === 'string' && link.url.startsWith('http'))
+      .map(link => ({ platform: link.platform, url: link.url }));
+  }
+  // Returns a deduplicated array of social links from both possible sources
+  getCombinedSocialLinks(): { platform: string, url: string }[] {
+    const links1 = this.getSocialLinksArray(this.searchResult?.Company?.SocialLinks);
+    const links2 = this.getSocialLinksArray(this.searchResult?.SocialLinks);
+    const combined: { [platform: string]: { platform: string, url: string } } = {};
+    // Add from links2 first (prioritize SocialLinks)
+    for (const link of links2) {
+      if (link.platform) {
+        combined[link.platform.toLowerCase()] = link;
+      }
+    }
+    // Add from links1 if not already present
+    for (const link of links1) {
+      if (link.platform && !combined[link.platform.toLowerCase()]) {
+        combined[link.platform.toLowerCase()] = link;
+      }
+    }
+    return Object.values(combined);
+}
   ngOnDestroy(): void {
     if (this.themeSubscription) {
       this.themeSubscription.unsubscribe();
@@ -164,6 +290,12 @@ hasDisplayableImages(imagesArray: any[]): boolean {
   }
 
   goBackToSearch() {
-    this.router.navigate(['/search']);
+    // Use query param to determine navigation source
+    const navSource = this.route.snapshot.queryParamMap.get('from');
+    if (navSource === 'brands') {
+      this.router.navigate(['/all-categories']);
+    } else {
+      this.router.navigate(['/search']);
+    }
   }
 }

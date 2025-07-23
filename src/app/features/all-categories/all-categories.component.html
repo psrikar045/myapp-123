@@ -24,11 +24,10 @@
       </button>
     </form>
     <div class="categories-main-layout">
-      <!-- <div class="categories-topbar">
-        <button class="topbar-btn" [class.active]="selectedCategory === 'All'" (click)="selectCategory('All')">All</button>
-        <button class="topbar-btn explore" (click)="exploreCategories()">Explore categories <span class="arrow"><i class="bi bi-arrow-right-circle-fill"></i></span></button>
-      </div> -->
-      <div class="categories-main-layout-content">
+      <div *ngIf="isLoadingBrands" class="categories-loader">
+        <div class="spinner"></div>
+      </div>
+      <div class="categories-main-layout-content" *ngIf="!isLoadingBrands">
         <!-- Sidebar Accordion -->
 <aside class="categories-sidebar">
   <div *ngFor="let cat of filteredCategories" class="sidebar-category">
@@ -54,18 +53,25 @@
         <!-- Main Brand Cards Grid -->
         <div class="categories-main-layout-right" *ngIf="!isLoadingBrands" >
           <section class="brand-cards-grid">
-            <div *ngFor="let brand of pagedBrands" class="brand-card" [ngStyle]="{ 'background': brand.colors[0]?.hexCode }" (click)="goToBrand(brand)">
+            <div *ngFor="let brand of pagedBrands" class="brand-card"
+              [ngStyle]="getBrandCardGradient(brand)"
+              (click)="goToBrand(brand)">
               <div class="brand-card-icon">
-                <!-- Placeholder for logo/icon -->
+                <!-- Render asset originalUrl if available, else fallback to image or letter -->
+                <ng-container *ngIf="brand.assets && brand.assets.length > 0 && brand.assets[0].originalUrl; else fallbackIcon">
+                  <img [src]="brand.assets[0].originalUrl" [alt]="brand.name + ' asset'" />
+                </ng-container>
+                <ng-template #fallbackIcon>
                 <ng-container *ngIf="brand.images && brand.images.length > 0; else defaultLogoTemplate">
                   <img src="{{ brand.images[0].accessUrl }}" alt="brand.name.charAt(0)" />
                 </ng-container>
                 <ng-template #defaultLogoTemplate>
                   <span>{{ brand.name.charAt(0) }}</span>
+                  </ng-template>
                 </ng-template>
               </div>
               <div class="brand-card-title">{{ brand.name }}</div>
-              <div class="brand-card-sub">&#64;{{ brand.user }}</div>
+              <!-- <div class="brand-card-sub">&#64;{{ brand.user }}</div> -->
             </div>
           </section>
           <div class="pagination-bottom-center-wrapper">

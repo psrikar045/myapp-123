@@ -33,7 +33,7 @@
     <div class="brand-info-actions">
       <button class="share-btn"><i class="bi bi-share"></i> Share</button>
       <div class="company-socials">
-        <ng-container *ngFor="let social of getSocialLinksArray(searchResult?.Company?.SocialLinks)">
+        <ng-container *ngFor="let social of getCombinedSocialLinks()">
           <ng-container *ngIf="getSocialIconClass(social.platform)">
             <a [href]="social.url" target="_blank" rel="noopener noreferrer"
               [attr.aria-label]="getSocialAriaLabel(social.platform)">

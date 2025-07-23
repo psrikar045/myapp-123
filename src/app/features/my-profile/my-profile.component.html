@@ -46,25 +46,29 @@
                 <div class="profile-form-col-mockup">
                   <div class="profile-form-section-title-mockup">Personal</div>
                   <div class="form-group-mockup">
+                    <label>User Name</label>
+                    <input type="text" [(ngModel)]="profileForm.username" name="username" />
+                  </div>
+                  <div class="form-group-mockup">
                     <label>First Name</label>
                     <input type="text" [(ngModel)]="profileForm.firstName" name="firstName" />
                   </div>
                   <div class="form-group-mockup">
-                    <label>Surname</label>
-                    <input type="text" [(ngModel)]="profileForm.surname" name="surname" />
+                    <label>Last Name</label>
+                    <input type="text" [(ngModel)]="profileForm.surname" name="lastName" />
                   </div>
-                  <div class="form-group-mockup">
+                  <!-- <div class="form-group-mockup">
                     <label>National Code</label>
                     <input type="text" [(ngModel)]="profileForm.nationalCode" name="nationalCode" placeholder="Enter Value" />
-                  </div>
+                  </div> -->
                   <div class="form-group-mockup">
                     <label>Date of birth</label>
                     <input type="date" [(ngModel)]="profileForm.dob" name="dob" />
                   </div>
-                  <div class="form-group-mockup">
+                  <!-- <div class="form-group-mockup">
                     <label>Education level</label>
                     <input type="text" [(ngModel)]="profileForm.educationLevel" name="educationLevel" placeholder="software" />
-                  </div>
+                  </div> -->
                 </div>
                 <div class="profile-form-col-mockup">
                   <div class="profile-form-section-title-mockup">Contact</div>

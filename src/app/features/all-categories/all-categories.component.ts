@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { BrandDataResponse, BrandSearchFilters, BrandDataSummary } from '../../shared/models/api.models';
+import { UtilService } from '../../shared/services/util.service';
 
 interface Category {
   id?: number;
@@ -78,7 +79,8 @@ export class AllCategoriesComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private utilService: UtilService // Inject UtilService
   ) {
     console.log('AllCategoriesComponent constructor called');
     
@@ -423,8 +425,24 @@ getAllCategories() {
   }
 
   goToBrand(brand: any) {
+    this.utilService.searchResult = brand; // Set the selected brand for search-view
     const brandName = encodeURIComponent(brand.name);
-    this.router.navigate(['/search-view', brandName]);
+    this.router.navigate(['/search-view', brandName], { queryParams: { from: 'brands' } });
+  }
+
+  // Returns a style object for the brand card background using top 2 colors as a gradient
+  getBrandCardGradient(brand: any) {
+    if (brand.colors && brand.colors.length > 0) {
+      const color1 = brand.colors[0]?.hexCode || '#e0e7ef';
+      const color2 = brand.colors[1]?.hexCode || color1;
+      if (brand.colors.length > 1) {
+        return { background: `linear-gradient(135deg, ${color1} 0%, ${color2} 100%)` };
+      } else {
+        return { background: color1 };
+      }
+    }
+    // fallback color
+    return { background: '#e0e7ef' };
   }
 
   // ==================== NEW BRAND DATA API METHODS ====================
@@ -437,7 +455,26 @@ getAllCategories() {
     this.authService.getAllBrands(0, 20).subscribe({
       next: (response: any) => {
         this.brandData = response.data || [];
-        this.allBrands = JSON.parse(JSON.stringify(this.brandData));
+        // Filter out brands with error messages
+        const errorMessages = [
+          'Oops...too many requests !',
+          'Error Page',
+          'Access Denied'
+        ];
+        this.allBrands = (this.brandData as any[]).filter(brand => {
+          const name = (brand.name || '').toLowerCase();
+          return !errorMessages.some(msg => name.includes(msg.toLowerCase()));
+        });
+        // Remove duplicate brands by name (case-insensitive)
+        const seenNames = new Set<string>();
+        this.allBrands = this.allBrands.filter((brand: any) => {
+          const name = (brand.name || '').toLowerCase();
+          if (seenNames.has(name)) {
+            return false;
+          }
+          seenNames.add(name);
+          return true;
+        });
         this.isLoadingBrands = false;
         // console.log('Brand data loaded from API:', this.brandData);
       },
