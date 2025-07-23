@@ -456,15 +456,17 @@ getAllCategories() {
       next: (response: any) => {
         this.brandData = response.data || [];
         // Filter out brands with error messages
-        const errorMessages = [
-          'Oops...too many requests !',
-          'Error Page',
-          'Access Denied'
-        ];
-        this.allBrands = (this.brandData as any[]).filter(brand => {
-          const name = (brand.name || '').toLowerCase();
-          return !errorMessages.some(msg => name.includes(msg.toLowerCase()));
-        });
+        
+        // const errorMessages = [
+        //   'Oops...too many requests !',
+        //   'Error Page',
+        //   'Access Denied'
+        // ];
+        this.allBrands = this.brandData;
+        // (this.brandData as any[]).filter((brand: any) => {
+        //   const name = (brand.name || '').toLowerCase();
+        //   return !errorMessages.some(msg => name.includes(msg.toLowerCase()));
+        // });
         // Remove duplicate brands by name (case-insensitive)
         const seenNames = new Set<string>();
         this.allBrands = this.allBrands.filter((brand: any) => {
@@ -475,6 +477,7 @@ getAllCategories() {
           seenNames.add(name);
           return true;
         });
+        
         this.isLoadingBrands = false;
         // console.log('Brand data loaded from API:', this.brandData);
       },

@@ -24,8 +24,8 @@
       </button>
     </form>
     <div class="categories-main-layout">
-      <div *ngIf="isLoadingBrands" class="categories-loader">
-        <div class="spinner"></div>
+      <div *ngIf="isLoadingBrands">
+        <span class="loader"></span>
       </div>
       <div class="categories-main-layout-content" *ngIf="!isLoadingBrands">
         <!-- Sidebar Accordion -->

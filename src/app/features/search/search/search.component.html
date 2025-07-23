@@ -6,7 +6,7 @@
         <!-- Search Icon SVG -->
         <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="7" stroke="#A0AEC0" stroke-width="2"/><path d="M20 20L17 17" stroke="#A0AEC0" stroke-width="2" stroke-linecap="round"/></svg>
       </span>
-      <input class="search-input" (keydown)="handleKeyDown($event)" [(ngModel)]="searchDomainNameOrUrl" type="text" placeholder="Enter a brand name or website URL" [disabled]="isLoading" />
+      <input class="search-input" (keydown)="handleKeyDown($event)" [(ngModel)]="searchDomainNameOrUrl" type="text" placeholder="Enter website URL" [disabled]="isLoading" />
       <button class="shuffle-btn"  (click)="findBrandInfo($event)" title="Search Brand" [disabled]="isLoading">
         <!-- Loading Spinner -->
         <div *ngIf="isLoading" class="loading-spinner">

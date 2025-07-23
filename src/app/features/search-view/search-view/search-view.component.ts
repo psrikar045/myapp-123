@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../../header/header.component';
 import { FooterComponent } from '../../../shared/footer/footer.component';
@@ -6,6 +6,8 @@ import { ThemeService } from '../../../core/services/theme.service';
 import { Subscription } from 'rxjs';
 import { UtilService } from '../../../shared/services/util.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-search-view',
@@ -21,15 +23,22 @@ export class SearchViewComponent implements OnInit, OnDestroy {
   searchResult: any = null;
   isDarkMode = false;
   private themeSubscription!: Subscription;
-  private readonly themeService = inject(ThemeService);
-  private readonly utilService = inject(UtilService);
-  filters = ['All', 'Logos', 'Colors', 'Font', 'Images'];//, 'Icons'
+  showFullDescription = false;
+  shouldShowViewMore = false;
+  filters = ['All', 'Logos', 'Colors', 'Font', 'Images']; //, 'Icons'
   activeFilter = 'All';
+  isAuthenticated = false;
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private themeService: ThemeService,
+    private utilService: UtilService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.themeSubscription = this.themeService.isDarkMode$.subscribe(isDark => {
+    this.themeSubscription = this.themeService.isDarkMode$.subscribe((isDark: boolean) => {
       this.isDarkMode = isDark;
     });
     this.isDarkMode = this.themeService.getIsDarkMode();
@@ -113,6 +122,11 @@ export class SearchViewComponent implements OnInit, OnDestroy {
       this.searchResult = rawResult;
     }
     // Remove sessionStorage usage; just read the query param when needed
+    // Check if description has more than 3 lines
+    const desc = this.searchResult?.Company?.Description || '';
+    this.shouldShowViewMore = desc.split(/\r?\n|\r|\n|(?<=\S)\s+/).length > 3 || desc.length > 300;
+    // Set authentication status
+    this.isAuthenticated = this.authService.isAuthenticated();
   }
   getSocialLinksArray(socialLinks: any): { platform: string, url: string }[] {
     if (!socialLinks) {
@@ -136,7 +150,7 @@ export class SearchViewComponent implements OnInit, OnDestroy {
       case 'facebook': return 'bi bi-facebook';
       case 'youtube': return 'bi bi-youtube';
       case 'instagram': return 'bi bi-instagram';
-      case 'pinterest': return 'bi bi-pinterest'; 
+      case 'pinterest': return 'bi bi-pinterest';
       case 'tiktok': return 'bi bi-tiktok';
       default: return 'bi bi-link-45deg'; // If no specific icon is found, return bi bi-link-45deg
     }
@@ -273,6 +287,25 @@ hasDisplayableImages(imagesArray: any[]): boolean {
     }
   }
 
+  public getFirstNLines(text: string, n: number): string {
+    if (!text) return '';
+    // Estimate line length (adjust as needed for your font/width)
+    const avgLineLength = 100; // characters per line
+    const maxChars = n * avgLineLength;
+    if (text.length <= maxChars) return text;
+    // Truncate at the last space before maxChars
+    let truncated = text.slice(0, maxChars);
+    const lastSpace = truncated.lastIndexOf(' ');
+    if (lastSpace > 0) {
+      truncated = truncated.slice(0, lastSpace);
+    }
+    return truncated + '...';
+  }
+
+  toggleDescription() {
+    this.showFullDescription = !this.showFullDescription;
+  }
+
   onAnalyzeClick() {
     this.showBrandDetails = true;
   }
@@ -296,6 +329,19 @@ hasDisplayableImages(imagesArray: any[]): boolean {
       this.router.navigate(['/all-categories']);
     } else {
       this.router.navigate(['/search']);
+    }
+  }
+
+  onViewMoreClick() {
+    if (this.isAuthenticated) {
+      this.toggleDescription();
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Please login',
+        text: 'You need to be logged in to view the full description.',
+        confirmButtonText: 'OK',
+      });
     }
   }
 }

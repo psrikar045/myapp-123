@@ -798,3 +798,42 @@ body, .company-data-body {
     /* margin-left: 0; */
     /* /* transition: background 0.2s, color 0.2s; */
 }
+
+.collapsed-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  max-height: 4.5em;
+}
+.view-more-btn {
+  background: none;
+  border: none;
+  color: #2563eb;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  margin-left: 8px;
+  padding: 0;
+  text-decoration: underline;
+}
+.view-more-btn-inline {
+  color: #2563eb;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: 600;
+  margin-left: 8px;
+  padding: 0;
+  text-decoration: underline;
+  display: inline;
+  background: none;
+  border: none;
+}
+.view-more-btn-inline.disabled {
+  color: #b0b7c3;
+  /* cursor: not-allowed; */
+  text-decoration: none;
+  /* pointer-events: none; */
+}
