@@ -666,13 +666,14 @@ body, .categories-main-layout, .categories-bg, .categories-content, .categories-
 }
 
 .pagination-bottom-center-wrapper {
-  width: 100%;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
-  min-height: 60px;
-  margin-top: auto;
-  margin-bottom: 0;
+  align-items: center;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  width: 100%;
+  position: relative;
+  top: 159px;
 }
 
 /* .categories-loader {
