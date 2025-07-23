@@ -672,8 +672,8 @@ body, .categories-main-layout, .categories-bg, .categories-content, .categories-
   margin-top: 32px;
   margin-bottom: 16px;
   width: 100%;
-  position: relative;
-  top: 159px;
+  /* position: relative; */
+  /* top: 159px; */
 }
 
 /* .categories-loader {
