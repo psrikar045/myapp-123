@@ -1,144 +1,415 @@
 <app-header></app-header>
 
-
-<div class="pad100 ProfilePageBG">
-  <div class="container">
-    <div class="profile-mockup-wrapper">
-      <div class="profile-banner-mockup">
-        <div class="profile-banner-content-mockup">
-          <div class="profilebannerFonts">
-            <div class="profile-banner-greeting">
-              <span class="bannerFont1">Hello, my name is </span> <span class="profile-banner-highlight bannerFont2">{{ profile.name || 'Jon Doe' }}</span>
+<div class="profile-page-bg">
+  <div class="container-fluid px-lg-5 px-md-4 px-3">
+    <div class="profile-wrapper">
+      <!-- Enhanced Profile Banner -->
+      <div class="profile-banner">
+        <div class="profile-banner-content">
+          <div class="container-fluid">
+            <!-- Loading Skeleton -->
+            <div class="row align-items-center" *ngIf="isProfileLoading">
+              <div class="col-lg-4 col-md-5 col-12">
+                <div class="profile-main-info d-flex align-items-center">
+                  <div class="profile-avatar-container me-4">
+                    <div class="skeleton-avatar"></div>
+                  </div>
+                  <div class="profile-basic-info">
+                    <div class="skeleton-line skeleton-name mb-2"></div>
+                    <div class="skeleton-line skeleton-email mb-1"></div>
+                    <div class="skeleton-line skeleton-phone mb-1"></div>
+                    <div class="skeleton-line skeleton-location"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-3 col-12 mt-3 mt-md-0">
+                <div class="skeleton-card"></div>
+              </div>
+              <div class="col-lg-4 col-md-4 col-12 mt-3 mt-lg-0">
+                <div class="skeleton-card"></div>
+              </div>
             </div>
-            <div class="profile-banner-role bannerFont3">I am front end developer</div>
+            
+            <!-- Actual Content -->
+            <div class="row align-items-center" *ngIf="!isProfileLoading">
+              <!-- Left Side: Avatar and Basic Info -->
+              <div class="col-lg-4 col-md-5 col-12">
+                <div class="profile-main-info d-flex align-items-center">
+                  <div class="profile-avatar-container me-4">
+                    <img [src]="profile.avatar" alt="Profile" class="profile-avatar-img" />
+                    <div class="avatar-edit-overlay">
+                      <i class="bi bi-camera-fill"></i>
+                    </div>
+                    <div class="avatar-status-badge" [class.verified]="profile.emailVerified">
+                      <i class="bi" [class.bi-check-circle-fill]="profile.emailVerified" [class.bi-exclamation-circle-fill]="!profile.emailVerified"></i>
+                    </div>
+                  </div>
+                  <div class="profile-basic-info">
+                    <h2 class="profile-name mb-2">{{ profile.name || 'User' }}</h2>
+                    <div class="profile-email mb-1" *ngIf="profile.email">
+                      <i class="bi bi-envelope-fill me-2"></i>
+                      <span>{{ profile.email }}</span>
+                      <span class="verification-badge ms-2" [class.verified]="profile.emailVerified" [class.unverified]="!profile.emailVerified">
+                        {{ profile.emailVerified ? 'Verified' : 'Unverified' }}
+                      </span>
+                    </div>
+                    <div class="profile-phone mb-1" *ngIf="profile.phone">
+                      <i class="bi bi-telephone-fill me-2"></i>
+                      <span>{{ profile.phone }}</span>
+                    </div>
+                    <div class="profile-location" *ngIf="profile.location">
+                      <i class="bi bi-geo-alt-fill me-2"></i>
+                      <span>{{ profile.location }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Center: Profile Stats -->
+              <div class="col-lg-4 col-md-3 col-12 mt-3 mt-md-0">
+                <div class="profile-stats">
+                  <div class="stat-card">
+                    <div class="stat-header">
+                      <h6 class="stat-title">Profile Completion</h6>
+                      <span class="stat-percentage">{{ profile.profileCompletion }}%</span>
+                    </div>
+                    <div class="progress profile-progress">
+                      <div class="progress-bar" 
+                           [style.width.%]="profile.profileCompletion"
+                           [class.bg-success]="profile.profileCompletion >= 80"
+                           [class.bg-warning]="profile.profileCompletion >= 50 && profile.profileCompletion < 80"
+                           [class.bg-danger]="profile.profileCompletion < 50">
+                      </div>
+                    </div>
+                    <small class="completion-text">
+                      <span *ngIf="profile.profileCompletion >= 80" class="text-success">
+                        <i class="bi bi-check-circle me-1"></i>Profile Complete
+                      </span>
+                      <span *ngIf="profile.profileCompletion >= 50 && profile.profileCompletion < 80" class="text-warning">
+                        <i class="bi bi-exclamation-triangle me-1"></i>Almost Complete
+                      </span>
+                      <span *ngIf="profile.profileCompletion < 50" class="text-danger">
+                        <i class="bi bi-info-circle me-1"></i>Complete Your Profile
+                      </span>
+                    </small>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Right Side: Account Info -->
+              <div class="col-lg-4 col-md-4 col-12 mt-3 mt-lg-0">
+                <div class="profile-account-info">
+                  <div class="account-type-badge mb-3">
+                    <i class="bi bi-star-fill me-2"></i>
+                    <span class="account-type">{{ profile.accountType }} Account</span>
+                  </div>
+                  
+                  <div class="account-details">
+                    <div class="detail-item" *ngIf="profile.joinDate">
+                      <small class="detail-label">Member Since</small>
+                      <span class="detail-value">{{ profile.joinDate }}</span>
+                    </div>
+                    <div class="detail-item" *ngIf="profile.lastLogin">
+                      <small class="detail-label">Last Login</small>
+                      <span class="detail-value">{{ profile.lastLogin }}</span>
+                    </div>
+                  </div>
+                  
+                  <div class="profile-actions mt-3">
+                    <button class="btn btn-outline-light btn-sm me-2" (click)="onSidebarSelect(0)">
+                      <i class="bi bi-pencil-fill me-1"></i>
+                      Edit Profile
+                    </button>
+                    <button class="btn btn-outline-light btn-sm" (click)="onSidebarSelect(2)">
+                      <i class="bi bi-arrow-up-circle-fill me-1"></i>
+                      Upgrade
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="profile-banner-identity-mockup">
-          <div class="profile-banner-avatar-mockup">
-            <img [src]="profile.avatar" alt="Profile" class="profile-banner-avatar-img-mockup" />
-            <!-- <span class="profile-avatar-edit-btn-mockup"><img src="assets/icons/camera.svg" alt="Edit" /></span> -->
-          </div>
-          <div class="profile-banner-info-mockup">
-            <div class="profile-banner-name-mockup">{{ profile.name }}</div>
-            <div class="profile-banner-status-mockup">{{ profile.status }}</div>
+        
+        <!-- Welcome Message -->
+        <div class="profile-welcome-message">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-12">
+                <div class="welcome-text">
+                  <h4 class="welcome-title">
+                    <i class="bi bi-house-heart-fill me-2"></i>
+                    Welcome back, {{ (profile.name || '').split(' ')[0] || 'User' }}!
+                  </h4>
+                  <p class="welcome-subtitle">{{ profile.status }}</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="profile-main-mockup">
-        <aside class="profile-sidebar-mockup">
-          <button class="sidebar-edit-btn-mockup" [class.active]="selectedSidebarIndex === 0" (click)="onSidebarSelect(0)">Edit Profile</button>
-          <button class="sidebar-edit-btn-mockup" [class.active]="selectedSidebarIndex === 1" (click)="onSidebarSelect(1)">Notifications</button>
-          <button class="sidebar-edit-btn-mockup" [class.active]="selectedSidebarIndex === 2" (click)="onSidebarSelect(2)">My Plan</button>
-          <button class="sidebar-edit-btn-mockup" [class.active]="selectedSidebarIndex === 3" (click)="onSidebarSelect(3)">Choose Plan</button>
-          <button class="sidebar-edit-btn-mockup" [class.active]="selectedSidebarIndex === 4" (click)="onSidebarSelect(4)">Password & Security</button>
-        </aside>
-        <section class="profile-content-mockup">
-          <ng-container *ngIf="selectedSidebarIndex === 0">
-            <div class="profile-content-header-mockup">
-              <div>
-                <div class="profile-content-title-mockup">Edit Profile</div>
-                <div class="profile-content-status-mockup">Your account is ready, you can now apply for advice.</div>
+      <!-- Enhanced Main Content -->
+      <div class="profile-main">
+        <div class="row g-4">
+          <!-- Enhanced Sidebar -->
+          <div class="col-lg-3 col-md-4">
+            <div class="profile-sidebar">
+              <div class="sidebar-header">
+                <h5 class="sidebar-title">
+                  <i class="bi bi-gear-fill me-2"></i>
+                  Account Settings
+                </h5>
               </div>
-              <div class="profile-content-update-mockup">last update {{ profileForm.updatedAt | date:'MMM-d-yyyy' }}</div>
+              <nav class="sidebar-nav">
+                <button class="sidebar-nav-btn" 
+                        [class.active]="selectedSidebarIndex === 0" 
+                        (click)="onSidebarSelect(0)">
+                  <i class="bi bi-person-fill me-2"></i>
+                  Edit Profile
+                </button>
+                <button class="sidebar-nav-btn" 
+                        [class.active]="selectedSidebarIndex === 1" 
+                        (click)="onSidebarSelect(1)">
+                  <i class="bi bi-bell-fill me-2"></i>
+                  Notifications
+                </button>
+                <button class="sidebar-nav-btn" 
+                        [class.active]="selectedSidebarIndex === 2" 
+                        (click)="onSidebarSelect(2)">
+                  <i class="bi bi-credit-card-fill me-2"></i>
+                  My Plan
+                </button>
+                <button class="sidebar-nav-btn" 
+                        [class.active]="selectedSidebarIndex === 3" 
+                        (click)="onSidebarSelect(3)">
+                  <i class="bi bi-star-fill me-2"></i>
+                  Choose Plan
+                </button>
+                <button class="sidebar-nav-btn" 
+                        [class.active]="selectedSidebarIndex === 4" 
+                        (click)="onSidebarSelect(4)">
+                  <i class="bi bi-shield-lock-fill me-2"></i>
+                  Password & Security
+                </button>
+              </nav>
             </div>
-            <form (ngSubmit)="onSave()" #profileFormRef="ngForm" class="profile-form-mockup">
-              <div class="profile-form-columns-mockup">
-                <div class="profile-form-col-mockup">
-                  <div class="profile-form-section-title-mockup">Personal</div>
-                  <div class="form-group-mockup">
-                    <label>User Name</label>
-                    <input type="text" [(ngModel)]="profileForm.username" name="username" />
+          </div>
+          <!-- Enhanced Content Area -->
+          <div class="col-lg-9 col-md-8">
+            <div class="profile-content">
+              <ng-container *ngIf="selectedSidebarIndex === 0">
+                <div class="content-header">
+                  <div class="content-title-section">
+                    <h3 class="content-title">
+                      <i class="bi bi-person-gear me-2"></i>
+                      Edit Profile
+                    </h3>
+                    <p class="content-subtitle">Update your personal information and preferences</p>
                   </div>
-                  <div class="form-group-mockup">
-                    <label>First Name</label>
-                    <input type="text" [(ngModel)]="profileForm.firstName" name="firstName" />
+                  <div class="content-meta">
+                    <small class="text-muted">
+                      <i class="bi bi-clock me-1"></i>
+                      Last updated: {{ profileForm.updatedAt | date:'MMM d, yyyy' }}
+                    </small>
                   </div>
-                  <div class="form-group-mockup">
-                    <label>Last Name</label>
-                    <input type="text" [(ngModel)]="profileForm.surname" name="lastName" />
-                  </div>
-                  <!-- <div class="form-group-mockup">
-                    <label>National Code</label>
-                    <input type="text" [(ngModel)]="profileForm.nationalCode" name="nationalCode" placeholder="Enter Value" />
-                  </div> -->
-                  <div class="form-group-mockup">
-                    <label>Date of birth</label>
-                    <input type="date" [(ngModel)]="profileForm.dob" name="dob" />
-                  </div>
-                  <!-- <div class="form-group-mockup">
-                    <label>Education level</label>
-                    <input type="text" [(ngModel)]="profileForm.educationLevel" name="educationLevel" placeholder="software" />
-                  </div> -->
                 </div>
-                <div class="profile-form-col-mockup">
-                  <div class="profile-form-section-title-mockup">Contact</div>
-                  <div class="form-group-mockup">
-                    <label>Email</label>
-                    <input type="email" [(ngModel)]="profileForm.email" name="email" placeholder="Enter Value" disabled />
-                  </div>
-                  <div class="form-group-mockup">
-                    <label>Phone Number</label>
-                    <div class="phone-input-group-mockup">
-                      <select 
-                        [(ngModel)]="profileForm.phoneCountry" 
-                        name="phoneCountry" 
-                        (change)="onPhoneCodeChange(profileForm.phoneCountry)"
-                        class="phone-code-select">
-                        <option *ngFor="let phoneCode of allPhoneCodes" [value]="phoneCode.code">
-                          {{ phoneCode.flag }} 
-                          {{ phoneCode.code }} 
-                          <!-- - {{ phoneCode.country }} -->
-                        </option>
-                      </select>
-                      <input 
-                        type="tel" 
-                        [(ngModel)]="profileForm.phoneNumber" 
-                        name="phoneNumber" 
-                        placeholder="Enter phone number" 
-                        class="phone-number-input" />
+                
+                <form (ngSubmit)="onSave()" #profileFormRef="ngForm" class="profile-form">
+                  <div class="row g-4">
+                    <!-- Personal Information Section -->
+                    <div class="col-lg-6 col-md-6 col-12">
+                      <div class="form-section">
+                        <h5 class="form-section-title">
+                          <i class="bi bi-person-badge me-2"></i>
+                          Personal Information
+                        </h5>
+                        
+                        <div class="mb-3">
+                          <label class="form-label">Username</label>
+                          <input type="text" 
+                                 class="form-control" 
+                                 [(ngModel)]="profileForm.username" 
+                                 name="username"
+                                 placeholder="Enter your username">
+                        </div>
+                        
+                        <div class="mb-3">
+                          <label class="form-label">First Name</label>
+                          <input type="text" 
+                                 class="form-control" 
+                                 [(ngModel)]="profileForm.firstName" 
+                                 name="firstName"
+                                 placeholder="Enter your first name">
+                        </div>
+                        
+                        <div class="mb-3">
+                          <label class="form-label">Last Name</label>
+                          <input type="text" 
+                                 class="form-control" 
+                                 [(ngModel)]="profileForm.surname" 
+                                 name="lastName"
+                                 placeholder="Enter your last name">
+                        </div>
+                        
+                        <div class="mb-3">
+                          <label class="form-label">Date of Birth</label>
+                          <input type="date" 
+                                 class="form-control" 
+                                 [(ngModel)]="profileForm.dob" 
+                                 name="dob">
+                        </div>
+                        
+                        <div class="mb-3">
+                          <label class="form-label">National Code</label>
+                          <input type="text" 
+                                 class="form-control" 
+                                 [(ngModel)]="profileForm.nationalCode" 
+                                 name="nationalCode"
+                                 placeholder="Enter your national code">
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- Contact Information Section -->
+                    <div class="col-lg-6 col-md-6 col-12">
+                      <div class="form-section">
+                        <h5 class="form-section-title">
+                          <i class="bi bi-envelope-at me-2"></i>
+                          Contact Information
+                        </h5>
+                        
+                        <div class="mb-3">
+                          <label class="form-label">Email Address</label>
+                          <div class="input-group">
+                            <span class="input-group-text">
+                              <i class="bi bi-envelope"></i>
+                            </span>
+                            <input type="email" 
+                                   class="form-control" 
+                                   [(ngModel)]="profileForm.email" 
+                                   name="email"
+                                   placeholder="Enter your email"
+                                   disabled>
+                          </div>
+                          <div class="form-text">Email cannot be changed from here</div>
+                        </div>
+                        
+                        <div class="mb-3">
+                          <label class="form-label">Phone Number</label>
+                          <div class="input-group">
+                            <select class="form-select" 
+                                    style="max-width: 120px;"
+                                    [(ngModel)]="profileForm.phoneCountry" 
+                                    name="phoneCountry" 
+                                    (change)="onPhoneCodeChange(profileForm.phoneCountry)">
+                              <option *ngFor="let phoneCode of allPhoneCodes" [value]="phoneCode.code">
+                                {{ phoneCode.flag }} {{ phoneCode.code }}
+                              </option>
+                            </select>
+                            <input type="tel" 
+                                   class="form-control" 
+                                   [(ngModel)]="profileForm.phoneNumber" 
+                                   name="phoneNumber" 
+                                   placeholder="Enter phone number">
+                          </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                          <label class="form-label">Country</label>
+                          <select class="form-select" 
+                                  [(ngModel)]="profileForm.country" 
+                                  name="country" 
+                                  (change)="onCountryChange(profileForm.country)">
+                            <option *ngFor="let country of allCountries" [value]="country">
+                              {{ country }}
+                            </option>
+                          </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                          <label class="form-label">City</label>
+                          <input type="text" 
+                                 class="form-control" 
+                                 [(ngModel)]="profileForm.city" 
+                                 name="city" 
+                                 placeholder="Enter your city">
+                        </div>
+                      </div>
                     </div>
                   </div>
-                  <div class="form-group-mockup">
-                    <label>Country</label>
-                    <select 
-                      [(ngModel)]="profileForm.country" 
-                      name="country" 
-                      (change)="onCountryChange(profileForm.country)"
-                      class="form-input">
-                      <option *ngFor="let country of allCountries" [value]="country">
-                        {{ country }}
-                      </option>
-                    </select>
+                  
+                  <!-- Save Button -->
+                  <div class="form-actions">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                      <i class="bi bi-check-circle me-2"></i>
+                      Save Changes
+                    </button>
                   </div>
-                  <div class="form-group-mockup">
-                    <label>City</label>
-                    <input type="text" [(ngModel)]="profileForm.city" name="city" placeholder="Enter city" />
+                </form>
+              </ng-container>
+              
+              <!-- Notifications Section -->
+              <ng-container *ngIf="selectedSidebarIndex === 1">
+                <div class="content-header">
+                  <div class="content-title-section">
+                    <h3 class="content-title">
+                      <i class="bi bi-bell-fill me-2"></i>
+                      Notifications
+                    </h3>
+                    <p class="content-subtitle">Manage your notification preferences</p>
                   </div>
                 </div>
-              </div>
-              <div class="profile-form-save-row-mockup">
-                <button type="submit" class="save-btn-mockup">Save</button>
-              </div>
-            </form>
-          </ng-container>
-          <ng-container *ngIf="selectedSidebarIndex === 1">
-            <div class="dev-progress-message">
-              <h2>Notifications</h2>
-              <p>This feature is under development. Please check back later.</p>
+                <div class="development-notice">
+                  <div class="alert alert-info d-flex align-items-center" role="alert">
+                    <i class="bi bi-info-circle-fill me-3"></i>
+                    <div>
+                      <h5 class="alert-heading">Coming Soon!</h5>
+                      <p class="mb-0">This feature is currently under development. Please check back later for notification settings.</p>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              
+              <!-- My Plan Section -->
+              <ng-container *ngIf="selectedSidebarIndex === 2">
+                <app-my-plan (upgradeClicked)="onUpgradeClicked()"></app-my-plan>
+              </ng-container>
+              
+              <!-- Choose Plan Section -->
+              <ng-container *ngIf="selectedSidebarIndex === 3">
+                <app-choose-plan></app-choose-plan>
+              </ng-container>
+              
+              <!-- Password & Security Section -->
+              <ng-container *ngIf="selectedSidebarIndex === 4">
+                <div class="content-header">
+                  <div class="content-title-section">
+                    <h3 class="content-title">
+                      <i class="bi bi-shield-lock-fill me-2"></i>
+                      Password & Security
+                    </h3>
+                    <p class="content-subtitle">Manage your account security settings</p>
+                  </div>
+                </div>
+                <div class="security-section">
+                  <div class="card">
+                    <div class="card-body">
+                      <h5 class="card-title">
+                        <i class="bi bi-key-fill me-2"></i>
+                        Change Password
+                      </h5>
+                      <p class="card-text">Update your password to keep your account secure.</p>
+                      <button class="btn btn-outline-primary" (click)="goToResetPassword()">
+                        <i class="bi bi-arrow-clockwise me-2"></i>
+                        Change Password
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
             </div>
-          </ng-container>
-          <ng-container *ngIf="selectedSidebarIndex === 2">
-            <app-my-plan (upgradeClicked)="onUpgradeClicked()"></app-my-plan>
-          </ng-container>
-          <ng-container *ngIf="selectedSidebarIndex === 3">
-            <app-choose-plan></app-choose-plan>
-          </ng-container>
-          <ng-container *ngIf="selectedSidebarIndex === 4">
-            <div class="dev-progress-message">
-              <button class="change-password-btn" (click)="goToResetPassword()">Change Password</button>
-            </div>
-          </ng-container>
-        </section>
+          </div>
+        </div>
       </div>
     </div>
   </div>

@@ -1,8 +1,6 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+// Removed Angular Material dependencies - using Bootstrap instead
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { HeaderComponent } from '../../layout/header/header.component';
@@ -13,9 +11,6 @@ import { ToolbarService } from '../../shared/services/toolbar.service';
   standalone: true,
   imports: [
     CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
     HeaderComponent
   ],
   templateUrl: './home-page.component.html',

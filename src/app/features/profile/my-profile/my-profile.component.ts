@@ -10,7 +10,7 @@ import {  NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { ToolbarService } from '../../../shared/services/toolbar.service';
 import { UserProfileUpdateRequest } from '../../../shared/models/user-profile.model';
-import { MatSnackBar } from '@angular/material/snack-bar';
+// Removed Angular Material dependency - using custom toast service instead
 import { PhoneService } from '../../../shared/services/phone.service';
 
 @Component({
@@ -25,7 +25,7 @@ import { PhoneService } from '../../../shared/services/phone.service';
     ChoosePlanComponent
   ],
   templateUrl: './my-profile.component.html',
-  styleUrl: './my-profile.component.css'
+  styleUrl: './my-profile.component.scss'
 })
 export class MyProfileComponent implements OnInit {
   sidebarMenu = [
@@ -37,8 +37,9 @@ export class MyProfileComponent implements OnInit {
   ];
   userProfile: any;
   selectedSidebarIndex = 0;
+  isProfileLoading = true;
   private readonly authService = inject(AuthService);
-  private readonly snackBar = inject(MatSnackBar);
+  // Removed MatSnackBar dependency
   private readonly phoneService = inject(PhoneService);
     constructor(private router: Router, private toolbarService: ToolbarService) {
     // Listen for route changes and set logged-in toolbar if on /my-profile
@@ -66,16 +67,37 @@ export class MyProfileComponent implements OnInit {
   fetchUserProfile() {
     this.authService.userProfileFetch().subscribe({
       next: (response: any) => {
-        console.log('User profile fetched successfully:');
+        console.log('User profile fetched successfully:', response);
         this.userProfile = response;
         this.profile.avatar = response.profilePictureUrl || 'assets/user-small-1.png';
         this.toolbarService.setProfileAvatar(this.profile.avatar); // Update header avatar
-        this.profile.name= response.firstName + ' ' + response.lastName || 'User';
+        this.profile.name = (response.firstName && response.lastName) 
+          ? `${response.firstName} ${response.lastName}` 
+          : (response.firstName || response.lastName || 'User');
+        this.profile.email = response.email || '';
+        this.profile.phone = response.phoneNumber ? `${response.futureV2 || '+91'} ${response.phoneNumber}` : '';
+        this.profile.location = response.futureV4 && response.futureV3 ? `${response.futureV4}, ${response.futureV3}` : (response.futureV3 || '');
+        this.profile.joinDate = response.createdAt ? new Date(response.createdAt).toLocaleDateString() : '';
+        this.profile.lastLogin = response.lastLoginAt ? new Date(response.lastLoginAt).toLocaleDateString() : '';
+        this.profile.emailVerified = response.emailVerified || false;
+        this.profile.accountType = response.accountType || 'Standard';
+        
+        // Calculate profile completion percentage
+        this.profile.profileCompletion = this.calculateProfileCompletion(response);
+        this.isProfileLoading = false;
+        
+        console.log('Profile data after setting:', {
+          name: this.profile.name,
+          email: this.profile.email,
+          phone: this.profile.phone,
+          location: this.profile.location,
+          completion: this.profile.profileCompletion
+        });
         this.profileForm.firstName = response.firstName || '';
         this.profileForm.surname = response.lastName || '';
         this.profileForm.nationalCode = response.futureI1 || '';
         this.profileForm.dob = response.futureT1 || '';
-        this.profileForm.educationLevel = response.futureV1 || '';
+
         this.profileForm.email = response.email || '';
         this.profileForm.phoneCountry = response.futureV2 || '+91';
         this.profileForm.phoneNumber = response.phoneNumber || '';
@@ -91,6 +113,13 @@ export class MyProfileComponent implements OnInit {
       },
       error: (error: any) => {
         console.error('Error fetching user profile:', error);
+        this.isProfileLoading = false;
+        // Set fallback data
+        this.profile.name = 'User';
+        this.profile.email = '';
+        this.profile.phone = '';
+        this.profile.location = '';
+        this.profile.profileCompletion = 0;
       }
     });
   }
@@ -100,23 +129,46 @@ export class MyProfileComponent implements OnInit {
     this.selectedSidebarIndex = index;
   }
 
+  calculateProfileCompletion(response: any): number {
+    const fields = [
+      response.firstName,
+      response.lastName,
+      response.email,
+      response.phoneNumber,
+      response.futureV3, // country
+      response.futureV4, // city
+      response.futureI1, // national code
+      response.profilePictureUrl
+    ];
+    
+    const completedFields = fields.filter(field => field && field.trim() !== '').length;
+    return Math.round((completedFields / fields.length) * 100);
+  }
+
   profile = {
     avatar: '/landing/user.jfif',
-    name: 'Mobina Mirbagheri',
-    status: 'Your account is ready, you can now apply for advice.'
+    name: '',
+    status: 'Your account is ready, you can now apply for advice.',
+    email: '',
+    phone: '',
+    location: '',
+    joinDate: '',
+    lastLogin: '',
+    accountType: 'Standard',
+    emailVerified: false,
+    profileCompletion: 0
   };
 
   profileForm = {
-    firstName: 'mobina',
-    surname: 'Mir',
+    firstName: '',
+    surname: '',
     nationalCode: '',
     dob: '',
-    educationLevel: 'software',
     email: '',
     phoneCountry: '+91',
     phoneNumber: '',
     country: 'India',
-    city: 'software',
+    city: '',
     updatedAt: new Date().toISOString(),
     username:'',
     emailVerified: false,
@@ -133,11 +185,7 @@ export class MyProfileComponent implements OnInit {
     return indiaCode ? [indiaCode, ...otherCodes] : allCodes;
   }
 
-  educationLevels = [
-    { value: 'software', label: 'software' },
-    { value: 'hardware', label: 'hardware' },
-    { value: 'other', label: 'other' }
-  ];
+
 
   countries = [
     { value: '', label: 'Select' },
@@ -194,7 +242,7 @@ export class MyProfileComponent implements OnInit {
       firstName: this.profileForm.firstName,
       surname: this.profileForm.surname, // Maps to backend's lastName
       nationalCode: this.profileForm.nationalCode,
-      educationLevel: this.profileForm.educationLevel,
+      // educationLevel: this.profileForm.educationLevel,
       phoneCountry: this.profileForm.phoneCountry,
       phoneNumber: this.profileForm.phoneNumber,
       country: this.profileForm.country,
@@ -204,7 +252,7 @@ export class MyProfileComponent implements OnInit {
     };
  this.authService.userProfileUpdate( updateRequest).subscribe({
       next: (response: any) => {
-       this._openSnackBar(`Profile update successful!`, 'Dismiss');
+       this.showToast('Profile update successful!', 'success');
        this.profileForm.updatedAt = response.updatedAt || new Date().toISOString(); // Update timestamp
         // Optionally, re-fetch profile to ensure UI reflects latest state or update form values
         // this.fetchUserProfile(this.userId!);
@@ -213,11 +261,11 @@ export class MyProfileComponent implements OnInit {
         console.error('Failed to update user profile:', err);
         // Handle specific error codes or validation errors from backend
         if (err.status === 400 && err.error && err.error.message) {
-          this._openSnackBar(`Update failed: ${err.error.message}`);
+          this.showToast(`Update failed: ${err.error.message}`, 'error');
         } else if (err.status === 404) {
-          this._openSnackBar('User not found for update.');
+          this.showToast('User not found for update.', 'error');
         } else {
-          this._openSnackBar('Failed to update profile. Please try again.');
+          this.showToast('Failed to update profile. Please try again.', 'error');
         }
       }
     });
@@ -234,11 +282,48 @@ export class MyProfileComponent implements OnInit {
     // Update sidebar menu active state
     this.sidebarMenu.forEach((item, i) => item.active = i === 3);
   }
-    private _openSnackBar(message: string, action: string = 'Close', duration: number = 3000) {
-    this.snackBar.open(message, action, {
-      duration: duration,
-      verticalPosition: 'bottom', // Can be 'top' or 'bottom'
-      horizontalPosition: 'center', // Can be 'start', 'center', 'end', 'left', or 'right'
-    });
+  // Custom toast notification using Bootstrap
+  showToast(message: string, type: 'success' | 'error' | 'info' = 'info') {
+    // Create toast element
+    const toastContainer = document.getElementById('toast-container') || this.createToastContainer();
+    const toastId = 'toast-' + Date.now();
+    
+    const toastHtml = `
+      <div id="${toastId}" class="toast align-items-center text-white bg-${type === 'success' ? 'success' : type === 'error' ? 'danger' : 'primary'} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            <i class="bi bi-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-triangle' : 'info-circle'} me-2"></i>
+            ${message}
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    `;
+    
+    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+    
+    // Initialize and show toast
+    const toastElement = document.getElementById(toastId);
+    if (toastElement) {
+      const toast = new (window as any).bootstrap.Toast(toastElement, {
+        autohide: true,
+        delay: 4000
+      });
+      toast.show();
+      
+      // Remove toast element after it's hidden
+      toastElement.addEventListener('hidden.bs.toast', () => {
+        toastElement.remove();
+      });
+    }
+  }
+  
+  private createToastContainer(): HTMLElement {
+    const container = document.createElement('div');
+    container.id = 'toast-container';
+    container.className = 'toast-container position-fixed top-0 end-0 p-3';
+    container.style.zIndex = '9999';
+    document.body.appendChild(container);
+    return container;
   }
 }

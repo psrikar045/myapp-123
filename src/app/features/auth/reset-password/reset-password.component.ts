@@ -274,7 +274,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     this.stopCodeExpiryTimer();
     
     if (this.mode === 'profile') {
-      this.router.navigate(['/my-profile']);
+      this.router.navigate(['/profile']);
     } else {
       this.router.navigate(['/login']);
     }
@@ -286,7 +286,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     this.stopCodeExpiryTimer();
     
     if (this.mode === 'profile') {
-      this.router.navigate(['/my-profile']);
+      this.router.navigate(['/profile']);
     } else {
       this.router.navigate(['/login']);
     }
@@ -655,7 +655,7 @@ userId: response?.userId,
         this.buttonState = 'normal';
         if (this.mode === 'profile') {
           this.snackBar.open('Password successfully changed.', 'Close', { duration: 5000 });
-          this.router.navigate(['/my-profile']);
+          this.router.navigate(['/profile']);
         } else {
           this.snackBar.open('Password successfully reset. Please login.', 'Close', { duration: 5000 });
           this.router.navigate(['/login']);
@@ -675,7 +675,7 @@ userId: response?.userId,
             this.buttonState = 'normal';
             if (this.mode === 'profile') {
               this.snackBar.open('Password successfully changed.', 'Close', { duration: 5000 });
-              this.router.navigate(['/my-profile']);
+              this.router.navigate(['/profile']);
             } else {
               this.snackBar.open('Password successfully reset. Please login.', 'Close', { duration: 5000 });
               this.router.navigate(['/login']);

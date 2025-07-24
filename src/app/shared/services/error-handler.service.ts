@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, throwError } from 'rxjs';
 
 export interface ErrorInfo {
@@ -18,7 +17,7 @@ export interface ErrorInfo {
 export class ErrorHandlerService {
   private errorLog: ErrorInfo[] = [];
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor() {}
 
   /**
    * Handle HTTP errors
@@ -135,48 +134,91 @@ export class ErrorHandlerService {
    * Show success notification
    */
   showSuccess(message: string, duration = 3000): void {
-    this.snackBar.open(message, 'Close', {
-      duration,
-      panelClass: ['success-snackbar'],
-      horizontalPosition: 'right',
-      verticalPosition: 'top'
-    });
+    this.showBootstrapToast(message, 'success', duration);
   }
 
   /**
    * Show warning notification
    */
   showWarning(message: string, duration = 5000): void {
-    this.snackBar.open(message, 'Close', {
-      duration,
-      panelClass: ['warning-snackbar'],
-      horizontalPosition: 'right',
-      verticalPosition: 'top'
-    });
+    this.showBootstrapToast(message, 'warning', duration);
   }
 
   /**
    * Show info notification
    */
   showInfo(message: string, duration = 4000): void {
-    this.snackBar.open(message, 'Close', {
-      duration,
-      panelClass: ['info-snackbar'],
-      horizontalPosition: 'right',
-      verticalPosition: 'top'
-    });
+    this.showBootstrapToast(message, 'info', duration);
   }
 
   /**
    * Show error notification
    */
   private showErrorNotification(message: string, duration = 6000): void {
-    this.snackBar.open(message, 'Close', {
-      duration,
-      panelClass: ['error-snackbar'],
-      horizontalPosition: 'right',
-      verticalPosition: 'top'
-    });
+    this.showBootstrapToast(message, 'error', duration);
+  }
+
+  /**
+   * Show Bootstrap toast notification
+   */
+  private showBootstrapToast(message: string, type: 'success' | 'error' | 'warning' | 'info', duration = 4000): void {
+    const toastContainer = document.getElementById('toast-container') || this.createToastContainer();
+    const toastId = 'toast-' + Date.now();
+    
+    const iconMap = {
+      success: 'check-circle-fill',
+      error: 'exclamation-triangle-fill',
+      warning: 'exclamation-triangle-fill',
+      info: 'info-circle-fill'
+    };
+    
+    const bgColorMap = {
+      success: 'success',
+      error: 'danger',
+      warning: 'warning',
+      info: 'primary'
+    };
+    
+    const toastHtml = `
+      <div id="${toastId}" class="toast align-items-center text-white bg-${bgColorMap[type]} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body">
+            <i class="bi bi-${iconMap[type]} me-2"></i>
+            ${message}
+          </div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+      </div>
+    `;
+    
+    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+    
+    // Initialize and show toast
+    const toastElement = document.getElementById(toastId);
+    if (toastElement) {
+      const toast = new (window as any).bootstrap.Toast(toastElement, {
+        autohide: true,
+        delay: duration
+      });
+      toast.show();
+      
+      // Remove toast element after it's hidden
+      toastElement.addEventListener('hidden.bs.toast', () => {
+        toastElement.remove();
+      });
+    }
+  }
+
+  /**
+   * Create toast container if it doesn't exist
+   */
+  private createToastContainer(): HTMLElement {
+    const container = document.createElement('div');
+    container.id = 'toast-container';
+    container.className = 'toast-container position-fixed top-0 end-0 p-3';
+    container.style.zIndex = '9999';
+    document.body.appendChild(container);
+    return container;
   }
 
   /**

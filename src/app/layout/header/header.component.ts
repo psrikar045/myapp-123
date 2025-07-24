@@ -6,13 +6,10 @@ import { AuthService } from '../../core/services/auth.service';
 import { LayoutService } from '../../core/services/layout.service';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatIconModule } from '@angular/material/icon';
-
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatMenuModule, MatIconModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
@@ -54,13 +51,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.currentRoute = event.urlAfterRedirects;
         this.showNavigation = true;
         this.isLanding = this.currentRoute === '/' || this.currentRoute.startsWith('/landing');
-        // Force white header for /developer and /my-profile
-        if (this.currentRoute.startsWith('/developer') || this.currentRoute.startsWith('/my-profile')) {
+        // Force white header for /developer and /profile
+        if (this.currentRoute.startsWith('/developer') || this.currentRoute.startsWith('/profile')) {
           this.isScrolled = true;
         }
-        // Add or remove body attribute for my-profile page
+        // Add or remove body attribute for profile page
         if (isPlatformBrowser(this.platformId)) {
-          if (this.currentRoute.startsWith('/my-profile')) {
+          if (this.currentRoute.startsWith('/profile')) {
             document.body.setAttribute('data-profile-page', 'true');
           } else {
             document.body.removeAttribute('data-profile-page');
@@ -149,9 +146,10 @@ this.authService.checkAuthStatusAndNavigate();
     this.showProfileDropdown = !this.showProfileDropdown;
   }
   goToProfile(event: Event) {
+    event.preventDefault();
     event.stopPropagation();
     this.showProfileDropdown = false;
-    this.router.navigate(['/my-profile']);
+    this.router.navigate(['/profile']);
   }
   logout() {
     this.authService.logout();
@@ -186,7 +184,7 @@ this.authService.checkAuthStatusAndNavigate();
     // Only update isScrolled for background/shadow, but always keep isVisible true
     if (this.isLanding) {
       this.isScrolled = currentScrollY > 0;
-    } else if (this.currentRoute.startsWith('/developer') || this.currentRoute.startsWith('/my-profile')) {
+    } else if (this.currentRoute.startsWith('/developer') || this.currentRoute.startsWith('/profile')) {
       this.isScrolled = true;
     } else {
       this.isScrolled = currentScrollY > 0;
