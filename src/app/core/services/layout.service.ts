@@ -1,13 +1,38 @@
 import { Injectable, inject } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map, shareReplay } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
+
+export interface LayoutConfig {
+  showHeader: boolean;
+  showFooter: boolean;
+  containerClass: string;
+  headerType: 'default' | 'minimal' | 'transparent';
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class LayoutService {
   private breakpointObserver = inject(BreakpointObserver);
+  private router = inject(Router);
+  
+  // Layout state management
+  private showHeaderSubject = new BehaviorSubject<boolean>(true);
+  private showFooterSubject = new BehaviorSubject<boolean>(true);
+  private layoutConfigSubject = new BehaviorSubject<LayoutConfig>({
+    showHeader: true,
+    showFooter: true,
+    containerClass: 'container',
+    headerType: 'default'
+  });
+  
+  // Public observables
+  public showHeader$ = this.showHeaderSubject.asObservable();
+  public showFooter$ = this.showFooterSubject.asObservable();
+  public layoutConfig$ = this.layoutConfigSubject.asObservable();
 
   // Predefined breakpoints from Angular Material
   // You can customize these as needed.
@@ -69,4 +94,160 @@ export class LayoutService {
       map(result => result.matches),
       shareReplay(1)
     );
+
+  // Bootstrap-compatible breakpoints
+  public isXs$: Observable<boolean> = this.breakpointObserver
+    .observe('(max-width: 575.98px)')
+    .pipe(map(result => result.matches), shareReplay(1));
+
+  public isSm$: Observable<boolean> = this.breakpointObserver
+    .observe('(min-width: 576px) and (max-width: 767.98px)')
+    .pipe(map(result => result.matches), shareReplay(1));
+
+  public isMd$: Observable<boolean> = this.breakpointObserver
+    .observe('(min-width: 768px) and (max-width: 991.98px)')
+    .pipe(map(result => result.matches), shareReplay(1));
+
+  public isLg$: Observable<boolean> = this.breakpointObserver
+    .observe('(min-width: 992px) and (max-width: 1199.98px)')
+    .pipe(map(result => result.matches), shareReplay(1));
+
+  public isXl$: Observable<boolean> = this.breakpointObserver
+    .observe('(min-width: 1200px) and (max-width: 1399.98px)')
+    .pipe(map(result => result.matches), shareReplay(1));
+
+  public isXxl$: Observable<boolean> = this.breakpointObserver
+    .observe('(min-width: 1400px)')
+    .pipe(map(result => result.matches), shareReplay(1));
+
+  // Utility breakpoints
+  public isMobileOrTablet$: Observable<boolean> = this.breakpointObserver
+    .observe('(max-width: 991.98px)')
+    .pipe(map(result => result.matches), shareReplay(1));
+
+  public isDesktopOrLarger$: Observable<boolean> = this.breakpointObserver
+    .observe('(min-width: 992px)')
+    .pipe(map(result => result.matches), shareReplay(1));
+
+  constructor() {
+    // Listen to route changes to update layout configuration
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        map(event => event as NavigationEnd)
+      )
+      .subscribe(event => {
+        this.updateLayoutForRoute(event.url);
+      });
+  }
+
+  // Layout control methods
+  setHeaderVisibility(show: boolean): void {
+    this.showHeaderSubject.next(show);
+    this.updateLayoutConfig({ showHeader: show });
+  }
+
+  setFooterVisibility(show: boolean): void {
+    this.showFooterSubject.next(show);
+    this.updateLayoutConfig({ showFooter: show });
+  }
+
+  setLayoutConfig(config: Partial<LayoutConfig>): void {
+    const currentConfig = this.layoutConfigSubject.value;
+    const newConfig = { ...currentConfig, ...config };
+    this.layoutConfigSubject.next(newConfig);
+    
+    // Update individual subjects
+    this.showHeaderSubject.next(newConfig.showHeader);
+    this.showFooterSubject.next(newConfig.showFooter);
+  }
+
+  private updateLayoutConfig(updates: Partial<LayoutConfig>): void {
+    const currentConfig = this.layoutConfigSubject.value;
+    const newConfig = { ...currentConfig, ...updates };
+    this.layoutConfigSubject.next(newConfig);
+  }
+
+  private updateLayoutForRoute(url: string): void {
+    // Define route-specific layout configurations
+    const routeConfigs: { [key: string]: Partial<LayoutConfig> } = {
+      '/': {
+        showHeader: true,
+        showFooter: true,
+        containerClass: 'container-fluid',
+        headerType: 'default'
+      },
+      '/login': {
+        showHeader: false,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'minimal'
+      },
+      '/forgot-password': {
+        showHeader: false,
+        showFooter: false,
+        containerClass: 'container-fluid'
+      },
+      '/landing': {
+        showHeader: true,
+        showFooter: true,
+        containerClass: 'container-fluid',
+        headerType: 'default'
+      },
+      '/home': {
+        showHeader: true,
+        showFooter: true,
+        containerClass: 'container',
+        headerType: 'default'
+      },
+      '/dashboard': {
+        showHeader: true,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'default'
+      }
+    };
+
+    // Find matching route configuration
+    const matchingRoute = Object.keys(routeConfigs).find(route => 
+      url.startsWith(route)
+    );
+
+    if (matchingRoute) {
+      this.setLayoutConfig(routeConfigs[matchingRoute]);
+    } else {
+      // Default configuration
+      this.setLayoutConfig({
+        showHeader: true,
+        showFooter: true,
+        containerClass: 'container',
+        headerType: 'default'
+      });
+    }
+  }
+
+  // Utility methods for responsive behavior
+  getCurrentBreakpoint(): Observable<string> {
+    return this.breakpointObserver
+      .observe([
+        '(max-width: 575.98px)',
+        '(min-width: 576px) and (max-width: 767.98px)',
+        '(min-width: 768px) and (max-width: 991.98px)',
+        '(min-width: 992px) and (max-width: 1199.98px)',
+        '(min-width: 1200px) and (max-width: 1399.98px)',
+        '(min-width: 1400px)'
+      ])
+      .pipe(
+        map(result => {
+          if (result.breakpoints['(max-width: 575.98px)']) return 'xs';
+          if (result.breakpoints['(min-width: 576px) and (max-width: 767.98px)']) return 'sm';
+          if (result.breakpoints['(min-width: 768px) and (max-width: 991.98px)']) return 'md';
+          if (result.breakpoints['(min-width: 992px) and (max-width: 1199.98px)']) return 'lg';
+          if (result.breakpoints['(min-width: 1200px) and (max-width: 1399.98px)']) return 'xl';
+          if (result.breakpoints['(min-width: 1400px)']) return 'xxl';
+          return 'unknown';
+        }),
+        shareReplay(1)
+      );
+  }
 }

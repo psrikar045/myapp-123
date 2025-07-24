@@ -2,16 +2,17 @@ import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToolbarService } from '../../shared/services/toolbar.service';
-import { HeaderComponent } from '../header/header.component';
+import { HeaderComponent } from '../../layout/header/header.component';
+import { FooterComponent } from '../../shared/footer/footer.component';
 import { BlogCard } from '../../shared/interfaces/blog-card.interface';
 import { BlogService } from '../../shared/services/blog.service';
 
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [CommonModule, HeaderComponent],
+  imports: [CommonModule, HeaderComponent, FooterComponent],
   templateUrl: './blog.component.html',
-  styleUrl: './blog.component.css'
+  styleUrl: './blog.component.scss'
 })
 export class BlogComponent implements OnInit {
   private toolbar = inject(ToolbarService);

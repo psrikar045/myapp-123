@@ -10,10 +10,10 @@ describe('GlobalErrorHandler', () => {
 
   beforeEach(() => {
     loggingServiceMock = {
-      error: jasmine.createSpy('error')
+      error: jest.fn()
     };
     spinnerServiceMock = {
-      hide: jasmine.createSpy('hide')
+      hide: jest.fn()
     };
     injectorMock = Injector.create({
       providers: [
@@ -32,6 +32,7 @@ describe('GlobalErrorHandler', () => {
     const error = new Error('Test error');
     handler.handleError(error);
     expect(spinnerServiceMock.hide).toHaveBeenCalled();
-    expect(loggingServiceMock.error).toHaveBeenCalledWith(jasmine.stringMatching(/Test error/), error.stack);
+    expect(loggingServiceMock.error).toHaveBeenCalledWith(expect.stringMatching(/Test error/), error.stack);
   });
 });
+

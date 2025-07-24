@@ -1,7 +1,8 @@
-<footer class="footer-container">
+<!-- Bootstrap Responsive Footer -->
+<footer class="footer bg-dark text-light py-5">
   <!-- Back to Top Button -->
   <button 
-    class="back-to-top-btn" 
+    class="btn btn-primary back-to-top-btn position-fixed" 
     [class.visible]="showBackToTop"
     (click)="scrollToTop()" 
     aria-label="Back to top"
@@ -9,59 +10,122 @@
     <i class="bi bi-arrow-up"></i>
   </button>
   
-  <div class="footer-content">
-    <!-- Column 1: Logo, description, socials, copyright -->
-    <div class="footer-section company-info">
-      <div class="footer-logo-row">
-        <img src="images/Footer_logo.png" alt="Logo" class="footer-logo-img" />
-        <!-- <span class="company-name">{{ companyName }}</span> -->
+  <div class="container">
+    <div class="row g-4">
+      
+      <!-- Company Info Column -->
+      <div class="col-lg-4 col-md-6 col-12">
+        <div class="footer-section">
+          <!-- Logo -->
+          <div class="mb-3">
+            <img src="images/Footer_logo.png" 
+                 alt="Company Logo" 
+                 class="footer-logo img-fluid"
+                 style="max-height: 50px;">
+          </div>
+          
+          <!-- Description -->
+          <p class="text-light mb-3" style="opacity: 0.8;">{{ companyDescription }}</p>
+          
+          <!-- Social Links -->
+          <div class="d-flex gap-2 mb-3">
+            <a *ngFor="let social of socialLinks" 
+               [href]="social.url" 
+               target="_blank" 
+               rel="noopener"
+               class="btn btn-outline-light btn-sm rounded-circle d-flex align-items-center justify-content-center"
+               style="width: 40px; height: 40px;">
+              <i [class]="social.iconClass"></i>
+            </a>
+          </div>
+          
+          <!-- Copyright -->
+          <p class="text-light small mb-0" style="opacity: 0.7;">{{ copyright }}</p>
+        </div>
       </div>
-      <div class="company-description">{{ companyDescription }}</div>
-      <div class="footer-socials-row">
-        <a *ngFor="let social of socialLinks" [href]="social.url" target="_blank" rel="noopener" class="footer-social-btn">
-          <i [class]="social.iconClass"></i>
-        </a>
+
+      <!-- Brand Categories Column -->
+      <div class="col-lg-3 col-md-6 col-12">
+        <div class="footer-section">
+          <h5 class="text-uppercase fw-bold mb-3">Top Brand Categories</h5>
+          <div class="row">
+            <div class="col-6">
+              <ul class="list-unstyled">
+                <li *ngFor="let cat of brandCategories.slice(0,6)" class="mb-2">
+                  <a [href]="'/all-categories?category=' + cat.route" 
+                     (click)="navigateToCategory(cat, $event)" 
+                     class="text-light text-decoration-none footer-link" style="opacity: 0.8;">
+                    {{ cat.name }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-6">
+              <ul class="list-unstyled">
+                <li *ngFor="let cat of brandCategories.slice(6)" class="mb-2">
+                  <a [href]="'/all-categories?category=' + cat.route" 
+                     (click)="navigateToCategory(cat, $event)" 
+                     class="text-light text-decoration-none footer-link" style="opacity: 0.8;">
+                    {{ cat.name }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="footer-copyright">{{ copyright }}</div>
-    </div>
 
-    <!-- Column 2: Top Brand Categories -->
-    <div class="footer-section footer-categories">
-      <div class="footer-title">TOP BRAND CATEGORIES</div>
-      <div class="footer-links-row">
-        <ul>
-          <li *ngFor="let cat of brandCategories.slice(0,6)">
-            <a [href]="'/all-categories?category=' + cat.route" (click)="navigateToCategory(cat, $event)" class="footer-link" style="cursor: pointer;">{{ cat.name }}</a>
-          </li>
-        </ul>
-        <ul>
-          <li *ngFor="let cat of brandCategories.slice(6)">
-            <a [href]="'/all-categories?category=' + cat.route" (click)="navigateToCategory(cat, $event)" class="footer-link" style="cursor: pointer;">{{ cat.name }}</a>
-          </li>
-        </ul>
+      <!-- For Developers Column -->
+      <div class="col-lg-2 col-md-6 col-12">
+        <div class="footer-section">
+          <h5 class="text-uppercase fw-bold mb-3">For Developers</h5>
+          <ul class="list-unstyled">
+            <li *ngFor="let link of developerLinks" class="mb-2">
+              <a *ngIf="link.route" 
+                 [routerLink]="link.route" 
+                 class="text-light text-decoration-none footer-link" style="opacity: 0.8;">
+                {{ link.label }}
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
 
-    <!-- Column 3: For Developers -->
-    <div class="footer-section footer-developers">
-      <div class="footer-title">FOR DEVELOPERS</div>
-      <ul>
-        <li *ngFor="let link of developerLinks">
-          <a *ngIf="link.route" [routerLink]="link.route" class="footer-link">{{ link.label }}</a>
-          <!-- <a *ngIf="link.url && !link.route" [href]="link.url" class="footer-link">{{ link.label }}</a> -->
-        </li>
-      </ul>
+      <!-- Company Column -->
+      <div class="col-lg-3 col-md-6 col-12">
+        <div class="footer-section">
+          <h5 class="text-uppercase fw-bold mb-3">Company</h5>
+          <ul class="list-unstyled">
+            <li *ngFor="let link of companyLinks" class="mb-2">
+              <a *ngIf="link.route" 
+                 [routerLink]="link.route" 
+                 class="text-light text-decoration-none footer-link" style="opacity: 0.8;">
+                {{ link.label }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
     </div>
-
-    <!-- Column 4: Company -->
-    <div class="footer-section footer-company">
-      <div class="footer-title">COMPANY</div>
-      <ul>
-        <li *ngFor="let link of companyLinks">
-          <a *ngIf="link.route" [routerLink]="link.route" class="footer-link">{{ link.label }}</a>
-          <!-- <a *ngIf="link.url && !link.route" [href]="link.url" class="footer-link">{{ link.label }}</a> -->
-        </li>
-      </ul>
+    
+    <!-- Bottom Border -->
+    <hr class="my-4 border-secondary">
+    
+    <!-- Bottom Row -->
+    <div class="row align-items-center">
+      <div class="col-md-6 col-12 text-center text-md-start">
+        <p class="text-light small mb-0" style="opacity: 0.7;">
+          © {{ currentYear }} {{ companyName }}. All rights reserved.
+        </p>
+      </div>
+      <div class="col-md-6 col-12 text-center text-md-end mt-2 mt-md-0">
+        <div class="d-flex justify-content-center justify-content-md-end gap-3">
+          <a href="#" class="text-light text-decoration-none small" style="opacity: 0.8;">Privacy Policy</a>
+          <a href="#" class="text-light text-decoration-none small" style="opacity: 0.8;">Terms of Service</a>
+          <a href="#" class="text-light text-decoration-none small" style="opacity: 0.8;">Cookie Policy</a>
+        </div>
+      </div>
     </div>
   </div>
 </footer>

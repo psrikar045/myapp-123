@@ -64,7 +64,7 @@ export class PermissionCheckDirective implements OnInit {
 
     // Super simple placeholder: just check if logged in for any permission request.
     // Replace with actual permission logic.
-    if (this.authService.isLoggedIn()) {
+    if (this.authService.isAuthenticated()) {
         // console.warn(`PermissionCheckDirective: Displaying element for permission(s) '${this.requiredPermission}'. Implement actual permission check.`);
         return true; // Allow if logged in, for placeholder purposes
     }

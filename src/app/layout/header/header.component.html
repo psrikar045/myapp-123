@@ -1,0 +1,101 @@
+<!-- Bootstrap Responsive Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top" 
+     [class.navbar-scrolled]="isScrolled"
+     [class.navbar-hidden]="!isVisible"
+     [attr.data-header-type]="headerType">
+  
+  <div class="container-fluid px-lg-5 px-md-4 px-3">
+    
+    <!-- Brand/Logo -->
+    <a class="navbar-brand" (click)="onLogoClick()" style="cursor: pointer;">
+      <img [src]="(logo$ | async)?.src" 
+           [alt]="(logo$ | async)?.alt" 
+           class="logo-img"
+           loading="lazy">
+    </a>
+
+    <!-- Mobile Menu Toggle Button -->
+    <button class="navbar-toggler" 
+            type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" 
+            aria-expanded="false" 
+            aria-label="Toggle navigation"
+            *ngIf="showNavigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigation Menu -->
+    <div class="collapse navbar-collapse" id="navbarNav" *ngIf="showNavigation">
+      
+      <!-- Main Navigation Links -->
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item" *ngFor="let item of navItems$ | async">
+          <a class="nav-link" 
+             (click)="onNavClick(item)"
+             [class.active]="isNavItemActive(item)"
+             role="button">
+            {{ item.label }}
+          </a>
+        </li>
+      </ul>
+
+      <!-- Action Buttons -->
+      <div class="navbar-nav ms-auto">
+        <ng-container *ngFor="let action of actions$ | async">
+          
+          <!-- Upgrade Button -->
+          <button *ngIf="action.type === 'upgrade'" 
+                  class="btn btn-outline-primary me-2 d-flex align-items-center" 
+                  (click)="onUpgradeClick()">
+            <i class="bi bi-star me-1"></i>
+            Upgrade
+          </button>
+
+          <!-- Profile Dropdown -->
+          <div *ngIf="action.type === 'profile'" class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" 
+               href="#" 
+               role="button" 
+               [matMenuTriggerFor]="profileMenu"
+               aria-expanded="false">
+              <img [src]="profileAvatarUrl" 
+                   alt="User Avatar" 
+                   class="profile-avatar me-2">
+              <span class="d-none d-lg-inline">Profile</span>
+            </a>
+            
+            <mat-menu #profileMenu="matMenu" class="profile-dropdown">
+              <button mat-menu-item (click)="goToProfile($event)" *ngIf="!currentRoute.startsWith('/my-profile')">
+                <mat-icon>person</mat-icon>
+                <span>My Profile</span>
+              </button>
+              <button mat-menu-item (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                <span>Logout</span>
+              </button>
+            </mat-menu>
+          </div>
+
+          <!-- Login Button -->
+          <button *ngIf="action.type === 'login'" 
+                  (click)="login()" 
+                  class="btn btn-outline-primary me-2 header-btn">
+            {{ action.label }}
+          </button>
+
+          <!-- Get Started Button -->
+          <button *ngIf="action.type === 'get-started'" 
+                  [routerLink]="['/login']" 
+                  [queryParams]="{ register: 'true' }" 
+                  class="btn btn-primary header-btn header-btn-primary d-flex align-items-center">
+            {{ action.label }}
+            <i class="bi bi-arrow-right ms-2"></i>
+          </button>
+          
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</nav>

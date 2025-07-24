@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 import { SpinnerService } from '../../services/spinner.service';
-// CommonModule and MatProgressSpinnerModule will be imported in CoreModule
 
 @Component({
   selector: 'app-spinner',
-  standalone: false, // Changed to false
-  // imports: [], // Removed for non-standalone
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './spinner.component.html',
-  styleUrls: ['./spinner.component.css'] // Changed to styleUrls
+  styleUrls: ['./spinner.component.css']
 })
 export class SpinnerComponent {
   isLoading$: Observable<boolean>;

@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { HeaderComponent } from '../header/header.component';
+import { HeaderComponent } from '../../layout/header/header.component';
 import { ToolbarService } from '../../shared/services/toolbar.service';
 
 @Component({
@@ -19,7 +19,7 @@ import { ToolbarService } from '../../shared/services/toolbar.service';
     HeaderComponent
   ],
   templateUrl: './home-page.component.html',
-  styleUrls: ['./home-page.component.css'],
+  styleUrls: ['./home-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePageComponent implements OnInit {

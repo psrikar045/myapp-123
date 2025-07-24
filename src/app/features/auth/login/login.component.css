@@ -11,7 +11,7 @@
   background-color: transparent; /* Handled by global styles or parent */
   padding: 1rem; /* Approx 14px. Was 1.25rem (20px) */
   box-sizing: border-box;
- font-family: "Inter", sans-serif;
+ font-family: var(--font-family-primary);
   transition: background-color 0.3s ease;
 }
 
@@ -236,6 +236,7 @@ mat-form-field {
   background-color: #f0f0f0;
   border-color: #999;
   transform: translateY(-0.1rem); /* Approx -1.4px. Was -0.125rem */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 .social-button mat-icon {
   font-size: 1.25rem; /* Approx 17.5px. Was 1.25rem then 1.5rem */
@@ -429,13 +430,58 @@ mat-form-field {
   background-color: #444;
 }
 
-/* Button animation styles */
+/* Enhanced Button Styles */
 .login-button, .register-button {
-  transition: transform 0.2s ease-in-out, background-color 0.3s ease;
+  font-family: var(--font-family-primary, 'Inter', sans-serif) !important;
+  font-weight: 600 !important;
+  border-radius: 0.5rem !important;
+  padding: 0.875rem 1.5rem !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.025em !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(74, 80, 224, 0.2) !important;
+}
+
+.login-button::before, .register-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.login-button:hover::before, .register-button:hover::before {
+  left: 100%;
+}
+
+.login-button:hover, .register-button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(74, 80, 224, 0.4) !important;
 }
 
 .login-button:active, .register-button:active {
-  transform: scale(0.98);
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 8px rgba(74, 80, 224, 0.3) !important;
+}
+
+.login-button:disabled, .register-button:disabled {
+  transform: none !important;
+  box-shadow: none !important;
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
+/* Loading spinner positioning */
+.button-spinner {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
 }
 
 /* Material Overrides - Kept as is, assuming necessary for theme */

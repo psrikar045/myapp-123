@@ -1,0 +1,30 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:4200",
+      "localStorage": [
+        {
+          "name": "theme",
+          "value": "light"
+        },
+        {
+          "name": "jwt_token",
+          "value": "eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOiI3ZjczNWQ0YS0yY2VhLTQxNDMtYTAyYi05YmE0MTBkNTc2YzQiLCJzdWIiOiJ0eWVkdWtvbmRhbHUiLCJpYXQiOjE3NTMyNjQwNjUsImV4cCI6MTc1MzMwMDA2NX0.kEVTkvntm-44YiRRdEAt7llo-6Flvv1c4VG3ml6_uSgIbTyH-Zu_Gs9gg1DLHSDv"
+        },
+        {
+          "name": "brand_id",
+          "value": "MRTFY000002"
+        },
+        {
+          "name": "user_details",
+          "value": "{\"id\":\"tyedukondalu\",\"userId\":\"MRTFY000002\",\"roles\":[],\"exp\":1753300065,\"iat\":1753264065,\"token\":\"eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOiI3ZjczNWQ0YS0yY2VhLTQxNDMtYTAyYi05YmE0MTBkNTc2YzQiLCJzdWIiOiJ0eWVkdWtvbmRhbHUiLCJpYXQiOjE3NTMyNjQwNjUsImV4cCI6MTc1MzMwMDA2NX0.kEVTkvntm-44YiRRdEAt7llo-6Flvv1c4VG3ml6_uSgIbTyH-Zu_Gs9gg1DLHSDv\"}"
+        },
+        {
+          "name": "refresh_token",
+          "value": "eyJhbGciOiJIUzM4NCJ9.eyJ1c2VySWQiOiI3ZjczNWQ0YS0yY2VhLTQxNDMtYTAyYi05YmE0MTBkNTc2YzQiLCJzdWIiOiJ0eWVkdWtvbmRhbHUiLCJpYXQiOjE3NTMyNjQwNjUsImV4cCI6MTc1Mzg2ODg2NX0.mOvGILo6DbAjAedOz7Y-freG2rhWuC5YcLEu0rDBbQGTiXvghuUda_i_i7u0p3Q8"
+        }
+      ]
+    }
+  ]
+}

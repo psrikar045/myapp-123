@@ -1,0 +1,475 @@
+/* ============================================================================
+   RESPONSIVE SEARCH VIEW STYLES
+   ============================================================================ */
+
+.search-view-container {
+  background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+  min-height: 100vh;
+  padding-top: 2rem;
+  
+  @media (max-width: 767.98px) {
+    padding-top: 1rem;
+  }
+}
+
+// Company Banner Card
+.company-banner-card {
+  border-radius: 1rem;
+  overflow: hidden;
+  
+  .banner-wrapper {
+    .banner-image {
+      transition: transform 0.3s ease;
+    }
+    
+    &:hover .banner-image {
+      transform: scale(1.02);
+    }
+    
+    .company-logo-wrapper {
+      .logo-circle {
+        transition: all 0.3s ease;
+        border: 3px solid #ffffff;
+        
+        &:hover {
+          transform: scale(1.1);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .company-logo {
+          transition: transform 0.3s ease;
+        }
+      }
+    }
+  }
+}
+
+// Brand Info Card
+.brand-info-card {
+  border-radius: 1rem;
+  
+  .brand-header {
+    .brand-name {
+      color: #1a1a1a;
+      line-height: 1.2;
+      
+      @media (max-width: 767.98px) {
+        font-size: 2rem;
+      }
+    }
+    
+    .badge {
+      font-size: 0.8rem;
+      padding: 0.5rem 1rem;
+    }
+  }
+  
+  .social-links {
+    a {
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}
+
+// Description Card
+.description-card {
+  border-radius: 1rem;
+  
+  .description-content {
+    .btn-link {
+      font-weight: 600;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+      
+      &.disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// Filter Card
+.filter-card {
+  border-radius: 1rem;
+  
+  .btn {
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-radius: 2rem;
+    padding: 0.5rem 1.5rem;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    &.active {
+      background-color: var(--bs-primary);
+      border-color: var(--bs-primary);
+      color: #ffffff;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(var(--bs-primary-rgb), 0.4);
+    }
+  }
+}
+
+// Logos Section Card
+.logos-section-card {
+  border-radius: 1rem;
+  
+  .logo-item {
+    transition: all 0.3s ease;
+    border-radius: 0.75rem;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .logo-image-wrapper {
+      img {
+        transition: transform 0.3s ease;
+      }
+    }
+    
+    &:hover .logo-image-wrapper img {
+      transform: scale(1.1);
+    }
+    
+    .logo-info {
+      h6 {
+        color: #1a1a1a;
+      }
+    }
+  }
+}
+
+// Colors Section Card
+.colors-section-card {
+  border-radius: 1rem;
+  
+  .color-swatch-card {
+    transition: all 0.3s ease;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    
+    .color-preview {
+      transition: transform 0.3s ease;
+    }
+    
+    &:hover .color-preview {
+      transform: scale(1.05);
+    }
+    
+    .card-body {
+      small {
+        &.fw-bold {
+          color: #1a1a1a;
+        }
+      }
+    }
+  }
+}
+
+// Empty State Styles
+.text-center {
+  i.display-1 {
+    opacity: 0.5;
+  }
+  
+  h5 {
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    margin-bottom: 0;
+  }
+}
+
+// Responsive Adjustments
+@media (max-width: 991.98px) {
+  .company-banner-card {
+    .banner-wrapper {
+      .company-logo-wrapper {
+        left: 1rem !important;
+        
+        .logo-circle {
+          width: 70px !important;
+          height: 70px !important;
+          
+          .company-logo {
+            max-width: 50px !important;
+            max-height: 50px !important;
+          }
+        }
+      }
+    }
+  }
+  
+  .brand-info-card {
+    .card-body {
+      padding-top: 2.5rem !important;
+    }
+    
+    .social-links {
+      justify-content: center !important;
+      margin-top: 1rem;
+    }
+  }
+}
+
+@media (max-width: 767.98px) {
+  .search-view-container {
+    .container-fluid {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+  
+  .company-banner-card {
+    .banner-wrapper {
+      .banner-image {
+        height: 150px !important;
+      }
+      
+      .company-logo-wrapper {
+        bottom: -25px !important;
+        left: 50% !important;
+        transform: translateX(-50%);
+        
+        .logo-circle {
+          width: 60px !important;
+          height: 60px !important;
+          
+          .company-logo {
+            max-width: 40px !important;
+            max-height: 40px !important;
+          }
+        }
+      }
+    }
+  }
+  
+  .brand-info-card {
+    .card-body {
+      text-align: center;
+      padding-top: 2rem !important;
+    }
+    
+    .brand-header {
+      .brand-name {
+        font-size: 1.75rem;
+      }
+    }
+    
+    .social-links {
+      justify-content: center !important;
+    }
+  }
+  
+  .filter-card {
+    .d-flex {
+      justify-content: center !important;
+    }
+    
+    .btn {
+      font-size: 0.9rem;
+      padding: 0.4rem 1rem;
+    }
+  }
+  
+  .logos-section-card,
+  .colors-section-card {
+    .card-body {
+      padding: 2rem 1rem !important;
+    }
+  }
+}
+
+@media (max-width: 575.98px) {
+  .company-banner-card {
+    .banner-wrapper {
+      .banner-image {
+        height: 120px !important;
+      }
+    }
+  }
+  
+  .brand-info-card {
+    .brand-header {
+      .brand-name {
+        font-size: 1.5rem;
+      }
+    }
+    
+    .social-links {
+      a {
+        width: 35px !important;
+        height: 35px !important;
+        
+        i {
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+  
+  .filter-card {
+    .btn {
+      font-size: 0.85rem;
+      padding: 0.35rem 0.8rem;
+    }
+  }
+  
+  .colors-section-card {
+    .color-swatch-card {
+      .color-preview {
+        height: 60px !important;
+      }
+    }
+  }
+}
+
+// Animation for cards
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.company-banner-card,
+.brand-info-card,
+.description-card,
+.filter-card,
+.logos-section-card,
+.colors-section-card {
+  animation: cardFadeIn 0.6s ease-out;
+}
+
+.brand-info-card { animation-delay: 0.1s; }
+.description-card { animation-delay: 0.2s; }
+.filter-card { animation-delay: 0.3s; }
+.logos-section-card { animation-delay: 0.4s; }
+.colors-section-card { animation-delay: 0.5s; }
+
+// Dark Theme Support
+[data-bs-theme="dark"] {
+  .search-view-container {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  }
+  
+  .company-banner-card,
+  .brand-info-card,
+  .description-card,
+  .filter-card,
+  .logos-section-card,
+  .colors-section-card {
+    background-color: #3a3a3a;
+    border-color: rgba(255, 255, 255, 0.1);
+    
+    .card-header {
+      background-color: #2d2d2d;
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .card-title,
+    .brand-name,
+    h3, h5, h6 {
+      color: #ffffff;
+    }
+    
+    .card-text,
+    p {
+      color: #b0b0b0;
+    }
+  }
+  
+  .logo-item,
+  .color-swatch-card {
+    background-color: #2d2d2d;
+    border-color: rgba(255, 255, 255, 0.1);
+    
+    .logo-info h6 {
+      color: #ffffff;
+    }
+    
+    small {
+      color: #b0b0b0;
+      
+      &.fw-bold {
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+// Print Styles
+@media print {
+  .search-view-container {
+    background: #ffffff !important;
+  }
+  
+  .company-banner-card,
+  .brand-info-card,
+  .description-card,
+  .filter-card,
+  .logos-section-card,
+  .colors-section-card {
+    background: #ffffff !important;
+    box-shadow: none !important;
+    border: 1px solid #000000;
+  }
+  
+  .btn {
+    display: none !important;
+  }
+  
+  .social-links {
+    display: none !important;
+  }
+}
+
+// Reduced Motion
+@media (prefers-reduced-motion: reduce) {
+  .company-banner-card,
+  .brand-info-card,
+  .description-card,
+  .filter-card,
+  .logos-section-card,
+  .colors-section-card,
+  .logo-item,
+  .color-swatch-card,
+  .btn,
+  .banner-image,
+  .company-logo,
+  .logo-circle {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .company-banner-card:hover .banner-image,
+  .logo-item:hover,
+  .color-swatch-card:hover,
+  .btn:hover {
+    transform: none !important;
+  }
+}

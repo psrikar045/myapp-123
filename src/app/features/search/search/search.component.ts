@@ -14,7 +14,7 @@ import { UtilService } from '../../../shared/services/util.service';
   standalone: true,
   imports: [CommonModule, FormsModule, SearchModalComponent],
   templateUrl: './search.component.html',
-  styleUrl: './search.component.css',
+  styleUrl: './search.component.scss',
   animations: [
     trigger('fadeInOut', [
       transition(':enter', [

@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, OnInit, Pipe, PipeTransform, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../header/header.component';
+import { HeaderComponent } from '../../layout/header/header.component';
 import { ToolbarService } from '../../shared/services/toolbar.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Subscription } from 'rxjs';

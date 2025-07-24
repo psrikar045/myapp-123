@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material/card';
@@ -10,6 +11,7 @@ import { ToolbarService } from '../../shared/services/toolbar.service';
 import { of } from 'rxjs';
 
 class MockAuthService {
+  isAuthenticated$ = of(true);
   logout() {}
 }
 
@@ -25,13 +27,12 @@ describe('HomePageComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
+        HttpClientTestingModule,RouterTestingModule,
         NoopAnimationsModule,
         MatCardModule,
         MatButtonModule,
         MatIconModule,
-        HomePageComponent
-      ],
+        HomePageComponent, HttpClientTestingModule],
       providers: [
         { provide: AuthService, useClass: MockAuthService },
         { provide: ToolbarService, useClass: MockToolbarService }
@@ -49,8 +50,10 @@ describe('HomePageComponent', () => {
   });
 
   it('should call authService.logout on onLogout', () => {
-    spyOn(authService, 'logout');
+    jest.spyOn(authService, 'logout');
     component.onLogout();
     expect(authService.logout).toHaveBeenCalled();
   });
 });
+
+

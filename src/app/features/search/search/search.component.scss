@@ -1,0 +1,414 @@
+/* ============================================================================
+   RESPONSIVE SEARCH PAGE STYLES
+   ============================================================================ */
+
+.search-page-container {
+  background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+  min-height: 100vh;
+  padding-top: 2rem;
+  
+  @media (max-width: 767.98px) {
+    padding-top: 1rem;
+  }
+}
+
+// Logo Styles
+.search-logo {
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+// Search Card Styles
+.search-card {
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .input-group {
+    .input-group-text {
+      border-radius: 0.5rem 0 0 0.5rem;
+      border-color: #e9ecef;
+      
+      i {
+        font-size: 1.1rem;
+      }
+    }
+    
+    .form-control {
+      border-radius: 0;
+      border-color: #e9ecef;
+      font-size: 1.1rem;
+      padding: 0.75rem 1rem;
+      
+      &:focus {
+        border-color: var(--bs-primary);
+        box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+      }
+      
+      &::placeholder {
+        color: #6c757d;
+        font-size: 1rem;
+      }
+    }
+    
+    .btn {
+      border-radius: 0 0.5rem 0.5rem 0;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      
+      &:disabled {
+        opacity: 0.7;
+      }
+      
+      i {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+// Recently Viewed Card Styles
+.recently-viewed-card {
+  border-radius: 1rem;
+  overflow: hidden;
+  
+  .card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  }
+  
+  .brand-item {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #f1f3f4 !important;
+    
+    &:last-child {
+      border-bottom: none !important;
+    }
+    
+    &:hover {
+      background-color: #f8f9fa !important;
+      transform: translateX(5px);
+    }
+    
+    .brand-icon-wrapper {
+      img, div {
+        transition: all 0.3s ease;
+      }
+    }
+    
+    &:hover .brand-icon-wrapper {
+      img, div {
+        transform: scale(1.1);
+      }
+    }
+    
+    .brand-details {
+      h6 {
+        color: #1a1a1a;
+        transition: color 0.3s ease;
+      }
+      
+      small {
+        font-size: 0.85rem;
+      }
+    }
+    
+    &:hover .brand-details h6 {
+      color: var(--bs-primary);
+    }
+    
+    .btn {
+      opacity: 0;
+      transition: all 0.3s ease;
+      transform: scale(0.9);
+    }
+    
+    &:hover .btn {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+// Hover Background Utility
+.hover-bg-light {
+  transition: background-color 0.3s ease;
+}
+
+// Loading States
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+// Responsive Adjustments
+@media (max-width: 991.98px) {
+  .search-card {
+    .input-group {
+      .form-control {
+        font-size: 1rem;
+      }
+      
+      .btn {
+        padding: 0.75rem 1rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 767.98px) {
+  .search-page-container {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+  
+  .search-card {
+    .card-body {
+      padding: 1.5rem !important;
+    }
+    
+    .input-group {
+      .form-control {
+        font-size: 0.95rem;
+        padding: 0.6rem 0.8rem;
+      }
+      
+      .btn {
+        padding: 0.6rem 1rem;
+        
+        i {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+  
+  .recently-viewed-card {
+    .brand-item {
+      padding: 1rem !important;
+      
+      .brand-icon-wrapper {
+        img, div {
+          width: 35px !important;
+          height: 35px !important;
+        }
+      }
+      
+      .brand-details {
+        h6 {
+          font-size: 0.95rem;
+        }
+        
+        small {
+          font-size: 0.8rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 575.98px) {
+  .search-logo {
+    max-height: 45px !important;
+  }
+  
+  .search-card {
+    .input-group {
+      flex-direction: column;
+      
+      .input-group-text {
+        border-radius: 0.5rem 0.5rem 0 0;
+        border-bottom: none;
+        justify-content: center;
+        padding: 0.5rem;
+      }
+      
+      .form-control {
+        border-radius: 0;
+        border-top: none;
+        border-bottom: none;
+        text-align: center;
+      }
+      
+      .btn {
+        border-radius: 0 0 0.5rem 0.5rem;
+        border-top: none;
+      }
+    }
+  }
+  
+  .recently-viewed-card {
+    .card-header {
+      .d-flex {
+        flex-direction: column;
+        gap: 0.5rem;
+        
+        h6 {
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+// Animation for brand items
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.brand-item {
+  animation: slideInUp 0.4s ease-out;
+  
+  &:nth-child(2) { animation-delay: 0.1s; }
+  &:nth-child(3) { animation-delay: 0.2s; }
+  &:nth-child(4) { animation-delay: 0.3s; }
+  &:nth-child(5) { animation-delay: 0.4s; }
+}
+
+// Dark Theme Support
+[data-bs-theme="dark"] {
+  .search-page-container {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  }
+  
+  .search-card,
+  .recently-viewed-card {
+    background-color: #3a3a3a;
+    border-color: rgba(255, 255, 255, 0.1);
+    
+    .card-header {
+      background: linear-gradient(135deg, #2d2d2d 0%, #3a3a3a 100%);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .input-group {
+      .input-group-text,
+      .form-control {
+        background-color: #2d2d2d;
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+      }
+      
+      .form-control::placeholder {
+        color: #b0b0b0;
+      }
+    }
+    
+    .brand-item {
+      border-color: rgba(255, 255, 255, 0.1) !important;
+      
+      &:hover {
+        background-color: #2d2d2d !important;
+      }
+      
+      .brand-details {
+        h6 {
+          color: #ffffff;
+        }
+        
+        small {
+          color: #b0b0b0;
+        }
+      }
+    }
+  }
+}
+
+// Print Styles
+@media print {
+  .search-page-container {
+    background: #ffffff !important;
+    
+    .btn {
+      display: none !important;
+    }
+    
+    .brand-item:hover {
+      background-color: transparent !important;
+      transform: none !important;
+    }
+  }
+}
+
+// Enhanced Search Button
+.search-btn-enhanced {
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-semibold);
+  border-radius: 0 0.5rem 0.5rem 0;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  min-width: 60px;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.4s;
+  }
+  
+  &:hover::before {
+    left: 100%;
+  }
+  
+  &:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(74, 80, 224, 0.4);
+  }
+  
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  i {
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover:not(:disabled) i {
+    transform: rotate(15deg) scale(1.1);
+  }
+}
+
+// Reduced Motion
+@media (prefers-reduced-motion: reduce) {
+  .search-card,
+  .brand-item,
+  .search-logo,
+  .brand-icon-wrapper img,
+  .brand-icon-wrapper div,
+  .search-btn-enhanced {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .search-card:hover,
+  .brand-item:hover,
+  .search-btn-enhanced:hover {
+    transform: none !important;
+  }
+}

@@ -12,7 +12,7 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ThemeService } from '../../../core/services/theme.service';
 import { LayoutService } from '../../../core/services/layout.service'; // Import LayoutService
 import { Router } from '@angular/router';
-import { HeaderComponent } from '../../header/header.component';
+import { HeaderComponent } from '../../../layout/header/header.component';
 import { ToolbarService } from '../../../shared/services/toolbar.service';
 @Component({
   selector: 'app-landing-page',
@@ -29,9 +29,65 @@ import { ToolbarService } from '../../../shared/services/toolbar.service';
     FormsModule // <-- Add FormsModule for ngModel
   ],
   templateUrl: './landing-page.component.html',
-  styleUrls: ['./landing-page.component.css']
+  styleUrls: ['./landing-page.component.scss']
 })
 export class LandingPageComponent implements OnInit, OnDestroy {
+  // Responsive data
+  features = [
+    {
+      icon: 'bi bi-lightning-charge',
+      title: 'Lightning Fast',
+      description: 'Get brand assets instantly with our optimized API endpoints and CDN delivery.'
+    },
+    {
+      icon: 'bi bi-shield-check',
+      title: 'Always Accurate',
+      description: 'Our AI-powered system ensures you get the most up-to-date brand information.'
+    },
+    {
+      icon: 'bi bi-code-slash',
+      title: 'Developer Friendly',
+      description: 'Simple REST API with comprehensive documentation and SDKs for popular languages.'
+    },
+    {
+      icon: 'bi bi-palette',
+      title: 'Rich Brand Data',
+      description: 'Access logos, colors, fonts, social links, and more for thousands of brands.'
+    },
+    {
+      icon: 'bi bi-graph-up',
+      title: 'Scalable',
+      description: 'From startup to enterprise, our infrastructure scales with your needs.'
+    },
+    {
+      icon: 'bi bi-headset',
+      title: '24/7 Support',
+      description: 'Get help when you need it with our dedicated developer support team.'
+    }
+  ];
+
+  stats = [
+    { number: '10K+', label: 'Brands Available' },
+    { number: '99.9%', label: 'Uptime SLA' },
+    { number: '50M+', label: 'API Calls/Month' },
+    { number: '1000+', label: 'Happy Developers' }
+  ];
+
+  // Event handlers for logo hover effects
+  onLogoHover(event: Event, isHover: boolean): void {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.style.opacity = isHover ? '1' : '0.7';
+    }
+  }
+
+  onOrbitLogoHover(event: Event, isHover: boolean): void {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.style.opacity = isHover ? '1' : '0.8';
+      target.style.transform = isHover ? 'scale(1.1)' : 'scale(1)';
+    }
+  }
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
   isDarkMode: boolean = false;
