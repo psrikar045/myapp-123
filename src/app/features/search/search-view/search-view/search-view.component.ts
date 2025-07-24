@@ -43,6 +43,9 @@ export class SearchViewComponent implements OnInit, OnDestroy {
     });
     this.isDarkMode = this.themeService.getIsDarkMode();
     const rawResult = this.utilService.searchResult;
+    
+    // Debug logging
+    console.log('Raw search result:', rawResult);
     // If coming from all-categories, map BrandDataResponse to expected structure
     if (rawResult && !rawResult.Company) {
       // Try to get logo from assets where assetType is 'logo', then images, then any asset
@@ -121,6 +124,31 @@ export class SearchViewComponent implements OnInit, OnDestroy {
     } else {
       this.searchResult = rawResult;
     }
+    
+    // Debug logging for mapped result
+    console.log('Mapped search result:', this.searchResult);
+    
+    // Handle case where no search result is available
+    if (!this.searchResult) {
+      console.warn('No search result available, redirecting to search page');
+      this.router.navigate(['/search']);
+      return;
+    }
+    
+    // Ensure minimum required data structure
+    if (!this.searchResult.Company) {
+      this.searchResult.Company = {
+        Name: 'Unknown Brand',
+        Description: 'No description available',
+        Industry: '',
+        Location: '',
+        Founded: '',
+        CompanyType: '',
+        Employees: '',
+        Website: ''
+      };
+    }
+    
     // Remove sessionStorage usage; just read the query param when needed
     // Check if description has more than 3 lines
     const desc = this.searchResult?.Company?.Description || '';
@@ -310,6 +338,18 @@ hasDisplayableImages(imagesArray: any[]): boolean {
     this.showBrandDetails = true;
   }
 
+  goBackToSearch() {
+    // Check where the user came from and navigate accordingly
+    this.route.queryParams.subscribe(params => {
+      const from = params['from'];
+      if (from === 'brands') {
+        this.router.navigate(['/all-categories']);
+      } else {
+        this.router.navigate(['/search']);
+      }
+    });
+  }
+
   setActiveTab(idx: number) {
     this.activeTab = idx;
   }
@@ -322,16 +362,21 @@ hasDisplayableImages(imagesArray: any[]): boolean {
     return this.activeFilter === 'All' || this.activeFilter === section;
   }
 
-  goBackToSearch() {
-    // Use query param to determine navigation source
-    const navSource = this.route.snapshot.queryParamMap.get('from');
-    if (navSource === 'brands') {
-      this.router.navigate(['/all-categories']);
-    } else {
-      this.router.navigate(['/search']);
+  // goBackToSearch() {
+  //   // Use query param to determine navigation source
+  //   const navSource = this.route.snapshot.queryParamMap.get('from');
+  //   if (navSource === 'brands') {
+  //     this.router.navigate(['/all-categories']);
+  //   } else {
+  //     this.router.navigate(['/search']);
+  //   }
+  // }
+  onImageError(event: any) {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.style.display = 'none';
     }
   }
-
   onViewMoreClick() {
     if (this.isAuthenticated) {
       this.toggleDescription();

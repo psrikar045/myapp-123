@@ -4,17 +4,32 @@
 <div class="search-view-container bg-light min-vh-100">
   <div class="container-fluid py-4">
     
-    <!-- Back Navigation -->
-    <div class="row mb-3">
+    <!-- Error/No Data Message -->
+    <div *ngIf="!searchResult" class="row">
       <div class="col-12">
-        <button class="btn btn-link text-primary p-0" 
-                (click)="goBackToSearch()" 
-                aria-label="Back to Search">
-          <i class="bi bi-arrow-left me-2"></i>
-          Back to Search
-        </button>
+        <div class="alert alert-warning text-center">
+          <h4><i class="bi bi-exclamation-triangle me-2"></i>No Brand Data Available</h4>
+          <p>Sorry, we couldn't find the brand information you're looking for.</p>
+          <button class="btn btn-primary" (click)="goBackToSearch()">
+            <i class="bi bi-arrow-left me-2"></i>Go Back
+          </button>
+        </div>
       </div>
     </div>
+    
+    <!-- Main Content - Only show when searchResult exists -->
+    <div *ngIf="searchResult">
+      <!-- Back Navigation -->
+      <div class="row mb-3">
+        <div class="col-12">
+          <button class="btn btn-link text-primary p-0" 
+                  (click)="goBackToSearch()" 
+                  aria-label="Back to Search">
+            <i class="bi bi-arrow-left me-2"></i>
+            Back to Search
+          </button>
+        </div>
+      </div>
     <!-- Company Banner Section -->
     <div class="row mb-4">
       <div class="col-12">
@@ -32,10 +47,19 @@
                  style="bottom: -30px; left: 2rem;">
               <div class="logo-circle bg-white rounded-circle p-2 shadow-sm d-flex align-items-center justify-content-center"
                    style="width: 80px; height: 80px;">
-                <img class="company-logo" 
-                     [src]="searchResult?.Logo?.Logo" 
-                     [alt]="searchResult?.Company?.Name + ' Logo'"
-                     style="max-width: 60px; max-height: 60px; object-fit: contain;">
+                <ng-container *ngIf="searchResult?.Logo?.Logo; else defaultLogo">
+                  <img class="company-logo" 
+                       [src]="searchResult.Logo.Logo" 
+                       [alt]="searchResult?.Company?.Name + ' Logo'"
+                       style="max-width: 60px; max-height: 60px; object-fit: contain;"
+                       (error)="onImageError($event)">
+                </ng-container>
+                <ng-template #defaultLogo>
+                  <div class="default-logo d-flex align-items-center justify-content-center"
+                       style="width: 60px; height: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; color: white; font-size: 24px; font-weight: bold;">
+                    {{ (searchResult?.Company?.Name || 'B').charAt(0).toUpperCase() }}
+                  </div>
+                </ng-template>
               </div>
             </div>
           </div>
@@ -296,7 +320,8 @@
         </div>
       </div>
     </div>
-
+    
+    </div> <!-- End of searchResult conditional -->
     
   </div>
 

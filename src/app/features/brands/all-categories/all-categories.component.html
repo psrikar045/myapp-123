@@ -24,8 +24,11 @@
       </button>
     </form>
     <div class="categories-main-layout">
-      <div *ngIf="isLoadingBrands">
-        <span class="loader"></span>
+      <div *ngIf="isLoadingBrands" class="loading-container">
+        <div class="loading-content">
+          <span class="loader"></span>
+          <p class="loading-text">Loading brands...</p>
+        </div>
       </div>
       <div class="categories-main-layout-content" *ngIf="!isLoadingBrands && filteredCategories.length > 0">
         <!-- Sidebar Accordion -->
