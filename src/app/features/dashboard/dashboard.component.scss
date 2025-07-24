@@ -7,8 +7,18 @@
   min-height: 100vh;
   padding-top: 2rem;
   
+  .container-fluid {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
   @media (max-width: 767.98px) {
     padding-top: 1rem;
+    
+    .container-fluid {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
   }
 }
 

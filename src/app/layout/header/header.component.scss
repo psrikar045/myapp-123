@@ -9,6 +9,20 @@
   background: transparent;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  z-index: 1050;
+  
+  .container-fluid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    @media (max-width: 991.98px) {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
   
   &.navbar-scrolled {
     background: rgba(255, 255, 255, 0.95) !important;

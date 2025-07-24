@@ -53,6 +53,7 @@ export class SearchComponent {
  searchDomainNameOrUrl = '';
  isLoading = false;
  errorMessage = '';
+ isSearchFocused = false;
  
  // Animation type selector - change this to switch between animations
  selectedAnimationType: 'default' | 'card-based' | 'minimalist' = 'card-based';
@@ -230,6 +231,14 @@ handleKeyDown(event:any){
   if (event.key === 'Enter') {
     this.findBrandInfo(event);
   }
+}
+
+onSearchFocus(): void {
+  this.isSearchFocused = true;
+}
+
+onSearchBlur(): void {
+  this.isSearchFocused = false;
 }
   async findBrandInfo(event: any) {
     event.preventDefault();

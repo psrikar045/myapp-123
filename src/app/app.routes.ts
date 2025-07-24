@@ -94,6 +94,7 @@ export const routes: Routes = [
   { path: 'search-view/:brand', redirectTo: '/search/view/:brand', pathMatch: 'full' },
   { path: 'search-api', redirectTo: '/search/api', pathMatch: 'full' },
   { path: 'blog-details/:id', redirectTo: '/blog/:id', pathMatch: 'full' },
+  { path: 'blog-details', redirectTo: '/blog', pathMatch: 'full' },
 
   // 5. Wildcard Route (Must be last!)
   {

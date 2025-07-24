@@ -8,24 +8,37 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparent; /* Handled by global styles or parent */
-  padding: 1rem; /* Approx 14px. Was 1.25rem (20px) */
+  background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+  padding: 1rem;
   box-sizing: border-box;
- font-family: var(--font-family-primary);
+  font-family: var(--font-family-primary);
   transition: background-color 0.3s ease;
+  
+  @media (max-width: 768px) {
+    padding: 0.5rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
 }
 
 .login-container {
   display: flex;
-  border: 1px solid #cccc;
-    border-radius: 20px;
-  flex-direction: column; /* Mobile first: stacked */
+  border: 1px solid #e9ecef;
+  border-radius: 1rem;
+  flex-direction: column;
   width: 100%;
-  max-width: 26.25rem; /* Approx 420px for the form panel itself on mobile */
-  background-color: transparent;
+  max-width: 28rem;
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  gap: 1.5rem; /* Approx 21px. Was 1.25rem (20px) then 5rem */
-  align-items: center; /* Center login-left when stacked */
+  gap: 0;
+  align-items: stretch;
+  
+  @media (max-width: 768px) {
+    max-width: 100%;
+    margin: 0 0.5rem;
+    border-radius: 0.75rem;
+  }
 }
 
 .login-left {

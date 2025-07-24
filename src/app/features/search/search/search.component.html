@@ -19,32 +19,44 @@
         <div class="search-card card border-0 shadow-sm">
           <div class="card-body p-4">
             
-            <!-- Search Input Group -->
-            <div class="input-group input-group-lg">
-              <span class="input-group-text bg-white border-end-0">
-                <i class="bi bi-search text-muted"></i>
-              </span>
-              <input type="text" 
-                     class="form-control border-start-0 ps-0" 
-                     [(ngModel)]="searchDomainNameOrUrl"
-                     (keydown)="handleKeyDown($event)"
-                     placeholder="Enter website URL or domain name"
-                     [disabled]="isLoading"
-                     aria-label="Search for brand information">
-              <button class="btn btn-primary px-4 search-btn-enhanced" 
-                      type="button"
-                      (click)="findBrandInfo($event)"
-                      [disabled]="isLoading"
-                      title="Search Brand">
-                
-                <!-- Loading Spinner -->
-                <div *ngIf="isLoading" class="spinner-border spinner-border-sm text-white" role="status">
-                  <span class="visually-hidden">Loading...</span>
+            <!-- Modern Search Input -->
+            <div class="modern-search-container">
+              <div class="search-input-wrapper" [class.focused]="isSearchFocused">
+                <div class="search-icon">
+                  <i class="bi bi-globe2"></i>
                 </div>
-                
-                <!-- Search Icon -->
-                <i *ngIf="!isLoading" class="bi bi-search"></i>
-              </button>
+                <input type="text" 
+                       class="search-input" 
+                       [(ngModel)]="searchDomainNameOrUrl"
+                       (keydown)="handleKeyDown($event)"
+                       (focus)="onSearchFocus()"
+                       (blur)="onSearchBlur()"
+                       placeholder="Enter website URL or domain name (e.g., example.com)"
+                       [disabled]="isLoading"
+                       aria-label="Search for brand information">
+                <button class="search-btn" 
+                        type="button"
+                        (click)="findBrandInfo($event)"
+                        [disabled]="isLoading || !searchDomainNameOrUrl.trim()"
+                        title="Search Brand">
+                  
+                  <!-- Loading Spinner -->
+                  <div *ngIf="isLoading" class="spinner-wrapper">
+                    <div class="custom-spinner"></div>
+                  </div>
+                  
+                  <!-- Search Icon -->
+                  <i *ngIf="!isLoading" class="bi bi-arrow-right"></i>
+                </button>
+              </div>
+              
+              <!-- Search Suggestions/Help Text -->
+              <div class="search-help-text mt-2">
+                <small class="text-muted">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Try: google.com, facebook.com, or any website domain
+                </small>
+              </div>
             </div>
             
           </div>

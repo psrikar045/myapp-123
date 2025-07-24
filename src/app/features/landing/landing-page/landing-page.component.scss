@@ -2,11 +2,34 @@
    RESPONSIVE LANDING PAGE STYLES
    ============================================================================ */
 
-// Hero Section
+// Enhanced Hero Section
 .hero-section {
   background: linear-gradient(135deg, #f8faff 0%, #fff6e5 100%);
-  min-height: 100vh;
+  min-height: calc(100vh - 72px); // Account for header height
   position: relative;
+  display: flex;
+  align-items: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  
+  .container-fluid {
+    position: relative;
+    z-index: 2;
+    
+    .row {
+      align-items: center;
+      min-height: calc(100vh - 144px); // Account for header and padding
+    }
+  }
+  
+  // Responsive adjustments for header height
+  @media (max-width: 767.98px) {
+    min-height: calc(100vh - 60px); // Smaller header on mobile
+    
+    .container-fluid .row {
+      min-height: calc(100vh - 120px);
+    }
+  }
   
   .hero-bg-elements {
     position: absolute;

@@ -34,17 +34,46 @@
     background: linear-gradient(90deg, var(--bs-primary), #6366f1, var(--bs-primary));
   }
   
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+  }
+  
+  .footer-section {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    h5 {
+      color: #ffffff;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 30px;
+        height: 2px;
+        background: var(--bs-primary);
+        border-radius: 1px;
+      }
+    }
+  }
+  
   .footer-logo {
     transition: all 0.3s ease;
     max-height: 50px;
-    // Dark background to make white logo text visible
     background: rgba(0, 0, 0, 0.3);
     padding: 10px 12px;
     border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: inline-block;
     
-    // Ensure logo is visible - no filters to preserve original colors
     img {
       filter: none;
       width: 100%;

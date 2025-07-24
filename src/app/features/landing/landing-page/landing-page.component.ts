@@ -12,7 +12,6 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ThemeService } from '../../../core/services/theme.service';
 import { LayoutService } from '../../../core/services/layout.service'; // Import LayoutService
 import { Router } from '@angular/router';
-import { HeaderComponent } from '../../../layout/header/header.component';
 import { ToolbarService } from '../../../shared/services/toolbar.service';
 @Component({
   selector: 'app-landing-page',
@@ -25,7 +24,6 @@ import { ToolbarService } from '../../../shared/services/toolbar.service';
     MatSidenavModule, // Add MatSidenavModule
     MatListModule,
     NgClass, NgIf, NgFor,    // Add MatListModule for nav items in sidenav
-    HeaderComponent, // <-- Add HeaderComponent here
     FormsModule // <-- Add FormsModule for ngModel
   ],
   templateUrl: './landing-page.component.html',
@@ -123,6 +121,14 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // Set layout configuration for landing page
+    this.layoutService.setLayoutConfig({
+      showHeader: true,
+      showFooter: true,
+      containerClass: 'container-fluid',
+      headerType: 'default'
+    });
+    
     this.toolbarService.setLoggedOutToolbar();
     this.themeSubscription = this.themeService.isDarkMode$.pipe(
       takeUntil(this.destroy$)

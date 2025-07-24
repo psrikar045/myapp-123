@@ -236,12 +236,18 @@
 
 .categories-main-layout {
   display: flex;
-  gap: 3rem; // Increased gap for better spacing
+  gap: 2rem; // Better balanced gap
   align-items: flex-start;
   margin-top: 2rem;
+  min-height: 60vh; // Ensure minimum height
+  
+  @media (max-width: 1200px) {
+    gap: 1.5rem;
+  }
   
   @media (max-width: 768px) {
-    gap: 1.5rem;
+    flex-direction: column;
+    gap: 1rem;
     margin-top: 1rem;
   }
 }
