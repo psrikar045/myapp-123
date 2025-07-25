@@ -31,6 +31,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 
 import { ThemeService } from '../../../core/services/theme.service';
 import { ToolbarService } from '../../../shared/services/toolbar.service';
+import { LayoutService } from '../../../core/services/layout.service';
 declare var google: any; // Declare google global variable
 // Custom Phone Number Validator
 function phoneNumberValidator(control: AbstractControl): ValidationErrors | null {
@@ -99,7 +100,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly validationService = inject(ValidationService);
   private readonly toolbarService = inject(ToolbarService);
   private readonly route = inject(ActivatedRoute);
-
+public layoutService = inject(LayoutService);
   // --- Form Definitions ---
   loginForm!: FormGroup<{
     identifier: FormControl<string>;
@@ -151,6 +152,12 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     // Initialize forms here
+     this.layoutService.setLayoutConfig({
+      showHeader: false,
+      showFooter: false,
+      containerClass: 'container-fluid',
+      headerType: 'default'
+    });
     this.loginForm = this.fb.group({
       identifier: this.fb.control('', [Validators.required, emailOrUsernameValidator()]),
       password: this.fb.control('', [Validators.required]),
