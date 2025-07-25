@@ -2,21 +2,23 @@
 // GLOBAL STYLES - BOOTSTRAP + CUSTOM INTEGRATION
 // ============================================================================
 
+// SASS modules must be imported first
+@use 'sass:map';
+
 // Import shared component styles
-@import 'app/shared/styles/tooltip.scss';
+@use 'app/shared/styles/tooltip.scss';
 
-// Custom Bootstrap Variable Overrides (before importing Bootstrap)
-$primary: #4A50E0;
-$secondary: #6c757d;
-$success: #4caf50;
-$info: #17a2b8;
-$warning: #ff9800;
-$danger: #f44336;
+// Import full Bootstrap using modern @use syntax with variable overrides
+@use 'bootstrap/scss/bootstrap' as * with (
+  $primary: #4A50E0,
+  $secondary: #6c757d,
+  $success: #4caf50,
+  $info: #17a2b8,
+  $warning: #ff9800,
+  $danger: #f44336
+);
 
-// Import full Bootstrap
-@import 'bootstrap/scss/bootstrap';
-
-// Import Bootstrap Icons
+// Import Bootstrap Icons (CSS files require @import)
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 
 // Import Google Fonts
@@ -660,7 +662,7 @@ body {
 }
 
 // Responsive spacing utilities
-@each $breakpoint in map-keys($grid-breakpoints) {
+@each $breakpoint in map.keys($grid-breakpoints) {
   @include media-breakpoint-up($breakpoint) {
     $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
     

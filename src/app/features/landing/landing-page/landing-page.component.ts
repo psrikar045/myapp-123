@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit, inject, PLATFORM_ID, Inject, ViewChild } from '@angular/core';
-import { isPlatformBrowser, CommonModule, NgClass, NgIf, NgFor, NgSwitch } from '@angular/common';
+import { isPlatformBrowser, CommonModule, NgIf, NgFor, NgSwitch } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,7 +23,7 @@ import { ToolbarService } from '../../../shared/services/toolbar.service';
     MatIconModule,
     MatSidenavModule, // Add MatSidenavModule
     MatListModule,
-    NgClass, NgIf, NgFor,    // Add MatListModule for nav items in sidenav
+    NgIf, NgFor,    // Add MatListModule for nav items in sidenav
     FormsModule // <-- Add FormsModule for ngModel
   ],
   templateUrl: './landing-page.component.html',

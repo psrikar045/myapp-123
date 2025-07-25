@@ -3,15 +3,14 @@ import { CommonModule } from '@angular/common';
 // Removed Angular Material dependencies - using Bootstrap instead
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { HeaderComponent } from '../../layout/header/header.component';
+
 import { ToolbarService } from '../../shared/services/toolbar.service';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
   imports: [
-    CommonModule,
-    HeaderComponent
+    CommonModule
   ],
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],

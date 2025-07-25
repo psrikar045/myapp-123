@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HeaderComponent } from '../../../layout/header/header.component';
-import { FooterComponent } from '../../../shared/footer/footer.component';
+
 import { AuthService } from '../../../core/services/auth.service';
 import { BrandDataResponse, BrandSearchFilters, BrandDataSummary } from '../../../shared/models/api.models';
 import { UtilService } from '../../../shared/services/util.service';
@@ -21,7 +21,7 @@ interface SubCategory {
 @Component({
   selector: 'app-all-categories',
   standalone: true,
-  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent],
+  imports: [CommonModule, FormsModule, HeaderComponent],
   templateUrl: './all-categories.component.html',
   styleUrl: './all-categories.component.scss'
 })

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, NgStyle } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../../../layout/header/header.component';
 import { MyPlanComponent } from '../../pricing/my-plan/my-plan.component';
 import { ChoosePlanComponent } from '../../pricing/choose-plan/choose-plan.component';
@@ -19,7 +19,6 @@ import { PhoneService } from '../../../shared/services/phone.service';
   imports: [
     CommonModule, 
     FormsModule, 
-    NgStyle, 
     HeaderComponent, 
     MyPlanComponent, 
     ChoosePlanComponent
