@@ -14,7 +14,7 @@ import { takeWhile, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
 import { AuthService } from '../../../core/services/auth.service';
-import { ThemeService } from '../../../core/services/theme.service';
+import { AppThemeService } from '../../../core/services/app-theme.service';
 import { ValidationService } from '../../../core/services/validation.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
@@ -122,7 +122,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly snackBar = inject(MatSnackBar);
   private readonly cdr = inject(ChangeDetectorRef);
-  public readonly themeService = inject(ThemeService); // Public if used in template
+  public readonly appThemeService = inject(AppThemeService); // Public if used in template
   private readonly validationService = inject(ValidationService);
   private readonly matIconRegistry = inject(MatIconRegistry);
   private readonly domSanitizer = inject(DomSanitizer);
@@ -176,11 +176,11 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     });
     this.updateCarouselImage();
 
-    this.themeSubscription = this.themeService.isDarkMode$.subscribe(isDark => {
+    this.themeSubscription = this.appThemeService.isDarkMode$.subscribe(isDark => {
       this.isDarkMode = isDark;
       this.cdr.markForCheck();
     });
-    this.isDarkMode = this.themeService.getIsDarkMode();
+    this.appThemeService.isDarkMode$.subscribe(isDark => this.isDarkMode = isDark);
 
     if (isPlatformBrowser(this.platformId)) {
       this.startCarousel();
@@ -705,7 +705,7 @@ userId: response?.userId,
 
   // For dark mode toggle, if used in template
   toggleDarkMode(): void {
-    this.themeService.toggleDarkMode();
+    this.appThemeService.toggleDarkMode();
   }
 
   private startCarousel(): void {

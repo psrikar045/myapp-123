@@ -3,11 +3,13 @@
    ============================================================================ */
 
 .search-page-container {
-  background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+  background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
   min-height: 100vh;
   padding-top: 2rem;
   display: flex;
   flex-direction: column;
+  color: var(--theme-text);
+  transition: var(--theme-animations);
   
   .container {
     flex: 1;

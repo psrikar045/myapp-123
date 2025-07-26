@@ -4,6 +4,9 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { LayoutService } from '../../core/services/layout.service';
+import { SidenavService } from '../services/sidenav.service';
+import { AppThemeService } from '../../core/services/app-theme.service';
+import { AppThemePanelService } from '../../shared/services/app-theme-panel.service';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 @Component({
@@ -28,6 +31,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   isLanding = false;
   isMobile$:any;
   
+  // Theme state
+  isDarkMode$: Observable<boolean>;
+  isAdvancedThemeEnabled$: Observable<boolean>;
+  currentTheme: any = 'light';
+  
+  // Theme features availability
+  themeFeatures$!: Observable<boolean>;
+  
   // Private properties
   private lastScrollY = 0;
   private showTimeout: any;
@@ -38,14 +49,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private avatarSubscription: Subscription | undefined;
   constructor(
     private toolbarService: ToolbarService,
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router,
     private layoutService: LayoutService,
+    public sidenavService: SidenavService,
+    private appThemeService: AppThemeService,
+    private appThemePanelService: AppThemePanelService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     this.logo$ = this.toolbarService.logo;
     this.navItems$ = this.toolbarService.navItems;
     this.actions$ = this.toolbarService.actions;
+    this.isDarkMode$ = this.appThemeService.isDarkMode$;
+    this.isAdvancedThemeEnabled$ = this.appThemeService.canAccessAdvancedFeatures$;
+    this.themeFeatures$ = this.appThemeService.canAccessAdvancedFeatures$;
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.currentRoute = event.urlAfterRedirects;
@@ -91,6 +108,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(config => {
         this.headerType = config.headerType;
+      });
+
+    // Subscribe to theme changes using isDarkMode$ for simplicity
+    this.appThemeService.isDarkMode$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(isDark => {
+        this.currentTheme = isDark ? 'dark' : 'light';
       });
 
     // Initialize responsive behavior
@@ -148,11 +172,31 @@ this.authService.checkAuthStatusAndNavigate();
   goToProfile(event: Event) {
     event.preventDefault();
     event.stopPropagation();
-    this.showProfileDropdown = false;
+    this.closeProfileDropdown();
     this.router.navigate(['/profile']);
   }
+  
+  closeProfileDropdown() {
+    this.showProfileDropdown = false;
+    // Force close Bootstrap dropdown
+    const dropdownElement = document.querySelector('.profile-dropdown');
+    if (dropdownElement) {
+      dropdownElement.classList.remove('show');
+    }
+    const dropdownToggle = document.querySelector('#profileDropdown');
+    if (dropdownToggle) {
+      dropdownToggle.setAttribute('aria-expanded', 'false');
+    }
+  }
   logout() {
+    // Close profile dropdown immediately
+    this.closeProfileDropdown();
+    
+    // Perform logout
     this.authService.logout();
+    
+    // Force immediate toolbar update
+    this.toolbarService.setLoggedOutToolbar();
   }
   
   onUpgradeClick() {
@@ -220,5 +264,23 @@ this.authService.checkAuthStatusAndNavigate();
 
   onGetStartedClick() {
     this.router.navigate(['/login'], { queryParams: { register: 'true' } });
+  }
+
+  toggleSidenav() {
+    this.sidenavService.toggleCollapsed();
+  }
+
+  toggleTheme() {
+    this.appThemeService.toggleDarkMode();
+  }
+
+  // Open unified theme panel (replaces both basic and advanced theme panels)
+  openThemePanel() {
+    this.appThemePanelService.open();
+  }
+
+  // Check if advanced theme features are available
+  get isAdvancedThemeAvailable(): boolean {
+    return this.appThemeService.canAccessAdvancedFeatures();
   }
 }

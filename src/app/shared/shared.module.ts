@@ -31,7 +31,7 @@ import { FilterPipe } from './pipes/filter.pipe';
 
 // Shared Services
 import { UtilService } from './services/util.service';
-import { ThemeUtilsService } from './services/theme-utils.service';
+
 import { ToolbarService } from './services/toolbar.service';
 import { SearchModalService } from './services/search-modal.service';
 import { SearchHistoryService } from './services/search-history.service';
@@ -110,7 +110,6 @@ import { ErrorHandlerService } from './services/error-handler.service';
   providers: [
     // Shared services
     UtilService,
-    ThemeUtilsService,
     ToolbarService,
     SearchModalService,
     SearchHistoryService,

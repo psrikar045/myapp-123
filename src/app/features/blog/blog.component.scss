@@ -3,13 +3,15 @@
    ============================================================================ */
 
 .blog-page-container {
-  background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+  background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
   min-height: 100vh;
+  color: var(--theme-text);
+  transition: var(--theme-animations);
 }
 
 // Enhanced Hero Section
 .blog-hero-section {
-  background: linear-gradient(135deg, var(--bs-primary) 0%, #6366f1 100%);
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
   position: relative;
   overflow: hidden;
   min-height: 60vh;

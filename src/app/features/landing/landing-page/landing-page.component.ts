@@ -9,10 +9,10 @@ import { MatListModule } from '@angular/material/list';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subject, Subscription, fromEvent, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { ThemeService } from '../../../core/services/theme.service';
 import { LayoutService } from '../../../core/services/layout.service'; // Import LayoutService
 import { Router } from '@angular/router';
 import { ToolbarService } from '../../../shared/services/toolbar.service';
+import { AppThemeService } from '../../../core/services/app-theme.service';
 @Component({
   selector: 'app-landing-page',
   standalone: true,
@@ -105,7 +105,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   private arrowForwardIconPath = 'icons/arrow_forward.svg'; // Ensure correct path
   private menuIconPath = 'icons/menu.svg'; // Ensure correct path for menu icon
 
-  private themeService = inject(ThemeService);
+  private appThemeService = inject(AppThemeService);
   private iconRegistry = inject(MatIconRegistry);
   private sanitizer = inject(DomSanitizer);
   private router = inject(Router);
@@ -130,11 +130,6 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     });
     
     this.toolbarService.setLoggedOutToolbar();
-    this.themeSubscription = this.themeService.isDarkMode$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(isDark => {
-      this.isDarkMode = isDark;
-    });
 
     if (isPlatformBrowser(this.platformId)) {
       this.checkScrollPosition();
@@ -213,7 +208,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   }
 
   toggleDarkMode(): void {
-    this.themeService.toggleDarkMode();
+    // this.themeService.toggleDarkMode();
   }
 
   navigateToLogin(): void {

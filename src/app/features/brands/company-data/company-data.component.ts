@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HeaderComponent } from '../../../layout/header/header.component';
-import { ThemeService } from '../../../core/services/theme.service';
+import { AppThemeService } from '../../../core/services/app-theme.service';
 import { ValidationService } from '../../../core/services/validation.service';
 import { SearchModalService, AnimationType } from '../../../shared/services/search-modal.service';
 import { SearchModalComponent } from '../../../shared/components/search-modal/search-modal.component';
@@ -12,7 +11,7 @@ import {NgxJsonViewerModule} from 'ngx-json-viewer';
 @Component({
   selector: 'app-company-data',
   standalone: true,
-  imports: [CommonModule, FormsModule, HeaderComponent, SearchModalComponent, NgxJsonViewerModule ],
+  imports: [CommonModule, FormsModule, SearchModalComponent, NgxJsonViewerModule ],
   templateUrl: './company-data.component.html',
   styleUrl: './company-data.component.css'
 })
@@ -31,16 +30,17 @@ export class CompanyDataComponent implements OnInit, OnDestroy {
   
   isDarkMode = false;
   private themeSubscription!: Subscription;
-  private readonly themeService = inject(ThemeService);
+  private readonly appThemeService = inject(AppThemeService);
   private readonly validationService = inject(ValidationService);
   private readonly searchModalService = inject(SearchModalService);
   private readonly authService = inject(AuthService);
 
   ngOnInit(): void {
-    this.themeSubscription = this.themeService.isDarkMode$.subscribe(isDark => {
+    this.themeSubscription = this.appThemeService.isDarkMode$.subscribe(isDark => {
       this.isDarkMode = isDark;
     });
-    this.isDarkMode = this.themeService.getIsDarkMode();
+    // Get initial dark mode state
+    this.appThemeService.isDarkMode$.subscribe(isDark => this.isDarkMode = isDark);
   }
 
   setActiveTab(idx: number) {
@@ -81,7 +81,7 @@ export class CompanyDataComponent implements OnInit, OnDestroy {
   onModalCancel(): void {
     this.searchModalService.hideModal();
     this.isLoading = false;
-    this.isDarkMode = this.themeService.getIsDarkMode();
+    this.appThemeService.isDarkMode$.subscribe(isDark => this.isDarkMode = isDark);
   }
 
   ngOnDestroy(): void {

@@ -29,7 +29,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
-import { ThemeService } from '../../../core/services/theme.service';
 import { ToolbarService } from '../../../shared/services/toolbar.service';
 import { LayoutService } from '../../../core/services/layout.service';
 declare var google: any; // Declare google global variable
@@ -92,7 +91,6 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly fb = inject(NonNullableFormBuilder); // Using NonNullableFormBuilder
   private readonly matIconRegistry = inject(MatIconRegistry);
   private readonly domSanitizer = inject(DomSanitizer);
-  public readonly themeService = inject(ThemeService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly authService = inject(AuthService); // <-- Inject AuthService
   private readonly router = inject(Router); // <-- Inject Router
@@ -183,11 +181,6 @@ public layoutService = inject(LayoutService);
       this.cdr.markForCheck();
     });
 
-    this.themeSubscription = this.themeService.isDarkMode$.subscribe(isDark => {
-      this.isDarkMode = isDark;
-      this.cdr.markForCheck();
-    });
-    this.isDarkMode = this.themeService.getIsDarkMode();
 
     this.route.queryParams.subscribe(params => {
       if (params['register'] === 'true') {
@@ -459,9 +452,6 @@ public layoutService = inject(LayoutService);
     this.cdr.markForCheck();
   }
 
-  toggleDarkMode(): void {
-    this.themeService.toggleDarkMode();
-  }
 
   // --- Carousel Logic (Original - adapt if needed) ---
   // If you want a continuously cycling carousel on the right, use this.

@@ -3,9 +3,11 @@
    ============================================================================ */
 
 .dashboard-page {
-  background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+  background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
   min-height: 100vh;
   padding-top: 2rem;
+  color: var(--theme-text);
+  transition: var(--theme-animations);
   
   .container-fluid {
     max-width: 1400px;
@@ -24,9 +26,10 @@
 
 // Welcome Card
 .welcome-card {
-  border-radius: 1rem;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  border-left: 4px solid var(--bs-primary);
+  border-radius: var(--theme-border-radius);
+  background: linear-gradient(135deg, var(--theme-surface) 0%, var(--theme-background) 100%);
+  border-left: 4px solid var(--theme-primary);
+  box-shadow: var(--theme-shadows);
   
   .dashboard-illustration {
     i {
@@ -41,9 +44,11 @@
 
 // Action Cards
 .action-card {
-  border-radius: 1rem;
-  transition: all 0.3s ease;
+  border-radius: var(--theme-border-radius);
+  transition: var(--theme-animations);
   cursor: pointer;
+  background: var(--theme-surface);
+  box-shadow: var(--theme-shadows);
   
   &:hover {
     transform: translateY(-5px);
@@ -236,7 +241,7 @@
 // Dark Theme Support
 [data-bs-theme="dark"] {
   .dashboard-page {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
   }
   
   .welcome-card {

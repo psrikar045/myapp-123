@@ -3,13 +3,15 @@
    ============================================================================ */
 
 .pricing-page-container {
-  background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+  background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
   min-height: 100vh;
+  color: var(--theme-text);
+  transition: var(--theme-animations);
 }
 
 // Hero Section
 .pricing-hero-section {
-  background: linear-gradient(135deg, var(--bs-primary) 0%, #6366f1 100%);
+  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
   position: relative;
   overflow: hidden;
   
@@ -107,16 +109,16 @@
   overflow: hidden;
   
   &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
   }
   
   &.border-primary {
     border: 2px solid var(--bs-primary) !important;
-    transform: scale(1.05);
+    transform: scale(1.02);
     
     &:hover {
-      transform: scale(1.05) translateY(-10px);
+      transform: scale(1.02) translateY(-5px);
     }
   }
   
@@ -490,45 +492,81 @@
 // Dark Theme Support
 [data-bs-theme="dark"] {
   .pricing-page-container {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
   }
   
   .billing-toggle-section {
-    background: #1a1a1a;
+    background: #0d1117;
   }
   
   .pricing-cards-section {
-    background: #1a1a1a;
+    background: #0d1117;
   }
   
   .faq-section {
-    background: #1a1a1a;
+    background: #0d1117;
   }
   
   .billing-toggle-card,
   .pricing-card,
   .faq-item-card {
-    background-color: #3a3a3a;
-    border-color: rgba(255, 255, 255, 0.1);
+    background-color: #21262d !important;
+    border-color: #30363d !important;
+    color: #e6edf3 !important;
     
     .card-header {
-      background-color: #2d2d2d;
-      border-color: rgba(255, 255, 255, 0.1);
+      background-color: #161b22 !important;
+      border-color: #30363d !important;
       
       &:hover {
-        background-color: #404040 !important;
+        background-color: #21262d !important;
       }
     }
     
     .plan-title,
     h6 {
-      color: #ffffff;
+      color: #e6edf3 !important;
     }
     
     .plan-description,
     .text-muted,
     p {
-      color: #b0b0b0 !important;
+      color: #8b949e !important;
+    }
+    
+    .plan-price {
+      color: #e6edf3 !important;
+      
+      &.text-primary {
+        color: var(--bs-primary) !important;
+      }
+    }
+    
+    .plan-period {
+      color: #8b949e !important;
+    }
+    
+    .billing-option {
+      color: #e6edf3 !important;
+      
+      &.text-muted {
+        color: #8b949e !important;
+      }
+      
+      &.text-primary {
+        color: var(--bs-primary) !important;
+      }
+    }
+  }
+  
+  .pricing-hero-section,
+  .cta-section {
+    h1, h2 {
+      color: #ffffff !important;
+    }
+    
+    .lead, p {
+      color: rgba(255, 255, 255, 0.9) !important;
     }
   }
 }

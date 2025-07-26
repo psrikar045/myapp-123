@@ -2,14 +2,39 @@
    RESPONSIVE BOOTSTRAP NAVBAR STYLES
    ============================================================================ */
 
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+
 .navbar {
   min-height: 72px;
   padding: 0;
   transition: all 0.3s ease;
-  background: transparent;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  z-index: 1050;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 1030;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.08);
+  
+  // Adjust header position based on sidenav state
+  &.with-sidenav-expanded {
+    @include media-breakpoint-up(lg) {
+      left: 280px !important; // Start after expanded sidenav
+      width: calc(100% - 280px) !important;
+    }
+  }
+  
+  &.with-sidenav-collapsed {
+    @include media-breakpoint-up(lg) {
+      left: 70px !important; // Start after collapsed sidenav
+      width: calc(100% - 70px) !important;
+    }
+  }
   
   .container-fluid {
     max-width: 1400px;
@@ -29,6 +54,32 @@
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    
+    // Dark theme scrolled state
+    [data-bs-theme="dark"] & {
+      background: rgba(13, 17, 23, 0.95) !important;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+      
+      .navbar-nav .nav-link {
+        color: rgba(230, 237, 243, 0.9) !important;
+        
+        &:hover, &.active {
+          color: var(--bs-primary) !important;
+        }
+      }
+      
+      .navbar-brand {
+        color: #e6edf3 !important;
+      }
+      
+      .btn-link {
+        color: #e6edf3 !important;
+        
+        &:hover {
+          color: var(--bs-primary) !important;
+        }
+      }
+    }
   }
   
   &.navbar-hidden {
@@ -308,6 +359,95 @@
 }
 
 /* ============================================================================
+   THEME & SETTINGS BUTTON
+   ============================================================================ */
+
+.theme-settings-btn {
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0.5rem;
+  color: var(--bs-body-color);
+  background: transparent;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  position: relative;
+  
+  &:hover {
+    background: rgba(var(--bs-primary-rgb), 0.1);
+    color: var(--bs-primary);
+    transform: scale(1.05);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+  }
+  
+  i {
+    font-size: 1.2rem;
+  }
+  
+  .theme-indicator {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: var(--bs-primary);
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+}
+
+/* ============================================================================
+   SIDENAV TOGGLE BUTTON
+   ============================================================================ */
+
+.sidenav-toggle-btn {
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0.375rem;
+  color: var(--bs-body-color);
+  background: transparent;
+  border-radius: 0.375rem;
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--bs-primary);
+  }
+  
+  &:focus {
+    outline: 2px solid var(--bs-primary);
+    outline-offset: 2px;
+  }
+  
+  i {
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  // Dark theme support
+  [data-bs-theme="dark"] & {
+    color: var(--bs-light);
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--bs-primary);
+    }
+  }
+}
+
+/* ============================================================================
    RESPONSIVE UTILITIES
    ============================================================================ */
 
@@ -464,35 +604,77 @@
    DARK THEME SUPPORT
    ============================================================================ */
 
-[data-bs-theme="dark"] {
-  .navbar {
-    &.navbar-scrolled {
-      background: rgba(18, 18, 18, 0.95) !important;
-    }
+// Dark theme styles - using multiple selectors for maximum compatibility
+[data-bs-theme="dark"] .navbar,
+.navbar[data-bs-theme="dark"],
+.navbar.navbar-dark {
+  background: rgba(18, 18, 18, 0.95) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+  color: #f8fafc !important;
     
-    &[data-header-type="default"] {
-      background: rgba(18, 18, 18, 0.95);
-    }
-    
-    &[data-header-type="minimal"] {
-      background: #1e1e1e;
-    }
+  &.navbar-scrolled {
+    background: rgba(18, 18, 18, 0.98) !important;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
   }
   
+  &[data-header-type="default"] {
+    background: rgba(18, 18, 18, 0.95) !important;
+  }
+  
+  &[data-header-type="minimal"] {
+    background: #1e1e1e !important;
+  }
+  
+  &[data-header-type="transparent"] {
+    background: rgba(18, 18, 18, 0.8) !important;
+  }
+}
+
+[data-bs-theme="dark"],
+.navbar[data-bs-theme="dark"],
+.navbar.navbar-dark {
+  
   .navbar-nav .nav-link {
-    color: #e0e0e0;
+    color: #f8fafc !important;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
     
     &:hover {
-      color: #8c9eff;
-      background-color: rgba(140, 158, 255, 0.1);
+      color: #8c9eff !important;
+      background-color: rgba(140, 158, 255, 0.15);
+      transform: translateY(-1px);
     }
     
     &.active {
-      color: #8c9eff;
+      color: #8c9eff !important;
+      font-weight: 600;
       
       &::after {
         background: #8c9eff;
       }
+    }
+  }
+  
+  // Ensure all text elements are visible in dark mode
+  .navbar-brand,
+  .nav-link,
+  .btn,
+  .dropdown-toggle {
+    color: #f8fafc !important;
+  }
+  
+  // Profile dropdown text
+  .dropdown-toggle span {
+    color: #f8fafc !important;
+  }
+  
+  .navbar-brand {
+    color: #ffffff !important;
+    
+    .logo-img {
+      // Apply filter to make logo text visible in dark mode while preserving icon colors
+      filter: brightness(0) saturate(100%) invert(85%) sepia(8%) saturate(200%) hue-rotate(176deg) brightness(102%) contrast(97%) !important;
     }
   }
   
@@ -504,7 +686,85 @@
   }
   
   .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28224, 224, 224, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28248, 250, 252, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  }
+  
+  .profile-dropdown {
+    background: #2d2d2d !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    
+    .dropdown-item {
+      color: #f8fafc !important;
+      background: transparent !important;
+      
+      i {
+        color: #9ca3af !important;
+      }
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.1) !important;
+        color: #8c9eff !important;
+        
+        i {
+          color: #8c9eff !important;
+        }
+      }
+      
+      &:active,
+      &:focus {
+        background: rgba(255, 255, 255, 0.15) !important;
+        color: #8c9eff !important;
+        outline: none;
+      }
+    }
+    
+    .dropdown-item + .dropdown-item {
+      border-top-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+  
+  .btn-primary,
+  .header-btn-primary {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+    border-color: transparent !important;
+    
+    &:hover {
+      background: linear-gradient(135deg, #5b5fc7 0%, #7c3aed 100%) !important;
+    }
+  }
+  
+  .btn-outline-primary {
+    border-color: #8c9eff !important;
+    color: #8c9eff !important;
+    
+    &:hover {
+      background: #8c9eff !important;
+      color: #1e1e1e !important;
+    }
+  }
+  
+  // Force visibility for all interactive elements
+  .theme-settings-btn,
+  .sidenav-toggle-btn {
+    color: #f8fafc !important;
+    
+    &:hover {
+      color: #8c9eff !important;
+    }
+  }
+  
+  // Ensure button text is visible
+  .btn {
+    color: #f8fafc !important;
+    
+    &.btn-primary {
+      color: #ffffff !important;
+    }
+    
+    &.btn-outline-primary {
+      color: #8c9eff !important;
+    }
   }
 }
 
@@ -548,6 +808,61 @@
 @media print {
   .navbar {
     display: none !important;
+  }
+}
+
+/* ============================================================================
+   DIRECT DARK MODE STYLES FOR NAVBAR
+   ============================================================================ */
+
+// Direct navbar dark mode styles
+.navbar[data-bs-theme="dark"],
+.navbar.navbar-dark {
+  background: rgba(18, 18, 18, 0.95) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4) !important;
+  
+  .navbar-nav .nav-link {
+    color: #f8fafc !important;
+    
+    &:hover {
+      color: #8c9eff !important;
+      background-color: rgba(140, 158, 255, 0.15) !important;
+    }
+    
+    &.active {
+      color: #8c9eff !important;
+    }
+  }
+  
+  .navbar-brand {
+    color: #ffffff !important;
+  }
+  
+  .btn {
+    color: #f8fafc !important;
+    
+    &.btn-primary {
+      color: #ffffff !important;
+    }
+    
+    &.btn-outline-primary {
+      color: #8c9eff !important;
+      border-color: #8c9eff !important;
+    }
+  }
+  
+  .theme-settings-btn,
+  .sidenav-toggle-btn {
+    color: #f8fafc !important;
+    
+    &:hover {
+      color: #8c9eff !important;
+    }
+  }
+  
+  .dropdown-toggle span {
+    color: #f8fafc !important;
   }
 }
 
@@ -635,5 +950,438 @@
     margin: 0.25rem 0;
     justify-content: center;
     padding: 0.75rem 1.5rem;
+  }
+}
+
+/* ============================================================================
+   THEME TOGGLE BUTTON STYLES
+   ============================================================================ */
+
+.theme-toggle-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: rgba(74, 80, 224, 0.1);
+  color: #4A50E0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    background: rgba(74, 80, 224, 0.2);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(74, 80, 224, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:focus {
+    outline: 2px solid #4A50E0;
+    outline-offset: 2px;
+  }
+
+  i {
+    font-size: 1.125rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  // Dark mode styles
+  [data-bs-theme="dark"] & {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+    }
+
+    &:focus {
+      outline-color: #ffffff;
+    }
+  }
+
+  // Animation for icon change
+  .bi-sun-fill,
+  .bi-moon-fill {
+    animation: iconFadeIn 0.3s ease-in-out;
+  }
+}
+
+@keyframes iconFadeIn {
+  0% {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+// Responsive adjustments for theme toggle
+@media (max-width: 991.98px) {
+  .theme-toggle-btn {
+    width: 44px;
+    height: 44px;
+    margin: 0.25rem;
+  }
+}
+
+/* ============================================================================
+   SETTINGS TOGGLE BUTTON STYLES
+   ============================================================================ */
+
+.settings-toggle-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: rgba(74, 80, 224, 0.1);
+  color: #4A50E0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    background: rgba(74, 80, 224, 0.2);
+    transform: scale(1.05) rotate(90deg);
+    box-shadow: 0 4px 12px rgba(74, 80, 224, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.95) rotate(90deg);
+  }
+
+  &:focus {
+    outline: 2px solid #4A50E0;
+    outline-offset: 2px;
+  }
+
+  i {
+    font-size: 1.125rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  // Dark mode styles
+  [data-bs-theme="dark"] & {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+    }
+
+    &:focus {
+      outline-color: #ffffff;
+    }
+  }
+}
+
+// Responsive adjustments for settings toggle
+@media (max-width: 991.98px) {
+  .settings-toggle-btn {
+    width: 44px;
+    height: 44px;
+    margin: 0.25rem;
+  }
+}
+
+/* ============================================================================
+   UNIFIED THEME TOGGLE BUTTON STYLES
+   ============================================================================ */
+
+.unified-theme-toggle-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: linear-gradient(135deg, rgba(74, 80, 224, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+  color: #4A50E0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    background: linear-gradient(135deg, rgba(74, 80, 224, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(74, 80, 224, 0.3);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:focus {
+    outline: 2px solid #4A50E0;
+    outline-offset: 2px;
+  }
+
+  i {
+    font-size: 1.125rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .theme-indicator {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    animation: pulse 2s infinite;
+
+    i {
+      font-size: 0.6rem;
+      color: #b45309;
+    }
+  }
+
+  // Dark mode styles
+  [data-bs-theme="dark"] & {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%);
+    color: #c4b5fd;
+
+    &:hover {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(99, 102, 241, 0.25) 100%);
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+    }
+
+    &:focus {
+      outline-color: #c4b5fd;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+}
+
+// Responsive adjustments for unified theme toggle
+@media (max-width: 991.98px) {
+  .unified-theme-toggle-btn {
+    width: 44px;
+    height: 44px;
+    margin: 0.25rem;
+  }
+}
+
+/* ============================================================================
+   ADVANCED THEME TOGGLE BUTTON STYLES (LEGACY - KEEP FOR COMPATIBILITY)
+   ============================================================================ */
+
+.advanced-theme-toggle-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(99, 102, 241, 0.1) 100%);
+  color: #8b5cf6;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(139, 92, 246, 0.3);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:focus {
+    outline: 2px solid #8b5cf6;
+    outline-offset: 2px;
+  }
+
+  i {
+    font-size: 1.125rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  // Animated gradient background
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, #8b5cf6, #6366f1, #3b82f6, #8b5cf6);
+    background-size: 300% 300%;
+    opacity: 0;
+    border-radius: 50%;
+    transition: opacity 0.3s ease;
+    animation: gradientShift 3s ease infinite;
+  }
+
+  &:hover::before {
+    opacity: 0.1;
+  }
+
+  // Dark mode styles
+  [data-bs-theme="dark"] & {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%);
+    color: #c4b5fd;
+
+    &:hover {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.25) 0%, rgba(99, 102, 241, 0.25) 100%);
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+    }
+
+    &:focus {
+      outline-color: #c4b5fd;
+    }
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+// Responsive adjustments for advanced theme toggle
+@media (max-width: 991.98px) {
+  .advanced-theme-toggle-btn {
+    width: 44px;
+    height: 44px;
+    margin: 0.25rem;
+  }
+}
+
+/* ============================================================================
+   COMPREHENSIVE DARK MODE SUPPORT
+   ============================================================================ */
+
+[data-bs-theme="dark"] {
+  .navbar {
+    background: rgba(13, 17, 23, 0.8) !important;
+    
+    &.navbar-scrolled {
+      background: rgba(13, 17, 23, 0.95) !important;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    .navbar-brand {
+      color: #e6edf3 !important;
+      
+      &:hover {
+        color: var(--theme-primary) !important;
+      }
+    }
+    
+    .navbar-nav {
+      .nav-link {
+        color: rgba(230, 237, 243, 0.8) !important;
+        
+        &:hover,
+        &:focus,
+        &.active {
+          color: var(--theme-primary) !important;
+        }
+      }
+    }
+    
+    .navbar-toggler {
+      border-color: #30363d;
+      
+      &:focus {
+        box-shadow: 0 0 0 0.25rem rgba(74, 80, 224, 0.25);
+      }
+      
+      .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28230, 237, 243, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+      }
+    }
+    
+    // Header buttons dark mode
+    .header-btn {
+      color: #e6edf3;
+      border-color: #30363d;
+      
+      &:hover {
+        background-color: #21262d;
+        border-color: var(--theme-primary);
+        color: var(--theme-primary);
+      }
+      
+      &.btn-primary {
+        background-color: var(--theme-primary);
+        border-color: var(--theme-primary);
+        color: white;
+        
+        &:hover {
+          background-color: color-mix(in srgb, var(--theme-primary) 85%, black);
+          border-color: color-mix(in srgb, var(--theme-primary) 85%, black);
+        }
+      }
+    }
+    
+    // Profile dropdown dark mode
+    .profile-dropdown {
+      background-color: #21262d;
+      border-color: #30363d;
+      
+      .dropdown-item {
+        color: #e6edf3;
+        
+        &:hover,
+        &:focus {
+          background-color: #30363d;
+          color: #e6edf3;
+        }
+      }
+    }
+    
+    .profile-avatar {
+      border-color: #30363d;
+    }
+    
+    // Theme toggle buttons dark mode
+    .theme-toggle-btn,
+    .settings-toggle-btn {
+      color: #8b949e;
+      
+      &:hover {
+        color: var(--theme-primary);
+        background-color: rgba(139, 92, 246, 0.1);
+      }
+    }
   }
 }

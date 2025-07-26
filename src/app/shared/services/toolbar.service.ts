@@ -29,7 +29,7 @@ export class ToolbarService {
   private currentRoute: string = '';
   private isAuthPage: boolean = false;
   private logo$ = new BehaviorSubject<ToolbarLogo>({
-    src: 'images/logo.svg',
+    src: 'assets/images/logo.svg',
     alt: 'Marketify Logo',
     link: '/'
   });
@@ -63,20 +63,19 @@ export class ToolbarService {
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: NavigationEnd) => {
       this.currentRoute = event.urlAfterRedirects;
-      this.isAuthPage = this.currentRoute.includes('/login') || 
+      this.isAuthPage = this.currentRoute.includes('/auth/login') || 
+                       this.currentRoute.includes('/auth/signup') || 
+                       this.currentRoute.includes('/auth/reset-password') ||
+                       this.currentRoute.includes('/login') || 
                        this.currentRoute.includes('/signup') || 
                        this.currentRoute.includes('/reset-password');
       
-      // Update toolbar when route changes
-      this.setLoggedOutToolbar();
+      console.log('Route changed:', this.currentRoute, 'isAuthPage:', this.isAuthPage);
     });
-    
-    // Initial setup
-    this.setLoggedOutToolbar();
   }
   setProfileHeaderOnly() {
      this.logo$.next({
-      src: 'images/logo.svg',
+      src: 'assets/images/logo.svg',
       alt: '',
       link: '/'
     });
@@ -94,33 +93,33 @@ export class ToolbarService {
   }
 
   setLoggedInToolbar(): void {
+    console.log('Setting logged in toolbar');
     this.logo$.next({
-      src: 'images/logo.svg',
-      alt: '',
+      src: 'assets/images/logo.svg',
+      alt: 'Marketify Logo',
       link: '/home'
     });
+    // Remove Pricing and Blog from logged-in header
     this.navItems$.next([
       { label: 'Home', route: '/home', scrollId: '' },
-      { label: 'Brands', route: '/all-categories', scrollId: '' },
-      { label: 'Brand API', route: '/brandApi', scrollId: '' },
-      { label: 'Developers', route: '/developer', scrollId: '' },
-      // { label: 'Logo link', route: '/logo-link', scrollId: '' },
-      // { label: 'Search API', route: '/search-api', scrollId: '' }
+      { label: 'Brands', route: '/brands/categories', scrollId: '' },
+      { label: 'Developers', route: '/developer', scrollId: '' }
     ]);
     this.actions$.next([
       { type: 'upgrade', label: 'Upgrade'  },
-      { type: 'profile', label: 'Profile', route: '/my-profile' }
+      { type: 'profile', label: 'Profile', route: '/profile' }
     ]);
   }
 
   setLoggedOutToolbar(): void {
+    console.log('Setting logged out toolbar, isAuthPage:', this.isAuthPage);
     this.logo$.next({
-      src: 'images/logo.svg',
-      alt: '',
-      link: '/'
+      src: 'assets/images/logo.svg',
+      alt: 'Marketify Logo',
+      link: '/landing'
     });
     this.navItems$.next([
-      { label: 'Brands', route: '/all-categories', scrollId: '' },
+      { label: 'Brands', route: '/brands/categories', scrollId: '' },
       { label: 'Developers', route: '/developer', scrollId: '' },
       { label: 'Pricing', route: '/pricing', scrollId: '' },
       { label: 'Blog', route: '/blog', scrollId: '' }
@@ -131,8 +130,8 @@ export class ToolbarService {
       this.actions$.next([]);
     } else {
       this.actions$.next([
-        { type: 'login', label: 'Login', route: '/login' },
-        { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.svg', route: '' }
+        { type: 'login', label: 'Login', route: '/auth/login' },
+        { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.svg', route: '/auth/login' }
       ]);
     }
   }

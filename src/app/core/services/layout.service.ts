@@ -137,7 +137,10 @@ export class LayoutService {
         map(event => event as NavigationEnd)
       )
       .subscribe(event => {
-        this.updateLayoutForRoute(event.url);
+        // Use setTimeout to defer layout updates to avoid ExpressionChangedAfterItHasBeenCheckedError
+        setTimeout(() => {
+          this.updateLayoutForRoute(event.url);
+        });
       });
   }
 
@@ -169,6 +172,8 @@ export class LayoutService {
   }
 
   private updateLayoutForRoute(url: string): void {
+    console.log('LayoutService: Updating layout for route:', url);
+    
     // Define route-specific layout configurations
     const routeConfigs: { [key: string]: Partial<LayoutConfig> } = {
       '/': {
@@ -177,7 +182,32 @@ export class LayoutService {
         containerClass: 'container-fluid',
         headerType: 'default'
       },
+      // Auth routes - no header/footer
+      '/auth/login': {
+        showHeader: false,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'minimal'
+      },
+      '/auth/reset-password': {
+        showHeader: false,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'minimal'
+      },
       '/login': {
+        showHeader: false,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'minimal'
+      },
+      '/signup': {
+        showHeader: false,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'minimal'
+      },
+      '/register': {
         showHeader: false,
         showFooter: false,
         containerClass: 'container-fluid',
@@ -186,17 +216,50 @@ export class LayoutService {
       '/forgot-password': {
         showHeader: false,
         showFooter: false,
-        containerClass: 'container-fluid'
+        containerClass: 'container-fluid',
+        headerType: 'minimal'
       },
+      '/reset-password': {
+        showHeader: false,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'minimal'
+      },
+      // Public routes - header + footer
       '/landing': {
         showHeader: true,
         showFooter: true,
         containerClass: 'container-fluid',
         headerType: 'default'
       },
-      '/home': {
+      '/brands': {
+        showHeader: true,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'default'
+      },
+      '/blog': {
         showHeader: true,
         showFooter: true,
+        containerClass: 'container-fluid',
+        headerType: 'default'
+      },
+      '/pricing': {
+        showHeader: true,
+        showFooter: false, // You removed footer from pricing
+        containerClass: 'container-fluid',
+        headerType: 'default'
+      },
+      '/developer': {
+        showHeader: true,
+        showFooter: true,
+        containerClass: 'container-fluid',
+        headerType: 'default'
+      },
+      // Authenticated routes - header only, no footer
+      '/home': {
+        showHeader: true,
+        showFooter: false,
         containerClass: 'container',
         headerType: 'default'
       },
@@ -205,17 +268,41 @@ export class LayoutService {
         showFooter: false,
         containerClass: 'container-fluid',
         headerType: 'default'
+      },
+      '/profile': {
+        showHeader: true,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'default'
+      },
+      '/admin': {
+        showHeader: true,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'default'
+      },
+      '/search': {
+        showHeader: true,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'default'
       }
     };
 
-    // Find matching route configuration
-    const matchingRoute = Object.keys(routeConfigs).find(route => 
-      url.startsWith(route)
-    );
+    // Find matching route configuration (order matters - more specific routes first)
+    const sortedRoutes = Object.keys(routeConfigs).sort((a, b) => b.length - a.length);
+    const matchingRoute = sortedRoutes.find(route => {
+      if (route === '/') {
+        return url === '/' || url === '/landing';
+      }
+      return url.startsWith(route);
+    });
 
     if (matchingRoute) {
+      console.log('LayoutService: Matched route:', matchingRoute, 'Config:', routeConfigs[matchingRoute]);
       this.setLayoutConfig(routeConfigs[matchingRoute]);
     } else {
+      console.log('LayoutService: No matching route, using default config');
       // Default configuration
       this.setLayoutConfig({
         showHeader: true,

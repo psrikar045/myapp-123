@@ -11,7 +11,7 @@ import { isPlatformBrowser } from '@angular/common';
 @Component({
   selector: 'app-developer',
   standalone: true,
-  imports: [CommonModule, HeaderComponent],
+  imports: [CommonModule],
   templateUrl: './developer.component.html',
   styleUrl: './developer.component.css'
 })

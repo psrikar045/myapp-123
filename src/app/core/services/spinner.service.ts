@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class SpinnerService {
   private loadingSubject = new BehaviorSubject<boolean>(false);
-  public readonly loading$ = this.loadingSubject.asObservable();
+  public  loading$ = this.loadingSubject.asObservable();
 
   constructor() {
     // Constructor can be empty if no immediate DI needs,

@@ -2,13 +2,13 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BlogCard } from '../../../shared/interfaces/blog-card.interface';
-import { HeaderComponent } from '../../../layout/header/header.component';
+
 import { BlogService } from '../../../shared/services/blog.service';
 
 @Component({
   selector: 'app-blog-details',
   standalone: true,
-  imports: [CommonModule, HeaderComponent],
+  imports: [CommonModule],
   templateUrl: './blog-details.component.html',
   styleUrl: './blog-details.component.css'
 })

@@ -4,13 +4,15 @@
 
 // Enhanced Hero Section
 .hero-section {
-  background: linear-gradient(135deg, #f8faff 0%, #fff6e5 100%);
+  background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
   min-height: calc(100vh - 72px); // Account for header height
   position: relative;
   display: flex;
   align-items: center;
   padding-top: 2rem;
   padding-bottom: 2rem;
+  color: var(--theme-text);
+  transition: var(--theme-animations);
   
   .container-fluid {
     position: relative;
@@ -91,7 +93,7 @@
 .hero-headline {
   font-size: clamp(2.5rem, 5vw, 4rem);
   line-height: 1.2;
-  color: #1a1a1a;
+  color: var(--theme-text);
   margin-bottom: 1.5rem;
   
   @media (max-width: 767.98px) {
@@ -123,7 +125,7 @@
 .hero-subheadline {
   font-size: 1.25rem;
   line-height: 1.6;
-  color: #6b7280;
+  color: var(--bs-secondary);
   max-width: 600px;
   
   @media (max-width: 767.98px) {
@@ -579,5 +581,169 @@
   
   &:hover i {
     transform: rotate(15deg) scale(1.1);
+  }
+}
+
+/* ============================================================================
+   DARK THEME SUPPORT
+   ============================================================================ */
+
+[data-bs-theme="dark"] {
+  
+  // Hero section background elements for dark mode
+  .hero-section {
+    background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
+    
+    .hero-white-circle {
+      background: rgba(255, 255, 255, 0.05) !important;
+    }
+    
+    .hero-yellow-circle {
+      opacity: 0.3 !important;
+    }
+  }
+  
+  // Form controls dark mode
+  .input-group-lg {
+    .input-group-text {
+      background-color: var(--theme-surface) !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+      color: var(--theme-text) !important;
+    }
+    
+    .form-control {
+      background-color: var(--theme-surface) !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+      color: var(--theme-text) !important;
+      
+      &:focus {
+        background-color: var(--theme-surface) !important;
+        border-color: var(--bs-primary) !important;
+        box-shadow: 0 0 0 0.2rem rgba(74, 80, 224, 0.25) !important;
+        color: var(--theme-text) !important;
+      }
+      
+      &::placeholder {
+        color: rgba(255, 255, 255, 0.5) !important;
+      }
+    }
+  }
+  
+  // Cards dark mode
+  .card {
+    background-color: var(--theme-surface) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--theme-text) !important;
+    
+    &:hover {
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+    }
+  }
+  
+  // Features section dark mode
+  .features-section {
+    background-color: var(--theme-background) !important;
+    color: var(--theme-text) !important;
+    
+    .feature-icon {
+      color: var(--bs-primary) !important;
+    }
+    
+    h3 {
+      color: var(--theme-text) !important;
+    }
+    
+    p {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+  }
+  
+  // Statistics section dark mode
+  .stats-section {
+    background-color: var(--theme-surface) !important;
+    color: var(--theme-text) !important;
+    
+    .stat-number {
+      color: var(--bs-primary) !important;
+    }
+    
+    .stat-label {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+  }
+  
+  // Testimonials dark mode
+  .testimonials-section {
+    background-color: var(--theme-background) !important;
+    color: var(--theme-text) !important;
+    
+    .testimonial-card {
+      background-color: var(--theme-surface) !important;
+      border-color: rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .testimonial-author {
+      color: var(--theme-text) !important;
+    }
+    
+    .testimonial-role {
+      color: rgba(255, 255, 255, 0.6) !important;
+    }
+  }
+  
+  // CTA section dark mode
+  .cta-section {
+    background: linear-gradient(135deg, var(--theme-surface) 0%, var(--theme-background) 100%) !important;
+    color: var(--theme-text) !important;
+    
+    h2 {
+      color: var(--theme-text) !important;
+    }
+    
+    p {
+      color: rgba(255, 255, 255, 0.8) !important;
+    }
+  }
+  
+  // Ensure all headings are visible
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--theme-text) !important;
+  }
+  
+  // Ensure all paragraphs are visible
+  p {
+    color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  // Badge dark mode
+  .badge {
+    &.bg-success {
+      background-color: #059669 !important;
+      color: #ffffff !important;
+    }
+    
+    &.bg-primary {
+      background-color: var(--bs-primary) !important;
+      color: #ffffff !important;
+    }
+  }
+  
+  // Ensure icons are visible
+  i, .bi {
+    color: var(--theme-text) !important;
+    
+    &.text-primary {
+      color: var(--bs-primary) !important;
+    }
+  }
+  
+  // Star ratings dark mode
+  .text-warning {
+    color: #fbbf24 !important;
+  }
+  
+  // Avatar and images
+  .avatar img {
+    border: 2px solid rgba(255, 255, 255, 0.1) !important;
   }
 }

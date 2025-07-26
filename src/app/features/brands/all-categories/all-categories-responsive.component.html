@@ -1,4 +1,4 @@
-<app-header [showNavigation]="true"></app-header>
+
 
 <!-- Bootstrap Responsive Categories Page -->
 <div class="categories-page-container">
@@ -41,15 +41,7 @@
   <div class="categories-content-section py-5">
     <div class="container-fluid">
       
-      <!-- Loading State -->
-      <div class="row justify-content-center" *ngIf="isLoadingBrands">
-        <div class="col-12 text-center py-5">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <p class="mt-3 text-muted">Loading brands...</p>
-        </div>
-      </div>
+      <!-- Loading State - Removed local spinner, using global spinner instead -->
 
       <!-- Main Layout -->
       <div class="row g-4" *ngIf="!isLoadingBrands && filteredCategories.length > 0">

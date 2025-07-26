@@ -4,16 +4,32 @@
 
 /* Page Background */
 .profile-page-bg {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: linear-gradient(135deg, var(--bs-body-bg) 0%, var(--bs-secondary-bg) 100%);
   min-height: 100vh;
-  padding-top: 100px;
+  padding-top: 2rem;
   padding-bottom: 3rem;
+  color: var(--bs-body-color);
+  transition: all 0.3s ease;
+  
+  // Account for sidenav when present
+  @media (min-width: 992px) {
+    margin-left: 0; // Will be handled by main layout
+  }
 }
 
 /* Main Wrapper */
 .profile-wrapper {
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 1rem;
+  
+  @media (min-width: 768px) {
+    padding: 0 2rem;
+  }
+  
+  @media (min-width: 992px) {
+    padding: 0 1rem;
+  }
 }
 
 /* ============================================================================
@@ -28,6 +44,18 @@
   overflow: hidden;
   margin-bottom: 2rem;
   min-height: 320px;
+  
+  @media (max-width: 767.98px) {
+    border-radius: 15px;
+    min-height: 280px;
+    margin-bottom: 1.5rem;
+  }
+  
+  @media (max-width: 575.98px) {
+    border-radius: 10px;
+    min-height: 240px;
+    margin-bottom: 1rem;
+  }
   
   &::before {
     content: '';
@@ -58,6 +86,14 @@
   z-index: 2;
   padding: 2.5rem 0;
   color: white;
+  
+  @media (max-width: 767.98px) {
+    padding: 2rem 0;
+  }
+  
+  @media (max-width: 575.98px) {
+    padding: 1.5rem 0;
+  }
 }
 
 /* Profile Main Info Section */
@@ -84,6 +120,18 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     object-fit: cover;
     transition: border-color 0.3s ease;
+    
+    @media (max-width: 767.98px) {
+      width: 80px;
+      height: 80px;
+      border-width: 3px;
+    }
+    
+    @media (max-width: 575.98px) {
+      width: 70px;
+      height: 70px;
+      border-width: 2px;
+    }
     
     &:hover {
       border-color: rgba(255, 255, 255, 0.6);
@@ -387,18 +435,42 @@
    ============================================================================ */
 
 .profile-sidebar {
-  background: white;
+  background: var(--bs-body-bg);
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   position: sticky;
   top: 120px;
+  border: 1px solid var(--bs-border-color);
+  
+  @media (max-width: 991.98px) {
+    position: static;
+    margin-bottom: 2rem;
+  }
+  
+  @media (max-width: 767.98px) {
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+  }
+  
+  @media (max-width: 575.98px) {
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
 }
 
 .sidebar-header {
   background: linear-gradient(135deg, var(--bs-primary) 0%, #6366f1 100%);
   padding: 1.5rem;
   color: white;
+  
+  @media (max-width: 767.98px) {
+    padding: 1rem;
+  }
+  
+  @media (max-width: 575.98px) {
+    padding: 0.75rem;
+  }
 }
 
 .sidebar-title {
@@ -417,11 +489,21 @@
   border: none;
   background: none;
   text-align: left;
-  color: #4b5563;
+  color: var(--bs-body-color);
   font-size: 0.95rem;
   font-weight: 500;
   transition: all 0.3s ease;
   position: relative;
+  
+  @media (max-width: 767.98px) {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  @media (max-width: 575.98px) {
+    padding: 0.6rem 0.75rem;
+    font-size: 0.85rem;
+  }
   
   &::before {
     content: '';
@@ -462,21 +544,40 @@
    ============================================================================ */
 
 .profile-content {
-  background: white;
+  background: var(--bs-body-bg);
   border-radius: 16px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
   overflow: hidden;
+  border: 1px solid var(--bs-border-color);
+  
+  @media (max-width: 767.98px) {
+    border-radius: 12px;
+  }
+  
+  @media (max-width: 575.98px) {
+    border-radius: 8px;
+  }
 }
 
 .content-header {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  background: linear-gradient(135deg, var(--bs-secondary-bg) 0%, var(--bs-tertiary-bg) 100%);
   padding: 2rem;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--bs-border-color);
   display: flex;
-  justify-content: between;
+  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
+  
+  @media (max-width: 767.98px) {
+    padding: 1.5rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  @media (max-width: 575.98px) {
+    padding: 1rem;
+  }
 }
 
 .content-title-section {
@@ -486,8 +587,16 @@
 .content-title {
   font-size: 1.75rem;
   font-weight: 600;
-  color: #1a202c;
+  color: var(--bs-body-color);
   margin-bottom: 0.5rem;
+  
+  @media (max-width: 767.98px) {
+    font-size: 1.5rem;
+  }
+  
+  @media (max-width: 575.98px) {
+    font-size: 1.25rem;
+  }
   
   i {
     color: var(--bs-primary);

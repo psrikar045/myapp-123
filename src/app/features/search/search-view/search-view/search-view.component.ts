@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from '../../../../layout/header/header.component';
+
 import { FooterComponent } from '../../../../shared/footer/footer.component';
-import { ThemeService } from '../../../../core/services/theme.service';
+import { AppThemeService } from '../../../../core/services/app-theme.service';
 import { Subscription } from 'rxjs';
 import { UtilService } from '../../../../shared/services/util.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-search-view',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, FooterComponent],
+  imports: [CommonModule, FooterComponent],
   templateUrl: './search-view.component.html',
   styleUrl: './search-view.component.scss'
 })
@@ -32,16 +32,17 @@ export class SearchViewComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private themeService: ThemeService,
+    private appThemeService: AppThemeService,
     private utilService: UtilService,
     private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.themeSubscription = this.themeService.isDarkMode$.subscribe((isDark: boolean) => {
+    this.themeSubscription = this.appThemeService.isDarkMode$.subscribe((isDark: boolean) => {
       this.isDarkMode = isDark;
     });
-    this.isDarkMode = this.themeService.getIsDarkMode();
+    // Get initial dark mode state
+    this.appThemeService.isDarkMode$.subscribe(isDark => this.isDarkMode = isDark);
     const rawResult = this.utilService.searchResult;
     
     // Debug logging

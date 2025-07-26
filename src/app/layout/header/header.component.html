@@ -1,13 +1,31 @@
 <!-- Bootstrap Responsive Navbar -->
-<nav class="navbar navbar-expand-lg fixed-top" 
+<nav class="navbar navbar-expand-lg" 
      [class.navbar-scrolled]="isScrolled"
      [class.navbar-hidden]="!isVisible"
-     [attr.data-header-type]="headerType">
+     [class.with-sidenav-expanded]="authService.isAuthenticated() && (sidenavService.isVisible$ | async) && !(sidenavService.config$ | async)?.collapsed"
+     [class.with-sidenav-collapsed]="authService.isAuthenticated() && (sidenavService.isVisible$ | async) && (sidenavService.config$ | async)?.collapsed"
+     [class.navbar-dark]="currentTheme === 'dark'"
+     [attr.data-header-type]="headerType"
+     [attr.data-bs-theme]="currentTheme">
   
   <div class="container-fluid px-lg-5 px-md-4 px-3">
     
-    <!-- Brand/Logo -->
-    <a class="navbar-brand" (click)="onLogoClick()" style="cursor: pointer;">
+    <!-- Sidenav Toggle Button (for authenticated users) -->
+    <button class="btn btn-link sidenav-toggle-btn mobile-menu-toggle d-lg-none me-2" 
+            type="button"
+            (click)="toggleSidenav()"
+            *ngIf="authService.isAuthenticated()"
+            aria-label="Toggle sidebar navigation">
+      <i class="bi-list" style="font-size: 1.5rem;"></i>
+    </button>
+
+
+
+    <!-- Brand/Logo - Show only when sidenav is collapsed or not visible -->
+    <a class="navbar-brand" 
+       (click)="onLogoClick()" 
+       style="cursor: pointer;"
+       *ngIf="!(sidenavService.isVisible$ | async) || (sidenavService.config$ | async)?.collapsed">
       <img [src]="(logo$ | async)?.src" 
            [alt]="(logo$ | async)?.alt" 
            class="logo-img"
@@ -43,6 +61,19 @@
 
       <!-- Action Buttons -->
       <div class="navbar-nav ms-auto">
+        
+        <!-- Theme & Settings Button (Combined) -->
+        <button class="btn btn-link theme-settings-btn me-2" 
+                type="button"
+                (click)="openThemePanel()"
+                aria-label="Open theme & settings panel"
+                [title]="isAdvancedThemeAvailable ? 'Theme & Settings (Premium Available)' : 'Theme & Settings'">
+          <i class="bi-palette-fill" aria-hidden="true"></i>
+          <span class="theme-indicator" *ngIf="isAdvancedThemeAvailable">
+            <i class="bi-star-fill"></i>
+          </span>
+        </button>
+
         <ng-container *ngFor="let action of actions$ | async">
           
           <!-- Upgrade Button -->
@@ -75,7 +106,7 @@
                 </a>
               </li>
               <li>
-                <a class="dropdown-item d-flex align-items-center" href="#" (click)="logout()">
+                <a class="dropdown-item d-flex align-items-center" href="#" (click)="logout(); $event.preventDefault()">
                   <i class="bi bi-box-arrow-right me-2"></i>
                   <span>Logout</span>
                 </a>

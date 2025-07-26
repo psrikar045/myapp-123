@@ -19,7 +19,6 @@ import { PhoneService } from '../../../shared/services/phone.service';
   imports: [
     CommonModule, 
     FormsModule, 
-    HeaderComponent, 
     MyPlanComponent, 
     ChoosePlanComponent
   ],

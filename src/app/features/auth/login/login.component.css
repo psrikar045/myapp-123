@@ -8,11 +8,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+  background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
   padding: 1rem;
   box-sizing: border-box;
-  font-family: var(--font-family-primary);
-  transition: background-color 0.3s ease;
+  font-family: var(--theme-font-family);
+  transition: var(--theme-animations);
+  color: var(--theme-text);
   
   @media (max-width: 768px) {
     padding: 0.5rem;
@@ -23,13 +24,13 @@
 
 .login-container {
   display: flex;
-  border: 1px solid #e9ecef;
-  border-radius: 1rem;
+  border: 1px solid var(--bs-border-color, #e9ecef);
+  border-radius: var(--theme-border-radius);
   flex-direction: column;
   width: 100%;
   max-width: 28rem;
-  background: #ffffff;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  background: var(--theme-surface);
+  box-shadow: var(--theme-shadows);
   overflow: hidden;
   gap: 0;
   align-items: stretch;
@@ -591,6 +592,117 @@ mat-form-field {
 }
 .dark-theme .mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__track { background-color: #8c9eff !important; }
 .dark-theme .mat-mdc-slide-toggle .mdc-switch__handle { background-color: #f0f0f0 !important; }
+
+/* ============================================================================
+   COMPREHENSIVE DARK MODE SUPPORT FOR LOGIN
+   ============================================================================ */
+
+[data-bs-theme="dark"] {
+  .login-page-wrapper {
+    background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
+    color: var(--theme-text);
+  }
+  
+  .login-container {
+    background: var(--theme-surface);
+    border-color: #30363d;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  .login-left {
+    background: var(--theme-surface);
+    color: var(--theme-text);
+  }
+  
+  h2 {
+    color: var(--theme-text);
+  }
+  
+  .subtitle {
+    color: #8b949e;
+  }
+  
+  .form-control {
+    background-color: #21262d;
+    border-color: #30363d;
+    color: var(--theme-text);
+    
+    &:focus {
+      background-color: #21262d;
+      border-color: var(--theme-primary);
+      color: var(--theme-text);
+      box-shadow: 0 0 0 0.2rem rgba(74, 80, 224, 0.25);
+    }
+    
+    &::placeholder {
+      color: #8b949e;
+    }
+  }
+  
+  .btn-primary {
+    background-color: var(--theme-primary);
+    border-color: var(--theme-primary);
+    
+    &:hover {
+      background-color: color-mix(in srgb, var(--theme-primary) 85%, black);
+      border-color: color-mix(in srgb, var(--theme-primary) 85%, black);
+    }
+  }
+  
+  .btn-outline-primary {
+    color: var(--theme-primary);
+    border-color: var(--theme-primary);
+    
+    &:hover {
+      background-color: var(--theme-primary);
+      border-color: var(--theme-primary);
+      color: white;
+    }
+  }
+  
+  .social-button {
+    background-color: #21262d;
+    border-color: #30363d;
+    color: var(--theme-text);
+    
+    &:hover {
+      background-color: #30363d;
+      border-color: #484f58;
+    }
+  }
+  
+  .divider {
+    color: #8b949e;
+    
+    &::before,
+    &::after {
+      border-bottom-color: #30363d;
+    }
+  }
+  
+  .signup-link,
+  .login-link {
+    color: var(--theme-primary);
+    
+    &:hover {
+      color: color-mix(in srgb, var(--theme-primary) 85%, white);
+    }
+  }
+  
+  .error-message {
+    background-color: rgba(248, 81, 73, 0.1);
+    color: #ff7b72;
+    border-color: rgba(248, 81, 73, 0.3);
+  }
+  
+  .terms-checkbox span {
+    color: #8b949e;
+  }
+  
+  .carousel-container {
+    background: #21262d;
+  }
+}
 
 
 /* --- Mobile First Media Queries --- */

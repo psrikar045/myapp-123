@@ -3,13 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ToolbarService } from '../../../shared/services/toolbar.service';
-import { HeaderComponent } from '../../../layout/header/header.component';
-import { FooterComponent } from '../../../shared/footer/footer.component';
 
 @Component({
   selector: 'app-pricing-plans',
   standalone: true,
-  imports: [CommonModule, FormsModule, HeaderComponent, FooterComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './pricing-plans.component.html',
   styleUrl: './pricing-plans.component.scss',
   animations: [
