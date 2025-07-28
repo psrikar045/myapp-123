@@ -42,14 +42,53 @@ export class SidenavService implements OnDestroy {
   });
   public environmentInfo$ = this.environmentInfoSubject.asObservable();
 
-  // Visibility state - controlled by authentication
-  public isVisible$: Observable<boolean> = this.authService.isAuthenticated$;
+  // Routes where sidenav should be visible (only for authenticated users)
+  // These are the authenticated user workflow pages
+  private readonly sidenavVisibleRoutes = [
+    '/home',           // Home page after login
+    '/brandApi',       // Brand API page
+    '/brands',         // Brands pages (authenticated user browsing)
+    '/developer'       // Developer pages (authenticated user workflow)
+  ];
+
+  // Routes where sidenav should never be visible
+  // This includes public/marketing pages that should remain clean
+  private readonly sidenavHiddenRoutes = [
+    '/landing',        // Landing page
+    '/pricing',        // Pricing pages (public marketing page)
+    '/blog',           // Blog pages (public content)
+    '/login',          // Login page
+    '/register',       // Register page
+    '/forgot-password',// Password reset
+    '/auth'            // Auth pages
+  ];
+
+  // Current route state
+  private currentRouteSubject = new BehaviorSubject<string>('');
+  
+  // Visibility state - controlled by authentication AND specific routes
+  public isVisible$: Observable<boolean> = combineLatest([
+    this.authService.isAuthenticated$,
+    this.currentRouteSubject.asObservable()
+  ]).pipe(
+    takeUntil(this.destroy$),
+    map(([isAuthenticated, currentRoute]) => {
+      // Never show sidenav on hidden routes
+      if (this.sidenavHiddenRoutes.some(route => currentRoute.startsWith(route))) {
+        return false;
+      }
+
+      // Only show sidenav for authenticated users on specific visible routes
+      return isAuthenticated && this.sidenavVisibleRoutes.some(route => currentRoute.startsWith(route));
+    })
+  );
 
   // Responsive state - overlay mode for mobile/tablet
   public isOverlayMode$: Observable<boolean> = combineLatest([
     this.layoutService.isMobileOrTablet$,
     this.config$
   ]).pipe(
+    takeUntil(this.destroy$),
     map(([isMobileOrTablet, config]) => isMobileOrTablet || config.overlayMode)
   );
 
@@ -58,6 +97,7 @@ export class SidenavService implements OnDestroy {
     this.subscribeToRouteChanges();
     this.subscribeToAuthChanges();
     this.subscribeToResponsiveChanges();
+    this.initializeRouteTracking();
   }
 
   /**
@@ -200,9 +240,47 @@ export class SidenavService implements OnDestroy {
         filter(event => event instanceof NavigationEnd),
         takeUntil(this.destroy$)
       )
-      .subscribe((event: NavigationEnd) => {
-        this.updateActiveStates(event.urlAfterRedirects);
+      .subscribe({
+        next: (event: NavigationEnd) => {
+          if (!this.destroy$.closed) {
+            this.updateActiveStates(event.urlAfterRedirects);
+          }
+        },
+        error: (error) => {
+          console.error('Error in route changes subscription:', error);
+        }
       });
+  }
+
+  /**
+   * Initialize route tracking for sidenav visibility
+   */
+  private initializeRouteTracking(): void {
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: (event: NavigationEnd) => {
+          if (!this.destroy$.closed) {
+            this.currentRouteSubject.next(event.urlAfterRedirects);
+          }
+        },
+        error: (error) => {
+          console.error('Error in route tracking:', error);
+        }
+      });
+
+    // Set initial route safely
+    try {
+      if (this.router && !this.destroy$.closed) {
+        this.currentRouteSubject.next(this.router.url);
+      }
+    } catch (error) {
+      console.error('Error setting initial route:', error);
+      this.currentRouteSubject.next('/');
+    }
   }
 
   /**
@@ -211,18 +289,25 @@ export class SidenavService implements OnDestroy {
   private subscribeToAuthChanges(): void {
     this.authService.userDetails$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(userDetails => {
-        if (userDetails) {
-          const profile: UserProfile = {
-            name: `${userDetails.firstName || ''} ${userDetails.lastName || ''}`.trim() || userDetails.username || 'User',
-            email: userDetails.email || '',
-            role: this.formatRole(userDetails.roles?.[0] || 'USER'),
-            avatar: userDetails.token ? this.generateAvatarUrl(userDetails.email) : undefined,
-            initials: this.generateInitials(userDetails.firstName, userDetails.lastName, userDetails.username)
-          };
-          this.userProfileSubject.next(profile);
-        } else {
-          this.userProfileSubject.next(null);
+      .subscribe({
+        next: (userDetails) => {
+          if (!this.destroy$.closed) {
+            if (userDetails) {
+              const profile: UserProfile = {
+                name: `${userDetails.firstName || ''} ${userDetails.lastName || ''}`.trim() || userDetails.username || 'User',
+                email: userDetails.email || '',
+                role: this.formatRole(userDetails.roles?.[0] || 'USER'),
+                avatar: userDetails.token ? this.generateAvatarUrl(userDetails.email) : undefined,
+                initials: this.generateInitials(userDetails.firstName, userDetails.lastName, userDetails.username)
+              };
+              this.userProfileSubject.next(profile);
+            } else {
+              this.userProfileSubject.next(null);
+            }
+          }
+        },
+        error: (error) => {
+          console.error('Error in auth changes subscription:', error);
         }
       });
   }
@@ -233,12 +318,19 @@ export class SidenavService implements OnDestroy {
   private subscribeToResponsiveChanges(): void {
     this.layoutService.isMobileOrTablet$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(isMobileOrTablet => {
-        const currentConfig = this.configSubject.value;
-        if (currentConfig.autoCollapseOnMobile && isMobileOrTablet) {
-          this.setCollapsed(true);
-          // Also update overlay mode
-          this.updateConfig({ overlayMode: isMobileOrTablet });
+      .subscribe({
+        next: (isMobileOrTablet) => {
+          if (!this.destroy$.closed) {
+            const currentConfig = this.configSubject.value;
+            if (currentConfig.autoCollapseOnMobile && isMobileOrTablet) {
+              this.setCollapsed(true);
+              // Also update overlay mode
+              this.updateConfig({ overlayMode: isMobileOrTablet });
+            }
+          }
+        },
+        error: (error) => {
+          console.error('Error in responsive changes subscription:', error);
         }
       });
   }
@@ -343,6 +435,19 @@ export class SidenavService implements OnDestroy {
   // Public methods for controlling sidenav
   
   /**
+   * Check if sidenav should be visible for a specific route and auth status
+   */
+  public shouldShowSidenavForRoute(route: string, isAuthenticated: boolean): boolean {
+    // Never show on hidden routes
+    if (this.sidenavHiddenRoutes.some(hiddenRoute => route.startsWith(hiddenRoute))) {
+      return false;
+    }
+
+    // Only show for authenticated users on visible routes
+    return isAuthenticated && this.sidenavVisibleRoutes.some(visibleRoute => route.startsWith(visibleRoute));
+  }
+
+  /**
    * Toggle sidenav collapsed state
    */
   public toggleCollapsed(): void {
@@ -410,8 +515,16 @@ export class SidenavService implements OnDestroy {
    * Cleanup subscriptions
    */
   ngOnDestroy(): void {
+    // Signal all subscriptions to complete
     this.destroy$.next();
     this.destroy$.complete();
+    
+    // Complete all BehaviorSubjects to free memory
+    this.configSubject.complete();
+    this.navigationItemsSubject.complete();
+    this.userProfileSubject.complete();
+    this.environmentInfoSubject.complete();
+    this.currentRouteSubject.complete();
   }
 
   /**

@@ -103,6 +103,7 @@ export class ToolbarService {
     this.navItems$.next([
       { label: 'Home', route: '/home', scrollId: '' },
       { label: 'Brands', route: '/brands/categories', scrollId: '' },
+      { label: 'Brand API', route: '/brandApi', scrollId: '' },
       { label: 'Developers', route: '/developer', scrollId: '' }
     ]);
     this.actions$.next([
