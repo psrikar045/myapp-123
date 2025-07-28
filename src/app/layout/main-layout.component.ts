@@ -61,8 +61,11 @@ export class MainLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe(isDark => {
         setTimeout(() => {
-          this.currentTheme = isDark ? 'dark' : 'light';
-          this.cdr.detectChanges();
+          // Check if component is still active before updating
+          if (!this.destroy$.closed) {
+            this.currentTheme = isDark ? 'dark' : 'light';
+            this.cdr.detectChanges();
+          }
         });
       });
 

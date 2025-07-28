@@ -1,6 +1,6 @@
-import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { map, filter } from 'rxjs/operators';
+import { Injectable, inject, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, combineLatest, Subject } from 'rxjs';
+import { map, filter, takeUntil, take } from 'rxjs/operators';
 import { Router, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { LayoutService } from '../../core/services/layout.service';
@@ -15,10 +15,11 @@ import {
 @Injectable({
   providedIn: 'root'
 })
-export class SidenavService {
+export class SidenavService implements OnDestroy {
   private router = inject(Router);
   private authService = inject(AuthService);
   private layoutService = inject(LayoutService);
+  private destroy$ = new Subject<void>();
 
   // Configuration state
   private configSubject = new BehaviorSubject<SidenavConfig>(DEFAULT_SIDENAV_CONFIG);
@@ -195,7 +196,10 @@ export class SidenavService {
    */
   private subscribeToRouteChanges(): void {
     this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
       .subscribe((event: NavigationEnd) => {
         this.updateActiveStates(event.urlAfterRedirects);
       });
@@ -205,34 +209,38 @@ export class SidenavService {
    * Subscribe to auth changes to update user profile
    */
   private subscribeToAuthChanges(): void {
-    this.authService.userDetails$.subscribe(userDetails => {
-      if (userDetails) {
-        const profile: UserProfile = {
-          name: `${userDetails.firstName || ''} ${userDetails.lastName || ''}`.trim() || userDetails.username || 'User',
-          email: userDetails.email || '',
-          role: this.formatRole(userDetails.roles?.[0] || 'USER'),
-          avatar: userDetails.token ? this.generateAvatarUrl(userDetails.email) : undefined,
-          initials: this.generateInitials(userDetails.firstName, userDetails.lastName, userDetails.username)
-        };
-        this.userProfileSubject.next(profile);
-      } else {
-        this.userProfileSubject.next(null);
-      }
-    });
+    this.authService.userDetails$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(userDetails => {
+        if (userDetails) {
+          const profile: UserProfile = {
+            name: `${userDetails.firstName || ''} ${userDetails.lastName || ''}`.trim() || userDetails.username || 'User',
+            email: userDetails.email || '',
+            role: this.formatRole(userDetails.roles?.[0] || 'USER'),
+            avatar: userDetails.token ? this.generateAvatarUrl(userDetails.email) : undefined,
+            initials: this.generateInitials(userDetails.firstName, userDetails.lastName, userDetails.username)
+          };
+          this.userProfileSubject.next(profile);
+        } else {
+          this.userProfileSubject.next(null);
+        }
+      });
   }
 
   /**
    * Subscribe to responsive changes for auto-collapse
    */
   private subscribeToResponsiveChanges(): void {
-    this.layoutService.isMobileOrTablet$.subscribe(isMobileOrTablet => {
-      const currentConfig = this.configSubject.value;
-      if (currentConfig.autoCollapseOnMobile && isMobileOrTablet) {
-        this.setCollapsed(true);
-        // Also update overlay mode
-        this.updateConfig({ overlayMode: isMobileOrTablet });
-      }
-    });
+    this.layoutService.isMobileOrTablet$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(isMobileOrTablet => {
+        const currentConfig = this.configSubject.value;
+        if (currentConfig.autoCollapseOnMobile && isMobileOrTablet) {
+          this.setCollapsed(true);
+          // Also update overlay mode
+          this.updateConfig({ overlayMode: isMobileOrTablet });
+        }
+      });
   }
 
   /**
@@ -381,11 +389,13 @@ export class SidenavService {
     this.router.navigate([route]);
     
     // Auto-collapse on mobile after navigation
-    this.isOverlayMode$.pipe().subscribe(isOverlay => {
-      if (isOverlay) {
-        this.setCollapsed(true);
-      }
-    });
+    this.isOverlayMode$
+      .pipe(take(1))
+      .subscribe(isOverlay => {
+        if (isOverlay) {
+          this.setCollapsed(true);
+        }
+      });
   }
 
   /**
@@ -394,6 +404,14 @@ export class SidenavService {
   public updateConfig(config: Partial<SidenavConfig>): void {
     const currentConfig = this.configSubject.value;
     this.configSubject.next({ ...currentConfig, ...config });
+  }
+
+  /**
+   * Cleanup subscriptions
+   */
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /**

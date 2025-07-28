@@ -1,7 +1,7 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, OnDestroy } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { map, shareReplay } from 'rxjs/operators';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { map, shareReplay, takeUntil } from 'rxjs/operators';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -15,9 +15,10 @@ export interface LayoutConfig {
 @Injectable({
   providedIn: 'root'
 })
-export class LayoutService {
+export class LayoutService implements OnDestroy {
   private breakpointObserver = inject(BreakpointObserver);
   private router = inject(Router);
+  private destroy$ = new Subject<void>();
   
   // Layout state management
   private showHeaderSubject = new BehaviorSubject<boolean>(true);
@@ -134,14 +135,23 @@ export class LayoutService {
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
-        map(event => event as NavigationEnd)
+        map(event => event as NavigationEnd),
+        takeUntil(this.destroy$)
       )
       .subscribe(event => {
         // Use setTimeout to defer layout updates to avoid ExpressionChangedAfterItHasBeenCheckedError
         setTimeout(() => {
-          this.updateLayoutForRoute(event.url);
+          // Check if service is still active before updating
+          if (!this.destroy$.closed) {
+            this.updateLayoutForRoute(event.url);
+          }
         });
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   // Layout control methods

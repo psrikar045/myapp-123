@@ -1,6 +1,6 @@
 .pricing-section-wrapper {
   width: 100%;
-  background: #f5f7ff url('assets/landing/Vector.png') no-repeat center/cover;
+  background: #f5f7ff url('/assets/landing/Vector.png') no-repeat center/cover;
   position: relative;
   overflow: hidden;
   padding: 0;
