@@ -96,8 +96,8 @@ export class SidenavService implements OnDestroy {
       {
         id: 'analytics',
         label: 'Analytics',
-        icon: 'bi-graph-up',
-        route: '/analytics'
+        icon: 'bi-graph-up'
+        // ,route: '/analytics'
       },
 
       // Brand - Collapsible group

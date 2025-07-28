@@ -242,7 +242,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   onHelpClick(): void {
-    this.sidenavService.navigateToRoute('/support/help');
+    // this.sidenavService.navigateToRoute('/support/help');
   }
 
   onProfileClick(): void {

@@ -138,6 +138,11 @@ export class SidenavItemComponent implements OnInit, OnDestroy {
   }
 
   onItemClick(): void {
+    // Block navigation for submenu items only
+    if (this.level > 0) {
+      return;
+    }
+
     if (this.item.route) {
       // Navigate to route
       this.sidenavService.navigateToRoute(this.item.route);
