@@ -230,7 +230,7 @@ public layoutService = inject(LayoutService);
   }
 
   private registerSvgIcons(): void {
-    const iconPath = '/icons/';
+    const iconPath = 'assets/icons/';
     this.matIconRegistry.addSvgIcon(
       'google',
       this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'google.svg')

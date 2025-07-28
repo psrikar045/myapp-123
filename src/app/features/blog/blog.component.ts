@@ -51,7 +51,7 @@ export class BlogComponent implements OnInit, OnDestroy {
   sidebarCategories = [
     {
       id: 1,
-      img: '/images/Image.jpg',
+      img: 'assets/images/Image.jpg',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',
@@ -59,7 +59,7 @@ export class BlogComponent implements OnInit, OnDestroy {
     },
     {
       id: 1,
-      img: '/images/Image (1).jpg',
+      img: 'assets/images/Image (1).jpg',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',
@@ -67,7 +67,7 @@ export class BlogComponent implements OnInit, OnDestroy {
     },
     {
       id:2,
-      img: '/images/Image (2).jpg',
+      img: 'assets/images/Image (2).jpg',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',
@@ -75,7 +75,7 @@ export class BlogComponent implements OnInit, OnDestroy {
     },
     {
       id:3,
-      img: '/images/Image (3).jpg',
+      img: 'assets/images/Image (3).jpg',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',
@@ -83,7 +83,7 @@ export class BlogComponent implements OnInit, OnDestroy {
     },
     {
       id:4,
-      img: '/images/Image.jpg',
+      img: 'assets/images/Image.jpg',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',
@@ -91,7 +91,7 @@ export class BlogComponent implements OnInit, OnDestroy {
     },
     {
       id:5,
-      img: '/images/Image (1).jpg',
+      img: 'assets/images/Image (1).jpg',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',
@@ -99,7 +99,7 @@ export class BlogComponent implements OnInit, OnDestroy {
     },
     {
       id:6,
-      img: '/images/Image (2).jpg',
+      img: 'assets/images/Image (2).jpg',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',
@@ -107,7 +107,7 @@ export class BlogComponent implements OnInit, OnDestroy {
     },
     {
       id:7,
-      img: '/images/Image (3).jpg',
+      img: 'assets/images/Image (3).jpg',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',

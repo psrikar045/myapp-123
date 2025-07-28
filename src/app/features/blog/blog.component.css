@@ -352,7 +352,7 @@
   width: 100%;
   min-height: 361px;
   background: linear-gradient(180deg, #3887f7 0%, #1a237e 100%);
-  background-image: url('/images/blog section.png'), linear-gradient(180deg, #3887f7 0%, #1a237e 100%);
+  background-image: url('assets/images/blog section.png'), linear-gradient(180deg, #3887f7 0%, #1a237e 100%);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

@@ -99,11 +99,11 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   private themeSubscription!: Subscription;
   private scrollSubscription!: Subscription;
 
-  private logoPath = 'images/logo.svg'; // Ensure correct path
-  private sunIconPath = 'icons/sun.svg'; // Ensure correct path
-  private cloudIconPath = 'icons/cloud.svg'; // Ensure correct path
-  private arrowForwardIconPath = 'icons/arrow_forward.svg'; // Ensure correct path
-  private menuIconPath = 'icons/menu.svg'; // Ensure correct path for menu icon
+  private logoPath = 'assets/images/logo.svg'; // Ensure correct path
+  private sunIconPath = 'assets/icons/sun.svg'; // Ensure correct path
+  private cloudIconPath = 'assets/icons/cloud.svg'; // Ensure correct path
+  private arrowForwardIconPath = 'assets/icons/arrow_forward.svg'; // Ensure correct path
+  private menuIconPath = 'assets/icons/menu.svg'; // Ensure correct path for menu icon
 
   private appThemeService = inject(AppThemeService);
   private iconRegistry = inject(MatIconRegistry);
@@ -252,7 +252,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     open = false;
 
   logo = {
-    src: 'landing/logo.svg', // Replace with your logo path or use the SVG inline
+    src: 'assets/landing/logo.svg', // Replace with your logo path or use the SVG inline
     alt: 'Marketify Logo',
     text: 'Marketify',
   };
@@ -300,19 +300,19 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   orbitHeadline = 'Trusted by Forward – Thinking Teams';
   orbitSubheadline = 'Polygon absolutely works great with tools in your other existing platform.';
   orbitLogos = [
-    { src: '/company/Animalbiome.svg', alt: 'Company 1' },
-    { src: '/company/nutanix.svg', alt: 'Company 2' },
-    { src: '/company/paloalto.svg', alt: 'Company 3' },
-    { src: '/company/xAmplify.svg', alt: 'Company 4' },
-    { src: '/company/people.png', alt: 'Company 5' }
+    { src: 'assets/company/Animalbiome.svg', alt: 'Company 1' },
+    { src: 'assets/company/nutanix.svg', alt: 'Company 2' },
+    { src: 'assets/company/paloalto.svg', alt: 'Company 3' },
+    { src: 'assets/company/xAmplify.svg', alt: 'Company 4' },
+    { src: 'assets/company/people.png', alt: 'Company 5' }
   ];
   // Company logos row section logic (after hero)
   companyLogos = [
-    { src: '/company/Item-1.svg', alt: 'Company 1' },
-    { src: '/company/Item-2.svg', alt: 'Company 2' },
-    { src: '/company/Item-3.svg', alt: 'Company 3' },
-    { src: '/company/Item-4.svg', alt: 'Company 4' },
-    { src: '/company/Item.svg', alt: 'Company 5' }
+    { src: 'assets/company/Item-1.svg', alt: 'Company 1' },
+    { src: 'assets/company/Item-2.svg', alt: 'Company 2' },
+    { src: 'assets/company/Item-3.svg', alt: 'Company 3' },
+    { src: 'assets/company/Item-4.svg', alt: 'Company 4' },
+    { src: 'assets/company/Item.svg', alt: 'Company 5' }
   ];
   // Core capabilities section logic
   coreHeadline = "Discover Marketify’s Core Capabilities";
@@ -344,7 +344,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     {
       title: 'For Designers',
       description: 'Instantly access brand assets, color palettes, and typography to streamline your creative workflow. Marketify makes it easy to maintain brand consistency and save hours on manual asset collection.',
-      image: 'landing/Section_1.png',
+      image: 'assets/landing/Section_1.png',
       cards: [
         { icon: 'bi bi-journal-bookmark', title: 'Brand Guidelines', subtitle: 'Official brand rules at your fingertips' },
         { icon: 'bi bi-palette', title: 'Color Palettes', subtitle: 'Accurate brand color codes instantly' },
@@ -365,7 +365,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     {
       title: 'For Marketers',
       description: 'Ensure your campaigns and content always use the latest brand assets. Marketify helps you maintain consistency and credibility across all channels.',
-      image: 'landing/Section_3.png',
+      image: 'assets/landing/Section_3.png',
       cards: [
         { icon: 'bi bi-geo-alt', title: 'Social Links', subtitle: 'Find official social profiles' },
         { icon: 'bi bi-bell', title: 'Brand Monitoring', subtitle: 'Get notified on asset changes' },
@@ -440,7 +440,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   testimonials = [
     {
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       name: 'User',
       role: 'Customer',
       text: 'This is a testimonial from user.jfif.'
@@ -448,49 +448,49 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     }
   ];
