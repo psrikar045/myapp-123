@@ -6,6 +6,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { LandingPageComponent } from './features/landing/landing-page/landing-page.component';
 import { HomePageComponent } from './features/home/home-page.component';
 import { LogoLinkComponent } from './features/logo-link/logo-link.component';
+import { CompanyDataComponent } from './features/brands/company-data/company-data.component';
 
 export const routes: Routes = [
   // 1. Root redirect
@@ -38,6 +39,11 @@ export const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule),
     title: 'Authentication - Marketify'
+  },
+  {
+    path: 'brandApi',
+    component: CompanyDataComponent,
+    canActivate: [authGuard]
   },
   {
     path: 'dashboard',
