@@ -101,10 +101,10 @@ export class ToolbarService {
     });
     // Remove Pricing and Blog from logged-in header
     this.navItems$.next([
-      { label: 'Home', route: '/home', scrollId: '' },
-      { label: 'Brands', route: '/brands/categories', scrollId: '' },
-      { label: 'Brand API', route: '/brandApi', scrollId: '' },
-      { label: 'Developers', route: '/developer', scrollId: '' }
+      // { label: 'Home', route: '/home', scrollId: '' },
+      // { label: 'Brands', route: '/brands/categories', scrollId: '' },
+      // { label: 'Brand API', route: '/brandApi', scrollId: '' },
+      // { label: 'Developers', route: '/developer', scrollId: '' }
     ]);
     this.actions$.next([
       { type: 'upgrade', label: 'Upgrade'  },

@@ -46,9 +46,8 @@ export class SidenavService implements OnDestroy {
   // These are the authenticated user workflow pages
   private readonly sidenavVisibleRoutes = [
     '/home',           // Home page after login
-    '/brandApi',       // Brand API page
-    '/brands',         // Brands pages (authenticated user browsing)
-    '/developer'       // Developer pages (authenticated user workflow)
+    '/brandApi',       // Brand API page (legacy route)
+    '/brands/company'  // Brands API page (new route)
   ];
 
   // Routes where sidenav should never be visible
@@ -60,7 +59,9 @@ export class SidenavService implements OnDestroy {
     '/login',          // Login page
     '/register',       // Register page
     '/forgot-password',// Password reset
-    '/auth'            // Auth pages
+    '/auth',           // Auth pages
+    '/brands/categories', // All-categories page
+    '/developer'       // Developers page
   ];
 
   // Current route state
@@ -148,17 +149,17 @@ export class SidenavService implements OnDestroy {
         children: [
           {
             id: 'api-key',
-            label: 'API Key',
+            label: 'Brands',
             route: '/brand/api-key'
           },
           {
             id: 'brand-manager',
-            label: 'Brand Manager',
-            route: '/brand/manager'
+            label: 'Brands Api',
+            route: '/brands/company/:domain'
           },
           {
             id: 'brand-intelligence',
-            label: 'Brand Intelligence',
+            label: 'Developers',
             route: '/brand/intelligence'
           }
         ]

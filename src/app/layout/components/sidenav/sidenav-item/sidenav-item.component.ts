@@ -138,8 +138,8 @@ export class SidenavItemComponent implements OnInit, OnDestroy {
   }
 
   onItemClick(): void {
-    // Block navigation for submenu items only
-    if (this.level > 0) {
+    // Block navigation for submenu items only, except for "Brands Api"
+    if (this.level > 0 && this.item.label !== 'Brands Api') {
       return;
     }
 
