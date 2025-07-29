@@ -83,7 +83,6 @@ export const routes: Routes = [
   {
     path: 'developer',
     loadChildren: () => import('./features/developer/developer.module').then(m => m.DeveloperModule),
-    canActivate: [authGuard],
     title: 'Developer - Marketify'
   },
   {
