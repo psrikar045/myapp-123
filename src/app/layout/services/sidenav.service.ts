@@ -153,8 +153,8 @@ export class SidenavService implements OnDestroy {
           },
           {
             id: 'brand-manager',
-            label: 'Brand Manager',
-            route: '/brand/manager'
+            label: 'Brands Api',
+            route: '/brandApi'
           },
           {
             id: 'brand-intelligence',

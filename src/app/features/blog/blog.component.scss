@@ -1067,3 +1067,303 @@
     transform: none !important;
   }
 }
+
+/* ============================================================================
+   VIEW TOGGLE & GRID LAYOUT STYLES
+   ============================================================================ */
+
+// View Toggle Button
+.view-toggle-wrapper {
+  .view-toggle-btn {
+    height: 52px;
+    width: 52px;
+    border-radius: 16px;
+    border: 2px solid #e9ecef;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      border-color: #ced4da;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      transform: translateY(-1px);
+      background: #f8f9fa;
+    }
+    
+    &:focus {
+      border-color: var(--bs-primary);
+      box-shadow: 0 0 0 4px rgba(var(--bs-primary-rgb), 0.1);
+      transform: translateY(-1px);
+      outline: none;
+    }
+    
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    i {
+      font-size: 18px;
+      color: #6c757d;
+      transition: color 0.3s ease;
+    }
+    
+    &:hover i {
+      color: var(--bs-primary);
+    }
+  }
+}
+
+// Base Grid Layout Styles (overridden by enhanced styles below)
+.blog-grid-card {
+  transition: all 0.3s ease;
+  border-radius: 16px;
+  overflow: hidden;
+  
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15) !important;
+    
+    .card-img-top {
+      transform: scale(1.05);
+    }
+  }
+  
+  .card-img-wrapper {
+    overflow: hidden;
+    border-radius: 16px 16px 0 0;
+    
+    .card-img-top {
+      transition: transform 0.3s ease;
+      border-radius: 16px 16px 0 0;
+    }
+  }
+}
+
+// Responsive Grid Adjustments
+@media (max-width: 991.98px) {
+  .blog-grid-card {
+    .card-body {
+      padding: 1.25rem;
+      
+      .card-title {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 767.98px) {
+  .view-toggle-wrapper {
+    .view-toggle-btn {
+      height: 48px;
+      width: 48px;
+      border-radius: 12px;
+      
+      i {
+        font-size: 16px;
+      }
+    }
+  }
+  
+  .blog-grid-card {
+    margin-bottom: 1rem;
+    
+    .card-body {
+      padding: 1rem;
+      
+      .card-title {
+        font-size: 0.9375rem;
+        margin-bottom: 0.75rem;
+      }
+      
+      .blog-grid-stats {
+        margin-bottom: 0.75rem;
+        
+        .stats-left {
+          .stat-item {
+            font-size: 0.8125rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Grid specific spacing adjustments
+.blog-posts-container {
+  // Ensure proper spacing for both list and grid views
+  .row.g-4 {
+    margin: 0;
+    
+    > * {
+      padding-left: calc(var(--bs-gutter-x) * 0.5);
+      padding-right: calc(var(--bs-gutter-x) * 0.5);
+    }
+  }
+  
+  // Enhanced spacing for grid view
+  .row.g-4:has(.blog-grid-card) {
+    --bs-gutter-x: 2rem; // Increased spacing between grid cards
+    --bs-gutter-y: 2rem;
+    
+    @media (min-width: 1200px) {
+      --bs-gutter-x: 2.5rem;
+      --bs-gutter-y: 2.5rem;
+    }
+    
+    @media (min-width: 1400px) {
+      --bs-gutter-x: 3rem;
+      --bs-gutter-y: 3rem;
+    }
+  }
+}
+
+// Full-width grid optimizations
+.blog-page-container {
+  // When in grid view, optimize for full-width layout
+  .container {
+    // Reduced padding for better space utilization in grid view
+    @media (min-width: 1200px) {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+    
+    @media (min-width: 1400px) {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+    
+    @media (min-width: 1600px) {
+      max-width: none; // Allow full width utilization on very large screens
+      padding-left: 3rem;
+      padding-right: 3rem;
+    }
+  }
+}
+
+// Enhanced full-width grid for wider cards
+.blog-grid-card {
+  // Base enhanced styling for wider cards
+  .card-img-wrapper {
+    height: 220px; // Increased base height
+    
+    .card-img-top {
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .blog-grid-meta,
+    .reading-time-badge {
+      .badge {
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 8px 14px;
+        border-radius: 14px;
+      }
+    }
+  }
+  
+  .card-body {
+    padding: 2rem; // Increased padding for wider cards
+    
+    .card-title {
+      font-size: 1.25rem; // Larger title for wider cards
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1.25rem;
+      -webkit-line-clamp: 2;
+    }
+    
+    .blog-grid-stats {
+      margin-bottom: 1.25rem;
+      
+      .stats-left {
+        .stat-item {
+          font-size: 0.9rem;
+          
+          i {
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+    
+    .blog-grid-author {
+      .author-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 0.9rem;
+      }
+      
+      .author-info {
+        .author-name {
+          font-size: 0.95rem;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+// Responsive adjustments for wider cards
+@media (min-width: 1200px) {
+  .blog-grid-card {
+    .card-img-wrapper {
+      height: 240px; // Taller images on large screens
+    }
+    
+    .card-body {
+      padding: 2.25rem;
+      
+      .card-title {
+        font-size: 1.375rem;
+      }
+    }
+  }
+}
+
+@media (min-width: 1400px) {
+  .blog-grid-card {
+    .card-img-wrapper {
+      height: 260px; // Even taller on XL screens
+    }
+    
+    .card-body {
+      padding: 2.5rem;
+      
+      .card-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      
+      .blog-grid-stats {
+        margin-bottom: 1.5rem;
+        
+        .stats-left {
+          .stat-item {
+            font-size: 1rem;
+          }
+        }
+      }
+      
+      .blog-grid-author {
+        .author-avatar {
+          width: 44px;
+          height: 44px;
+          font-size: 1rem;
+        }
+        
+        .author-info {
+          .author-name {
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+  }
+}

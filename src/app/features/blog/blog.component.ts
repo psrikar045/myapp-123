@@ -31,6 +31,7 @@ export class BlogComponent implements OnInit, OnDestroy {
   // Pagination properties (matching AllCategoriesComponent)
   currentPage = 1;
   pageSize = 5;
+  gridPageSize = 6; // For grid view: 3x2 layout
 
   // Sidebar management properties
   showAllSidebarCategories = false;
@@ -42,6 +43,9 @@ export class BlogComponent implements OnInit, OnDestroy {
   filteredBlogs: BlogCard[] = [];
   isSearching = false;
   isSearchFocused = false;
+  
+  // View mode properties
+  viewMode: 'list' | 'grid' = 'list';
 
   blogs: BlogCard[] = [];
  hero = {
@@ -239,14 +243,25 @@ export class BlogComponent implements OnInit, OnDestroy {
     this.applyFilters();
   }
 
+  // View mode methods
+  toggleViewMode(): void {
+    this.viewMode = this.viewMode === 'list' ? 'grid' : 'list';
+    this.currentPage = 1; // Reset to first page when switching views
+  }
+
+  // Get current page size based on view mode
+  get currentPageSize(): number {
+    return this.viewMode === 'grid' ? this.gridPageSize : this.pageSize;
+  }
+
   // Pagination methods (matching AllCategoriesComponent)
   get pagedBlogs() {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredBlogs.slice(start, start + this.pageSize);
+    const start = (this.currentPage - 1) * this.currentPageSize;
+    return this.filteredBlogs.slice(start, start + this.currentPageSize);
   }
 
   get totalPages() {
-    return Math.ceil(this.filteredBlogs.length / this.pageSize) || 1;
+    return Math.ceil(this.filteredBlogs.length / this.currentPageSize) || 1;
   }
 
   get pages() {
@@ -281,7 +296,7 @@ export class BlogComponent implements OnInit, OnDestroy {
 
   navigateToBlogDetails(blogIndex: number): void {
     // Calculate the actual index in the full blogs array
-    const actualIndex = (this.currentPage - 1) * this.pageSize + blogIndex;
+    const actualIndex = (this.currentPage - 1) * this.currentPageSize + blogIndex;
     const selectedBlog = this.pagedBlogs[blogIndex];
     
     // Set the selected blog in the service to ensure the clicked blog is displayed
@@ -290,13 +305,13 @@ export class BlogComponent implements OnInit, OnDestroy {
     }
     
     // Set pagination context in the service so BlogDetails knows which blogs to navigate within
-    this.blogService.setPaginationContext(this.currentPage, this.pageSize);
+    this.blogService.setPaginationContext(this.currentPage, this.currentPageSize);
     
     // Navigate with the actual index and pagination context
     this.router.navigate(['/blog', actualIndex], {
       queryParams: {
         page: this.currentPage,
-        pageSize: this.pageSize
+        pageSize: this.currentPageSize
       }
     });
   }

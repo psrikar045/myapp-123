@@ -7,9 +7,9 @@
       <div class="row justify-content-center text-center">
         <div class="col-lg-8 col-md-10 col-12">
           <div class="hero-content">
-            <div class="hero-icon mb-4">
+            <!-- <div class="hero-icon mb-4">
               <i class="bi bi-journal-richtext display-1"></i>
-            </div>
+            </div> -->
             <h1 class="display-4 fw-bold mb-3 hero-title">{{ hero.title }}</h1>
             <p class="lead mb-4 hero-subtitle">{{ hero.subtitle }}</p>
             <div class="hero-stats d-flex justify-content-center gap-4 flex-wrap">
@@ -92,6 +92,14 @@
                 </select>
                 <i class="bi bi-chevron-down dropdown-icon"></i>
               </div>
+              <div class="view-toggle-wrapper">
+                <button 
+                  class="btn btn-outline-secondary view-toggle-btn"
+                  (click)="toggleViewMode()"
+                  [title]="viewMode === 'list' ? 'Switch to Grid View' : 'Switch to List View'">
+                  <i class="bi" [ngClass]="viewMode === 'list' ? 'bi-grid-3x3-gap' : 'bi-list-ul'"></i>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -119,11 +127,11 @@
       
       <!-- Blog Posts Grid -->
       <div class="row g-4">
-        <div class="col-lg-8 col-12">
+        <div class="col-12" [ngClass]="viewMode === 'list' ? 'col-lg-8' : 'col-12'">
           <div class="blog-posts-container">
             
-            <!-- Enhanced Blog Post Cards -->
-            <div class="row g-4" *ngIf="pagedBlogs.length > 0; else noPosts">
+            <!-- List View -->
+            <div class="row g-4" *ngIf="pagedBlogs.length > 0 && viewMode === 'list'; else gridOrNoPosts">
               <div class="col-12" *ngFor="let blog of pagedBlogs; let i = index; trackBy: trackByBlog">
                 <article class="blog-post-card card border-0 shadow-sm h-100 hover-lift" 
                          (click)="navigateToBlogDetails(i)"
@@ -191,22 +199,75 @@
                 </article>
               </div>
             </div>
-            
-            <!-- No Posts Message -->
-            <ng-template #noPosts>
-              <div class="text-center py-5">
+
+            <!-- Grid View -->
+            <ng-template #gridOrNoPosts>
+              <div class="row g-4" *ngIf="pagedBlogs.length > 0 && viewMode === 'grid'">
+                <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-12" *ngFor="let blog of pagedBlogs; let i = index; trackBy: trackByBlog">
+                  <article class="blog-grid-card card border-0 shadow-sm h-100 hover-lift" 
+                           (click)="navigateToBlogDetails(i)"
+                           style="cursor: pointer;"
+                           role="button"
+                           tabindex="0"
+                           (keydown.enter)="navigateToBlogDetails(i)"
+                           (keydown.space)="navigateToBlogDetails(i)">
+                    <div class="card-img-wrapper position-relative">
+                      <img [src]="blog.img" 
+                           [alt]="blog.title"
+                           class="card-img-top"
+                           style="height: 200px; object-fit: cover;">
+                      <div class="blog-grid-meta position-absolute top-0 end-0 m-3">
+                        <span class="badge bg-primary">{{ blog.category || 'Web Development' }}</span>
+                      </div>
+                      <!-- <div class="reading-time-badge position-absolute bottom-0 start-0 m-3">
+                        <span class="badge bg-dark bg-opacity-75 text-white">
+                          <i class="bi bi-clock me-1"></i>2 mins Read
+                        </span>
+                      </div> -->
+                    </div>
+                    <div class="card-body p-4">
+                      <h5 class="card-title fw-bold mb-3 lh-sm">{{ blog.title }}</h5>
+                      <div class="blog-grid-stats d-flex align-items-center justify-content-between mb-3">
+                        <div class="stats-left d-flex align-items-center gap-3">
+                          <span class="stat-item text-muted small">
+                            <i class="bi bi-eye me-1"></i>9,125
+                          </span>
+                          <span class="stat-item text-muted small">
+                            <i class="bi bi-chat me-1"></i>3
+                          </span>
+                        </div>
+                        <small class="text-muted">{{ blog.date }}</small>
+                      </div>
+                      <div class="blog-grid-author d-flex align-items-center">
+                        <div class="author-avatar bg-primary text-white rounded-circle me-2 d-flex align-items-center justify-content-center"
+                             style="width: 32px; height: 32px; font-size: 0.8rem;">
+                          {{ blog.author.charAt(0) || 'A' }}
+                        </div>
+                        <div class="author-info">
+                          <div class="author-name fw-semibold text-dark small">{{ blog.author }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                </div>
+              </div>
+              
+              <!-- No Posts Message (for both views) -->
+              <div class="text-center py-5" *ngIf="pagedBlogs.length === 0">
                 <i class="bi bi-journal-text display-1 text-muted mb-3"></i>
                 <h4 class="text-muted">No blog posts found</h4>
                 <p class="text-muted">Check back later for new content</p>
               </div>
             </ng-template>
             
+
+            
             <!-- Enhanced Pagination -->
-            <div class="pagination-container mt-5" *ngIf="filteredBlogs.length > pageSize">
+            <div class="pagination-container mt-5" *ngIf="filteredBlogs.length > currentPageSize">
               <div class="d-flex justify-content-between align-items-center mb-3">
                 <div class="pagination-info">
                   <small class="text-muted">
-                    Showing {{ (currentPage - 1) * pageSize + 1 }} to {{ Math.min(currentPage * pageSize, filteredBlogs.length) }} 
+                    Showing {{ (currentPage - 1) * currentPageSize + 1 }} to {{ Math.min(currentPage * currentPageSize, filteredBlogs.length) }} 
                     of {{ filteredBlogs.length }} results
                   </small>
                 </div>
@@ -259,8 +320,8 @@
           </div>
         </div>
         
-        <!-- Sidebar -->
-        <div class="col-lg-4 col-12">
+        <!-- Sidebar - Only show in list view -->
+        <div class="col-lg-4 col-12" *ngIf="viewMode === 'list'">
           <div class="blog-sidebar-container">
             
             <!-- Popular Posts -->
