@@ -2,35 +2,20 @@
 <section class="hero-section position-relative overflow-hidden" id="brands-section">
   <!-- Background Elements -->
   <div class="hero-bg-elements">
-    <div class="hero-white-circle position-absolute rounded-circle"></div>
-    <img src="assets/landing/Group 1000003639.svg" alt="Decorative Circle" class="hero-yellow-circle position-absolute d-none d-lg-block" />
+    <img src="assets/landing/SectionBg1.png" alt="Decorative Circle" class="hero-yellow-circle position-absolute d-none d-lg-block" />
   </div>
-  
-  <div class="container-fluid px-lg-5 px-md-4 px-3">
+  <div class="container px-lg-5 px-md-4 px-3">
     <div class="row align-items-center py-4">
-      
       <!-- Left Column: Content -->
       <div class="col-lg-6 col-12 order-2 order-lg-1">
         <div class="hero-content">
           <!-- Main Headline -->
+          <div class="hero-white-circle position-absolute rounded-circle"></div>
           <h1 class="hero-headline display-3 fw-bold mb-4 fade-in-up">
             {{ heroHeadline.main }}<br class="d-none d-md-block"> 
             {{ heroHeadline.main1 }}<br class="d-none d-md-block"> 
             <span class="hero-highlight text-gradient">{{ heroHeadline.highlight }}</span>
-            <svg *ngIf="heroHeadline.waveIcon" 
-                 width="38" height="24" 
-                 viewBox="0 0 38 24" 
-                 fill="none" 
-                 xmlns="http://www.w3.org/2000/svg" 
-                 class="hero-wave-icon ms-2">
-              <path d="M2 12C6.5 2 13.5 2 18 12C22.5 22 29.5 22 34 12" 
-                    stroke="#377DFF" 
-                    stroke-width="3" 
-                    stroke-linecap="round" 
-                    stroke-linejoin="round"/>
-            </svg>
           </h1>
-          
           <!-- Subheadline -->
           <p class="hero-subheadline lead text-muted mb-4 fade-in-up" style="animation-delay: 0.2s;">
             {{ heroSubheadline }}
@@ -61,7 +46,6 @@
           </div>
           <!-- Ratings Block -->
           <div class="hero-rating-container fade-in-up" style="animation-delay: 0.6s;">
-            <div class="card border-0 shadow-sm bg-white rounded-3 p-3">
               <div class="row align-items-center g-3">
                 <div class="col-auto">
                   <small class="text-muted fw-medium">Our customers say</small>
@@ -83,27 +67,46 @@
                   </div>
                 </div>
               </div>
-            </div>
           </div>
         </div>
       </div>
       <!-- Right Column: Illustration -->
       <div class="col-lg-6 col-12 order-1 order-lg-2 mb-5 mb-lg-0">
         <div class="hero-illustration text-center">
-          <img src="assets/imgi.png" 
-               alt="Marketify Hero Illustration" 
-               class="img-fluid hero-main-image fade-in-up"
-               style="animation-delay: 0.3s; max-height: 500px;"
-               loading="lazy">
+          <img src="assets/landing/Hero_img.png" alt="Marketify Hero Illustration" class="img-fluid hero-main-image fade-in-up" style="animation-delay: 0.3s; max-height: 500px;" loading="lazy">
         </div>
       </div>
-      
+    </div>
+  </div>
+</section>
+
+
+<!-- Company Logos Section -->
+<section class="company-logos-section py-5 bg-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-4">
+        <h3 class="fw-bold text-muted">Trusted by leading companies</h3>
+      </div>
+    </div>
+    <div class="row justify-content-center align-items-center g-4">
+      <div class="col-lg-2 col-md-3 col-sm-4 col-6" *ngFor="let logo of orbitLogos">
+        <div class="logo-container text-center">
+           <!-- style="max-height: 60px; opacity: 0.7; transition: opacity 0.3s ease;" -->
+          <img [src]="logo.src" 
+               [alt]="logo.alt" 
+               class="img-fluid company-logo"
+               (mouseenter)="onLogoHover($event, true)"
+               (mouseleave)="onLogoHover($event, false)">
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- Features Section -->
-<section class="features-section section-padding bg-light">
+<section class="features-section section-padding SectionProperties">
+  <img src="assets/landing/SectionBg3.png" alt="Marketify" class="SectionBgImage" />
   <div class="container">
     <div class="row text-center mb-5">
       <div class="col-12">
@@ -136,29 +139,6 @@
         <div class="stat-item">
           <div class="stat-number display-4 fw-bold mb-2">{{ stat.number }}</div>
           <div class="stat-label">{{ stat.label }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Company Logos Section -->
-<section class="company-logos-section py-5 bg-white">
-  <div class="container">
-    <div class="row">
-      <div class="col-12 text-center mb-4">
-        <h3 class="fw-bold text-muted">Trusted by leading companies</h3>
-      </div>
-    </div>
-    <div class="row justify-content-center align-items-center g-4">
-      <div class="col-lg-2 col-md-3 col-sm-4 col-6" *ngFor="let logo of orbitLogos">
-        <div class="logo-container text-center">
-          <img [src]="logo.src" 
-               [alt]="logo.alt" 
-               class="img-fluid company-logo"
-               style="max-height: 60px; opacity: 0.7; transition: opacity 0.3s ease;"
-               (mouseenter)="onLogoHover($event, true)"
-               (mouseleave)="onLogoHover($event, false)">
         </div>
       </div>
     </div>

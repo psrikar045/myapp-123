@@ -20,7 +20,7 @@
   box-shadow: 0 8px 32px 0 rgba(55,125,255,0.10);
   padding: 0;
   margin: 40px auto 0 auto;
-  max-width: 1400px;
+  width: 100%;
   border: none;
   position: relative;
   z-index: 1;

@@ -847,7 +847,7 @@ body {
 // Support for existing custom classes
 .CustomContainer {
   @extend .container-fluid;
-  max-width: 1400px !important;
+  width: 100%;
 }
 
 .pad100 {

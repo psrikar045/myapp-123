@@ -129,7 +129,7 @@ a:hover {
   /* Potential for larger font sizes or wider containers if design calls for it */
   /* html { font-size: 17px; } */
   .container {
-    max-width: 1400px; /* Example: Wider container for large screens */
+    max-width: 1600px; /* Example: Wider container for large screens */
   }
 }
 
@@ -427,7 +427,7 @@ body.dark-theme .mat-mdc-menu-item:hover:not([disabled]) {
   background-color: rgba(255, 255, 255, 0.08) !important;
 }
 .pad100{padding-left:100px;padding-right:100px;}
-.CustomContainer{width:1400px !important;}
+.CustomContainer{width:1600px !important;}
 .mar100{margin-left:100px;margin-right:100px;}
 
 /* :root {

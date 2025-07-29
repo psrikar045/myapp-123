@@ -368,7 +368,6 @@ body, .company-data-body {
 }
 .company-banner {
   width: 100%;
-  max-width: 1400px;
   height: 260px;
   border-radius: 32px;
   overflow: hidden;

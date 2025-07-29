@@ -362,7 +362,7 @@
 
 /* ------------ */
 .hero-section {
-  background: linear-gradient(120deg, #ffe7c7 0%, #f8fafc 60%, #e6f0ff 100%);
+  background: linear-gradient(135deg, #ffd1666e 0%, var(--theme-surface) 32%);
   min-height: 720px;
   position: relative;
   display: flex;
@@ -785,7 +785,7 @@ width: 100%;
     align-content: center;
     justify-content: center;
     align-items: center;
-    width: 1400px;
+    width: 1600px;
     margin: 0 auto;
     /* align-items: stretch; */
     /* max-width: 1240px; */
@@ -875,7 +875,7 @@ width: 100%;
   box-shadow: 0 8px 40px 0 rgba(16,30,54,0.10);
   background: #fff;
 }
-@media (max-width: 1400px) {
+@media (max-width: 1600px) {
   /* .section-inner {
     max-width: 1000px;
     padding-left: 24px;
@@ -934,7 +934,7 @@ width: 100%;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 69px 40px 69px 40px;
 }
@@ -1077,7 +1077,7 @@ width: 100%;
   width: 100%;
 }
 .pricing-section-inner {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
     text-align: center;
     padding: 69px 0px;
@@ -1379,7 +1379,7 @@ width: 100%;
 }
 
 .core-capabilities-container {
-  max-width: 1400px;
+  max-width: 1600px;
   margin: 0 auto;
   padding-left: 0px;
   padding-right: 0px;
