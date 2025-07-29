@@ -108,7 +108,15 @@ export class BlogDetailsComponent implements OnInit {
     this.route.params.subscribe(params => {
       const blogId = +params['id'];
       this.currentIndex = blogId;
-      this.selectedBlog = this.blogService.getBlog(blogId) || this.blogService.getBlog(0);
+      
+      // Get the selected blog data - this ensures the clicked blog's data is displayed
+      this.selectedBlog = this.blogService.getBlog(blogId);
+      
+      // If blog not found, try to get from service or default to first blog
+      if (!this.selectedBlog) {
+        this.selectedBlog = this.blogService.getSelectedBlog() || this.blogService.getBlog(0);
+        this.currentIndex = this.selectedBlog ? 0 : 0;
+      }
       
       // Get pagination context from route params or service
       this.route.queryParams.subscribe(queryParams => {
@@ -149,7 +157,7 @@ export class BlogDetailsComponent implements OnInit {
   }
 
   navigateToBlog(index: number): void {
-    this.router.navigate(['/blog-details', index]).then(() => {
+    this.router.navigate(['/blog', index]).then(() => {
       this.currentIndex = index;
       this.selectedBlog = this.blogService.getBlog(index) || this.blogService.getBlog(0);
       this.updateNavigation();

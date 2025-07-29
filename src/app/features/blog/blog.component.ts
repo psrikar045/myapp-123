@@ -282,6 +282,12 @@ export class BlogComponent implements OnInit, OnDestroy {
   navigateToBlogDetails(blogIndex: number): void {
     // Calculate the actual index in the full blogs array
     const actualIndex = (this.currentPage - 1) * this.pageSize + blogIndex;
+    const selectedBlog = this.pagedBlogs[blogIndex];
+    
+    // Set the selected blog in the service to ensure the clicked blog is displayed
+    if (selectedBlog) {
+      this.blogService.setSelectedBlog(selectedBlog);
+    }
     
     // Set pagination context in the service so BlogDetails knows which blogs to navigate within
     this.blogService.setPaginationContext(this.currentPage, this.pageSize);
@@ -297,6 +303,8 @@ export class BlogComponent implements OnInit, OnDestroy {
 
   navigateToBlogDetailsFromSidebar(index: number): void {
     // For sidebar navigation, navigate to the blog details
+    // Reset pagination context since sidebar doesn't follow pagination
+    this.blogService.setPaginationContext(1, this.blogs.length);
     this.router.navigate(['/blog', index]);
   }
 

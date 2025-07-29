@@ -15,7 +15,7 @@ const routes: Routes = [
         title: 'Blog - Marketify'
       },
       {
-        path: ':slug',
+        path: ':id',
         component: BlogDetailsComponent,
         title: 'Blog Post - Marketify'
       }

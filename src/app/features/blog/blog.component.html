@@ -173,7 +173,9 @@
                       </div>
                     </div>
                     <div class="col-md-4 col-12">
-                      <div class="blog-image-wrapper h-100 position-relative">
+                      <div class="blog-image-wrapper h-100 position-relative"
+                           (click)="navigateToBlogDetails(i)"
+                           style="cursor: pointer;">
                         <img [src]="blog.img" 
                              [alt]="blog.title"
                              class="card-img h-100"
@@ -269,7 +271,13 @@
               <div class="card-body p-0">
                 <div class="popular-post-item border-bottom p-3" 
                      *ngFor="let cat of displayedSidebarCategories; let i = index; let last = last"
-                     [class.border-bottom-0]="last">
+                     [class.border-bottom-0]="last"
+                     (click)="navigateToBlogDetailsFromSidebar(cat.id || i)"
+                     style="cursor: pointer;"
+                     role="button"
+                     tabindex="0"
+                     (keydown.enter)="navigateToBlogDetailsFromSidebar(cat.id || i)"
+                     (keydown.space)="navigateToBlogDetailsFromSidebar(cat.id || i)">
                   <div class="d-flex">
                     <div class="popular-post-content flex-grow-1">
                       <h6 class="fw-semibold mb-1">{{ cat.title }}</h6>

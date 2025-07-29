@@ -5,6 +5,13 @@
     <div class="blog-details-main-card">
     <!-- Back Button -->
     
+    <!-- Back Button -->
+    <!-- <div class="back-button-container mb-4">
+      <button class="btn btn-outline-primary" (click)="onBackToList()">
+        <i class="bi bi-arrow-left me-2"></i>Back to Blog List
+      </button>
+    </div> -->
+
     <!-- Main content area -->
     <div class="blog-details-content">
       <!-- Blog Details (Left) -->
@@ -19,15 +26,25 @@
           </div>
         </div>
         <div class="blog-details-image" *ngIf="selectedBlog">
-          <img [src]="selectedBlog.img" [alt]="selectedBlog.title" />
+          <img [src]="selectedBlog.img" 
+               [alt]="selectedBlog.title" 
+               style="width: 100%; height: auto; object-fit: cover; border-radius: 8px;" />
         </div>
       <div class="blog-details-body">
-        <p>If you've ever spent time searching for a company's logo, brand colors, or social media links, you know how frustrating and time-consuming it can be. That's why we created Marketify — a simple yet powerful tool that helps you get all the important brand details using just a website link.
-With Marketify, all you need is a company's domain name, like nike.com or apple.com. In seconds, you'll get access to their official logo (in SVG or PNG), brand colors, fonts, social media profiles, and even a short company description. Whether you're a developer building an app, a designer creating a presentation, or a marketer managing client content, Marketify makes your job faster and easier.
-What makes Marketify different is its speed and simplicity. It's built using Java and Angular, which means it's reliable and developer-friendly. You can explore brands through a clean web interface or use our easy-to-integrate API to automate everything in your own application. You'll also get access to a personal dashboard where you can manage your API key and track usage.
-Compared to other tools like Brandfetch, Marketify gives you more flexibility and control. You can even suggest or manage your own brand data, making it great for agencies and platforms that deal with multiple brands every day.
-Getting started with Marketify is simple. Just visit marketify.io, sign up for a free account, and start searching by domain. Within minutes, you'll have all the brand details you need at your fingertips.
-Marketify is built to save you time and help you create faster — whether you're pulling logos for a pitch deck or populating your CRM with brand info. Give it a try and see how easy brand access can be.</p>
+        <p *ngIf="selectedBlog?.summary" class="lead">{{ selectedBlog?.summary }}</p>
+        <div *ngIf="selectedBlog?.title?.includes('Marketify')">
+          <p>If you've ever spent time searching for a company's logo, brand colors, or social media links, you know how frustrating and time-consuming it can be. That's why we created Marketify — a simple yet powerful tool that helps you get all the important brand details using just a website link.</p>
+          <p>With Marketify, all you need is a company's domain name, like nike.com or apple.com. In seconds, you'll get access to their official logo (in SVG or PNG), brand colors, fonts, social media profiles, and even a short company description. Whether you're a developer building an app, a designer creating a presentation, or a marketer managing client content, Marketify makes your job faster and easier.</p>
+          <p>What makes Marketify different is its speed and simplicity. It's built using Java and Angular, which means it's reliable and developer-friendly. You can explore brands through a clean web interface or use our easy-to-integrate API to automate everything in your own application. You'll also get access to a personal dashboard where you can manage your API key and track usage.</p>
+          <p>Compared to other tools like Brandfetch, Marketify gives you more flexibility and control. You can even suggest or manage your own brand data, making it great for agencies and platforms that deal with the brands every day.</p>
+          <p>Getting started with Marketify is simple. Just visit marketify.io, sign up for a free account, and start searching by domain. Within minutes, you'll have all the brand details you need at your fingertips.</p>
+          <p>Marketify is built to save you time and help you create faster — whether you're pulling logos for a pitch deck or populating your CRM with brand info. Give it a try and see how easy brand access can be.</p>
+        </div>
+        <div *ngIf="selectedBlog?.title && !selectedBlog?.title?.includes('Marketify')">
+          <p>This article provides comprehensive insights into modern marketing strategies and best practices. Our expert analysis covers the latest trends, tools, and techniques that can help your business grow and reach new audiences.</p>
+          <p>In today's competitive digital landscape, understanding your audience and leveraging the right technologies is crucial for success. This detailed guide explores proven methodologies and actionable strategies that you can implement immediately.</p>
+          <p>Whether you're a startup looking to establish your brand presence or an established company seeking to optimize your marketing efforts, this article offers valuable insights that can drive meaningful results for your business.</p>
+        </div>
         <h3>Research Your Destination</h3>
         <p>Before embarking on your journey, take the time to research your destination. This includes understanding the local culture, customs, and laws, as well as identifying top attractions, restaurants, and accommodations. Doing so will help you navigate your destination with confidence and avoid any cultural faux pas.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. In hendrerit gravida rutrum quisque non tellus orci ac auctor. Mi ipsum faucibus vitae aliquet nec ullamcorper sit amet. Viverra adipiscing at in tellus.</p>
@@ -78,7 +95,13 @@ Marketify is built to save you time and help you create faster — whether you'r
       <h3 class="sidebar-title">Recent Posts</h3>
       <p class="sidebar-desc">Traveling is an enriching experience that opens up new horizons, exposes us to</p>
       <div class="sidebar-category-list">
-        <div class="sidebar-category-item" *ngFor="let cat of sidebarCategories">
+        <div class="sidebar-category-item" *ngFor="let cat of sidebarCategories; let i = index"
+             (click)="navigateToBlog(i)"
+             style="cursor: pointer;"
+             role="button"
+             tabindex="0"
+             (keydown.enter)="navigateToBlog(i)"
+             (keydown.space)="navigateToBlog(i)">
           <div class="sidebar-category-content">
             <div class="sidebar-category-title">{{cat.title}}</div>
             <!-- <div class="sidebar-category-desc">{{cat.description}}</div> -->
@@ -87,7 +110,9 @@ Marketify is built to save you time and help you create faster — whether you'r
               <!-- <span class="sidebar-category-date">{{cat.date}}</span> -->
             </div>
           </div>
-          <img class="sidebar-category-img" [src]="cat.img" alt="Category" />
+          <img class="sidebar-category-img" [src]="cat.img" alt="Category" 
+               (click)="navigateToBlog(i)"
+               style="cursor: pointer;" />
         </div>
       </div>
       

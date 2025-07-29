@@ -168,4 +168,16 @@ export class BlogService {
   getCurrentPaginationContext() {
     return this.paginationContextSubject.value;
   }
+
+  // Set selected blog (for ensuring clicked blog is displayed)
+  private selectedBlogSubject = new BehaviorSubject<BlogCard | null>(null);
+  public selectedBlog$ = this.selectedBlogSubject.asObservable();
+
+  setSelectedBlog(blog: BlogCard): void {
+    this.selectedBlogSubject.next(blog);
+  }
+
+  getSelectedBlog(): BlogCard | null {
+    return this.selectedBlogSubject.value;
+  }
 }
