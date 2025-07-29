@@ -14,15 +14,15 @@ describe('PermissionCheckDirective', () => {
 
     // Mock ViewContainerRef
     viewContainerRefMock = {
-      clear: jasmine.createSpy('clear'),
-      createEmbeddedView: jasmine.createSpy('createEmbeddedView')
+      clear: jest.fn(),
+      createEmbeddedView: jest.fn()
     } as any;
 
     // Mock AuthService
     authServiceMock = {
-      isLoggedIn: () => true, // Default to logged in for basic tests
-      // Mock loggedIn$ if directive subscribes to it, but current impl uses isLoggedIn()
-      loggedIn$: new BehaviorSubject<boolean>(true) // If needed
+      isAuthenticated: () => true, // Default to authenticated for basic tests
+      // Mock isAuthenticated$ if directive subscribes to it
+      isAuthenticated$: new BehaviorSubject<boolean>(true) // If needed
     };
   });
 
@@ -31,8 +31,8 @@ describe('PermissionCheckDirective', () => {
     expect(directive).toBeTruthy();
   });
 
-  it('should create view if permission check passes (user logged in - placeholder logic)', () => {
-    authServiceMock.isLoggedIn = () => true;
+  it('should create view if permission check passes (user authenticated - placeholder logic)', () => {
+    authServiceMock.isAuthenticated = () => true;
     const directive = new PermissionCheckDirective(templateRefMock, viewContainerRefMock, authServiceMock as AuthService);
     directive.appPermissionCheck = 'somePermission'; // Trigger setter and updateView
     directive.ngOnInit(); // Explicitly call ngOnInit if needed, though setter should handle it
@@ -40,8 +40,8 @@ describe('PermissionCheckDirective', () => {
     expect(viewContainerRefMock.clear).not.toHaveBeenCalled();
   });
 
-  it('should clear view if permission check fails (user not logged in - placeholder logic)', () => {
-    authServiceMock.isLoggedIn = () => false;
+  it('should clear view if permission check fails (user not authenticated - placeholder logic)', () => {
+    authServiceMock.isAuthenticated = () => false;
     const directive = new PermissionCheckDirective(templateRefMock, viewContainerRefMock, authServiceMock as AuthService);
     directive.appPermissionCheck = 'somePermission';
     directive.ngOnInit();
@@ -50,7 +50,7 @@ describe('PermissionCheckDirective', () => {
   });
 
    it('should create view if no permission is specified', () => {
-    authServiceMock.isLoggedIn = () => true; // Irrelevant if no permission needed
+    authServiceMock.isAuthenticated = () => true; // Irrelevant if no permission needed
     const directive = new PermissionCheckDirective(templateRefMock, viewContainerRefMock, authServiceMock as AuthService);
     directive.appPermissionCheck = ''; // or null/undefined depending on how you want to handle it
     directive.ngOnInit();
@@ -58,3 +58,4 @@ describe('PermissionCheckDirective', () => {
   });
 
 });
+

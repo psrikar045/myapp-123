@@ -1,0 +1,220 @@
+name: 🤖 AI-Enhanced Testing Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  unit-tests:
+    name: 🧪 Unit Tests (Jest)
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 📋 Install dependencies
+      run: npm ci
+      
+    - name: 🧪 Run unit tests with coverage
+      run: npm run test:jest:coverage
+      
+    - name: 📊 Upload coverage reports
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage/jest/lcov.info
+        flags: unittests
+        name: unit-tests
+        
+    - name: 📋 Upload Jest results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: jest-results
+        path: |
+          coverage/jest/
+          allure-results/
+
+  e2e-tests:
+    name: 🎭 E2E Tests (Playwright)
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 📋 Install dependencies
+      run: npm ci
+      
+    - name: 🎭 Install Playwright browsers
+      run: npx playwright install --with-deps
+      
+    - name: 🏗️ Build application
+      run: npm run build
+      
+    - name: 🧪 Run E2E tests
+      run: npm run test:e2e
+      
+    - name: 📊 Upload Playwright report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-report
+        path: |
+          playwright-report/
+          allure-results/
+        retention-days: 30
+
+  visual-tests:
+    name: 👁️ Visual Regression Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 📋 Install dependencies
+      run: npm ci
+      
+    - name: 🎭 Install Playwright browsers
+      run: npx playwright install --with-deps
+      
+    - name: 🏗️ Build application
+      run: npm run build
+      
+    - name: 👁️ Run visual regression tests
+      run: npm run test:visual
+      
+    - name: 📊 Upload visual test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: visual-test-results
+        path: |
+          playwright-report/
+          test-results/
+        retention-days: 30
+
+  responsive-tests:
+    name: 📱 Responsive Design Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 📋 Install dependencies
+      run: npm ci
+      
+    - name: 🎭 Install Playwright browsers
+      run: npx playwright install --with-deps
+      
+    - name: 🏗️ Build application
+      run: npm run build
+      
+    - name: 📱 Run responsive design tests
+      run: npm run test:responsive
+      
+    - name: 📊 Upload responsive test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: responsive-test-results
+        path: |
+          playwright-report/
+          test-results/
+        retention-days: 30
+
+  generate-report:
+    name: 📋 Generate Test Reports
+    needs: [unit-tests, e2e-tests, visual-tests, responsive-tests]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 📋 Install dependencies
+      run: npm ci
+      
+    - name: 📥 Download all artifacts
+      uses: actions/download-artifact@v4
+      
+    - name: 📊 Generate Allure report
+      run: |
+        npm install -g allure-commandline
+        allure generate allure-results --clean --output allure-report
+        
+    - name: 📋 Upload comprehensive report
+      uses: actions/upload-artifact@v4
+      with:
+        name: comprehensive-test-report
+        path: |
+          allure-report/
+          jest-results/
+          playwright-report/
+          visual-test-results/
+          responsive-test-results/
+        retention-days: 30
+        
+    - name: 📊 Deploy reports to GitHub Pages
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./allure-report
+        destination_dir: test-reports
+
+  notify:
+    name: 📢 Notify Results
+    needs: [unit-tests, e2e-tests, visual-tests, responsive-tests]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: 📢 Test Results Summary
+      run: |
+        echo "## 🤖 AI-Enhanced Test Results" >> $GITHUB_STEP_SUMMARY
+        echo "| Test Type | Status |" >> $GITHUB_STEP_SUMMARY
+        echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+        echo "| Unit Tests | ${{ needs.unit-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| E2E Tests | ${{ needs.e2e-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Visual Tests | ${{ needs.visual-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "| Responsive Tests | ${{ needs.responsive-tests.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "📊 **Reports Available:**" >> $GITHUB_STEP_SUMMARY
+        echo "- [Test Reports](https://your-username.github.io/your-repo/test-reports/)" >> $GITHUB_STEP_SUMMARY
+        echo "- Check the Actions artifacts for detailed reports" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,111 @@
+
+<div class="categories-bg">
+  <div class="categories-content">
+    <h1 class="categories-title">
+      <span class="highlight">Browse Categories & Discover Top Brands</span>
+    </h1>
+    <p class="categories-desc">
+      Explore and filter the world’s most popular digital products, platforms, and creative tools by category and subcategory—all in one place.
+    </p>
+    <form class="categories-search-bar" (ngSubmit)="onSearch()">
+      <span class="search-icon">
+        <!-- SVG as before -->
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="10" cy="10" r="7.5" stroke="#b0b7c3" stroke-width="2"/>
+          <line x1="16.3536" y1="16.6464" x2="20" y2="20.2929" stroke="#b0b7c3" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <input type="text" placeholder="Search a brand" [(ngModel)]="searchTerm" name="search" autocomplete="off" />
+      <button class="search-btn" type="submit">
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 11H16" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 7L16 11L12 15" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </form>
+    <div class="categories-main-layout">
+      <div *ngIf="isLoadingBrands" class="loading-container">
+        <div class="loading-content">
+          <span class="loader"></span>
+          <p class="loading-text">Loading brands...</p>
+        </div>
+      </div>
+      <div class="categories-main-layout-content" *ngIf="!isLoadingBrands && filteredCategories.length > 0">
+        <!-- Sidebar Accordion -->
+        <aside class="categories-sidebar">
+          <!-- Sidebar Header -->
+          <div class="sidebar-header">
+            <h4 class="sidebar-title">
+              <i class="bi bi-funnel-fill me-2"></i>
+              Categories
+            </h4>
+            <p class="sidebar-subtitle">Filter by category</p>
+          </div>
+          
+          <div *ngFor="let cat of filteredCategories" class="sidebar-category">
+            <button class="sidebar-category-btn"
+              [class.active]="cat.label === selectedCategory"
+              [class.expanded]="cat.label === expandedCategory"
+              (click)="toggleCategoryAccordion(cat.label)">
+              {{ cat.label }}
+              <span class="accordion-arrow" [class.open]="cat.label === expandedCategory">
+                <i class="bi bi-chevron-down"></i>
+              </span>
+            </button>
+            <div class="sidebar-subcategories" *ngIf="cat.label === expandedCategory && cat.label !== 'All' && subCategoryMap[cat.label]">
+              <button *ngFor="let sub of subCategoryMap[cat.label]"
+                class="sidebar-subcategory-btn"
+                [class.active]="selectedSubCategory === sub.name"
+                (click)="goToSubCategory(sub.name)">
+                {{ sub.name }}
+              </button>
+            </div>
+          </div>
+        </aside>
+        <!-- Main Brand Cards Grid or No Data -->
+        <div class="categories-main-layout-right">
+          <div class="brands-content-wrapper">
+            <ng-container *ngIf="pagedBrands.length > 0; else noData">
+              <section class="brand-cards-grid">
+              <div *ngFor="let brand of pagedBrands" class="brand-card"
+                [ngStyle]="{ 'background': getNonWhiteColorWithOpacity(brand, 0.3) }"
+                (click)="goToBrand(brand)">
+                <div class="brand-card-icon">
+                  <!-- Render asset originalUrl if available, else fallback to image or letter -->
+                  <ng-container *ngIf="brand.assets && brand.assets.length > 0 && brand.assets[0].originalUrl; else fallbackIcon">
+                    <img [src]="brand.assets[0].originalUrl" [alt]="brand.name + ' asset'" />
+                  </ng-container>
+                  <ng-template #fallbackIcon>
+                    <ng-container *ngIf="brand.images && brand.images.length > 0; else defaultLogoTemplate">
+                      <img src="{{ brand.images[0].accessUrl }}" alt="brand.name.charAt(0)" />
+                    </ng-container>
+                    <ng-template #defaultLogoTemplate>
+                      <span>{{ brand.name.charAt(0) }}</span>
+                    </ng-template>
+                  </ng-template>
+                </div>
+                <div class="brand-card-title">{{ brand.name }}</div>
+                <!-- <div class="brand-card-sub">&#64;{{ brand.user }}</div> -->
+              </div>
+            </section>
+            <div class="pagination-bottom-center-wrapper" *ngIf="pagedBrands.length > 0">
+              <div class="categories-pagination">
+                <button class="page nav" (click)="selectPage(currentPage === 1 ? 1 : currentPage - 1)">
+                  <i class="bi bi-chevron-left"></i>
+                </button>
+                <button *ngFor="let page of pages" class="page" [class.active]="page === currentPage" (click)="selectPage(page)">{{ page }}</button>
+                <button class="page nav" (click)="selectPage(currentPage === pages.length ? pages.length : currentPage + 1)">
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </div>
+            </div>
+            </ng-container>
+            <ng-template #noData>
+              <div class="no-data-message">No data available</div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,381 @@
+/* ============================================================================
+   RESPONSIVE DASHBOARD STYLES
+   ============================================================================ */
+
+.dashboard-page {
+  background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
+  min-height: 100vh;
+  padding-top: 2rem;
+  color: var(--theme-text);
+  transition: var(--theme-animations);
+  
+  .container-fluid {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  @media (max-width: 767.98px) {
+    padding-top: 1rem;
+    
+    .container-fluid {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+}
+
+// Welcome Card
+.welcome-card {
+  border-radius: var(--theme-border-radius);
+  background: linear-gradient(135deg, var(--theme-surface) 0%, var(--theme-background) 100%);
+  border-left: 4px solid var(--theme-primary);
+  box-shadow: var(--theme-shadows);
+  
+  .dashboard-illustration {
+    i {
+      transition: all 0.3s ease;
+    }
+  }
+  
+  &:hover .dashboard-illustration i {
+    transform: scale(1.1) rotate(5deg);
+  }
+}
+
+// Action Cards
+.action-card {
+  border-radius: var(--theme-border-radius);
+  transition: var(--theme-animations);
+  cursor: pointer;
+  background: var(--theme-surface);
+  box-shadow: var(--theme-shadows);
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .action-icon {
+    i {
+      transition: all 0.3s ease;
+    }
+  }
+  
+  &:hover .action-icon i {
+    transform: scale(1.1);
+  }
+  
+  .btn {
+    transition: all 0.3s ease;
+    font-weight: 600;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+// Status Card
+.status-card {
+  border-radius: 1rem;
+  
+  .stat-item {
+    transition: all 0.3s ease;
+    border-radius: 0.75rem;
+    
+    &:hover {
+      background-color: #e9ecef !important;
+      transform: translateY(-2px);
+    }
+    
+    .stat-number {
+      font-size: 2rem;
+      
+      @media (max-width: 767.98px) {
+        font-size: 1.5rem;
+      }
+    }
+    
+    .stat-label {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+  }
+}
+
+// Logout Card
+.logout-card {
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+  border-left: 4px solid #dc3545;
+  
+  .btn {
+    font-weight: 600;
+    transition: all 0.3s ease;
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
+    }
+  }
+}
+
+// Hover Lift Utility
+.hover-lift {
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+// Responsive Adjustments
+@media (max-width: 991.98px) {
+  .welcome-card {
+    .row {
+      text-align: center;
+    }
+    
+    .dashboard-illustration {
+      margin-top: 1rem;
+    }
+  }
+}
+
+@media (max-width: 767.98px) {
+  .dashboard-page {
+    .container-fluid {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+  
+  .welcome-card {
+    .card-body {
+      padding: 2rem 1.5rem !important;
+    }
+    
+    h1 {
+      font-size: 2rem;
+    }
+    
+    .lead {
+      font-size: 1rem;
+    }
+  }
+  
+  .action-card {
+    .card-body {
+      padding: 2rem 1.5rem !important;
+    }
+    
+    .action-icon i {
+      font-size: 3rem !important;
+    }
+    
+    .card-title {
+      font-size: 1.1rem;
+    }
+  }
+  
+  .status-card {
+    .stat-item {
+      margin-bottom: 1rem;
+      
+      .stat-number {
+        font-size: 1.25rem;
+      }
+      
+      .stat-label {
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 575.98px) {
+  .welcome-card {
+    h1 {
+      font-size: 1.75rem;
+    }
+    
+    .lead {
+      font-size: 0.95rem;
+    }
+  }
+  
+  .action-card {
+    .action-icon i {
+      font-size: 2.5rem !important;
+    }
+  }
+}
+
+// Card Animations
+@keyframes cardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.welcome-card,
+.action-card,
+.status-card,
+.logout-card {
+  animation: cardSlideUp 0.6s ease-out;
+}
+
+.action-card {
+  &:nth-child(2) { animation-delay: 0.1s; }
+  &:nth-child(3) { animation-delay: 0.2s; }
+  &:nth-child(4) { animation-delay: 0.3s; }
+  &:nth-child(5) { animation-delay: 0.4s; }
+}
+
+// Dark Theme Support
+[data-bs-theme="dark"] {
+  .dashboard-page {
+    background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
+  }
+  
+  .welcome-card {
+    background: linear-gradient(135deg, #3a3a3a 0%, #2d2d2d 100%);
+    border-color: var(--bs-primary);
+    
+    h1 {
+      color: #ffffff;
+    }
+    
+    .lead {
+      color: #b0b0b0;
+    }
+  }
+  
+  .action-card,
+  .status-card {
+    background-color: #3a3a3a;
+    border-color: rgba(255, 255, 255, 0.1);
+    
+    .card-title {
+      color: #ffffff;
+    }
+    
+    .card-text {
+      color: #b0b0b0;
+    }
+    
+    .stat-item {
+      background-color: #2d2d2d !important;
+      
+      &:hover {
+        background-color: #404040 !important;
+      }
+      
+      .stat-number {
+        color: #ffffff;
+      }
+      
+      .stat-label {
+        color: #b0b0b0;
+      }
+    }
+  }
+  
+  .logout-card {
+    background: linear-gradient(135deg, #4a2c2c 0%, #3a3a3a 100%);
+    border-color: #dc3545;
+    
+    h5 {
+      color: #ffffff;
+    }
+    
+    p {
+      color: #b0b0b0;
+    }
+  }
+}
+
+// High Contrast Mode
+@media (prefers-contrast: high) {
+  .welcome-card,
+  .action-card,
+  .status-card,
+  .logout-card {
+    border: 2px solid #000000 !important;
+  }
+}
+
+// Reduced Motion
+@media (prefers-reduced-motion: reduce) {
+  .welcome-card,
+  .action-card,
+  .status-card,
+  .logout-card,
+  .hover-lift,
+  .action-icon i,
+  .dashboard-illustration i,
+  .stat-item,
+  .btn {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .action-card:hover,
+  .hover-lift:hover,
+  .stat-item:hover {
+    transform: none !important;
+  }
+}
+
+// Print Styles
+@media print {
+  .dashboard-page {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  
+  .welcome-card,
+  .action-card,
+  .status-card,
+  .logout-card {
+    background: #ffffff !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+    border: 1px solid #000000;
+  }
+  
+  .btn {
+    display: none !important;
+  }
+}
+
+// Loading States
+.card.loading {
+  opacity: 0.7;
+  pointer-events: none;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid var(--bs-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

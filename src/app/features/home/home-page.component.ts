@@ -1,35 +1,29 @@
 import { Component, ChangeDetectionStrategy, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
+// Removed Angular Material dependencies - using Bootstrap instead
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
-import { HeaderComponent } from '../header/header.component';
+
 import { ToolbarService } from '../../shared/services/toolbar.service';
 
 @Component({
   selector: 'app-home-page',
   standalone: true,
   imports: [
-    CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    HeaderComponent
+    CommonModule
   ],
   templateUrl: './home-page.component.html',
-  styleUrls: ['./home-page.component.css'],
+  styleUrls: ['./home-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomePageComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   companyIcons = [
-    { src: 'company/Item-1.svg', alt: 'Company 1' },
-    { src: 'company/Item-2.svg', alt: 'Company 2' },
-    { src: 'company/Item-3.svg', alt: 'Company 3' },
-    { src: 'company/Item-4.svg', alt: 'Company 4' }
+    { src: 'assets/company/Item-1.svg', alt: 'Company 1' },
+    { src: 'assets/company/Item-2.svg', alt: 'Company 2' },
+    { src: 'assets/company/Item-3.svg', alt: 'Company 3' },
+    { src: 'assets/company/Item-4.svg', alt: 'Company 4' }
   ];
   constructor(private toolbarService: ToolbarService) {
     // Initialize any necessary services or state here

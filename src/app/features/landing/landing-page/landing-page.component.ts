@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit, inject, PLATFORM_ID, Inject, ViewChild } from '@angular/core';
-import { isPlatformBrowser, CommonModule, NgClass, NgIf, NgFor, NgSwitch } from '@angular/common';
+import { isPlatformBrowser, CommonModule, NgIf, NgFor, NgSwitch } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -9,11 +9,10 @@ import { MatListModule } from '@angular/material/list';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Subject, Subscription, fromEvent, Observable } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { ThemeService } from '../../../core/services/theme.service';
 import { LayoutService } from '../../../core/services/layout.service'; // Import LayoutService
 import { Router } from '@angular/router';
-import { HeaderComponent } from '../../header/header.component';
 import { ToolbarService } from '../../../shared/services/toolbar.service';
+import { AppThemeService } from '../../../core/services/app-theme.service';
 @Component({
   selector: 'app-landing-page',
   standalone: true,
@@ -24,14 +23,69 @@ import { ToolbarService } from '../../../shared/services/toolbar.service';
     MatIconModule,
     MatSidenavModule, // Add MatSidenavModule
     MatListModule,
-    NgClass, NgIf, NgFor,    // Add MatListModule for nav items in sidenav
-    HeaderComponent, // <-- Add HeaderComponent here
+    NgIf, NgFor,    // Add MatListModule for nav items in sidenav
     FormsModule // <-- Add FormsModule for ngModel
   ],
   templateUrl: './landing-page.component.html',
-  styleUrls: ['./landing-page.component.css']
+  styleUrls: ['./landing-page.component.scss']
 })
 export class LandingPageComponent implements OnInit, OnDestroy {
+  // Responsive data
+  features = [
+    {
+      icon: 'bi bi-lightning-charge',
+      title: 'Lightning Fast',
+      description: 'Get brand assets instantly with our optimized API endpoints and CDN delivery.'
+    },
+    {
+      icon: 'bi bi-shield-check',
+      title: 'Always Accurate',
+      description: 'Our AI-powered system ensures you get the most up-to-date brand information.'
+    },
+    {
+      icon: 'bi bi-code-slash',
+      title: 'Developer Friendly',
+      description: 'Simple REST API with comprehensive documentation and SDKs for popular languages.'
+    },
+    {
+      icon: 'bi bi-palette',
+      title: 'Rich Brand Data',
+      description: 'Access logos, colors, fonts, social links, and more for thousands of brands.'
+    },
+    {
+      icon: 'bi bi-graph-up',
+      title: 'Scalable',
+      description: 'From startup to enterprise, our infrastructure scales with your needs.'
+    },
+    {
+      icon: 'bi bi-headset',
+      title: '24/7 Support',
+      description: 'Get help when you need it with our dedicated developer support team.'
+    }
+  ];
+
+  stats = [
+    { number: '10K+', label: 'Brands Available' },
+    { number: '99.9%', label: 'Uptime SLA' },
+    { number: '50M+', label: 'API Calls/Month' },
+    { number: '1000+', label: 'Happy Developers' }
+  ];
+
+  // Event handlers for logo hover effects
+  onLogoHover(event: Event, isHover: boolean): void {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.style.opacity = isHover ? '1' : '0.7';
+    }
+  }
+
+  onOrbitLogoHover(event: Event, isHover: boolean): void {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.style.opacity = isHover ? '1' : '0.8';
+      target.style.transform = isHover ? 'scale(1.1)' : 'scale(1)';
+    }
+  }
   @ViewChild('sidenav') sidenav!: MatSidenav;
 
   isDarkMode: boolean = false;
@@ -45,13 +99,13 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   private themeSubscription!: Subscription;
   private scrollSubscription!: Subscription;
 
-  private logoPath = 'images/logo.svg'; // Ensure correct path
-  private sunIconPath = 'icons/sun.svg'; // Ensure correct path
-  private cloudIconPath = 'icons/cloud.svg'; // Ensure correct path
-  private arrowForwardIconPath = 'icons/arrow_forward.svg'; // Ensure correct path
-  private menuIconPath = 'icons/menu.svg'; // Ensure correct path for menu icon
+  private logoPath = 'assets/images/logo.svg'; // Ensure correct path
+  private sunIconPath = 'assets/icons/sun.svg'; // Ensure correct path
+  private cloudIconPath = 'assets/icons/cloud.svg'; // Ensure correct path
+  private arrowForwardIconPath = 'assets/icons/arrow_forward.svg'; // Ensure correct path
+  private menuIconPath = 'assets/icons/menu.svg'; // Ensure correct path for menu icon
 
-  private themeService = inject(ThemeService);
+  private appThemeService = inject(AppThemeService);
   private iconRegistry = inject(MatIconRegistry);
   private sanitizer = inject(DomSanitizer);
   private router = inject(Router);
@@ -67,12 +121,15 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.toolbarService.setLoggedOutToolbar();
-    this.themeSubscription = this.themeService.isDarkMode$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(isDark => {
-      this.isDarkMode = isDark;
+    // Set layout configuration for landing page
+    this.layoutService.setLayoutConfig({
+      showHeader: true,
+      showFooter: true,
+      containerClass: 'container-fluid',
+      headerType: 'default'
     });
+    
+    this.toolbarService.setLoggedOutToolbar();
 
     if (isPlatformBrowser(this.platformId)) {
       this.checkScrollPosition();
@@ -151,7 +208,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   }
 
   toggleDarkMode(): void {
-    this.themeService.toggleDarkMode();
+    // this.themeService.toggleDarkMode();
   }
 
   navigateToLogin(): void {
@@ -195,7 +252,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     open = false;
 
   logo = {
-    src: 'landing/logo.svg', // Replace with your logo path or use the SVG inline
+    src: 'assets/landing/logo.svg', // Replace with your logo path or use the SVG inline
     alt: 'Marketify Logo',
     text: 'Marketify',
   };
@@ -243,19 +300,19 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   orbitHeadline = 'Trusted by Forward – Thinking Teams';
   orbitSubheadline = 'Polygon absolutely works great with tools in your other existing platform.';
   orbitLogos = [
-    { src: '/company/Animalbiome.svg', alt: 'Company 1' },
-    { src: '/company/nutanix.svg', alt: 'Company 2' },
-    { src: '/company/paloalto.svg', alt: 'Company 3' },
-    { src: '/company/xAmplify.svg', alt: 'Company 4' },
-    { src: '/company/people.png', alt: 'Company 5' }
+    { src: 'assets/company/Animalbiome.svg', alt: 'Company 1' },
+    { src: 'assets/company/nutanix.svg', alt: 'Company 2' },
+    { src: 'assets/company/paloalto.svg', alt: 'Company 3' },
+    { src: 'assets/company/xAmplify.svg', alt: 'Company 4' },
+    { src: 'assets/company/people.png', alt: 'Company 5' }
   ];
   // Company logos row section logic (after hero)
   companyLogos = [
-    { src: '/company/Item-1.svg', alt: 'Company 1' },
-    { src: '/company/Item-2.svg', alt: 'Company 2' },
-    { src: '/company/Item-3.svg', alt: 'Company 3' },
-    { src: '/company/Item-4.svg', alt: 'Company 4' },
-    { src: '/company/Item.svg', alt: 'Company 5' }
+    { src: 'assets/company/Item-1.svg', alt: 'Company 1' },
+    { src: 'assets/company/Item-2.svg', alt: 'Company 2' },
+    { src: 'assets/company/Item-3.svg', alt: 'Company 3' },
+    { src: 'assets/company/Item-4.svg', alt: 'Company 4' },
+    { src: 'assets/company/Item.svg', alt: 'Company 5' }
   ];
   // Core capabilities section logic
   coreHeadline = "Discover Marketify’s Core Capabilities";
@@ -287,7 +344,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     {
       title: 'For Designers',
       description: 'Instantly access brand assets, color palettes, and typography to streamline your creative workflow. Marketify makes it easy to maintain brand consistency and save hours on manual asset collection.',
-      image: 'landing/Section_1.png',
+      image: 'assets/landing/Section_1.png',
       cards: [
         { icon: 'bi bi-journal-bookmark', title: 'Brand Guidelines', subtitle: 'Official brand rules at your fingertips' },
         { icon: 'bi bi-palette', title: 'Color Palettes', subtitle: 'Accurate brand color codes instantly' },
@@ -308,7 +365,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     {
       title: 'For Marketers',
       description: 'Ensure your campaigns and content always use the latest brand assets. Marketify helps you maintain consistency and credibility across all channels.',
-      image: 'landing/Section_3.png',
+      image: 'assets/landing/Section_3.png',
       cards: [
         { icon: 'bi bi-geo-alt', title: 'Social Links', subtitle: 'Find official social profiles' },
         { icon: 'bi bi-bell', title: 'Brand Monitoring', subtitle: 'Get notified on asset changes' },
@@ -383,7 +440,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   testimonials = [
     {
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       name: 'User',
       role: 'Customer',
       text: 'This is a testimonial from user.jfif.'
@@ -391,49 +448,49 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'landing/user.jfif',
+      avatar: 'assets/landing/user.jfif',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     }
   ];

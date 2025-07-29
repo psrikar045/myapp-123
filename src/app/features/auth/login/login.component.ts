@@ -9,7 +9,7 @@ import {
   AbstractControl, // Import if needed, though direct control access is often typed
   ValidationErrors
 } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http'; // <-- Add this to imports array
+
 import { Router, RouterModule, ActivatedRoute } from '@angular/router'; // <-- Import Router
 import { AuthService, RegisterData } from '../../../core/services/auth.service'; // <-- Import AuthService (adjust path)
 import { emailOrUsernameValidator } from '../../../core/validators/custom-validators'; // Import the custom validator
@@ -29,8 +29,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
-import { ThemeService } from '../../../core/services/theme.service';
 import { ToolbarService } from '../../../shared/services/toolbar.service';
+import { LayoutService } from '../../../core/services/layout.service';
 declare var google: any; // Declare google global variable
 // Custom Phone Number Validator
 function phoneNumberValidator(control: AbstractControl): ValidationErrors | null {
@@ -66,7 +66,7 @@ function phoneNumberValidator(control: AbstractControl): ValidationErrors | null
     MatSlideToggleModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
-    HttpClientModule, // <-- Ensure this is here for Auth Service
+
     RouterModule, // <-- Add RouterModule for routerLink
     MatSnackBarModule // <-- Add MatSnackBarModule for notifications
   ],
@@ -91,7 +91,6 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly fb = inject(NonNullableFormBuilder); // Using NonNullableFormBuilder
   private readonly matIconRegistry = inject(MatIconRegistry);
   private readonly domSanitizer = inject(DomSanitizer);
-  public readonly themeService = inject(ThemeService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly authService = inject(AuthService); // <-- Inject AuthService
   private readonly router = inject(Router); // <-- Inject Router
@@ -99,7 +98,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly validationService = inject(ValidationService);
   private readonly toolbarService = inject(ToolbarService);
   private readonly route = inject(ActivatedRoute);
-
+public layoutService = inject(LayoutService);
   // --- Form Definitions ---
   loginForm!: FormGroup<{
     identifier: FormControl<string>;
@@ -151,6 +150,12 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit(): void {
     // Initialize forms here
+     this.layoutService.setLayoutConfig({
+      showHeader: false,
+      showFooter: false,
+      containerClass: 'container-fluid',
+      headerType: 'default'
+    });
     this.loginForm = this.fb.group({
       identifier: this.fb.control('', [Validators.required, emailOrUsernameValidator()]),
       password: this.fb.control('', [Validators.required]),
@@ -176,11 +181,6 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
       this.cdr.markForCheck();
     });
 
-    this.themeSubscription = this.themeService.isDarkMode$.subscribe(isDark => {
-      this.isDarkMode = isDark;
-      this.cdr.markForCheck();
-    });
-    this.isDarkMode = this.themeService.getIsDarkMode();
 
     this.route.queryParams.subscribe(params => {
       if (params['register'] === 'true') {
@@ -230,7 +230,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   private registerSvgIcons(): void {
-    const iconPath = '/icons/';
+    const iconPath = 'assets/icons/';
     this.matIconRegistry.addSvgIcon(
       'google',
       this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'google.svg')
@@ -452,9 +452,6 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
     this.cdr.markForCheck();
   }
 
-  toggleDarkMode(): void {
-    this.themeService.toggleDarkMode();
-  }
 
   // --- Carousel Logic (Original - adapt if needed) ---
   // If you want a continuously cycling carousel on the right, use this.

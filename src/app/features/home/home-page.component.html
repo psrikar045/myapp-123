@@ -1,97 +1,197 @@
-<app-header></app-header>
-<div class="home-container">
-  <main class="main-content">
-    <!-- Top Row: 2 Large Cards -->
-    <div class="grid-top-row">
-      <div class="card-large card-feature-1">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>Strat Building with Marketify</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <a href="#" class="getting-started-link">Getting Started <i class="bi bi-arrow-right"></i></a>
-          </mat-card-content>
-          <div class="card-icons">
-            <img src="assets/imgi.png" alt="Marketify Illustration" class="card-icon-img marketify-hero-img">
-          </div>
-        </mat-card>
-      </div>
-      <div class="card-large card-feature-2">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>Marketify</mat-card-title>
-            <mat-card-subtitle>Seamless integration for developers</mat-card-subtitle>
-          </mat-card-header>
-          <div class="card-icons">
-            <img src="assets/network.png" alt="Network" class="card-icon-img network-image">
-          </div>
-        </mat-card>
+<!-- Bootstrap Responsive Home Dashboard -->
+<div class="home-dashboard">
+  <div class="container-fluid px-lg-4 px-md-3 px-2 py-4">
+    
+    <!-- Welcome Section -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="welcome-header">
+          <h1 class="display-6 fw-bold mb-2">Welcome back! 👋</h1>
+          <p class="text-muted lead">Start building amazing applications with Marketify</p>
+        </div>
       </div>
     </div>
 
-    <!-- Middle Row: 3 Medium Cards -->
-    <div class="grid-middle-row">
-      <div class="card-medium api-card-purple" (click)="navigateToBrands()">
-        <mat-card>
-          <mat-card-header>
-            <i class="bi bi-pie-chart api-icon"></i>
-            <mat-card-title>Brands</mat-card-title>
-            <mat-card-subtitle>Easily embed logo in your apps</mat-card-subtitle>
-          </mat-card-header>
-        </mat-card>
+    <!-- Top Row: Featured Cards -->
+    <div class="row g-4 mb-4">
+      
+      <!-- Getting Started Card -->
+      <div class="col-lg-8 col-md-7 col-12">
+        <div class="card h-100 border-0 shadow-sm feature-card gradient-primary">
+          <div class="card-body p-4 d-flex align-items-center">
+            <div class="flex-grow-1">
+              <h3 class="card-title text-white fw-bold mb-3">Start Building with Marketify</h3>
+              <p class="card-text text-white-50 mb-4">
+                Get up and running in minutes with our comprehensive guides and examples.
+              </p>
+              <a href="#" class="btn btn-light btn-lg d-inline-flex align-items-center">
+                Getting Started 
+                <i class="bi bi-arrow-right ms-2"></i>
+              </a>
+            </div>
+            <div class="feature-illustration d-none d-md-block ms-4">
+              <img src="assets/images/imgi.png" 
+                   alt="Marketify Illustration" 
+                   class="img-fluid"
+                   style="max-height: 200px; filter: brightness(1.2);">
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="card-medium api-card-teal" (click)="navigateToBrandApi()">
-        <mat-card>
-          <mat-card-header>
-            <i class="bi bi-files api-icon"></i>
-            <mat-card-title>Brand API</mat-card-title>
-            <mat-card-subtitle>Data for B2B personalization</mat-card-subtitle>
-          </mat-card-header>
-        </mat-card>
+
+      <!-- Integration Card -->
+      <div class="col-lg-4 col-md-5 col-12">
+        <div class="card h-100 border-0 shadow-sm feature-card gradient-secondary">
+          <div class="card-body p-4 text-center">
+            <div class="feature-icon mb-3">
+              <img src="assets/images/network.png" 
+                   alt="Network Integration" 
+                   class="img-fluid"
+                   style="max-height: 80px;">
+            </div>
+            <h4 class="card-title text-white fw-bold mb-2">Marketify API</h4>
+            <p class="card-text text-white-50 mb-0">
+              Seamless integration for developers
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="card-medium api-card-brown" (click)="navigateToDevelopers()">
-        <mat-card>
-          <mat-card-header>
-            <i class="bi bi-pie-chart api-icon"></i>
-            <mat-card-title>Developers</mat-card-title>
-            <mat-card-subtitle>Autocomplete brand names</mat-card-subtitle>
-          </mat-card-header>
-        </mat-card>
-      </div>
+      
     </div>
 
-    <!-- Bottom Row: 4 Small Cards as a Grouped Card -->
-    <div class="grid-bottom-row">
-      <div class="card-small support-card">
-        <div class="small-card-inner">
-          <i class="bi bi-journal-code small-card-icon"></i>
-          <div class="small-card-title">API Documentation</div>
-          <div class="small-card-desc">Our comprehensive guide to using the Marketify API.</div>
+    <!-- API Services Row -->
+    <div class="row g-4 mb-4">
+      
+      <!-- Brands Card -->
+      <div class="col-lg-4 col-md-6 col-12">
+        <div class="card h-100 border-0 shadow-sm api-card hover-lift" 
+             (click)="navigateToBrands()"
+             role="button"
+             tabindex="0"
+             (keydown.enter)="navigateToBrands()">
+          <div class="card-body p-4 text-center">
+            <div class="api-icon-container mb-3">
+              <i class="bi bi-pie-chart display-4 text-primary"></i>
+            </div>
+            <h5 class="card-title fw-bold mb-2">Brands</h5>
+            <p class="card-text text-muted">Easily embed logos in your applications</p>
+            <div class="card-footer-action">
+              <i class="bi bi-arrow-right text-primary"></i>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="card-small">
-        <div class="small-card-inner">
-          <i class="bi bi-question-circle small-card-icon"></i>
-          <div class="small-card-title">Need help</div>
-          <div class="small-card-desc">Contact our support team for assistance.</div>
+
+      <!-- Brand API Card -->
+      <div class="col-lg-4 col-md-6 col-12">
+        <div class="card h-100 border-0 shadow-sm api-card hover-lift" 
+             (click)="navigateToBrandApi()"
+             role="button"
+             tabindex="0"
+             (keydown.enter)="navigateToBrandApi()">
+          <div class="card-body p-4 text-center">
+            <div class="api-icon-container mb-3">
+              <i class="bi bi-files display-4 text-success"></i>
+            </div>
+            <h5 class="card-title fw-bold mb-2">Brand API</h5>
+            <p class="card-text text-muted">Data for B2B personalization</p>
+            <div class="card-footer-action">
+              <i class="bi bi-arrow-right text-success"></i>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="card-small">
-        <div class="small-card-inner">
-          <i class="bi bi-arrow-repeat small-card-icon"></i>
-          <div class="small-card-title">Request an update</div>
-          <div class="small-card-desc">Request new features or updates.</div>
+      <!-- Developers Card -->
+      <div class="col-lg-4 col-md-6 col-12">
+        <div class="card h-100 border-0 shadow-sm api-card hover-lift" 
+             (click)="navigateToDevelopers()"
+             role="button"
+             tabindex="0"
+             (keydown.enter)="navigateToDevelopers()">
+          <div class="card-body p-4 text-center">
+            <div class="api-icon-container mb-3">
+              <i class="bi bi-code-slash display-4 text-warning"></i>
+            </div>
+            <h5 class="card-title fw-bold mb-2">Developers</h5>
+            <p class="card-text text-muted">Autocomplete brand names and tools</p>
+            <div class="card-footer-action">
+              <i class="bi bi-arrow-right text-warning"></i>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="card-small">
-        <div class="small-card-inner">
-          <i class="bi bi-activity small-card-icon"></i>
-          <div class="small-card-title">Service status</div>
-          <div class="small-card-desc">Check the current status of Marketify services.</div>
-        </div>
-      </div>
+      
     </div>
-  </main>
+
+    <!-- Support & Resources Section -->
+    <div class="row g-4">
+      <div class="col-12">
+        <h3 class="fw-bold mb-4">Support & Resources</h3>
+      </div>
+      
+      <!-- API Documentation -->
+      <div class="col-lg-3 col-md-6 col-12">
+        <div class="card h-100 border-0 shadow-sm support-card hover-lift">
+          <div class="card-body p-4 text-center">
+            <div class="support-icon mb-3">
+              <i class="bi bi-journal-code display-5 text-info"></i>
+            </div>
+            <h6 class="card-title fw-bold mb-2">API Documentation</h6>
+            <p class="card-text text-muted small">
+              Comprehensive guide to using the Marketify API
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Need Help -->
+      <div class="col-lg-3 col-md-6 col-12">
+        <div class="card h-100 border-0 shadow-sm support-card hover-lift">
+          <div class="card-body p-4 text-center">
+            <div class="support-icon mb-3">
+              <i class="bi bi-question-circle display-5 text-primary"></i>
+            </div>
+            <h6 class="card-title fw-bold mb-2">Need Help?</h6>
+            <p class="card-text text-muted small">
+              Contact our support team for assistance
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Request Update -->
+      <div class="col-lg-3 col-md-6 col-12">
+        <div class="card h-100 border-0 shadow-sm support-card hover-lift">
+          <div class="card-body p-4 text-center">
+            <div class="support-icon mb-3">
+              <i class="bi bi-arrow-repeat display-5 text-success"></i>
+            </div>
+            <h6 class="card-title fw-bold mb-2">Request Update</h6>
+            <p class="card-text text-muted small">
+              Request new features or updates
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service Status -->
+      <div class="col-lg-3 col-md-6 col-12">
+        <div class="card h-100 border-0 shadow-sm support-card hover-lift">
+          <div class="card-body p-4 text-center">
+            <div class="support-icon mb-3">
+              <i class="bi bi-activity display-5 text-danger"></i>
+            </div>
+            <h6 class="card-title fw-bold mb-2">Service Status</h6>
+            <p class="card-text text-muted small">
+              Check current status of Marketify services
+            </p>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+  </div>
 </div>
 <!-- <footer>
     <p>Marketify — The modern way of doing business</p>

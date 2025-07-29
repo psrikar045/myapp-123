@@ -1,0 +1,617 @@
+/* ============================================================================
+   RESPONSIVE BOOTSTRAP FOOTER STYLES
+   ============================================================================ */
+
+.footer {
+  margin-top: auto;
+  background: linear-gradient(135deg, #1a202c 0%, #2d3748 50%, #4a5568 100%) !important; // Professional dark gradient
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  
+  // Add subtle texture overlay
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+      radial-gradient(circle at 20% 20%, rgba(74, 80, 224, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  
+  // Add top border for definition
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--bs-primary), #6366f1, var(--bs-primary));
+  }
+  
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+  }
+  
+  .footer-section {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    h5 {
+      color: #ffffff;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 30px;
+        height: 2px;
+        background: var(--bs-primary);
+        border-radius: 1px;
+      }
+    }
+  }
+  
+  .footer-logo {
+    transition: all 0.3s ease;
+    max-height: 50px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    display: inline-block;
+    
+    img {
+      filter: none;
+      width: 100%;
+      height: auto;
+    }
+    
+    &:hover {
+      transform: scale(1.05);
+      background: rgba(0, 0, 0, 0.5);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
+  }
+  
+  .footer-section {
+    h5 {
+      color: #ffffff !important;
+      font-family: var(--font-family-secondary);
+      font-size: 1.1rem;
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: 0.025em;
+      margin-bottom: 1rem;
+      position: relative;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 30px;
+        height: 2px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 1px;
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+      }
+    }
+    
+    .footer-link {
+      transition: all 0.3s ease;
+      font-family: var(--font-family-primary);
+      font-size: 0.9rem;
+      font-weight: var(--font-weight-normal);
+      color: rgba(255, 255, 255, 0.85) !important;
+      text-decoration: none;
+      
+      &:hover {
+        color: rgba(255, 255, 255, 1) !important;
+        opacity: 1 !important;
+        transform: translateX(5px);
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+      }
+    }
+    
+    // Footer text elements - Light text on dark background
+    p {
+      color: rgba(255, 255, 255, 0.95) !important; // Light text for contrast
+      font-family: var(--font-family-primary);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); // Dark shadow
+      font-weight: 400;
+    }
+    
+    .text-light {
+      color: rgba(255, 255, 255, 0.9) !important; // Light text
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+    
+    .text-muted {
+      color: rgba(255, 255, 255, 0.7) !important; // Muted light text
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    
+    // Override ALL inline styles for proper visibility on dark background
+    p[style*="opacity"] {
+      opacity: 1 !important;
+      color: rgba(255, 255, 255, 0.95) !important;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    }
+    
+    a[style*="opacity"] {
+      opacity: 1 !important;
+      color: rgba(255, 255, 255, 0.9) !important; // Light links
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      
+      &:hover {
+        color: #ffffff !important;
+        text-decoration: underline;
+      }
+    }
+    
+    .small[style*="opacity"] {
+      opacity: 1 !important;
+      color: rgba(255, 255, 255, 0.8) !important;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    
+    // Force light text for all elements on dark background
+    * {
+      color: rgba(255, 255, 255, 0.9) !important;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      color: #ffffff !important; // Pure white for headings
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      font-weight: 600;
+    }
+    
+    .btn {
+      color: rgba(255, 255, 255, 0.95) !important;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      
+      &:hover {
+        color: #ffffff !important;
+      }
+    }
+  }
+}
+
+/* ============================================================================
+   BACK TO TOP BUTTON
+   ============================================================================ */
+
+.back-to-top-btn {
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(30px) scale(0.8);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, var(--bs-primary) 0%, #6366f1 100%) !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 8px 32px rgba(var(--bs-primary-rgb), 0.4);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+  
+  // Add animated ring effect
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--bs-primary), #6366f1, #8b5cf6, var(--bs-primary));
+    border-radius: 50%;
+    z-index: -1;
+    animation: rotate 3s linear infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  // Add shimmer effect
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s ease;
+  }
+  
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+  }
+  
+  &:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 12px 40px rgba(var(--bs-primary-rgb), 0.5);
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    
+    &::before {
+      opacity: 1;
+    }
+    
+    &::after {
+      left: 100%;
+    }
+    
+    i {
+      transform: translateY(-2px);
+    }
+  }
+  
+  &:active {
+    transform: translateY(-3px) scale(1.05);
+  }
+  
+  i {
+    font-size: 1.4rem;
+    color: white !important;
+    transition: transform 0.3s ease;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  @media (max-width: 767.98px) {
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 50px;
+    height: 50px;
+    
+    i {
+      font-size: 1.2rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    bottom: 1rem;
+    right: 1rem;
+    width: 45px;
+    height: 45px;
+    
+    i {
+      font-size: 1rem;
+    }
+  }
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ============================================================================
+   FOOTER LOGO (Handled in main footer section above)
+   ============================================================================ */
+
+/* ============================================================================
+   SOCIAL LINKS
+   ============================================================================ */
+
+.btn-outline-light {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  background-color: transparent !important;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.8) !important;
+    color: #ffffff !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+  }
+  
+  &:focus {
+    border-color: rgba(255, 255, 255, 0.8) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+  }
+  
+  i {
+    font-size: 1rem;
+    color: inherit;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================================================ */
+
+@media (max-width: 767.98px) {
+  .footer {
+    .row {
+      text-align: center;
+      
+      .col-12 {
+        margin-bottom: 2rem;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+    
+    .footer-section {
+      h5::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+    
+    .d-flex.gap-2 {
+      justify-content: center !important;
+    }
+  }
+}
+
+/* Tablet Portrait (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .footer {
+    padding: 3rem 0 1.5rem;
+    
+    .container {
+      padding: 0 2rem;
+    }
+    
+    .footer-section {
+      h5 {
+        font-size: 1rem;
+        margin-bottom: 0.875rem;
+      }
+      
+      .footer-link {
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+      }
+    }
+    
+    .col-lg-3,
+    .col-lg-4,
+    .col-lg-2 {
+      margin-bottom: 2rem;
+    }
+    
+    .row {
+      .col-md-6 {
+        margin-bottom: 1.5rem;
+      }
+    }
+  }
+}
+
+/* Tablet Landscape (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .footer {
+    padding: 3.5rem 0 1.5rem;
+    
+    .footer-section {
+      h5 {
+        font-size: 1.05rem;
+      }
+      
+      .footer-link {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+/* Mobile Landscape (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767.98px) and (orientation: landscape) {
+  .footer {
+    padding: 2.5rem 0 1rem;
+    
+    .row {
+      .col-sm-6 {
+        margin-bottom: 1.5rem;
+      }
+    }
+    
+    .footer-section {
+      h5 {
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+        
+        &::after {
+          width: 25px;
+          height: 1.5px;
+        }
+      }
+      
+      .footer-link {
+        font-size: 0.8rem;
+        margin-bottom: 0.4rem;
+      }
+    }
+  }
+}
+
+/* Small Mobile (max-width: 575px) */
+@media (max-width: 575.98px) {
+  .footer {
+    padding: 2rem 0 1rem;
+    
+    .container {
+      padding: 0 1rem;
+    }
+    
+    .footer-section {
+      margin-bottom: 2rem;
+      
+      h5 {
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+      }
+      
+      .footer-link {
+        font-size: 0.8rem;
+        margin-bottom: 0.4rem;
+        display: block;
+        padding: 0.25rem 0;
+      }
+    }
+    
+    .d-flex.gap-2 {
+      flex-wrap: wrap;
+      gap: 0.5rem !important;
+      
+      .btn {
+        flex: 1;
+        min-width: calc(50% - 0.25rem);
+      }
+    }
+  }
+}
+
+/* ============================================================================
+   DARK THEME SUPPORT
+   ============================================================================ */
+
+[data-bs-theme="dark"] {
+  .footer {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #21262d 100%) !important;
+    
+    &::before {
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(74, 80, 224, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%);
+    }
+    
+    &::after {
+      background: linear-gradient(90deg, var(--theme-primary), #6366f1, var(--theme-primary));
+    }
+    
+    .footer-section {
+      h5 {
+        color: #e6edf3 !important;
+      }
+      
+      .footer-link {
+        color: #8b949e !important;
+        
+        &:hover {
+          color: var(--theme-primary) !important;
+        }
+      }
+    }
+    
+    .text-muted {
+      color: #6e7681 !important;
+    }
+    
+    .border-secondary {
+      border-color: #30363d !important;
+    }
+    
+    .btn-outline-light {
+      border-color: rgba(230, 237, 243, 0.3) !important;
+      color: rgba(230, 237, 243, 0.8) !important;
+      
+      &:hover {
+        background-color: rgba(230, 237, 243, 0.1) !important;
+        border-color: rgba(230, 237, 243, 0.6) !important;
+        color: #e6edf3 !important;
+      }
+    }
+    
+    .back-to-top-btn {
+      background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%) !important;
+      border-color: rgba(230, 237, 243, 0.2) !important;
+      box-shadow: 0 8px 32px rgba(74, 80, 224, 0.3);
+    }
+  }
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer-section {
+  animation: fadeInUp 0.6s ease-out;
+  
+  &:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  
+  &:nth-child(3) {
+    animation-delay: 0.2s;
+  }
+  
+  &:nth-child(4) {
+    animation-delay: 0.3s;
+  }
+}
+
+/* ============================================================================
+   ACCESSIBILITY
+   ============================================================================ */
+
+.footer-link:focus,
+.btn:focus {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+   PRINT STYLES
+   ============================================================================ */
+
+@media print {
+  .footer {
+    background: #ffffff !important;
+    color: #000000 !important;
+    
+    .back-to-top-btn {
+      display: none !important;
+    }
+    
+    .footer-link,
+    .text-muted {
+      color: #000000 !important;
+    }
+  }
+}

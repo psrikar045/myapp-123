@@ -14,7 +14,7 @@ import { UtilService } from '../../../shared/services/util.service';
   standalone: true,
   imports: [CommonModule, FormsModule, SearchModalComponent],
   templateUrl: './search.component.html',
-  styleUrl: './search.component.css',
+  styleUrl: './search.component.scss',
   animations: [
     trigger('fadeInOut', [
       transition(':enter', [
@@ -53,6 +53,7 @@ export class SearchComponent {
  searchDomainNameOrUrl = '';
  isLoading = false;
  errorMessage = '';
+ isSearchFocused = false;
  
  // Animation type selector - change this to switch between animations
  selectedAnimationType: 'default' | 'card-based' | 'minimalist' = 'card-based';
@@ -230,6 +231,14 @@ handleKeyDown(event:any){
   if (event.key === 'Enter') {
     this.findBrandInfo(event);
   }
+}
+
+onSearchFocus(): void {
+  this.isSearchFocused = true;
+}
+
+onSearchBlur(): void {
+  this.isSearchFocused = false;
 }
   async findBrandInfo(event: any) {
     event.preventDefault();

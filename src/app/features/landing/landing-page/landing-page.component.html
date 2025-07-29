@@ -1,262 +1,529 @@
-<app-header></app-header>
-
-<section class="hero-section position-relative w-100 overflow-hidden" id="brands-section">
-  <!-- Large white circle overlay behind headline -->
-  <div class="hero-white-circle position-absolute rounded-circle"></div>
-  <!-- Decorative yellow/orange circle on the left behind text/CTAs -->
-  <img src="landing/Group 1000003639.svg" alt="Yellow Circle" class="hero-yellow-circle position-absolute" />
-  <div class="container position-relative z-2 py-5 hero-container CustomContainer">
-    <div class="d-flex flex-lg-row flex-column align-items-center justify-content-between hero-row" style="display: flex;">
-      <!-- Left: Text and Search -->
-      <div class="hero-left" style="display:flex; flex-direction:column; align-items:flex-start;">
-        <h1 class="hero-headline fw-extrabold mb-4">
-          {{ heroHeadline.main }}<br> {{ heroHeadline.main1 }}<br> 
-          <span class="hero-highlight">{{ heroHeadline.highlight }}</span>
-          <svg *ngIf="heroHeadline.waveIcon" width="38" height="24" viewBox="0 0 38 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="hero-wave-icon"><path d="M2 12C6.5 2 13.5 2 18 12C22.5 22 29.5 22 34 12" stroke="#377DFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </h1>
-        <p class="hero-subheadline mb-4">{{ heroSubheadline }}</p>
-        <!-- Search Bar -->
-        <form class="hero-search-bar" autocomplete="off">
-          <span class="hero-search-icon">
-            <svg width="28" height="28" fill="none" stroke="#B0B7C3" stroke-width="2.2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          </span>
-          <input type="text" class="hero-search-input" placeholder="Search a brand" (focus)="goToSearch()" />
-          <button type="button" class="hero-search-btn" (click)="goToSearch()">
-            <svg width="28" height="28" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
-        </form>
-        <!-- Ratings Block -->
-        <div class="hero-rating">
-          <div class="hero-rating-label">Our customers say</div>
-          <div class="hero-rating-content">
-            <div class="hero-rating-left">
-              <div class="hero-rating-score">Excellent</div>
-              <div class="hero-rating-stars">
-                <!-- Star SVGs here -->
-                <svg width="18" height="18" fill="#FBBF24" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg>
-                <svg width="18" height="18" fill="#FBBF24" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg>
-                <svg width="18" height="18" fill="#FBBF24" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg>
-                <svg width="18" height="18" fill="#FBBF24" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg>
-                <svg width="18" height="18" fill="#FBBF24" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/></svg>
+<!-- Bootstrap Responsive Hero Section -->
+<section class="hero-section position-relative overflow-hidden" id="brands-section">
+  <!-- Background Elements -->
+  <div class="hero-bg-elements">
+    <div class="hero-white-circle position-absolute rounded-circle"></div>
+    <img src="assets/landing/Group 1000003639.svg" alt="Decorative Circle" class="hero-yellow-circle position-absolute d-none d-lg-block" />
+  </div>
+  
+  <div class="container-fluid px-lg-5 px-md-4 px-3">
+    <div class="row align-items-center py-4">
+      
+      <!-- Left Column: Content -->
+      <div class="col-lg-6 col-12 order-2 order-lg-1">
+        <div class="hero-content">
+          <!-- Main Headline -->
+          <h1 class="hero-headline display-3 fw-bold mb-4 fade-in-up">
+            {{ heroHeadline.main }}<br class="d-none d-md-block"> 
+            {{ heroHeadline.main1 }}<br class="d-none d-md-block"> 
+            <span class="hero-highlight text-gradient">{{ heroHeadline.highlight }}</span>
+            <svg *ngIf="heroHeadline.waveIcon" 
+                 width="38" height="24" 
+                 viewBox="0 0 38 24" 
+                 fill="none" 
+                 xmlns="http://www.w3.org/2000/svg" 
+                 class="hero-wave-icon ms-2">
+              <path d="M2 12C6.5 2 13.5 2 18 12C22.5 22 29.5 22 34 12" 
+                    stroke="#377DFF" 
+                    stroke-width="3" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"/>
+            </svg>
+          </h1>
+          
+          <!-- Subheadline -->
+          <p class="hero-subheadline lead text-muted mb-4 fade-in-up" style="animation-delay: 0.2s;">
+            {{ heroSubheadline }}
+          </p>
+          <!-- Search Bar -->
+          <div class="hero-search-container mb-4 fade-in-up" style="animation-delay: 0.4s;">
+            <form class="hero-search-form position-relative" autocomplete="off">
+              <div class="input-group input-group-lg shadow-lg">
+                <span class="input-group-text bg-white border-end-0">
+                  <svg width="24" height="24" fill="none" stroke="#B0B7C3" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="7"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                </span>
+                <input type="text" 
+                       class="form-control border-start-0 border-end-0" 
+                       placeholder="Search a brand (e.g., Apple, Google, Nike...)" 
+                       (focus)="goToSearch()"
+                       aria-label="Search for a brand">
+                <button type="button" 
+                        class="btn btn-primary px-4 search-btn" 
+                        (click)="goToSearch()"
+                        aria-label="Search">
+                  <i class="bi bi-search"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+          <!-- Ratings Block -->
+          <div class="hero-rating-container fade-in-up" style="animation-delay: 0.6s;">
+            <div class="card border-0 shadow-sm bg-white rounded-3 p-3">
+              <div class="row align-items-center g-3">
+                <div class="col-auto">
+                  <small class="text-muted fw-medium">Our customers say</small>
+                </div>
+                <div class="col-auto">
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-success px-2 py-1">Excellent</span>
+                    <div class="d-flex gap-1">
+                      <svg width="16" height="16" fill="#FBBF24" viewBox="0 0 20 20" *ngFor="let star of [1,2,3,4,5]">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.967a1 1 0 00.95.69h4.175c.969 0 1.371 1.24.588 1.81l-3.38 2.455a1 1 0 00-.364 1.118l1.287 3.966c.3.922-.755 1.688-1.54 1.118l-3.38-2.454a1 1 0 00-1.175 0l-3.38 2.454c-.784.57-1.838-.196-1.54-1.118l1.287-3.966a1 1 0 00-.364-1.118L2.05 9.394c-.783-.57-.38-1.81.588-1.81h4.175a1 1 0 00.95-.69l1.286-3.967z"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <div class="d-flex align-items-center gap-1">
+                    <span class="fw-bold text-warning">4.7</span>
+                    <small class="text-muted">out of 5 on <strong>194</strong> reviews</small>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="hero-rating-right">
-              <span class="hero-rating-value">4.7</span>
-              <span class="hero-rating-count">out of 5 on <b>194</b> reviews</span>
-            </div>
           </div>
         </div>
       </div>
-      <!-- Right: Illustration -->
-      <div class="hero-right d-flex align-items-center justify-content-center flex-grow-1 position-relative">
-        <!-- Main illustration: Frame 37.svg -->
-        <img src="landing/Hero_img.png" alt="Main Illustration" class="hero-main-illustration" />
+      <!-- Right Column: Illustration -->
+      <div class="col-lg-6 col-12 order-1 order-lg-2 mb-5 mb-lg-0">
+        <div class="hero-illustration text-center">
+          <img src="assets/imgi.png" 
+               alt="Marketify Hero Illustration" 
+               class="img-fluid hero-main-image fade-in-up"
+               style="animation-delay: 0.3s; max-height: 500px;"
+               loading="lazy">
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section section-padding bg-light">
+  <div class="container">
+    <div class="row text-center mb-5">
+      <div class="col-12">
+        <h2 class="display-5 fw-bold mb-3">Why Choose Marketify?</h2>
+        <p class="lead text-muted">Everything you need to integrate brand assets into your applications</p>
+      </div>
+    </div>
+    
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6 col-12" *ngFor="let feature of features; let i = index">
+        <div class="card h-100 border-0 shadow-sm hover-lift">
+          <div class="card-body text-center p-4">
+            <div class="feature-icon mb-3">
+              <i [class]="feature.icon" class="display-4 text-primary"></i>
+            </div>
+            <h5 class="card-title fw-bold mb-3">{{ feature.title }}</h5>
+            <p class="card-text text-muted">{{ feature.description }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<section class="company-logos-section w-100">
-  <div class="pad100">
-    <div class="company-logos-row">
-      <img *ngFor="let logo of orbitLogos" [src]="logo.src" [alt]="logo.alt" class="company-logo" />
-    </div>
-  </div>
-</section>
-
-<section class="core-capabilities-section w-100 position-relative pad100">
-  <div class="core-capabilities-container container">
-    <h2 class="core-capabilities-headline">{{ coreHeadline }}</h2>
-    <p class="core-capabilities-subheadline">{{ coreSubheadline }}</p>
-    <div class="core-capabilities-cards-row">
-      <div *ngFor="let card of cards" class="core-capabilities-card">
-        <div class="core-capabilities-card-icon">
-          <i [class]="card.icon"></i>
+<!-- Stats Section -->
+<section class="stats-section section-padding">
+  <div class="container">
+    <div class="row text-center g-4">
+      <div class="col-lg-3 col-md-6 col-12" *ngFor="let stat of stats">
+        <div class="stat-item">
+          <div class="stat-number display-4 fw-bold mb-2">{{ stat.number }}</div>
+          <div class="stat-label">{{ stat.label }}</div>
         </div>
-        <div class="core-capabilities-card-title">{{ card.title }}</div>
-        <!-- <button class="core-capabilities-card-btn">
-          {{ card.button }}
-          <i class="bi bi-arrow-right ms-1"></i>
-        </button> -->
       </div>
     </div>
   </div>
-  <img src="landing/Group 1000003638.svg" alt="Illustration" class="core-capabilities-illustration" />
 </section>
 
-<div class="container-fluid all-sections-wrapper">
-  <div *ngFor="let section of allSections; let i = index" class="section-row" [id]="i === 1 ? 'developers-section' : null">
-    <div class="section-inner">
-      <ng-container *ngIf="i === 1">
-        <div class="section-illustration">
-          <img src="landing/Section_2.png" alt="Card Illustration" />
+<!-- Company Logos Section -->
+<section class="company-logos-section py-5 bg-white">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center mb-4">
+        <h3 class="fw-bold text-muted">Trusted by leading companies</h3>
+      </div>
+    </div>
+    <div class="row justify-content-center align-items-center g-4">
+      <div class="col-lg-2 col-md-3 col-sm-4 col-6" *ngFor="let logo of orbitLogos">
+        <div class="logo-container text-center">
+          <img [src]="logo.src" 
+               [alt]="logo.alt" 
+               class="img-fluid company-logo"
+               style="max-height: 60px; opacity: 0.7; transition: opacity 0.3s ease;"
+               (mouseenter)="onLogoHover($event, true)"
+               (mouseleave)="onLogoHover($event, false)">
         </div>
-        <div class="section-content developer-section-content">
-          <h2 class="section-title developer-section-title">{{ section.title }}</h2>
-          <p class="section-description">{{ section.description }}</p>
-          <div class="section-cards">
-            <div *ngFor="let card of section.cards" class="section-card">
-              <i [class]="card.icon + ' card-icon'"></i>
-              <div class="card-title">{{ card.title }}</div>
-              <div class="card-subtitle">{{ card.subtitle }}</div>
-            </div>
-          </div>
-        </div>
-      </ng-container>
-      <ng-container *ngIf="i !== 1">
-        <div class="section-content">
-          <h2 class="section-title">{{ section.title }}</h2>
-          <p class="section-description">{{ section.description }}</p>
-          <div class="section-cards">
-            <div *ngFor="let card of section.cards" class="section-card">
-              <i [class]="card.icon + ' card-icon'"></i>
-              <div class="card-title">{{ card.title }}</div>
-              <div class="card-subtitle">{{ card.subtitle }}</div>
-            </div>
-          </div>
-        </div>
-        <div class="section-illustration">
-          <img [src]="section.image" alt="Card Illustration" />
-        </div>
-      </ng-container>
+      </div>
     </div>
   </div>
+</section>
+
+<!-- Core Capabilities Section -->
+<section class="core-capabilities-section py-5 bg-light position-relative">
+  <div class="container">
+    <div class="row text-center mb-5">
+      <div class="col-12">
+        <h2 class="display-5 fw-bold mb-3">{{ coreHeadline }}</h2>
+        <p class="lead text-muted">{{ coreSubheadline }}</p>
+      </div>
+    </div>
+    
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6 col-12" *ngFor="let card of cards">
+        <div class="card h-100 border-0 shadow-sm text-center hover-lift">
+          <div class="card-body p-4">
+            <div class="capability-icon mb-3">
+              <i [class]="card.icon" class="display-4 text-primary"></i>
+            </div>
+            <h5 class="card-title fw-bold">{{ card.title }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Background Illustration -->
+  <div class="position-absolute top-50 end-0 translate-middle-y d-none d-xl-block" style="z-index: -1;">
+    <img src="landing/Group 1000003638.svg" 
+         alt="Background Illustration" 
+         class="img-fluid opacity-25"
+         style="max-width: 300px;">
+  </div>
+</section>
+
+<!-- Dynamic Sections -->
+<div class="dynamic-sections">
+  <section *ngFor="let section of allSections; let i = index" 
+           class="py-5"
+           [class.bg-light]="i % 2 === 0"
+           [id]="i === 1 ? 'developers-section' : null">
+    <div class="container">
+      <div class="row align-items-center g-5">
+        
+        <!-- Content Column -->
+        <div class="col-lg-6 col-12" [class.order-lg-2]="i === 1">
+          <div class="section-content">
+            <h2 class="display-6 fw-bold mb-4" 
+                [class.text-primary]="i === 1">
+              {{ section.title }}
+            </h2>
+            <p class="lead text-muted mb-4">{{ section.description }}</p>
+            
+            <!-- Feature Cards -->
+            <div class="row g-3" *ngIf="section.cards">
+              <div class="col-md-6 col-12" *ngFor="let card of section.cards">
+                <div class="d-flex align-items-start">
+                  <div class="feature-icon me-3 mt-1">
+                    <i [class]="card.icon" class="text-primary fs-4"></i>
+                  </div>
+                  <div>
+                    <h6 class="fw-bold mb-1">{{ card.title }}</h6>
+                    <small class="text-muted">{{ card.subtitle }}</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Illustration Column -->
+        <div class="col-lg-6 col-12" [class.order-lg-1]="i === 1">
+          <div class="text-center">
+            <img [src]="i === 1 ? 'assets/landing/Section_2.png' : section.image" 
+                 alt="Section Illustration" 
+                 class="img-fluid rounded-3 shadow-lg"
+                 style="max-height: 400px;">
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </section>
 </div>
 
-<div class="supercharge-section-wrapper container-fluid">
-  <div class="supercharge-section-inner">
-    <div class="supercharge-illustration">
-      <img src="landing/Illustration.svg" alt="Workflow Illustration" class="workflow-illustration-img" />
-    </div>
-    <div class="supercharge-content">
-      <h2 class="supercharge-headline">{{ superchargeHeadline }}</h2>
-      <p class="supercharge-subheadline">{{ superchargeSubheadline }}</p>
-      <div class="supercharge-form-row ">
-        <!-- <input type="email" class="supercharge-email-input" placeholder="Your Email here.." /> -->
-        <button class="supercharge-cta-btn action-btn get-started-btn" (click)="navigateToSignup()">{{ superchargeCta }}</button>
+<!-- CTA Section -->
+<section class="cta-section py-5 bg-primary text-white">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      
+      <!-- Illustration Column -->
+      <div class="col-lg-6 col-12 text-center">
+        <img src="assets/landing/Illustration.svg" 
+             alt="Workflow Illustration" 
+             class="img-fluid"
+             style="max-height: 300px; filter: brightness(1.2);">
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- Testimonials Section Start -->
-<section class="testimonials-section container-fluid" *ngIf="false">
-  <div class="testimonials-header">
-    <h2 class="testimonials-title">Reviews From Our Customers</h2>
-    <p class="testimonials-subtitle">CareerPathNow has got more than 100k positive ratings from our users around the world.</p>
-  </div>
-  <div class="testimonials-cards-row">
-    <div class="testimonial-card" *ngFor="let testimonial of testimonials">
-      <img class="testimonial-avatar" [src]="testimonial.avatar" [alt]="testimonial.name" />
-      <div class="testimonial-info">
-        <div class="testimonial-name">{{ testimonial.name }}</div>
-        <div class="testimonial-role">{{ testimonial.role }}</div>
+      
+      <!-- Content Column -->
+      <div class="col-lg-6 col-12">
+        <div class="cta-content">
+          <h2 class="display-5 fw-bold mb-4">{{ superchargeHeadline }}</h2>
+          <p class="lead mb-4 text-white-50">{{ superchargeSubheadline }}</p>
+          <div class="d-flex gap-3 flex-wrap justify-content-center justify-content-md-start">
+            <button class="btn btn-light btn-lg px-5 py-3 cta-btn cta-btn-primary" 
+                    (click)="navigateToSignup()">
+              {{ superchargeCta }}
+              <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+            <button class="btn btn-outline-light btn-lg px-5 py-3 cta-btn cta-btn-secondary">
+              Learn More
+              <i class="bi bi-play-circle ms-2"></i>
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="testimonial-text">{{ testimonial.text }}</div>
+      
     </div>
-  </div>
-  <div class="testimonials-pagination">
-    <button class="testimonials-arrow-btn" aria-label="Previous">
-      <span>&larr;</span>
-    </button>
-    <button class="testimonials-arrow-btn active" aria-label="Next">
-      <span>&rarr;</span>
-    </button>
   </div>
 </section>
-<!-- Testimonials Section End -->
 
-<section class="pricing-section-wrapper container-fluid" id="pricing-section">
-  <div class="pricing-section-inner">
-    <h2 class="pricing-headline">Expand your options with a subscription</h2>
-    <p class="pricing-subheadline">Graphs displaying your performance for metrics like follower evolution, average rate per post and reach and impressions to give you the insights.</p>
-    <div class="pricing-billing-toggle-row">
-      <span [class.active]="!isAnnual">Bill Monthly</span>
-      <span class="pricing-toggle-switch">
-        <input type="checkbox" id="billing-toggle" [(ngModel)]="isAnnual" />
-        <label for="billing-toggle"></label>
-      </span>
-      <span [class.active]="isAnnual">Bill Anually</span>
+<!-- Testimonials Section (Hidden for now) -->
+<!-- Can be enabled by removing *ngIf="false" -->
+<section class="testimonials-section py-5 bg-light" *ngIf="false">
+  <div class="container">
+    <div class="row text-center mb-5">
+      <div class="col-12">
+        <h2 class="display-5 fw-bold mb-3">Reviews From Our Customers</h2>
+        <p class="lead text-muted">Marketify has got more than 100k positive ratings from our users around the world.</p>
+      </div>
     </div>
-    <div class="pricing-cards-row">
-      <div class="pricing-card" [ngClass]="{ 'highlight': false }">
-        <div class="pricing-card-header">
-          <div class="pricing-card-name">Base</div>
-          <div class="pricing-card-desc">Free start for your project on our platform.</div>
-          <div class="pricing-card-price-row">
-            <span class="pricing-card-price">$0</span>
-            <span class="pricing-card-period" *ngIf="!isAnnual">Per User / Monthly</span>
-            <span class="pricing-card-period" *ngIf="isAnnual">Per User / Yearly</span>
+    
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6 col-12" *ngFor="let testimonial of testimonials">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-3">
+              <img [src]="testimonial.avatar" 
+                   [alt]="testimonial.name" 
+                   class="rounded-circle me-3"
+                   style="width: 50px; height: 50px; object-fit: cover;">
+              <div>
+                <h6 class="mb-0 fw-bold">{{ testimonial.name }}</h6>
+                <small class="text-muted">{{ testimonial.role }}</small>
+              </div>
+            </div>
+            <p class="card-text text-muted">{{ testimonial.text }}</p>
           </div>
         </div>
-        <ul class="pricing-card-features">
-          <li><i class="bi bi-check-circle-fill"></i><span>Access to editing all blocks</span></li>
-          <li><i class="bi bi-check-circle-fill"></i><span>Editing blocks together</span></li>
-          <li><i class="bi bi-check-circle-fill"></i><span>Access to all premium icons</span></li>
-          <li><i class="bi bi-check-circle-fill"></i><span>A dedicated domain</span></li>
-          <li><i class="bi bi-check-circle-fill"></i><span>Ability to integrate with CMS</span></li>
-        </ul>
-        <button class="pricing-card-cta" (click)="navigateToSignup()">Get started free</button>
-      </div>
-      <div class="pricing-card highlight">
-        <div class="pricing-card-header">
-          <div class="pricing-card-name">Standard</div>
-          <div class="pricing-card-desc">For a small company that wants to show what it's worth.</div>
-          <div class="pricing-card-price-row">
-            <span class="pricing-card-price" *ngIf="!isAnnual">$30</span>
-            <span class="pricing-card-price" *ngIf="isAnnual">$299</span>
-            <span class="pricing-card-period" *ngIf="!isAnnual">Per User / Monthly</span>
-            <span class="pricing-card-period" *ngIf="isAnnual">Per User / Yearly</span>
-          </div>
-        </div>
-        <ul class="pricing-card-features">
-          <li><i class="bi bi-check-circle-fill"></i><span>Access to editing all blocks</span></li>
-          <li><i class="bi bi-check-circle-fill"></i><span>Editing blocks together</span></li>
-          <li><i class="bi bi-check-circle-fill"></i><span>Access to all premium icons</span></li>
-          <li><i class="bi bi-check-circle-fill"></i><span>A dedicated domain</span></li>
-          <li><i class="bi bi-check-circle-fill"></i><span>Ability to integrate with CMS</span></li>
-        </ul>
-        <button class="pricing-card-cta highlight-btn" (click)="navigateToSignup()">Start Standard</button>
-      </div>
-      <div class="pricing-card" [ngClass]="{ 'highlight': false }">
-        <div class="pricing-card-header">
-          <div class="pricing-card-name">Unlimited</div>
-          <div class="pricing-card-desc">For a large company that wants to achieve maximum returns</div>
-          <div class="pricing-card-price-row">
-            <span class="pricing-card-price" *ngIf="!isAnnual">$60</span>
-            <span class="pricing-card-price" *ngIf="isAnnual">$599</span>
-            <span class="pricing-card-period" *ngIf="!isAnnual">Per User / Monthly</span>
-            <span class="pricing-card-period" *ngIf="isAnnual">Per User / Yearly</span>
-          </div>
-        </div>
-        <ul class="pricing-card-features">
-          <li><i class="bi bi-check-circle-fill"></i><span>Access to editing all blocks</span></li>
-          <li><i class="bi bi-check-circle-fill"></i><span>Editing blocks together</span></li>
-          <li><i class="bi bi-check-circle-fill"></i><span>Access to all premium icons</span></li>
-          <li><i class="bi bi-check-circle-fill"></i><span>A dedicated domain</span></li>
-          <li><i class="bi bi-check-circle-fill"></i><span>Ability to integrate with CMS</span></li>
-        </ul>
-        <button class="pricing-card-cta " (click)="navigateToSignup()">Start Premium</button>
       </div>
     </div>
   </div>
 </section>
 
-<section class="company-logos-section1 w-100 pad100"  id="company-logos-section">
-  <div class="company-logos-orbit-wrapper">
-    <svg class="company-logos-orbit-svg" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <ellipse cx="400" cy="200" rx="340" ry="160" stroke="#D6E4F7" stroke-width="2" />
-      <ellipse cx="400" cy="200" rx="270" ry="120" stroke="#E3EDFA" stroke-width="2" />
-      <ellipse cx="400" cy="200" rx="200" ry="80" stroke="#F0F4FA" stroke-width="2" />
-    </svg>
-    <div class="company-logos-content">
-      <h2 class="company-logos-headline">{{ orbitHeadline }}</h2>
-      <p class="company-logos-subheadline">{{ orbitSubheadline }}</p>
-    </div>
-    <ng-container *ngFor="let logo of orbitLogos; let i = index">
-      <div class="company-logo-card logo-pos-{{i}}">
-        <img [src]="logo.src" [alt]="logo.alt" />
+<!-- Pricing Section -->
+<section class="pricing-section py-5 bg-light" id="pricing-section">
+  <div class="container">
+    
+    <!-- Header -->
+    <div class="row text-center mb-5">
+      <div class="col-12">
+        <h2 class="display-5 fw-bold mb-3">Expand your options with a subscription</h2>
+        <p class="lead text-muted mb-4">
+          Choose the perfect plan for your needs with flexible pricing options.
+        </p>
+        
+        <!-- Billing Toggle -->
+        <div class="d-flex justify-content-center align-items-center gap-3 mb-4">
+          <span class="fw-medium" [class.text-primary]="!isAnnual">Monthly</span>
+          <div class="form-check form-switch">
+            <input class="form-check-input" 
+                   type="checkbox" 
+                   id="billingToggle" 
+                   [(ngModel)]="isAnnual">
+            <label class="form-check-label" for="billingToggle"></label>
+          </div>
+          <span class="fw-medium" [class.text-primary]="isAnnual">
+            Annual 
+            <span class="badge bg-success ms-1">Save 20%</span>
+          </span>
+        </div>
       </div>
-    </ng-container>
+    </div>
+    
+    <!-- Pricing Cards -->
+    <div class="row g-4 justify-content-center">
+      
+      <!-- Free Plan -->
+      <div class="col-lg-4 col-md-6 col-12">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body p-4 text-center">
+            <h5 class="card-title fw-bold mb-2">Base</h5>
+            <p class="text-muted mb-4">Free start for your project on our platform</p>
+            
+            <div class="pricing-amount mb-4">
+              <span class="display-4 fw-bold">$0</span>
+              <span class="text-muted">/month</span>
+            </div>
+            
+            <ul class="list-unstyled text-start mb-4">
+              <li class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Access to basic brand data
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                1,000 API calls/month
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Community support
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Basic documentation
+              </li>
+            </ul>
+            
+            <button class="btn btn-outline-primary w-100 pricing-btn" (click)="navigateToSignup()">
+              Get Started Free
+              <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Standard Plan -->
+      <div class="col-lg-4 col-md-6 col-12">
+        <div class="card h-100 border-primary shadow-lg position-relative">
+          <div class="position-absolute top-0 start-50 translate-middle">
+            <span class="badge bg-primary px-3 py-2">Most Popular</span>
+          </div>
+          <div class="card-body p-4 text-center">
+            <h5 class="card-title fw-bold mb-2 text-primary">Standard</h5>
+            <p class="text-muted mb-4">For small companies that want to show what they're worth</p>
+            
+            <div class="pricing-amount mb-4">
+              <span class="display-4 fw-bold">
+                ${{ isAnnual ? '24' : '30' }}
+              </span>
+              <span class="text-muted">/month</span>
+              <div *ngIf="isAnnual" class="small text-success">
+                Billed annually ($299/year)
+              </div>
+            </div>
+            
+            <ul class="list-unstyled text-start mb-4">
+              <li class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Everything in Base
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                50,000 API calls/month
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Priority support
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Advanced analytics
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Custom integrations
+              </li>
+            </ul>
+            
+            <button class="btn btn-primary w-100 pricing-btn pricing-btn-featured" (click)="navigateToSignup()">
+              Start Standard
+              <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Premium Plan -->
+      <div class="col-lg-4 col-md-6 col-12">
+        <div class="card h-100 border-0 shadow-sm">
+          <div class="card-body p-4 text-center">
+            <h5 class="card-title fw-bold mb-2">Unlimited</h5>
+            <p class="text-muted mb-4">For large companies that want maximum returns</p>
+            
+            <div class="pricing-amount mb-4">
+              <span class="display-4 fw-bold">
+                ${{ isAnnual ? '48' : '60' }}
+              </span>
+              <span class="text-muted">/month</span>
+              <div *ngIf="isAnnual" class="small text-success">
+                Billed annually ($599/year)
+              </div>
+            </div>
+            
+            <ul class="list-unstyled text-start mb-4">
+              <li class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Everything in Standard
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                Unlimited API calls
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                24/7 dedicated support
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                White-label solutions
+              </li>
+              <li class="mb-2">
+                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                SLA guarantee
+              </li>
+            </ul>
+            
+            <button class="btn btn-outline-primary w-100 pricing-btn" (click)="navigateToSignup()">
+              Start Premium
+              <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+    
+  </div>
+</section>
+
+<!-- Final CTA Section -->
+<section class="final-cta-section py-5 bg-white" id="company-logos-section">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-12">
+        <h2 class="display-5 fw-bold mb-3">{{ orbitHeadline }}</h2>
+        <p class="lead text-muted mb-5">{{ orbitSubheadline }}</p>
+        
+        <!-- Orbit-style logo display (simplified for Bootstrap) -->
+        <div class="d-flex flex-wrap justify-content-center align-items-center gap-4 mb-5">
+          <div *ngFor="let logo of orbitLogos" class="orbit-logo">
+            <img [src]="logo.src" 
+                 [alt]="logo.alt" 
+                 class="img-fluid"
+                 style="max-height: 50px; opacity: 0.8; transition: all 0.3s ease;"
+                 (mouseenter)="onOrbitLogoHover($event, true)"
+                 (mouseleave)="onOrbitLogoHover($event, false)">
+          </div>
+        </div>
+        
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+          <button class="btn btn-primary btn-lg px-5 py-3 cta-btn cta-btn-primary" (click)="navigateToSignup()">
+            Get Started Today
+            <i class="bi bi-arrow-right ms-2"></i>
+          </button>
+          <button class="btn btn-outline-primary btn-lg px-5 py-3 cta-btn cta-btn-secondary">
+            View Documentation
+            <i class="bi bi-book ms-2"></i>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </section> 

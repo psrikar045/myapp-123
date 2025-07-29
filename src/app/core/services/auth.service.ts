@@ -5,6 +5,7 @@ import { catchError, tap, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
 import { UserAuthService } from '../../shared/services/user-auth.service';
+
 import {
   AuthResponse,
   EmailLoginRequest,
@@ -183,6 +184,7 @@ export class AuthService {
             localStorage.setItem('jwt_token', response.token);
             localStorage.setItem('user_data', JSON.stringify(response.user));
             this.isAuthenticatedSubject.next(true);
+            
             console.log('Login successful, token stored.');
           }
         }),
@@ -285,6 +287,7 @@ private hasValidToken(): boolean {
       localStorage.removeItem('user_data');
       this.isAuthenticatedSubject.next(false);
     }
+    
     // Clear user details
     this.clearUserDetails();
     this.router.navigate(['/landing']);
@@ -1107,4 +1110,6 @@ generateUsername(firstName: string, lastName: string): string {
       }))
     );
   }
+
+
 }

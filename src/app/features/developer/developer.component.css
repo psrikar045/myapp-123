@@ -1016,7 +1016,7 @@
 }
 
 .SectionBG{
-background-image:  url('/developer img/bg1.png');
+background-image:  url('/assets/developer-img/bg1.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1025,7 +1025,7 @@ background-image:  url('/developer img/bg1.png');
     background: linear-gradient(135deg, #e0f2fe, #b3e5fc);
 }
 .WorldVector{
-    background-image:  url('/developer img/WorldVector.png');
+    background-image:  url('/assets/developer-img/WorldVector.png');
      background-size: inherit;
     background-position: right;
     background-repeat: no-repeat;
@@ -1040,7 +1040,7 @@ background-image:  url('/developer img/bg1.png');
       /* background-image: 
     linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)),
     url('/developer img/Hero.png'); */
-    background-image:  url('/developer img/Hero.png');
+    background-image:  url('/assets/developer-img/Hero.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -1253,7 +1253,7 @@ body, .dev-container, .container, .features-section, .marketing-section, .innova
 /* .BGlastSection{background: linear-gradient(180deg, #0550D2 0%, #003184 100%);} */
 .BGlastSection{
     /* background: linear-gradient(135deg, #e0f2fe, #b3e5fc); */
-    background-image:  url('/developer img/Secbg1.png');
+    background-image:  url('/assets/developer-img/Secbg1.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

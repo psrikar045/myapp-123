@@ -8,24 +8,38 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: transparent; /* Handled by global styles or parent */
-  padding: 1rem; /* Approx 14px. Was 1.25rem (20px) */
+  background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
+  padding: 1rem;
   box-sizing: border-box;
- font-family: "Inter", sans-serif;
-  transition: background-color 0.3s ease;
+  font-family: var(--theme-font-family);
+  transition: var(--theme-animations);
+  color: var(--theme-text);
+  
+  @media (max-width: 768px) {
+    padding: 0.5rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
 }
 
 .login-container {
   display: flex;
-  border: 1px solid #cccc;
-    border-radius: 20px;
-  flex-direction: column; /* Mobile first: stacked */
+  border: 1px solid var(--bs-border-color, #e9ecef);
+  border-radius: var(--theme-border-radius);
+  flex-direction: column;
   width: 100%;
-  max-width: 26.25rem; /* Approx 420px for the form panel itself on mobile */
-  background-color: transparent;
+  max-width: 28rem;
+  background: var(--theme-surface);
+  box-shadow: var(--theme-shadows);
   overflow: hidden;
-  gap: 1.5rem; /* Approx 21px. Was 1.25rem (20px) then 5rem */
-  align-items: center; /* Center login-left when stacked */
+  gap: 0;
+  align-items: stretch;
+  
+  @media (max-width: 768px) {
+    max-width: 100%;
+    margin: 0 0.5rem;
+    border-radius: 0.75rem;
+  }
 }
 
 .login-left {
@@ -236,6 +250,7 @@ mat-form-field {
   background-color: #f0f0f0;
   border-color: #999;
   transform: translateY(-0.1rem); /* Approx -1.4px. Was -0.125rem */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 .social-button mat-icon {
   font-size: 1.25rem; /* Approx 17.5px. Was 1.25rem then 1.5rem */
@@ -429,13 +444,58 @@ mat-form-field {
   background-color: #444;
 }
 
-/* Button animation styles */
+/* Enhanced Button Styles */
 .login-button, .register-button {
-  transition: transform 0.2s ease-in-out, background-color 0.3s ease;
+  font-family: var(--font-family-primary, 'Inter', sans-serif) !important;
+  font-weight: 600 !important;
+  border-radius: 0.5rem !important;
+  padding: 0.875rem 1.5rem !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.025em !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 2px 8px rgba(74, 80, 224, 0.2) !important;
+}
+
+.login-button::before, .register-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.login-button:hover::before, .register-button:hover::before {
+  left: 100%;
+}
+
+.login-button:hover, .register-button:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(74, 80, 224, 0.4) !important;
 }
 
 .login-button:active, .register-button:active {
-  transform: scale(0.98);
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 8px rgba(74, 80, 224, 0.3) !important;
+}
+
+.login-button:disabled, .register-button:disabled {
+  transform: none !important;
+  box-shadow: none !important;
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
+/* Loading spinner positioning */
+.button-spinner {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
 }
 
 /* Material Overrides - Kept as is, assuming necessary for theme */
@@ -532,6 +592,117 @@ mat-form-field {
 }
 .dark-theme .mat-mdc-slide-toggle.mat-mdc-slide-toggle-checked .mdc-switch__track { background-color: #8c9eff !important; }
 .dark-theme .mat-mdc-slide-toggle .mdc-switch__handle { background-color: #f0f0f0 !important; }
+
+/* ============================================================================
+   COMPREHENSIVE DARK MODE SUPPORT FOR LOGIN
+   ============================================================================ */
+
+[data-bs-theme="dark"] {
+  .login-page-wrapper {
+    background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
+    color: var(--theme-text);
+  }
+  
+  .login-container {
+    background: var(--theme-surface);
+    border-color: #30363d;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  .login-left {
+    background: var(--theme-surface);
+    color: var(--theme-text);
+  }
+  
+  h2 {
+    color: var(--theme-text);
+  }
+  
+  .subtitle {
+    color: #8b949e;
+  }
+  
+  .form-control {
+    background-color: #21262d;
+    border-color: #30363d;
+    color: var(--theme-text);
+    
+    &:focus {
+      background-color: #21262d;
+      border-color: var(--theme-primary);
+      color: var(--theme-text);
+      box-shadow: 0 0 0 0.2rem rgba(74, 80, 224, 0.25);
+    }
+    
+    &::placeholder {
+      color: #8b949e;
+    }
+  }
+  
+  .btn-primary {
+    background-color: var(--theme-primary);
+    border-color: var(--theme-primary);
+    
+    &:hover {
+      background-color: color-mix(in srgb, var(--theme-primary) 85%, black);
+      border-color: color-mix(in srgb, var(--theme-primary) 85%, black);
+    }
+  }
+  
+  .btn-outline-primary {
+    color: var(--theme-primary);
+    border-color: var(--theme-primary);
+    
+    &:hover {
+      background-color: var(--theme-primary);
+      border-color: var(--theme-primary);
+      color: white;
+    }
+  }
+  
+  .social-button {
+    background-color: #21262d;
+    border-color: #30363d;
+    color: var(--theme-text);
+    
+    &:hover {
+      background-color: #30363d;
+      border-color: #484f58;
+    }
+  }
+  
+  .divider {
+    color: #8b949e;
+    
+    &::before,
+    &::after {
+      border-bottom-color: #30363d;
+    }
+  }
+  
+  .signup-link,
+  .login-link {
+    color: var(--theme-primary);
+    
+    &:hover {
+      color: color-mix(in srgb, var(--theme-primary) 85%, white);
+    }
+  }
+  
+  .error-message {
+    background-color: rgba(248, 81, 73, 0.1);
+    color: #ff7b72;
+    border-color: rgba(248, 81, 73, 0.3);
+  }
+  
+  .terms-checkbox span {
+    color: #8b949e;
+  }
+  
+  .carousel-container {
+    background: #21262d;
+  }
+}
 
 
 /* --- Mobile First Media Queries --- */

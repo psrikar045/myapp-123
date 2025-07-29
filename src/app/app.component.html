@@ -1,5 +1,6 @@
-<app-spinner *ngIf="spinnerService.loading$ | async"></app-spinner>
-<router-outlet></router-outlet>
-<ng-container *ngIf="showFooter$ | async">
-  <app-footer></app-footer>
-</ng-container>
+<!-- Global Components -->
+<app-global-spinner></app-global-spinner>
+<app-error-boundary></app-error-boundary>
+
+<!-- Main Application Layout -->
+<app-main-layout></app-main-layout>

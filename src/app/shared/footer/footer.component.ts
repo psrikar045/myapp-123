@@ -7,12 +7,13 @@ import { RouterModule, Router } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './footer.component.html',
-  styleUrl: './footer.component.css'
+  styleUrl: './footer.component.scss'
 })
 export class FooterComponent implements OnInit, OnDestroy {
   companyName = 'Marketify';
   companyDescription = 'Access logos, brand colors, fonts and social links by simply entering a domain name';
   copyright = '© Copyright 2025 Marketify. All rights reserved.';
+  currentYear = new Date().getFullYear();
   
   showBackToTop = false;
 

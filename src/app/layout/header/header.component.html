@@ -1,0 +1,137 @@
+<!-- Bootstrap Responsive Navbar -->
+<nav class="navbar navbar-expand-lg" 
+     [class.navbar-scrolled]="isScrolled"
+     [class.navbar-hidden]="!isVisible"
+     [class.with-sidenav-expanded]="authService.isAuthenticated() && (sidenavService.isVisible$ | async) && !(sidenavService.config$ | async)?.collapsed"
+     [class.with-sidenav-collapsed]="authService.isAuthenticated() && (sidenavService.isVisible$ | async) && (sidenavService.config$ | async)?.collapsed"
+     [class.navbar-dark]="currentTheme === 'dark'"
+     [attr.data-header-type]="headerType"
+     [attr.data-bs-theme]="currentTheme">
+  
+  <div class="container-fluid px-lg-5 px-md-4 px-3">
+    
+    <!-- Sidenav Toggle Button (for authenticated users) -->
+    <button class="btn btn-link sidenav-toggle-btn mobile-menu-toggle d-lg-none me-2" 
+            type="button"
+            (click)="toggleSidenav()"
+            *ngIf="authService.isAuthenticated()"
+            aria-label="Toggle sidebar navigation">
+      <i class="bi-list" style="font-size: 1.5rem;"></i>
+    </button>
+
+
+
+    <!-- Brand/Logo - Show only when sidenav is collapsed or not visible -->
+    <a class="navbar-brand" 
+       (click)="onLogoClick()" 
+       style="cursor: pointer;"
+       *ngIf="!(sidenavService.isVisible$ | async) || (sidenavService.config$ | async)?.collapsed">
+      <img [src]="(logo$ | async)?.src" 
+           [alt]="(logo$ | async)?.alt" 
+           class="logo-img"
+           loading="lazy">
+    </a>
+
+    <!-- Mobile Menu Toggle Button -->
+    <button class="navbar-toggler" 
+            type="button" 
+            data-bs-toggle="collapse" 
+            data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" 
+            aria-expanded="false" 
+            aria-label="Toggle navigation"
+            *ngIf="showNavigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navigation Menu -->
+    <div class="collapse navbar-collapse" id="navbarNav" *ngIf="showNavigation">
+      
+      <!-- Main Navigation Links -->
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item" *ngFor="let item of navItems$ | async">
+          <a class="nav-link" 
+             (click)="onNavClick(item)"
+             [class.active]="isNavItemActive(item)"
+             role="button">
+            {{ item.label }}
+          </a>
+        </li>
+      </ul>
+
+      <!-- Action Buttons -->
+      <div class="navbar-nav ms-auto">
+        
+        <!-- Theme & Settings Button (Combined) -->
+        <button class="btn btn-link theme-settings-btn me-2" 
+                type="button"
+                (click)="openThemePanel()"
+                aria-label="Open theme & settings panel"
+                [title]="isAdvancedThemeAvailable ? 'Theme & Settings (Premium Available)' : 'Theme & Settings'">
+          <i class="bi-palette-fill" aria-hidden="true"></i>
+          <span class="theme-indicator" *ngIf="isAdvancedThemeAvailable">
+            <i class="bi-star-fill"></i>
+          </span>
+        </button>
+
+        <ng-container *ngFor="let action of actions$ | async">
+          
+          <!-- Upgrade Button -->
+          <button *ngIf="action.type === 'upgrade'" 
+                  class="btn btn-outline-primary me-2 d-flex align-items-center" 
+                  (click)="onUpgradeClick()">
+            <i class="bi bi-star me-1"></i>
+            Upgrade
+          </button>
+
+          <!-- Profile Dropdown -->
+          <div *ngIf="action.type === 'profile'" class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle d-flex align-items-center" 
+               href="#" 
+               role="button" 
+               data-bs-toggle="dropdown"
+               aria-expanded="false"
+               id="profileDropdown">
+              <img [src]="profileAvatarUrl" 
+                   alt="User Avatar" 
+                   class="profile-avatar me-2">
+              <span class="d-none d-lg-inline">Profile</span>
+            </a>
+            
+            <ul class="dropdown-menu dropdown-menu-end profile-dropdown" aria-labelledby="profileDropdown">
+              <li *ngIf="!currentRoute.startsWith('/profile')">
+                <a class="dropdown-item d-flex align-items-center" href="#" (click)="goToProfile($event)">
+                  <i class="bi bi-person-circle me-2"></i>
+                  <span>My Profile</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center" href="#" (click)="logout(); $event.preventDefault()">
+                  <i class="bi bi-box-arrow-right me-2"></i>
+                  <span>Logout</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Login Button -->
+          <button *ngIf="action.type === 'login'" 
+                  (click)="login()" 
+                  class="btn btn-outline-primary me-2 header-btn">
+            {{ action.label }}
+          </button>
+
+          <!-- Get Started Button -->
+          <button *ngIf="action.type === 'get-started'" 
+                  [routerLink]="['/login']" 
+                  [queryParams]="{ register: 'true' }" 
+                  class="btn btn-primary header-btn header-btn-primary d-flex align-items-center">
+            {{ action.label }}
+            <i class="bi bi-arrow-right ms-2"></i>
+          </button>
+          
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</nav>

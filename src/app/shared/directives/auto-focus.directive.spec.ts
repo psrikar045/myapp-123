@@ -9,7 +9,7 @@ describe('AutoFocusDirective', () => {
   beforeEach(() => {
     // Mock ElementRef
     const mockNativeElement = {
-      focus: jasmine.createSpy('focus')
+      focus: jest.fn()
     };
     elementRefMock = {
       nativeElement: mockNativeElement
@@ -47,3 +47,4 @@ describe('AutoFocusDirective', () => {
     }, 20); // Wait a bit longer than the delay
   });
 });
+

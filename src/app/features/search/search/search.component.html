@@ -1,78 +1,155 @@
-<div class="search-brands-bg">
-  <div class="search-brands-container" style="position:relative;">
-    <img src="images/logo.svg" alt="Logo" class="logo"  (click)="navigateToLanding()" />
-    <div class="search-bar-wrapper" [ngClass]="{'marginM':brands.length > 0 , 'marginN':brands.length == 0}">
-      <span class="search-icon">
-        <!-- Search Icon SVG -->
-        <svg width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="7" stroke="#A0AEC0" stroke-width="2"/><path d="M20 20L17 17" stroke="#A0AEC0" stroke-width="2" stroke-linecap="round"/></svg>
-      </span>
-      <input class="search-input" (keydown)="handleKeyDown($event)" [(ngModel)]="searchDomainNameOrUrl" type="text" placeholder="Enter website URL" [disabled]="isLoading" />
-      <button class="shuffle-btn"  (click)="findBrandInfo($event)" title="Search Brand" [disabled]="isLoading">
-        <!-- Loading Spinner -->
-        <div *ngIf="isLoading" class="loading-spinner">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="12" cy="12" r="10" stroke="#A78BFA" stroke-width="2" stroke-linecap="round" stroke-dasharray="31.416" stroke-dashoffset="31.416">
-              <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite"/>
-              <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite"/>
-            </circle>
-          </svg>
-        </div>
-        <!-- Search Icon SVG -->
-        <svg *ngIf="!isLoading" width="24" height="24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="7" stroke="#A0AEC0" stroke-width="2"/><path d="M20 20L17 17" stroke="#A0AEC0" stroke-width="2" stroke-linecap="round"/></svg>
-      </button>
-    </div>
+<!-- Bootstrap Responsive Search Page -->
+<div class="search-page-container min-vh-100 bg-light">
+  <div class="container py-5">
     
-    <!-- Error Message Display -->
-    <div class="error-message" *ngIf="errorMessage" role="alert">
-      <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="10" cy="10" r="10" fill="#EF4444"/>
-        <path d="M10 6v4M10 14h.01" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      <span>{{ errorMessage }}</span>
-    </div>
-    
-    <!-- Remove the animation-selector button section -->
-    
-    <div class="recently-viewed-section" *ngIf="brands.length > 0">
-      <div class="recently-viewed-header">
-        <span>RECENTLY VIEWED</span>
-        <button class="clear-all-btn" (click)="clearAll()">Clear all</button>
-      </div>
-      <div class="brand-card" *ngFor="let brand of brands; let i = index" (click)="goToResults(brand.name)" style="cursor:pointer;" [title]="'Searched: ' + brand.url + ' on ' + (brand.searchedAt | date:'short')">
-        <span class="brand-icon">
-          <!-- Favicon if available, otherwise show generic icon -->
-          <img *ngIf="brand.favicon && !brand.faviconError" 
-               [src]="brand.favicon" 
-               [alt]="brand.name" 
-               width="32" 
-               height="32" 
-               style="border-radius: 6px;" 
-               (error)="onFaviconError(i)"/>
-          <!-- Default Brand Icon SVG -->
-          <svg *ngIf="!brand.favicon || brand.faviconError" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="16" fill="#E5E7EB"/>
-            <text x="16" y="20" text-anchor="middle" style="font-family: 'Inter', sans-serif;" font-size="12" font-weight="bold" fill="#6B7280">
-              {{ brand.name.charAt(0).toUpperCase() }}
-            </text>
-          </svg>
-        </span>
-        <div class="brand-info">
-          <span class="brand-name">{{ brand.name }}</span>
-          <span class="brand-domain" *ngIf="brand.domain">{{ brand.domain }}</span>
-        </div>
-        <span class="verified-badge" *ngIf="brand.verified">
-          <!-- Verified Icon SVG -->
-          <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="10" fill="#3B82F6"/><path d="M7.5 10.5l2 2 3-3" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-        <button class="remove-btn" (click)="$event.stopPropagation(); removeBrand(i)" title="Remove from history">&times;</button>
+    <!-- Logo Section -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-12 text-center">
+        <img src="assets/images/logo.svg" 
+             alt="Logo" 
+             class="search-logo img-fluid mb-4" 
+             style="max-height: 60px; cursor: pointer;"
+             (click)="navigateToLanding()" />
       </div>
     </div>
-    <div style="width:100%;display:flex;justify-content:center;margin-top:32px;">
-      <button (click)="navigateToLanding()" style="background:none;border:none;display:flex;align-items:center;gap:8px;font-size:1.1rem;color:#377dff;cursor:pointer;">
-        <svg width="20" height="20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M13 5l-5 5 5 5" stroke="#377dff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Back to Home
-      </button>
+
+    <!-- Search Bar Section -->
+    <div class="row justify-content-center mb-4">
+      <div class="col-lg-8 col-md-10 col-12">
+        <div class="search-card card border-0 shadow-sm">
+          <div class="card-body p-4">
+            
+            <!-- Modern Search Input -->
+            <div class="modern-search-container">
+              <div class="search-input-wrapper" [class.focused]="isSearchFocused">
+                <div class="search-icon">
+                  <i class="bi bi-globe2"></i>
+                </div>
+                <input type="text" 
+                       class="search-input" 
+                       [(ngModel)]="searchDomainNameOrUrl"
+                       (keydown)="handleKeyDown($event)"
+                       (focus)="onSearchFocus()"
+                       (blur)="onSearchBlur()"
+                       placeholder="Enter website URL or domain name (e.g., example.com)"
+                       [disabled]="isLoading"
+                       aria-label="Search for brand information">
+                <button class="search-btn" 
+                        type="button"
+                        (click)="findBrandInfo($event)"
+                        [disabled]="isLoading || !searchDomainNameOrUrl.trim()"
+                        title="Search Brand">
+                  
+                  <!-- Loading Spinner -->
+                  <div *ngIf="isLoading" class="spinner-wrapper">
+                    <div class="custom-spinner"></div>
+                  </div>
+                  
+                  <!-- Search Icon -->
+                  <i *ngIf="!isLoading" class="bi bi-arrow-right"></i>
+                </button>
+              </div>
+              
+              <!-- Search Suggestions/Help Text -->
+              <div class="search-help-text mt-2">
+                <small class="text-muted">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Try: google.com, facebook.com, or any website domain
+                </small>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </div>
     </div>
+    
+    <!-- Error Message -->
+    <div class="row justify-content-center mb-4" *ngIf="errorMessage">
+      <div class="col-lg-8 col-md-10 col-12">
+        <div class="alert alert-danger d-flex align-items-center" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          <span>{{ errorMessage }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Recently Viewed Section -->
+    <div class="row justify-content-center" *ngIf="brands.length > 0">
+      <div class="col-lg-8 col-md-10 col-12">
+        <div class="recently-viewed-card card border-0 shadow-sm">
+          <div class="card-header bg-white border-bottom-0 py-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <h6 class="text-uppercase fw-bold text-muted mb-0 small">Recently Viewed</h6>
+              <button class="btn btn-outline-secondary btn-sm" (click)="clearAll()">
+                <i class="bi bi-trash me-1"></i>
+                Clear All
+              </button>
+            </div>
+          </div>
+          
+          <div class="card-body p-0">
+            <!-- Brand Cards Grid -->
+            <div class="row g-0">
+              <div class="col-12" *ngFor="let brand of brands; let i = index">
+                <div class="brand-item d-flex align-items-center p-3 border-bottom hover-bg-light" 
+                     style="cursor: pointer;"
+                     (click)="goToResults(brand.name)"
+                     [title]="'Searched: ' + brand.url + ' on ' + (brand.searchedAt | date:'short')">
+                  
+                  <!-- Brand Icon -->
+                  <div class="brand-icon-wrapper me-3">
+                    <img *ngIf="brand.favicon && !brand.faviconError" 
+                         [src]="brand.favicon" 
+                         [alt]="brand.name" 
+                         class="rounded"
+                         style="width: 40px; height: 40px; object-fit: cover;"
+                         (error)="onFaviconError(i)">
+                    
+                    <!-- Default Brand Icon -->
+                    <div *ngIf="!brand.favicon || brand.faviconError" 
+                         class="bg-light rounded d-flex align-items-center justify-content-center"
+                         style="width: 40px; height: 40px;">
+                      <span class="fw-bold text-muted">{{ brand.name.charAt(0).toUpperCase() }}</span>
+                    </div>
+                  </div>
+                  
+                  <!-- Brand Info -->
+                  <div class="brand-details flex-grow-1">
+                    <div class="d-flex align-items-center">
+                      <h6 class="mb-0 fw-semibold">{{ brand.name }}</h6>
+                      <span *ngIf="brand.verified" class="badge bg-primary ms-2">
+                        <i class="bi bi-check-circle-fill me-1"></i>
+                        Verified
+                      </span>
+                    </div>
+                    <small class="text-muted" *ngIf="brand.domain">{{ brand.domain }}</small>
+                  </div>
+                  
+                  <!-- Remove Button -->
+                  <button class="btn btn-outline-danger btn-sm ms-2" 
+                          (click)="$event.stopPropagation(); removeBrand(i)"
+                          title="Remove from history">
+                    <i class="bi bi-x"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Back to Home Button -->
+    <div class="row justify-content-center mt-4">
+      <div class="col-12 text-center">
+        <button class="btn btn-link text-primary" (click)="navigateToLanding()">
+          <i class="bi bi-arrow-left me-2"></i>
+          Back to Home
+        </button>
+      </div>
+    </div>
+    
   </div>
 
   <!-- Reusable Search Modal Component -->

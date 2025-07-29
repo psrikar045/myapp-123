@@ -20,3 +20,5 @@ describe('SpinnerComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
+

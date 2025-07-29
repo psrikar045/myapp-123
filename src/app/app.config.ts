@@ -1,17 +1,17 @@
-import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, isDevMode, ErrorHandler } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-
-import { routes } from './app.routes';
+import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideServiceWorker } from '@angular/service-worker';
-// Class-based guard imports are no longer needed if guards are functional
-// import { AuthGuard } from './core/guards/auth.guard';
-// import { RoleGuard } from './core/guards/role.guard';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { ErrorHandler } from '@angular/core';
+
+import { routes } from './app.routes';
 import { GlobalErrorHandler } from './core/handlers/global-error-handler';
-import { provideHttpClient, withInterceptors, withFetch } from '@angular/common/http'; // Import withFetch
+
+// Functional Interceptors
 import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { loadingInterceptor } from './core/interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,7 +21,14 @@ export const appConfig: ApplicationConfig = {
       anchorScrolling: 'disabled'
     })),
     provideClientHydration(),
-    provideHttpClient(withInterceptors([authInterceptor]), withFetch()), // Added withFetch()
+    provideHttpClient(
+      withInterceptors([
+        authInterceptor,
+        errorInterceptor,
+        loadingInterceptor
+      ]), 
+      withFetch()
+    ),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000'
