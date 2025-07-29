@@ -19,7 +19,7 @@
 );
 
 // Import unified theme system (after Bootstrap)
-@import 'app/styles/unified-theme.scss';
+@use 'app/styles/unified-theme.scss';
 
 // Import Bootstrap Icons (CSS files require @import)
 @import 'bootstrap-icons/font/bootstrap-icons.css';

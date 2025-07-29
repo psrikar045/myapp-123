@@ -1,0 +1,11 @@
+// Bootstrap mixins and utilities import
+// This file provides a centralized way to import Bootstrap's core functionality
+// while minimizing deprecation warnings
+
+// Import Bootstrap core modules in the correct order
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';
+
+// Note: Using @import here because Bootstrap 5.3.7 still has internal dependencies
+// that don't work properly with @use/@forward. This will be resolved in future Bootstrap versions.

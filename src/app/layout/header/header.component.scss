@@ -2,9 +2,7 @@
    RESPONSIVE BOOTSTRAP NAVBAR STYLES
    ============================================================================ */
 
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-@import 'bootstrap/scss/mixins';
+@import '../../styles/bootstrap-mixins';
 
 .navbar {
   min-height: 72px;
