@@ -25,7 +25,8 @@
 .login-container {
   display: flex;
   border: 1px solid var(--bs-border-color, #e9ecef);
-  border-radius: var(--theme-border-radius);
+  /* border-radius: var(--theme-border-radius); */
+  border-radius: 20px;
   flex-direction: column;
   width: 100%;
   max-width: 28rem;

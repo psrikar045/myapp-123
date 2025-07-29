@@ -157,7 +157,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.4rem 1rem;
+  // padding: 0.4rem 1rem;
+  padding: 5px 15px;
   border-bottom: 1px solid rgba(79, 70, 229, 0.1);
   flex-shrink: 0;
   width: 100%;
@@ -236,7 +237,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 0.125rem; // Reduced gap for compactness
-  width: 100%;
+  width: 82%;
 
   .logo-wrapper {
     display: flex;

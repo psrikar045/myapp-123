@@ -30,13 +30,7 @@ import { AuthService } from '../../../core/services/auth.service';
              *ngIf="!config?.collapsed"
              (click)="onLogoClick()">
           <div class="logo-container">
-            <div class="logo-expanded">
-              <div class="logo-wrapper">
-                <span class="logo-letter-expanded">M</span>
-                <span class="logo-text">Marketify</span>
-              </div>
-              <span class="logo-subtitle">Marketing Hub</span>
-            </div>
+            <img src="assets/images/logo.svg" alt="Logo" class="logo-expanded">
           </div>
         </div>
 
