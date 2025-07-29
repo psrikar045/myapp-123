@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import * as users from '../test-data/fixtures/users.json';
+import users from '../test-data/fixtures/users.json';
 
 test.describe('Data-driven tests', () => {
   for (const user of users) {
