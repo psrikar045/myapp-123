@@ -1,19 +1,22 @@
 import { Routes } from '@angular/router';
 import { roleGuard } from './core/guards/role.guard';
 import { authGuard } from './core/guards/auth.guard';
+// import { rootRedirectGuard } from './core/guards/root-redirect.guard';
+
 
 // Direct imports for components that are not in modules
 import { LandingPageComponent } from './features/landing/landing-page/landing-page.component';
 import { HomePageComponent } from './features/home/home-page.component';
 import { LogoLinkComponent } from './features/logo-link/logo-link.component';
 import { CompanyDataComponent } from './features/brands/company-data/company-data.component';
+import { rootRedirectGuard } from './core/guards/root-redirect.guard';
 
 export const routes: Routes = [
-  // 1. Root redirect
+  // 1. Root redirect based on authentication status
   {
     path: '',
-    redirectTo: '/landing',
-    pathMatch: 'full'
+    canActivate: [rootRedirectGuard],
+    children: []
   },
 
   // 2. Public Routes
