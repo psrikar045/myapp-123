@@ -538,6 +538,6 @@ export class UserAuthService {
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${jwtToken}`,
     });
-    return this.http.put<UserBackendResponse>(`http://localhost:8080/myapp/api/users/profile`, profileData, { headers });
+    return this.http.put<UserBackendResponse>(`${this.baseUrl}/api/users/profile`, profileData, { headers });
   }
 }
