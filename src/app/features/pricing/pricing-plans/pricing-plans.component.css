@@ -11,6 +11,12 @@ body, .pricing-hero-title, .pricing-hero-subtitle, .plan-title, .plan-price, .pl
   align-items: center;
   margin-top: 73px;
 }
+.margin-height-hero{
+  margin: 8px;
+}
+  .fw-semibold{
+    font-size: 0.9rem;
+  }
 
 .pricing-hero-bg {
   width: 100vw;
