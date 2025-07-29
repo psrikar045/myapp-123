@@ -129,7 +129,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       headerType: 'default'
     });
     
-    this.toolbarService.setLoggedOutToolbar();
+    // Don't force toolbar state - let header component handle it based on auth status
 
     if (isPlatformBrowser(this.platformId)) {
       this.checkScrollPosition();

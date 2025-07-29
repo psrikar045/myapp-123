@@ -80,7 +80,7 @@ export class AuthService {
 
 
   private readonly platformId = inject(PLATFORM_ID); // <-- Inject PLATFORM_ID
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.isAuthenticated());
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
   
   private userDetailsSubject = new BehaviorSubject<UserDetails | null>(this.getUserDetailsFromStorage());
@@ -93,6 +93,9 @@ export class AuthService {
   ) {
     // Initialize user details from storage on service creation
     this.userDetails = this.getUserDetailsFromStorage();
+    
+    // Initialize authentication state properly
+    this.isAuthenticatedSubject.next(this.isAuthenticated());
   }
 
   /**
@@ -246,12 +249,8 @@ private hasValidToken(): boolean {
    * @returns True if a token is present, false otherwise.
    */
   isAuthenticated(): boolean {
-    if (isPlatformBrowser(this.platformId)) { // <-- Add this check
-      const token = this.getToken();
-      // For production, also check token expiry:
-      // const payload = token ? JSON.parse(atob(token.split('.')[1])) : null;
-      // return !!token && payload && payload.exp * 1000 > Date.now();
-      return !!token;
+    if (isPlatformBrowser(this.platformId)) {
+      return this.hasValidToken();
     }
     return false; // Not authenticated if not in a browser
   }

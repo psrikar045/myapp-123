@@ -100,7 +100,7 @@ export class PricingPlansComponent implements OnInit {
 
   constructor(private toolbar: ToolbarService) {}
   ngOnInit() {
-    this.toolbar.setLoggedOutToolbar();
+    // Don't force toolbar state - let header component handle it based on auth status
   }
 
   toggleFaq(col: number, idx: number) {

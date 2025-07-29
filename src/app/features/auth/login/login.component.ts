@@ -291,7 +291,7 @@ public layoutService = inject(LayoutService);
           console.log('Login API success!', response);
           this.router.navigate(['/home']);
           this._openSnackBar('Login successful!', 'Dismiss');
-          this.toolbarService.setLoggedInToolbar(); // <-- Set logged-in toolbar
+          // Toolbar state will be updated automatically by header component
         }),
         catchError(error => {
           // Enhanced error message extraction

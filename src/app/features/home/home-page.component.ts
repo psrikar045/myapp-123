@@ -29,7 +29,7 @@ export class HomePageComponent implements OnInit {
     // Initialize any necessary services or state here
   }
   ngOnInit(): void {
-    this.toolbarService.setLoggedInToolbar();
+    // Toolbar state is handled automatically by header component based on auth status
   }
 
   onLogout(): void {
