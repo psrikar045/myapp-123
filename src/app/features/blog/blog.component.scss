@@ -11,7 +11,8 @@
 
 // Enhanced Hero Section
 .blog-hero-section {
-  background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+  // background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-accent) 100%);
+  background: linear-gradient(135deg, #4a73f1 0%, #151aaf 100%);
   position: relative;
   overflow: hidden;
   min-height: 60vh;

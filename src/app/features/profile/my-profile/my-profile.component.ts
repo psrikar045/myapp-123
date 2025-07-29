@@ -67,7 +67,7 @@ export class MyProfileComponent implements OnInit {
       next: (response: any) => {
         console.log('User profile fetched successfully:', response);
         this.userProfile = response;
-        this.profile.avatar = response.profilePictureUrl || 'assets/user-small-1.png';
+        this.profile.avatar = response.profilePictureUrl || 'assets/images/user-small-1.png';
         this.toolbarService.setProfileAvatar(this.profile.avatar); // Update header avatar
         this.profile.name = (response.firstName && response.lastName) 
           ? `${response.firstName} ${response.lastName}` 
