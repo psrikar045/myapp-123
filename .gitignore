@@ -40,3 +40,14 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Test results and reports
+/test-results
+/playwright-report
+/allure-results
+/allure-report
+
+# E2E test generated artifacts
+/e2e/*-snapshots/
+/e2e/.auth/
+/e2e/screenshots/
