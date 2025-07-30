@@ -51,6 +51,9 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   mediaStream: MediaStream | null = null;
   isCapturing = false;
   isUploadingImage = false;
+  
+  // Default avatar URL for fallback
+  defaultAvatarUrl = 'assets/images/user-small-1.png';
 
   private readonly authService = inject(AuthService);
   // Removed MatSnackBar dependency
@@ -83,7 +86,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
       next: (response: any) => {
         console.log('User profile fetched successfully:', response);
         this.userProfile = response;
-        this.profile.avatar = response.profilePictureUrl || 'assets/images/user-small-1.png';
+        this.profile.avatar = response.profilePictureUrl || this.defaultAvatarUrl;
         this.toolbarService.setProfileAvatar(this.profile.avatar); // Update header avatar
         this.profile.name = (response.firstName && response.lastName) 
           ? `${response.firstName} ${response.lastName}` 
@@ -134,6 +137,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
         this.profile.phone = '';
         this.profile.location = '';
         this.profile.profileCompletion = 0;
+        this.profile.avatar = this.defaultAvatarUrl;
       }
     });
   }
@@ -385,6 +389,17 @@ if (this.dobShow) {
   // Image Upload Methods
   onAvatarClick() {
     this.showImageModal = true;
+  }
+
+  // Handle avatar image loading error
+  onAvatarError(event: any) {
+    console.log('Avatar loading failed, using default image');
+    // Prevent infinite error loop by checking if we're already using the default image
+    if (event.target.src !== this.defaultAvatarUrl && !event.target.src.includes('user-small-1.png')) {
+      event.target.src = this.defaultAvatarUrl;
+      // Also update the profile avatar property
+      this.profile.avatar = this.defaultAvatarUrl;
+    }
   }
 
   closeImageModal() {
