@@ -1,0 +1,162 @@
+<!-- Date Picker Container -->
+<div class="date-picker-container">
+  
+  <!-- Label -->
+  <label *ngIf="label" class="form-label fw-semibold text-body-emphasis">
+    {{ label }}
+    <span *ngIf="required" class="text-danger ms-1">*</span>
+  </label>
+  
+  <!-- Input Group -->
+  <div class="input-group date-picker-input-group">
+    <input
+      #dateInput
+      type="text"
+      [class]="getInputClasses()"
+      [value]="inputValue"
+      [placeholder]="config.placeholder"
+      [disabled]="disabled"
+      [readonly]="true"
+      (click)="togglePopup()"
+      (input)="onInputChange($event)"
+      autocomplete="off">
+    
+    <!-- Calendar Icon -->
+    <button
+      type="button"
+      class="btn btn-outline-secondary date-picker-toggle"
+      [disabled]="disabled"
+      (click)="togglePopup()"
+      title="Open calendar">
+      <i class="bi bi-calendar3"></i>
+    </button>
+    
+    <!-- Clear Button -->
+    <button
+      *ngIf="config.clearable && selectedDate && !disabled"
+      type="button"
+      class="btn btn-outline-secondary date-picker-clear"
+      (click)="clearDate()"
+      title="Clear date">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+  
+  <!-- Error Message -->
+  <div *ngIf="error" class="invalid-feedback d-block">
+    {{ error }}
+  </div>
+  
+  <!-- Modal Popup -->
+  <app-modal-popup
+    [isOpen]="isOpen"
+    [config]="modalConfig"
+    [hasData]="!!selectedDate"
+    (buttonClick)="onModalButtonClick($event)"
+    (modalClose)="closePopup()">
+    
+    <!-- Date Input Section -->
+    <div class="date-input-section">
+      <label class="form-label">Selected Date</label>
+      <input 
+        type="text" 
+        class="form-control"
+        [(ngModel)]="displayDate"
+        [placeholder]="config.placeholder || 'Select a date'"
+        (blur)="onDateInputChange($event)"
+        (keyup.enter)="onDateInputChange($event)">
+      <div class="invalid-feedback" *ngIf="dateInputError">
+        {{ dateInputError }}
+      </div>
+    </div>
+    
+    <!-- Calendar Section -->
+    <div class="calendar-section">
+      <!-- Calendar Header -->
+      <div class="calendar-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <button
+            type="button"
+            class="btn btn-sm btn-ghost calendar-nav-btn"
+            (click)="previousMonth()"
+            title="Previous month">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+          
+          <h6 class="calendar-month-year mb-0 fw-semibold">
+            {{ getCurrentMonthName() }}
+          </h6>
+          
+          <button
+            type="button"
+            class="btn btn-sm btn-ghost calendar-nav-btn"
+            (click)="nextMonth()"
+            title="Next month">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Calendar Grid -->
+      <div class="calendar-grid">
+        
+        <!-- Week Days Header -->
+        <div class="calendar-weekdays">
+          <div
+            *ngFor="let day of weekDays"
+            class="calendar-weekday">
+            {{ day }}
+          </div>
+        </div>
+        
+        <!-- Calendar Days -->
+        <div class="calendar-days">
+          <button
+            *ngFor="let day of calendarDays"
+            type="button"
+            class="calendar-day"
+            [class.selected]="isDateSelected(day)"
+            [class.today]="isDateToday(day)"
+            [class.other-month]="!isDateInCurrentMonth(day)"
+            [class.disabled]="isDateDisabled(day)"
+            [disabled]="isDateDisabled(day)"
+            (click)="selectDate(day)"
+            [title]="day | date:'fullDate'">
+            {{ day.getDate() }}
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Time Picker Section (if enabled) -->
+    <div *ngIf="config.showTime" class="time-picker-section">
+      <div class="time-picker-header">
+        <label class="form-label">Select Time</label>
+      </div>
+      <div class="time-picker-input">
+        <input
+          type="time"
+          class="form-control form-control-sm"
+          [(ngModel)]="timeValue"
+          (change)="onTimeChange()"
+          [disabled]="!selectedDate">
+      </div>
+    </div>
+    
+    <!-- Quick Actions Section -->
+    <div class="quick-actions-section">
+      <div class="quick-actions">
+        <button
+          type="button"
+          class="btn btn-sm btn-outline-primary"
+          (click)="goToToday()"
+          [disabled]="isDateDisabled(getCurrentDate())">
+          <i class="bi bi-calendar-check me-1"></i>
+          Today
+        </button>
+      </div>
+    </div>
+    
+  </app-modal-popup>
+  
+</div>

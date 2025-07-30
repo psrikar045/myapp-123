@@ -10,6 +10,10 @@ import { SharedModule } from '../../shared/shared.module';
 import { AllCategoriesComponent } from './all-categories/all-categories.component';
 import { CategoryListComponent } from './category-list/category-list.component';
 import { CompanyDataComponent } from './company-data/company-data.component';
+import { AccountHubComponent } from './account-hub/account-hub.component';
+import { ApiKeyManagementComponent } from './account-hub/components/api-key-management/api-key-management.component';
+import { LoadingSpinnerComponent } from './account-hub/components/loading-spinner/loading-spinner.component';
+import { ErrorDisplayComponent } from './account-hub/components/error-display/error-display.component';
 
 // Feature Services
 import { BrandApiService } from '../../shared/services/brand-api.service';
@@ -20,7 +24,7 @@ import { BrandsRoutingModule } from './brands-routing.module';
 @NgModule({
   declarations: [
     // Only declare non-standalone components here
-    // Standalone components are imported directly in routing
+    // AccountHubComponent is now standalone, so it's imported below
   ],
   imports: [
     CommonModule,
@@ -31,9 +35,13 @@ import { BrandsRoutingModule } from './brands-routing.module';
     BrandsRoutingModule,
     
     // Import standalone components
+    AccountHubComponent,
     AllCategoriesComponent,
     CategoryListComponent,
-    CompanyDataComponent
+    CompanyDataComponent,
+    ApiKeyManagementComponent,
+    LoadingSpinnerComponent,
+    ErrorDisplayComponent
   ],
   providers: [
     BrandApiService

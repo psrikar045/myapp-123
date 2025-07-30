@@ -1,0 +1,685 @@
+// Date Picker Popup Component Styles
+.date-picker-container {
+  position: relative;
+  width: 100%;
+  z-index: 1; // Ensure proper stacking context
+  
+  .form-label {
+    margin-bottom: 0.5rem;
+    color: var(--bs-body-emphasis);
+  }
+}
+
+// Input Group Styling
+.date-picker-input-group {
+  position: relative;
+  
+  .date-picker-input {
+    cursor: pointer;
+    background-color: var(--bs-body-bg);
+    border: 1px solid var(--bs-border-color);
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    
+    &:focus {
+      border-color: var(--bs-primary);
+      box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+      outline: none;
+    }
+    
+    &.is-invalid {
+      border-color: var(--bs-danger);
+      
+      &:focus {
+        border-color: var(--bs-danger);
+        box-shadow: 0 0 0 0.2rem rgba(var(--bs-danger-rgb), 0.25);
+      }
+    }
+    
+    &.disabled {
+      background-color: var(--bs-secondary-bg);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    
+    &::placeholder {
+      color: var(--bs-body-secondary);
+      opacity: 0.7;
+    }
+  }
+  
+  .date-picker-toggle,
+  .date-picker-clear {
+    border-left: none;
+    border-radius: 0;
+    transition: all 0.2s ease;
+    
+    &:hover:not(:disabled) {
+      background-color: var(--bs-primary);
+      border-color: var(--bs-primary);
+      color: white;
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+  
+  .date-picker-toggle {
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+  }
+  
+  .date-picker-clear {
+    border-right: none;
+    color: var(--bs-danger);
+    
+    &:hover:not(:disabled) {
+      background-color: var(--bs-danger);
+      border-color: var(--bs-danger);
+      color: white;
+    }
+  }
+}
+
+// Popup Styling - HIGHEST PRIORITY OVERLAY
+.date-picker-popup {
+  // Position and z-index handled by global CSS
+  background: var(--bs-body-bg);
+  border: 1px solid var(--bs-border-color);
+  border-radius: 0.75rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  min-width: 320px;
+  max-width: 400px;
+  padding: 1rem;
+  animation: fadeInScale 0.2s ease-out;
+  
+  // Ensure all interactions work
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  
+  // Position variants
+  &.position-bottom-left {
+    top: 100%;
+    left: 0;
+  }
+  
+  &.position-bottom-right {
+    top: 100%;
+    right: 0;
+  }
+  
+  &.position-top-left {
+    bottom: 100%;
+    left: 0;
+    margin-top: 0;
+    margin-bottom: 0.25rem;
+  }
+  
+  &.position-top-right {
+    bottom: 100%;
+    right: 0;
+    margin-top: 0;
+    margin-bottom: 0.25rem;
+  }
+}
+
+// Calendar Header
+.calendar-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--bs-border-color);
+  
+  .calendar-month-year {
+    color: var(--bs-body-emphasis);
+    font-size: 1.1rem;
+    min-width: 140px;
+    text-align: center;
+  }
+  
+  .calendar-nav-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bs-body-secondary);
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background-color: var(--bs-primary);
+      color: white;
+      transform: scale(1.1);
+    }
+    
+    i {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+// Calendar Grid
+.calendar-grid {
+  .calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    margin-bottom: 0.5rem;
+    
+    .calendar-weekday {
+      text-align: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--bs-body-secondary);
+      padding: 0.5rem 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+  
+  .calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+    
+    .calendar-day {
+      aspect-ratio: 1;
+      border: none;
+      background: none;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--bs-body-emphasis);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      
+      &:hover:not(.disabled) {
+        background-color: var(--bs-primary-bg-subtle);
+        color: var(--bs-primary);
+        transform: scale(1.05);
+      }
+      
+      &.selected {
+        background-color: var(--bs-primary);
+        color: white;
+        font-weight: 600;
+        
+        &:hover {
+          background-color: var(--bs-primary);
+          transform: scale(1.05);
+        }
+      }
+      
+      &.today {
+        position: relative;
+        
+        &:not(.selected) {
+          background-color: var(--bs-warning-bg-subtle);
+          color: var(--bs-warning-text-emphasis);
+          font-weight: 600;
+        }
+        
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 2px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 4px;
+          height: 4px;
+          background-color: currentColor;
+          border-radius: 50%;
+        }
+      }
+      
+      &.other-month {
+        color: var(--bs-body-tertiary);
+        opacity: 0.5;
+      }
+      
+      &.disabled {
+        color: var(--bs-body-tertiary);
+        cursor: not-allowed;
+        opacity: 0.4;
+        
+        &:hover {
+          background: none;
+          transform: none;
+        }
+      }
+    }
+  }
+}
+
+// Time Picker
+.time-picker {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--bs-border-color);
+  
+  .time-picker-header {
+    margin-bottom: 0.5rem;
+    
+    small {
+      color: var(--bs-body-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+  }
+  
+  .time-picker-input {
+    input[type="time"] {
+      border-radius: 0.375rem;
+      border: 1px solid var(--bs-border-color);
+      
+      &:focus {
+        border-color: var(--bs-primary);
+        box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+      }
+      
+      &:disabled {
+        background-color: var(--bs-secondary-bg);
+        opacity: 0.6;
+      }
+    }
+  }
+}
+
+// Calendar Footer
+.calendar-footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--bs-border-color);
+  
+  .btn {
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-1px);
+    }
+    
+    i {
+      font-size: 0.75rem;
+    }
+  }
+}
+
+// Backdrop - handled by global CSS
+.date-picker-backdrop {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparent;
+}
+
+// Ghost button style
+.btn-ghost {
+  background: none;
+  border: none;
+  color: var(--bs-body-secondary);
+  
+  &:hover {
+    background-color: var(--bs-secondary-bg);
+    color: var(--bs-body-emphasis);
+  }
+}
+
+// Animations
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+// Date Picker Modal Specific Styles
+:host ::ng-deep .modal-popup-container {
+  z-index: 10001 !important; // Ensure date picker modal is above everything
+  
+  .modal-popup {
+    &.modal-sm {
+      max-width: 420px; // Slightly larger than default small for better date picker experience
+      min-width: 380px;
+    }
+    
+    .modal-body {
+      padding: 1rem; // Reduced padding for more compact layout
+    }
+  }
+}
+
+// Date Input Section Styling
+.date-input-section {
+  margin-bottom: 1rem;
+  
+  .form-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--bs-body-emphasis);
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-control {
+    border-radius: 0.5rem;
+    border: 1px solid var(--bs-border-color);
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+    
+    &:focus {
+      border-color: var(--bs-primary);
+      box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+    }
+  }
+  
+  .invalid-feedback {
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+  }
+}
+
+// Calendar Section Styling
+.calendar-section {
+  margin-bottom: 1rem;
+}
+
+// Time Picker Section Styling
+.time-picker-section {
+  margin-bottom: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--bs-border-color);
+  
+  .time-picker-header {
+    margin-bottom: 0.5rem;
+    
+    .form-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--bs-body-emphasis);
+      margin-bottom: 0;
+    }
+  }
+  
+  .time-picker-input {
+    .form-control {
+      border-radius: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// Quick Actions Section Styling
+.quick-actions-section {
+  border-top: 1px solid var(--bs-border-color);
+  padding-top: 1rem;
+  
+  .quick-actions {
+    display: flex;
+    justify-content: center;
+    
+    .btn {
+      font-size: 0.875rem;
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.5rem;
+      
+      i {
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 576px) {
+  :host ::ng-deep .modal-popup-container {
+    .modal-popup {
+      &.modal-sm {
+        max-width: calc(100vw - 2rem);
+        min-width: 320px;
+        margin: 1rem;
+      }
+    }
+  }
+  
+  .calendar-grid {
+    .calendar-days {
+      gap: 1px;
+      
+      .calendar-day {
+        min-height: 32px;
+        font-size: 0.8rem;
+      }
+    }
+  }
+  
+  .calendar-header {
+    .calendar-month-year {
+      font-size: 1rem;
+      min-width: 120px;
+    }
+    
+    .calendar-nav-btn {
+      width: 28px;
+      height: 28px;
+      
+      i {
+        font-size: 0.75rem;
+      }
+    }
+  }
+  
+  .date-picker-input-group {
+    .date-picker-toggle,
+    .date-picker-clear {
+      padding: 0.375rem 0.5rem;
+      
+      i {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+// Dark theme adjustments
+[data-bs-theme="dark"] {
+  .date-picker-popup {
+    background: var(--bs-dark);
+    border-color: var(--bs-border-color);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+  
+  .calendar-day {
+    &.today:not(.selected) {
+      background-color: rgba(var(--bs-warning-rgb), 0.2);
+      color: var(--bs-warning);
+    }
+  }
+}
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .date-picker-popup {
+    border-width: 2px;
+  }
+  
+  .calendar-day {
+    border: 1px solid transparent;
+    
+    &:hover:not(.disabled) {
+      border-color: var(--bs-primary);
+    }
+    
+    &.selected {
+      border-color: var(--bs-primary);
+    }
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .date-picker-popup {
+    animation: none;
+  }
+  
+  .calendar-day,
+  .calendar-nav-btn,
+  .btn {
+    transition: none;
+    
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+// ============================================================================
+// MODAL CONTENT SECTIONS
+// ============================================================================
+
+// Date Input Section
+.date-input-section {
+  margin-bottom: 1.5rem;
+  
+  .form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--bs-body-color);
+    font-size: 0.9rem;
+  }
+  
+  .form-control {
+    font-size: 1rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--bs-border-color);
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    
+    &:focus {
+      border-color: var(--bs-primary);
+      box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+      outline: 0;
+    }
+    
+    &::placeholder {
+      color: var(--bs-secondary-color);
+      opacity: 0.7;
+    }
+  }
+  
+  .invalid-feedback {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--bs-danger);
+  }
+}
+
+// Calendar Section
+.calendar-section {
+  margin-bottom: 1.5rem;
+  
+  // Remove old popup styles since we're in modal now
+  .calendar-header,
+  .calendar-grid {
+    // Inherit existing styles
+  }
+}
+
+// Time Picker Section
+.time-picker-section {
+  margin-bottom: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--bs-border-color);
+  
+  .time-picker-header {
+    margin-bottom: 0.75rem;
+    
+    .form-label {
+      font-weight: 600;
+      margin-bottom: 0;
+      color: var(--bs-body-color);
+      font-size: 0.9rem;
+    }
+  }
+  
+  .time-picker-input {
+    .form-control {
+      max-width: 150px;
+      font-size: 1rem;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      
+      &:focus {
+        border-color: var(--bs-primary);
+        box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+      }
+    }
+  }
+}
+
+// Quick Actions Section
+.quick-actions-section {
+  padding-top: 1rem;
+  border-top: 1px solid var(--bs-border-color);
+  
+  .quick-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    
+    .btn {
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      
+      &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.15);
+      }
+      
+      i {
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+// Responsive adjustments for modal content
+@media (max-width: 576px) {
+  .date-input-section,
+  .calendar-section,
+  .time-picker-section,
+  .quick-actions-section {
+    margin-bottom: 1rem;
+  }
+  
+  .quick-actions-section {
+    .quick-actions {
+      flex-direction: column;
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  }
+}

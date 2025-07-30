@@ -2,32 +2,39 @@
 
 // Main layout styles with proper space segregation
 .main-layout {
-  display: flex; // Flex row layout: sidenav | content-wrapper
+  position: relative;
   min-height: 100vh;
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
-  position: relative;
   z-index: 1;
+  overflow-x: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 // Content wrapper that adjusts based on sidenav state
 .content-wrapper {
-  flex: 1; // Takes remaining space after sidenav
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: margin-left 0.3s ease;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  
+  // Default state - no sidenav, full width
+  margin-left: 0;
+  width: 100%;
   
   // When sidenav is present and not in overlay mode (desktop)
   &.with-sidenav {
     @include media-breakpoint-up(lg) {
-      // Expanded state - sidenav takes 280px
+      // Expanded state
       &.sidenav-expanded {
         margin-left: 280px;
         width: calc(100% - 280px);
       }
       
-      // Collapsed state - sidenav takes 70px
+      // Collapsed state
       &.sidenav-collapsed {
         margin-left: 70px;
         width: calc(100% - 70px);
@@ -35,10 +42,10 @@
     }
   }
   
-  // Mobile/tablet responsive - full width when overlay mode
+  // Mobile/tablet responsive - overlay mode, full width
   @include media-breakpoint-down(lg) {
-    margin-left: 0 !important;
-    width: 100% !important;
+    margin-left: 0;
+    width: 100%;
   }
 }
 
@@ -54,6 +61,10 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  position: relative;
   
   &.with-header {
     padding-top: 72px; /* Account for fixed header height */
@@ -68,6 +79,74 @@
 .main-footer {
   flex-shrink: 0;
   width: 100%;
+}
+
+// Responsive and zoom support
+@media (max-width: 991.98px) {
+  .content-wrapper.with-sidenav {
+    margin-left: 0;
+    width: 100%;
+  }
+  
+  .navbar.with-sidenav-expanded,
+  .navbar.with-sidenav-collapsed {
+    left: 0;
+    width: 100%;
+  }
+}
+
+// Zoom level support - handle different zoom levels
+@media screen and (min-resolution: 120dpi), 
+       screen and (-webkit-min-device-pixel-ratio: 1.25) {
+  .content-wrapper {
+    &.with-sidenav {
+      @include media-breakpoint-up(lg) {
+        &.sidenav-expanded {
+          margin-left: 280px;
+          width: calc(100% - 280px);
+        }
+        
+        &.sidenav-collapsed {
+          margin-left: 70px;
+          width: calc(100% - 70px);
+        }
+      }
+    }
+  }
+  
+  .navbar {
+    &.with-sidenav-expanded {
+      @include media-breakpoint-up(lg) {
+        left: 280px;
+        width: calc(100% - 280px);
+      }
+    }
+    
+    &.with-sidenav-collapsed {
+      @include media-breakpoint-up(lg) {
+        left: 70px;
+        width: calc(100% - 70px);
+      }
+    }
+  }
+}
+
+// High zoom levels (150%+)
+@media screen and (min-resolution: 192dpi),
+       screen and (-webkit-min-device-pixel-ratio: 2) {
+  .content-wrapper {
+    &:not(.with-sidenav) {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+  
+  .navbar {
+    &:not(.with-sidenav-expanded):not(.with-sidenav-collapsed) {
+      left: 0;
+      width: 100%;
+    }
+  }
 }
 
 // Theme-specific adjustments

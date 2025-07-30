@@ -14,7 +14,7 @@
   --sidenav-user-height: 80px;
   --sidenav-environment-height: 60px;
   --sidenav-footer-height: 80px;
-  --sidenav-z-index: 1035;
+  --sidenav-z-index: 1040;
 }
 
 // Dark theme variables
@@ -30,7 +30,7 @@
 // Enhanced sidenav container
 .sidenav {
   position: fixed;
-  top: 0; // Use the full height including header space
+  top: 0;
   left: 0;
   height: 100vh;
   width: var(--sidenav-width-expanded);
@@ -40,15 +40,16 @@
   z-index: var(--sidenav-z-index);
   display: flex;
   flex-direction: column;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  transform: translateX(0);
+  transition: all 0.3s ease;
   color: var(--sidenav-text);
+  overflow: hidden;
+  box-sizing: border-box;
 
   &.collapsed {
     width: var(--sidenav-width-collapsed);
     
     .sidenav-header {
-      padding: 0.6rem 0.5rem;
+      padding: 0 0.5rem;
       justify-content: center;
       
       .sidenav-logo {
@@ -59,14 +60,13 @@
     .sidenav-nav {
       padding: 1.5rem 0.5rem;
       border-top: 1px solid rgba(79, 70, 229, 0.1);
-      // margin-top: 0.5rem;
+      margin-top: 0.5rem;
       
       .sidenav-nav-content {
         display: flex;
         flex-direction: column;
         align-items: center;
         padding: 0;
-        background: rgba(255, 255, 255, 0.95);
         
         // Hide scrollbar in collapsed state
         &::-webkit-scrollbar {
@@ -144,8 +144,8 @@
     }
   }
 
-  // Hide completely when not visible in non-overlay mode
-  &:not(.overlay-mode):not(.visible) {
+  // Hide completely when not visible
+  &:not(.visible) {
     transform: translateX(-100%);
   }
 }
@@ -158,13 +158,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // padding: 0.4rem 1rem;
-  padding: 5px 15px;
+  padding: 0 1rem;
   border-bottom: 1px solid rgba(79, 70, 229, 0.1);
   flex-shrink: 0;
   width: 100%;
   box-sizing: border-box;
-  // background: linear-gradient(135deg, rgba(79, 70, 229, 0.02) 0%, rgba(124, 58, 237, 0.02) 100%);
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.02) 0%, rgba(124, 58, 237, 0.02) 100%);
   position: relative;
 
   &::after {
@@ -238,7 +237,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 0.125rem; // Reduced gap for compactness
-  width: 82%;
+  width: 100%;
 
   .logo-wrapper {
     display: flex;
@@ -712,7 +711,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  // background: linear-gradient(135deg, rgba(79, 70, 229, 0.02) 0%, rgba(124, 58, 237, 0.02) 100%);
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.02) 0%, rgba(124, 58, 237, 0.02) 100%);
   position: relative;
 
   &::before {
@@ -904,5 +903,114 @@
   }
   to {
     opacity: 1;
+  }
+}
+
+/* ============================================================================
+   ZOOM LEVEL SPECIFIC FIXES FOR SIDENAV
+   ============================================================================ */
+
+// 125% zoom
+@media screen and (min-resolution: 120dpi) and (max-resolution: 143dpi) {
+  .sidenav {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: var(--sidenav-z-index) !important;
+    
+    &.collapsed {
+      width: var(--sidenav-width-collapsed) !important;
+      min-width: var(--sidenav-width-collapsed) !important;
+      max-width: var(--sidenav-width-collapsed) !important;
+    }
+    
+    &:not(.collapsed) {
+      width: var(--sidenav-width-expanded) !important;
+      min-width: var(--sidenav-width-expanded) !important;
+      max-width: var(--sidenav-width-expanded) !important;
+    }
+  }
+}
+
+// 150% zoom - Critical fix
+@media screen and (min-resolution: 144dpi) and (max-resolution: 191dpi) {
+  .sidenav {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 100vh !important;
+    z-index: var(--sidenav-z-index) !important;
+    box-sizing: border-box !important;
+    
+    &.collapsed {
+      width: var(--sidenav-width-collapsed) !important;
+      min-width: var(--sidenav-width-collapsed) !important;
+      max-width: var(--sidenav-width-collapsed) !important;
+    }
+    
+    &:not(.collapsed) {
+      width: var(--sidenav-width-expanded) !important;
+      min-width: var(--sidenav-width-expanded) !important;
+      max-width: var(--sidenav-width-expanded) !important;
+    }
+    
+    // Ensure content doesn't overflow
+    .sidenav-nav-content {
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+    }
+    
+    // Mobile override for zoom
+    @include media-breakpoint-down(lg) {
+      transform: translateX(-100%) !important;
+      
+      &.overlay-mode.visible {
+        transform: translateX(0) !important;
+      }
+    }
+  }
+}
+
+// 175% zoom
+@media screen and (min-resolution: 192dpi) and (max-resolution: 239dpi) {
+  .sidenav {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: var(--sidenav-z-index) !important;
+    
+    &.collapsed {
+      width: var(--sidenav-width-collapsed) !important;
+      min-width: var(--sidenav-width-collapsed) !important;
+      max-width: var(--sidenav-width-collapsed) !important;
+    }
+    
+    &:not(.collapsed) {
+      width: var(--sidenav-width-expanded) !important;
+      min-width: var(--sidenav-width-expanded) !important;
+      max-width: var(--sidenav-width-expanded) !important;
+    }
+  }
+}
+
+// 200%+ zoom
+@media screen and (min-resolution: 240dpi) {
+  .sidenav {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: var(--sidenav-z-index) !important;
+    
+    &.collapsed {
+      width: var(--sidenav-width-collapsed) !important;
+      min-width: var(--sidenav-width-collapsed) !important;
+      max-width: var(--sidenav-width-collapsed) !important;
+    }
+    
+    &:not(.collapsed) {
+      width: var(--sidenav-width-expanded) !important;
+      min-width: var(--sidenav-width-expanded) !important;
+      max-width: var(--sidenav-width-expanded) !important;
+    }
   }
 }

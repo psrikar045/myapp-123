@@ -44,11 +44,14 @@ export class SidenavService implements OnDestroy {
 
   // Routes where sidenav should be visible (only for authenticated users)
   // These are the authenticated user workflow pages
-  private readonly sidenavVisibleRoutes = [
+private readonly sidenavVisibleRoutes = [
     '/home',           // Home page after login
-    '/brandApi',       // Brand API page
-    '/brands',         // Brands pages (authenticated user browsing)
-    '/developer'       // Developer pages (authenticated user workflow)
+    '/brandApi',       // Brand API page (legacy route)
+    '/brands/company', // Brands API page (new route)
+    '/brands/account-hub', // Account Hub and API Key management
+    '/dashboard',      // Dashboard pages
+    '/analytics',      // Analytics pages
+    '/account'         // Account pages
   ];
 
   // Routes where sidenav should never be visible
@@ -103,7 +106,134 @@ export class SidenavService implements OnDestroy {
   /**
    * Initialize the navigation items based on your provided structure
    */
-  private initializeNavigationItems(): void {
+  // private initializeNavigationItems(): void {
+  //   const navigationItems: SidenavItem[] = [
+  //     // Home - Single item
+  //     {
+  //       id: 'home',
+  //       label: 'Home',
+  //       icon: 'bi-house',
+  //       route: '/home'
+  //     },
+      
+  //     // Dashboard - Collapsible group
+  //     {
+  //       id: 'dashboard',
+  //       label: 'Dashboard',
+  //       icon: 'bi-speedometer2',
+  //       children: [
+  //         {
+  //           id: 'dashboard-overview',
+  //           label: 'Overview',
+  //           route: '/dashboard'
+  //         },
+  //         {
+  //           id: 'dashboard-analytics',
+  //           label: 'Analytics',
+  //           route: '/dashboard/analytics'
+  //         }
+  //       ]
+  //     },
+
+  //     // Analytics - Single item
+  //     {
+  //       id: 'analytics',
+  //       label: 'Analytics',
+  //       icon: 'bi-graph-up'
+  //       // ,route: '/analytics'
+  //     },
+
+  //     // Brand - Collapsible group
+  //     {
+  //       id: 'brand',
+  //       label: 'Brand',
+  //       icon: 'bi-award',
+  //       children: [
+  //         {
+  //           id: 'api-key',
+  //           label: 'API Key',
+  //           route: '/brand/api-key'
+  //         },
+  //         {
+  //           id: 'brand-manager',
+  //           label: 'Brands Api',
+  //           route: '/brandApi'
+  //         },
+  //         {
+  //           id: 'brand-intelligence',
+  //           label: 'Brand Intelligence',
+  //           route: '/brand/intelligence'
+  //         }
+  //       ]
+  //     },
+
+  //     // Insights & Reports - Collapsible group
+  //     {
+  //       id: 'insights-reports',
+  //       label: 'Insights & Reports',
+  //       icon: 'bi-file-earmark-text',
+  //       children: [
+  //         {
+  //           id: 'sentiment-news',
+  //           label: 'Sentiment & News',
+  //           route: '/insights/sentiment'
+  //         },
+  //         {
+  //           id: 'data-aggregation',
+  //           label: 'Data Aggregation Log',
+  //           route: '/insights/data-log'
+  //         }
+  //       ]
+  //     },
+
+  //     // Technology Stack - Collapsible group
+  //     {
+  //       id: 'technology-stack',
+  //       label: 'Technology Stack',
+  //       icon: 'bi-stack',
+  //       children: [
+         
+  //       ]
+  //     },
+
+  //     // AI - Single item
+  //     {
+  //       id: 'ai',
+  //       label: 'AI',
+  //       icon: 'bi-robot',
+  //       children: [
+  //         {
+  //           id: 'ai-tools',
+  //           label: 'AI Tools',
+  //           route: '/tech/ai-tools',
+  //           badge: { text: 'NEW', type: 'success' }
+  //         }
+  //       ]
+  //     },
+
+  //     // Account - Collapsible group
+  //     {
+  //       id: 'account',
+  //       label: 'Account',
+  //       icon: 'bi-person-circle',
+  //       children: [
+  //         {
+  //           id: 'support',
+  //           label: 'Support',
+  //           route: '/account/support'
+  //         },
+  //         {
+  //           id: 'my-account',
+  //           label: 'My Account',
+  //           route: '/account/profile'
+  //         }
+  //       ]
+  //     }
+  //   ];
+
+  //   this.navigationItemsSubject.next(navigationItems);
+  // }
+ private initializeNavigationItems(): void {
     const navigationItems: SidenavItem[] = [
       // Home - Single item
       {
@@ -147,18 +277,25 @@ export class SidenavService implements OnDestroy {
         icon: 'bi-award',
         children: [
           {
-            id: 'api-key',
-            label: 'API Key',
-            route: '/brand/api-key'
+            id: 'account-hub',
+            label: 'Account Hub',
+            route: '/brands/account-hub',
+            icon: 'bi-speedometer2'
+          },
+          {
+            id: 'api-keys',
+            label: 'API Keys',
+            route: '/brands/account-hub/api-keys/manage',
+            icon: 'bi-key'
           },
           {
             id: 'brand-manager',
             label: 'Brands Api',
-            route: '/brandApi'
+            route: '/brands/company/:domain'
           },
           {
             id: 'brand-intelligence',
-            label: 'Brand Intelligence',
+            label: 'Developers',
             route: '/brand/intelligence'
           }
         ]
@@ -214,6 +351,18 @@ export class SidenavService implements OnDestroy {
         label: 'Account',
         icon: 'bi-person-circle',
         children: [
+          {
+            id: 'account-dashboard',
+            label: 'Dashboard',
+            route: '/brands/account-hub',
+            icon: 'bi-speedometer2'
+          },
+          {
+            id: 'api-management',
+            label: 'API Management',
+            route: '/brands/account-hub/api-keys/manage',
+            icon: 'bi-key'
+          },
           {
             id: 'support',
             label: 'Support',

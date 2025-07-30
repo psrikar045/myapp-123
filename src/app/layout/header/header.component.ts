@@ -146,7 +146,56 @@ export class HeaderComponent implements OnInit, OnDestroy {
           }
         }
       });
+
+      // Handle zoom level changes
+      this.handleZoomChanges();
     }
+  }
+
+  private handleZoomChanges(): void {
+    // Listen for resize events that might indicate zoom changes
+    window.addEventListener('resize', () => {
+      this.adjustLayoutForZoom();
+    });
+
+    // Initial adjustment
+    this.adjustLayoutForZoom();
+  }
+
+  private adjustLayoutForZoom(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const navbar = document.querySelector('.navbar') as HTMLElement;
+    if (!navbar) return;
+
+    // Force recalculation of layout
+    requestAnimationFrame(() => {
+      // Ensure proper positioning
+      navbar.style.position = 'fixed';
+      navbar.style.top = '0';
+      navbar.style.zIndex = '1030';
+      
+      // Check if sidenav is present and adjust accordingly
+      const sidenav = document.querySelector('.sidenav') as HTMLElement;
+      if (sidenav) {
+        const sidenavWidth = sidenav.offsetWidth;
+        const isCollapsed = sidenav.classList.contains('collapsed');
+        
+        if (window.innerWidth >= 992) { // Desktop
+          navbar.style.left = `${sidenavWidth}px`;
+          navbar.style.width = `calc(100vw - ${sidenavWidth}px)`;
+          navbar.style.maxWidth = `calc(100vw - ${sidenavWidth}px)`;
+        } else { // Mobile
+          navbar.style.left = '0';
+          navbar.style.width = '100vw';
+          navbar.style.maxWidth = '100vw';
+        }
+      } else {
+        navbar.style.left = '0';
+        navbar.style.width = '100vw';
+        navbar.style.maxWidth = '100vw';
+      }
+    });
   }
 login() {
 this.authService.checkAuthStatusAndNavigate();

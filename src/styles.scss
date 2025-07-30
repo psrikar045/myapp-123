@@ -110,6 +110,7 @@
   --z-modal: 1050;
   --z-popover: 1060;
   --z-tooltip: 1070;
+  --z-date-picker-modal: 10000; // Highest priority for date picker modals
 
   // Font Size Variables (Default: Medium)
   --font-size-base: 1rem;
@@ -847,7 +848,7 @@ body {
 // Support for existing custom classes
 .CustomContainer {
   @extend .container-fluid;
-  width: 100%;
+  max-width: 1400px !important;
 }
 
 .pad100 {
@@ -998,6 +999,61 @@ img {
 .border-gradient {
   border: 2px solid;
   border-image: linear-gradient(135deg, var(--primary-color) 0%, #8c9eff 100%) 1;
+}
+
+// ============================================================================
+// GLOBAL Z-INDEX MANAGEMENT
+// ============================================================================
+
+// Define z-index layers for consistent stacking
+:root {
+  --z-index-base: 1;
+  --z-index-content: 10;
+  --z-index-header: 1030;
+  --z-index-sidenav: 1040;
+  --z-index-backdrop: 1055;
+  --z-index-dropdown: 1060;
+  --z-index-modal: 1070;
+  --z-index-tooltip: 1080;
+  --z-index-toast: 1090;
+}
+
+// Ensure proper z-index hierarchy
+.main-layout {
+  z-index: var(--z-index-base) !important;
+}
+
+.content-wrapper {
+  z-index: var(--z-index-content) !important;
+}
+
+.navbar {
+  z-index: var(--z-index-header) !important;
+}
+
+.sidenav {
+  z-index: var(--z-index-sidenav) !important;
+}
+
+.date-picker-backdrop {
+  z-index: var(--z-index-backdrop) !important;
+}
+
+.date-picker-popup,
+.dropdown-menu {
+  z-index: var(--z-index-dropdown) !important;
+}
+
+.modal {
+  z-index: var(--z-index-modal) !important;
+}
+
+.tooltip {
+  z-index: var(--z-index-tooltip) !important;
+}
+
+.toast {
+  z-index: var(--z-index-toast) !important;
 }
 
 // ============================================================================
@@ -1418,6 +1474,151 @@ html[data-touch-enabled="true"] {
   }
 }
 
+// ============================================================================
+// ENHANCED ZOOM & RESPONSIVE SUPPORT
+// ============================================================================
+
+// Global container improvements for zoom support
+html, body {
+  width: 100vw;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// Ensure all elements use border-box
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+// Fix for zoom levels - prevent layout shifts
+@media screen and (min-resolution: 144dpi) {
+  // 150% zoom and above
+  html, body {
+    overflow-x: hidden !important;
+  }
+  
+  .container,
+  .container-fluid {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+  }
+}
+
+// Improved container behavior at all zoom levels
+.container,
+.container-fluid,
+.container-sm,
+.container-md,
+.container-lg,
+.container-xl,
+.container-xxl {
+  width: 100%;
+  max-width: 100%;
+  padding-left: clamp(0.5rem, 2vw, 1.5rem);
+  padding-right: clamp(0.5rem, 2vw, 1.5rem);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// Flexible grid system for zoom support
+.row {
+  margin-left: clamp(-0.25rem, -1vw, -0.75rem);
+  margin-right: clamp(-0.25rem, -1vw, -0.75rem);
+  
+  > * {
+    padding-left: clamp(0.25rem, 1vw, 0.75rem);
+    padding-right: clamp(0.25rem, 1vw, 0.75rem);
+  }
+}
+
+// Enhanced responsive breakpoints for zoom
+@media (max-width: 1600px) {
+  .container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 1400px) {
+  .container-fluid {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  
+  .col-xl-3,
+  .col-xl-4,
+  .col-xl-6,
+  .col-xl-8,
+  .col-xl-9,
+  .col-xl-12 {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .col-lg-3,
+  .col-lg-4,
+  .col-lg-6,
+  .col-lg-8,
+  .col-lg-9,
+  .col-lg-12 {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 992px) {
+  .col-md-3,
+  .col-md-4,
+  .col-md-6,
+  .col-md-8,
+  .col-md-9,
+  .col-md-12 {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+}
+
+// High DPI / Zoom Level Support
+@media (min-resolution: 144dpi), (min-resolution: 1.5dppx) {
+  // Thinner borders at high zoom levels
+  .card,
+  .btn,
+  .form-control,
+  .table,
+  .modal-content,
+  .dropdown-menu {
+    border-width: 0.5px;
+  }
+}
+
+// Ultra-high zoom support (200%+)
+@media (min-resolution: 192dpi), (min-resolution: 2dppx) {
+  .container-fluid {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .card-body {
+    padding: 0.75rem;
+  }
+  
+  .btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  
+  .form-control {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
 // Mobile device optimizations
 .device-mobile {
   // Larger font sizes for better readability
@@ -1596,5 +1797,52 @@ html[data-touch-enabled="true"] {
   body {
     background: white !important;
     color: black !important;
+  }
+}
+
+// ============================================================================
+// GLOBAL Z-INDEX MANAGEMENT - COMPREHENSIVE SOLUTION
+// ============================================================================
+
+// Z-index hierarchy (from lowest to highest):
+// 1. Normal content: 1-10
+// 2. Sticky elements: 1000-1099
+// 3. Fixed headers/navs: 1100-1199
+// 4. Overlays/modals: 1200-1299
+// 5. Date picker: 9999 (highest priority)
+
+// Date picker - highest priority overlay
+.date-picker-popup {
+  position: fixed !important;
+  z-index: var(--z-date-picker-modal) !important;
+  // Create isolated stacking context
+  isolation: isolate;
+  // Force hardware acceleration for smooth rendering
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+  // Prevent any interference
+  pointer-events: auto !important;
+}
+
+// Date picker backdrop - just below popup
+.date-picker-backdrop {
+  position: fixed !important;
+  z-index: calc(var(--z-date-picker-modal) - 1) !important;
+  pointer-events: none !important;
+}
+
+// Date picker container - ensure proper context
+app-date-picker-popup {
+  position: relative;
+  z-index: auto;
+  isolation: isolate;
+}
+
+// Modal popup container override for date picker
+.modal-popup-container {
+  z-index: var(--z-date-picker-modal) !important;
+  
+  &.date-picker-modal {
+    z-index: calc(var(--z-date-picker-modal) + 1) !important;
   }
 }

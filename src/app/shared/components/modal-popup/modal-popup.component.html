@@ -1,0 +1,69 @@
+<!-- Modal Container -->
+<div 
+  *ngIf="isOpen" 
+  class="modal-popup-container"
+  [class.modal-centered]="config.centered"
+  (click)="onBackdropClick($event)">
+  
+  <!-- Backdrop -->
+  <div class="modal-backdrop"></div>
+  
+  <!-- Modal -->
+  <div 
+    class="modal-popup"
+    [class]="getModalSizeClass()"
+    [class.responsive]="config.responsive">
+    
+    <!-- Header -->
+    <div class="modal-header" *ngIf="config.title || config.showCancelIcon">
+      <h6 class="modal-title mb-0" *ngIf="config.title">
+        {{ config.title }}
+      </h6>
+      <button 
+        *ngIf="config.showCancelIcon"
+        type="button" 
+        class="btn-close btn-close-white"
+        (click)="onCancelIconClick()"
+        aria-label="Close">
+      </button>
+    </div>
+    
+    <!-- Body Content (ng-content) -->
+    <div class="modal-body">
+      <ng-content></ng-content>
+    </div>
+    
+    <!-- Footer with Dynamic Buttons -->
+    <div class="modal-footer" *ngIf="config.buttons && config.buttons.length > 0">
+      <div class="button-group">
+        <button 
+          *ngFor="let button of config.buttons; trackBy: trackButton" 
+          type="button"
+          [class]="getButtonClass(button)"
+          [disabled]="isButtonDisabled(button)"
+          (click)="onButtonClick(button.action)"
+          [attr.aria-label]="button.label">
+          
+          <!-- Loading Spinner -->
+          <span 
+            *ngIf="button.loading" 
+            class="spinner-border spinner-border-sm me-2"
+            role="status"
+            aria-hidden="true">
+          </span>
+          
+          <!-- Icon -->
+          <i 
+            *ngIf="button.icon && !button.loading" 
+            [class]="button.icon + ' me-1'"
+            aria-hidden="true">
+          </i>
+          
+          <!-- Button Text -->
+          {{ button.loading ? (button.loadingText || 'Loading...') : button.label }}
+        </button>
+      </div>
+    </div>
+    
+  </div>
+</div>

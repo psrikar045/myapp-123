@@ -1,0 +1,1856 @@
+<!-- Create API Key Form -->
+<div class="create-api-key-container">
+  <!-- Skip Link for Accessibility -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  
+  <div class="container-fluid px-xxl-5 px-xl-4 px-lg-3 px-md-3 px-sm-2 px-2 py-4" id="main-content">
+    
+    <!-- Enhanced Header with Breadcrumb -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb" class="mb-3">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item">
+              <a href="#" class="text-decoration-none" (click)="goBack()">
+                <i class="bi bi-house-door me-1"></i>
+                Account Hub
+              </a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="#" class="text-decoration-none" (click)="goBack()">
+                API Keys
+              </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Create New</li>
+          </ol>
+        </nav>
+        
+        <!-- Header Content -->
+        <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between mb-3">
+          <div class="mb-3 mb-sm-0">
+            <div class="d-flex align-items-center mb-2">
+              <button 
+                class="btn btn-outline-secondary rounded-pill me-3 d-flex align-items-center" 
+                (click)="goBack()"
+                [disabled]="loading">
+                <i class="bi bi-arrow-left me-1"></i>
+                <span class="d-none d-sm-inline">Back</span>
+              </button>
+              <div>
+                <h1 class="h2 fw-bold mb-1 text-body-emphasis">Create New API Key</h1>
+                <p class="text-body-secondary mb-0 small">
+                  <span *ngIf="wizardMode">Step {{ currentStep + 1 }} of {{ steps.length }}: {{ getCurrentStep().subtitle }}</span>
+                  <span *ngIf="!wizardMode">Generate a secure API key for your application integration</span>
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Mode Toggle and Progress Indicator -->
+          <div class="d-none d-lg-flex align-items-center gap-3">
+            <!-- Mode Toggle -->
+            <div class="mode-toggle">
+              <button 
+                type="button" 
+                class="btn btn-outline-primary btn-sm rounded-pill"
+                (click)="toggleWizardMode()"
+                [title]="wizardMode ? 'Switch to Classic Mode' : 'Switch to Wizard Mode'">
+                <i class="bi" [class.bi-list-ul]="!wizardMode" [class.bi-arrow-right-circle]="wizardMode"></i>
+                <span class="ms-2 d-none d-sm-inline">{{ wizardMode ? 'Classic' : 'Wizard' }}</span>
+              </button>
+            </div>
+            
+            <!-- Progress Steps - Only show in Classic Mode -->
+            <div *ngIf="!wizardMode" class="progress-steps">
+              <div class="step" [class.active]="!success" [class.completed]="success">
+                <span class="step-number">1</span>
+                <span class="step-label">Configure</span>
+              </div>
+              <div class="step-divider"></div>
+              <div class="step" [class.active]="success">
+                <span class="step-number">2</span>
+                <span class="step-label">Complete</span>
+              </div>
+            </div>
+
+            <!-- Wizard Progress Indicator - Only show in Wizard Mode -->
+            <div *ngIf="wizardMode && !success" class="wizard-progress-indicator">
+              <div class="progress-bar-container">
+                <div class="progress-bar-bg">
+                  <div class="progress-bar-fill" [style.width.%]="((currentStep + 1) / steps.length) * 100"></div>
+                </div>
+                <span class="progress-text">{{ currentStep + 1 }} / {{ steps.length }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Success State -->
+    <div *ngIf="success && createdApiKey" class="row justify-content-center">
+      <div class="col-xxl-8 col-xl-9 col-lg-10 col-12">
+        <div class="success-container">
+          <!-- Success Animation -->
+          <div class="text-center mb-4">
+            <div class="success-icon-wrapper">
+              <i class="bi bi-check-circle-fill text-success success-icon"></i>
+            </div>
+            <h2 class="fw-bold text-body-emphasis mb-2">🎉 API Key Created Successfully!</h2>
+            <p class="text-body-secondary lead">Your new API key has been generated and is ready to use.</p>
+          </div>
+
+          <!-- Important Notice -->
+          <div class="alert alert-warning border-0 rounded-4 mb-4 shadow-sm">
+            <div class="d-flex align-items-start">
+              <i class="bi bi-exclamation-triangle-fill me-3 mt-1 text-warning"></i>
+              <div>
+                <h6 class="alert-heading mb-2">⚠️ Important Security Notice</h6>
+                <p class="mb-0">
+                  <strong>Copy this key immediately!</strong> For security reasons, this is the only time you'll be able to view the complete API key. 
+                  Store it securely in your application's configuration.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enhanced API Key Display -->
+          <div class="api-key-display-card">
+            <div class="card border-0 shadow-sm bg-gradient">
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                  <h5 class="card-title mb-0 fw-bold">
+                    <i class="bi bi-key-fill me-2 text-primary"></i>
+                    Your API Key
+                  </h5>
+                  <span class="badge bg-success-subtle text-success border border-success-subtle">
+                    <i class="bi bi-shield-check me-1"></i>
+                    Secure
+                  </span>
+                </div>
+                
+                <!-- API Key Value -->
+                <div class="api-key-wrapper">
+                  <div class="input-group">
+                    <input 
+                      type="text" 
+                      class="form-control form-control-lg font-monospace"
+                      [value]="createdApiKey.key"
+                      readonly
+                      id="apiKeyValue"
+                      style="background: var(--bs-gray-100); border-right: none;">
+                    <button 
+                      class="btn btn-primary btn-lg"
+                      type="button"
+                      (click)="copyApiKey()"
+                      [disabled]="copyButtonText !== 'Copy'"
+                      title="Copy API key to clipboard">
+                      <i class="bi" [class.bi-clipboard]="copyButtonText === 'Copy'" [class.bi-check-lg]="copyButtonText === 'Copied!'"></i>
+                      <span class="ms-2 d-none d-sm-inline">{{ copyButtonText }}</span>
+                    </button>
+                  </div>
+                  <small class="form-text text-body-secondary mt-2">
+                    <i class="bi bi-info-circle me-1"></i>
+                    This key provides {{ createdApiKey.tier }} access to your account resources
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enhanced Key Details -->
+          <div class="key-details-grid mb-4">
+            <div class="row g-3">
+              <div class="col-lg-3 col-md-6">
+                <div class="detail-card">
+                  <div class="detail-icon">
+                    <i class="bi bi-tag-fill text-primary"></i>
+                  </div>
+                  <div class="detail-content">
+                    <small class="detail-label">Name</small>
+                    <p class="detail-value">{{ createdApiKey.name }}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-lg-3 col-md-6">
+                <div class="detail-card">
+                  <div class="detail-icon">
+                    <i class="bi bi-speedometer2 text-success"></i>
+                  </div>
+                  <div class="detail-content">
+                    <small class="detail-label">Tier</small>
+                    <p class="detail-value">{{ createdApiKey.tier }}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-lg-3 col-md-6">
+                <div class="detail-card">
+                  <div class="detail-icon">
+                    <i class="bi bi-globe text-info"></i>
+                  </div>
+                  <div class="detail-content">
+                    <small class="detail-label">Environment</small>
+                    <p class="detail-value">{{ createdApiKey.environment || 'Production' }}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="col-lg-3 col-md-6">
+                <div class="detail-card">
+                  <div class="detail-icon">
+                    <i class="bi bi-calendar-check text-warning"></i>
+                  </div>
+                  <div class="detail-content">
+                    <small class="detail-label">Expires</small>
+                    <p class="detail-value">{{ createdApiKey.expirationDate ? (createdApiKey.expirationDate | date:'mediumDate') : 'Never' }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enhanced Action Buttons -->
+          <div class="action-buttons-container">
+            <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center">
+              <button 
+                class="btn btn-primary btn-lg rounded-pill px-4"
+                (click)="goBack()">
+                <i class="bi bi-speedometer2 me-2"></i>
+                Go to Dashboard
+              </button>
+              
+              <button 
+                class="btn btn-outline-secondary btn-lg rounded-pill px-4"
+                (click)="createAnother()">
+                <i class="bi bi-plus-circle me-2"></i>
+                Create Another Key
+              </button>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions mt-4">
+              <div class="d-flex flex-wrap justify-content-center gap-2">
+                <button 
+                  class="btn btn-sm btn-outline-primary rounded-pill"
+                  (click)="downloadKeyInfo()">
+                  <i class="bi bi-download me-1"></i>
+                  Download Info
+                </button>
+                
+                <button 
+                  class="btn btn-sm btn-outline-info rounded-pill"
+                  (click)="viewDocumentation()">
+                  <i class="bi bi-book me-1"></i>
+                  View Docs
+                </button>
+                
+                <button 
+                  class="btn btn-sm btn-outline-success rounded-pill"
+                  (click)="testApiKey()">
+                  <i class="bi bi-play-circle me-1"></i>
+                  Test Key
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== WIZARD MODE TEMPLATE ==================== -->
+    <div *ngIf="!success && wizardMode" class="wizard-container" id="main-content">
+      <div class="row g-4">
+        
+        <!-- Main Wizard Content -->
+        <div class="col-lg-8 col-12 order-2 order-lg-1">
+          
+          <!-- Step Progress Indicator -->
+          <div class="wizard-progress mb-4">
+            <div class="card border-0 shadow-sm bg-body">
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                  <h5 class="mb-0 fw-bold text-body-emphasis">
+                    <i class="bi bi-list-check me-2 text-primary"></i>
+                    Progress
+                  </h5>
+                  <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
+                    {{ getWizardProgress() }}% Complete
+                  </span>
+                </div>
+                
+                <!-- Step Indicators -->
+                <div class="step-indicators">
+                  <div class="row g-2">
+                    <div 
+                      *ngFor="let step of steps; let i = index" 
+                      class="col-6 col-md-3"
+                      [class.col-lg-3]="steps.length <= 4">
+                      <div 
+                        class="step-indicator"
+                        [class.active]="step.isActive"
+                        [class.completed]="step.isComplete"
+                        [class.accessible]="step.isAccessible"
+                        (click)="goToStep(i)"
+                        [attr.tabindex]="step.isAccessible ? '0' : '-1'"
+                        [attr.aria-label]="'Step ' + (i + 1) + ': ' + step.title"
+                        role="button">
+                        
+                        <div class="step-icon">
+                          <i *ngIf="!step.isComplete" class="{{ step.icon }}"></i>
+                          <i *ngIf="step.isComplete" class="bi bi-check-lg"></i>
+                        </div>
+                        
+                        <div class="step-content">
+                          <div class="step-title">{{ step.title }}</div>
+                          <div class="step-subtitle">{{ step.subtitle }}</div>
+                        </div>
+                        
+                        <div class="step-connector" *ngIf="i < steps.length - 1"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Overall Progress Bar -->
+                <div class="progress mt-3" style="height: 8px;">
+                  <div 
+                    class="progress-bar bg-gradient" 
+                    role="progressbar" 
+                    [style.width.%]="getWizardProgress()"
+                    [attr.aria-valuenow]="getWizardProgress()"
+                    aria-valuemin="0" 
+                    aria-valuemax="100">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Current Step Content -->
+          <div class="wizard-step-content">
+            <form [formGroup]="createForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate>
+              
+              <!-- Step 1: Basic Information -->
+              <div *ngIf="currentStep === 0" class="wizard-step" id="step-basic">
+                <div class="card border-0 shadow-sm bg-body">
+                  <div class="card-header bg-gradient-subtle border-0 py-4">
+                    <div class="d-flex align-items-center">
+                      <div class="step-header-icon me-3">
+                        <i class="bi bi-info-circle-fill"></i>
+                      </div>
+                      <div>
+                        <h4 class="card-title mb-1 fw-bold text-body-emphasis">{{ getCurrentStep().title }}</h4>
+                        <p class="text-body-secondary mb-0">{{ getCurrentStep().subtitle }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body p-4">
+                    <!-- API Key Name -->
+                    <div class="form-group mb-4">
+                      <label for="wizard-name" class="form-label fw-semibold text-body-emphasis d-flex align-items-center">
+                        <i class="bi bi-tag me-2 text-primary"></i>
+                        API Key Name 
+                        <span class="text-danger ms-1">*</span>
+                        <span class="badge bg-primary-subtle text-primary ms-2 small">Required</span>
+                      </label>
+                      <div class="input-group input-group-lg">
+                        <span class="input-group-text bg-body border-end-0">
+                          <i class="bi bi-key text-body-secondary"></i>
+                        </span>
+                        <input 
+                          type="text" 
+                          class="form-control border-start-0"
+                          [class.is-invalid]="hasFieldError('name')"
+                          [class.is-valid]="createForm.get('name')?.valid && createForm.get('name')?.touched"
+                          id="wizard-name" 
+                          formControlName="name"
+                          placeholder="e.g., Production API Key, Mobile App Key, Analytics Service"
+                          autocomplete="off"
+                          maxlength="100"
+                          aria-required="true"
+                          aria-describedby="wizard-name-help wizard-name-error"
+                          [attr.aria-invalid]="hasFieldError('name') ? 'true' : 'false'">
+                        <button 
+                          type="button" 
+                          class="btn btn-outline-primary" 
+                          (click)="generateName()"
+                          [disabled]="loading"
+                          title="Generate a suggested name based on your settings">
+                          <i class="bi bi-magic me-1"></i>
+                          <span class="d-none d-sm-inline">Generate</span>
+                        </button>
+                      </div>
+                      <div *ngIf="hasFieldError('name')" class="invalid-feedback d-block" id="wizard-name-error" role="alert">
+                        <i class="bi bi-exclamation-circle me-1"></i>
+                        {{ getFieldError('name') }}
+                      </div>
+                      <div class="form-text text-body-secondary" id="wizard-name-help">
+                        <i class="bi bi-lightbulb me-1"></i>
+                        Choose a descriptive name that helps you identify this key's purpose and environment
+                      </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                      <label for="wizard-description" class="form-label fw-semibold text-body-emphasis d-flex align-items-center">
+                        <i class="bi bi-file-text me-2 text-primary"></i>
+                        Description
+                        <span class="badge bg-secondary-subtle text-secondary ms-2 small">Optional</span>
+                      </label>
+                      <textarea 
+                        class="form-control" 
+                        id="wizard-description" 
+                        formControlName="description"
+                        rows="3"
+                        placeholder="Optional description of what this API key will be used for"
+                        aria-describedby="wizard-description-help"
+                        maxlength="500"></textarea>
+                      <small class="form-text text-body-secondary" id="wizard-description-help">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Help your team understand the purpose of this key (max 500 characters)
+                      </small>
+                    </div>
+
+                    <!-- API Key Prefix -->
+                    <div class="form-group mb-4">
+                      <label for="wizard-prefix" class="form-label fw-semibold text-body-emphasis d-flex align-items-center">
+                        <i class="bi bi-code-slash me-2 text-primary"></i>
+                        API Key Prefix 
+                        <span class="text-danger ms-1">*</span>
+                        <span class="badge bg-primary-subtle text-primary ms-2 small">Required</span>
+                      </label>
+                      <!-- Desktop Layout -->
+                      <div class="input-group input-group-lg d-none d-md-flex api-prefix-input">
+                        <span class="input-group-text bg-body">
+                          <i class="bi bi-hash text-body-secondary"></i>
+                        </span>
+                        <input 
+                          type="text" 
+                          class="form-control"
+                          [class.is-invalid]="hasFieldError('prefix')"
+                          [class.is-valid]="createForm.get('prefix')?.valid && createForm.get('prefix')?.touched"
+                          id="wizard-prefix" 
+                          formControlName="prefix"
+                          placeholder="mk"
+                          maxlength="10">
+                        <span class="input-group-text bg-body-secondary">_</span>
+                        <span class="input-group-text bg-body-tertiary text-body-secondary font-monospace">
+                          {{ createForm.get('environment')?.value || 'env' }}_************************
+                        </span>
+                      </div>
+
+                      <!-- Mobile Layout -->
+                      <div class="d-md-none">
+                        <div class="row g-2">
+                          <div class="col-12">
+                            <div class="input-group">
+                              <span class="input-group-text bg-body">
+                                <i class="bi bi-hash text-body-secondary"></i>
+                              </span>
+                              <input 
+                                type="text" 
+                                class="form-control"
+                                [class.is-invalid]="hasFieldError('prefix')"
+                                [class.is-valid]="createForm.get('prefix')?.valid && createForm.get('prefix')?.touched"
+                                id="wizard-prefix-mobile" 
+                                formControlName="prefix"
+                                placeholder="mk"
+                                maxlength="10">
+                            </div>
+                          </div>
+                          <div class="col-12">
+                            <div class="alert alert-info py-2 mb-0">
+                              <small class="font-monospace">
+                                Preview: <strong>{{ createForm.get('prefix')?.value || 'mk' }}_{{ createForm.get('environment')?.value || 'env' }}_************************</strong>
+                              </small>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="hasFieldError('prefix')" class="invalid-feedback d-block">
+                        <i class="bi bi-exclamation-circle me-1"></i>
+                        {{ getFieldError('prefix') }}
+                      </div>
+                      <div class="form-text text-body-secondary">
+                        <i class="bi bi-info-circle me-1"></i>
+                        This prefix will appear at the beginning of your API key (e.g., <code>mk_dev_abc123...</code>)
+                      </div>
+                    </div>
+
+                    <!-- Environment -->
+                    <div class="mb-4">
+                      <label class="form-label fw-semibold text-body-emphasis d-flex align-items-center">
+                        <i class="bi bi-globe me-2 text-primary"></i>
+                        Environment 
+                        <span class="text-danger ms-1">*</span>
+                        <span class="badge bg-primary-subtle text-primary ms-2 small">Required</span>
+                      </label>
+                      <!-- Responsive Button Group -->
+                      <div class="btn-group w-100 d-none d-md-flex" role="group">
+                        <input type="radio" class="btn-check" name="wizard-environment" id="wizard-env-dev" value="development" formControlName="environment">
+                        <label class="btn btn-outline-primary" for="wizard-env-dev">
+                          <i class="bi bi-code-slash me-1"></i>
+                          Development
+                        </label>
+
+                        <input type="radio" class="btn-check" name="wizard-environment" id="wizard-env-staging" value="staging" formControlName="environment">
+                        <label class="btn btn-outline-primary" for="wizard-env-staging">
+                          <i class="bi bi-gear me-1"></i>
+                          Staging
+                        </label>
+
+                        <input type="radio" class="btn-check" name="wizard-environment" id="wizard-env-prod" value="production" formControlName="environment">
+                        <label class="btn btn-outline-primary" for="wizard-env-prod">
+                          <i class="bi bi-shield-check me-1"></i>
+                          Production
+                        </label>
+                      </div>
+
+                      <!-- Mobile Stack Layout -->
+                      <div class="d-md-none">
+                        <div class="row g-2">
+                          <div class="col-12">
+                            <input type="radio" class="btn-check" name="wizard-environment-mobile" id="wizard-env-dev-mobile" value="development" formControlName="environment">
+                            <label class="btn btn-outline-primary w-100" for="wizard-env-dev-mobile">
+                              <i class="bi bi-code-slash me-2"></i>
+                              Development
+                            </label>
+                          </div>
+                          <div class="col-12">
+                            <input type="radio" class="btn-check" name="wizard-environment-mobile" id="wizard-env-staging-mobile" value="staging" formControlName="environment">
+                            <label class="btn btn-outline-primary w-100" for="wizard-env-staging-mobile">
+                              <i class="bi bi-gear me-2"></i>
+                              Staging
+                            </label>
+                          </div>
+                          <div class="col-12">
+                            <input type="radio" class="btn-check" name="wizard-environment-mobile" id="wizard-env-prod-mobile" value="production" formControlName="environment">
+                            <label class="btn btn-outline-primary w-100" for="wizard-env-prod-mobile">
+                              <i class="bi bi-shield-check me-2"></i>
+                              Production
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-text text-body-secondary mt-2">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Select the environment where this API key will be used
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Step 2: Rate Limits -->
+              <div *ngIf="currentStep === 1" class="wizard-step" id="step-limits">
+                <div class="card border-0 shadow-sm bg-body">
+                  <div class="card-header bg-gradient-subtle border-0 py-4">
+                    <div class="d-flex align-items-center">
+                      <div class="step-header-icon me-3">
+                        <i class="bi bi-speedometer2"></i>
+                      </div>
+                      <div>
+                        <h4 class="card-title mb-1 fw-bold text-body-emphasis">{{ getCurrentStep().title }}</h4>
+                        <p class="text-body-secondary mb-0">{{ getCurrentStep().subtitle }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body p-4">
+                    <!-- Rate Limit Tiers -->
+                    <div class="mb-4">
+                      <label class="form-label fw-semibold text-body-emphasis d-flex align-items-center mb-3">
+                        <i class="bi bi-speedometer2 me-2 text-primary"></i>
+                        Rate Limit Tier
+                        <span class="text-danger ms-1">*</span>
+                        <span class="badge bg-primary-subtle text-primary ms-2 small">Required</span>
+                      </label>
+                      <div class="row g-3">
+                        <div *ngFor="let tier of rateLimitTiers" class="col-md-6 col-lg-4">
+                          <div class="card h-100 border rate-limit-card" 
+                               [class.border-primary]="createForm.get('tier')?.value === tier"
+                               [class.bg-primary-subtle]="createForm.get('tier')?.value === tier"
+                               [class.shadow-sm]="createForm.get('tier')?.value === tier"
+                               (click)="selectRateLimitTier(tier)"
+                               style="cursor: pointer;"
+                               [attr.tabindex]="0"
+                               [attr.aria-selected]="createForm.get('tier')?.value === tier"
+                               role="button">
+                            <div class="card-body p-3 text-center">
+                              <div class="mb-2">
+                                <i class="bi bi-speedometer2 text-primary" style="font-size: 2rem;"></i>
+                              </div>
+                              <h6 class="fw-bold text-body-emphasis mb-2">{{ tier.tier }}</h6>
+                              <p class="text-body-secondary small mb-3">{{ tier.description }}</p>
+                              <div class="fw-bold text-primary mb-2">
+                                {{ formatNumber(tier.requestsPerDay) }}/day
+                              </div>
+                              <div class="small text-body-secondary">
+                                {{ formatNumber(tier.requestsPerMinute) }}/minute
+                              </div>
+                              <div *ngIf="createForm.get('tier')?.value === tier" class="mt-2">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                <small class="text-success ms-1">Selected</small>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-text text-body-secondary mt-2">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Choose a rate limit tier based on your expected API usage. You can upgrade later if needed.
+                      </div>
+                    </div>
+
+                    <!-- Expiration Date -->
+                    <div class="form-group mb-4">
+                      <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-calendar-event me-2 text-primary"></i>
+                        <span class="form-label fw-semibold text-body-emphasis mb-0">Expiration Date</span>
+                        <span class="badge bg-secondary-subtle text-secondary ms-2 small">Optional</span>
+                      </div>
+                      
+                      <!-- Date Picker Popup Component -->
+                      <app-date-picker-popup
+                        [value]="createForm.get('expirationDate')?.value"
+                        [config]="datePickerConfig"
+                        [disabled]="loading"
+                        [error]="hasFieldError('expirationDate') ? getFieldError('expirationDate') : ''"
+                        (valueChange)="createForm.get('expirationDate')?.setValue($event)"
+                        class="date-picker-wrapper">
+                      </app-date-picker-popup>
+                      
+                      <div class="form-text text-body-secondary mt-2">
+                        <div class="d-flex align-items-start">
+                          <i class="bi bi-shield-check me-2 text-success mt-1"></i>
+                          <div>
+                            <strong>Security Tip:</strong> Set an expiration date for better security. 
+                            You can always extend or create new keys later.
+                            <br>
+                            <small class="text-body-tertiary">Leave empty for no expiration (not recommended for production)</small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Rate Limit Summary -->
+                    <div class="alert alert-info border-0 bg-info-subtle">
+                      <div class="d-flex align-items-start">
+                        <i class="bi bi-info-circle-fill me-3 text-info mt-1"></i>
+                        <div>
+                          <h6 class="fw-semibold mb-2">Selected Rate Limit</h6>
+                          <div *ngIf="createForm.get('tier')?.value; else noTierSelected">
+                            <p class="mb-2">
+                              <strong>{{ createForm.get('tier')?.value?.tier }}</strong> - 
+                              {{ createForm.get('tier')?.value?.description }}
+                            </p>
+                            <ul class="list-unstyled mb-0 small">
+                              <li class="mb-1">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                <strong>{{ formatNumber(createForm.get('tier')?.value?.requestsPerDay) }}</strong> requests per day
+                              </li>
+                              <li class="mb-1">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                <strong>{{ formatNumber(createForm.get('tier')?.value?.requestsPerMinute) }}</strong> requests per minute
+                              </li>
+                              <li class="mb-0">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                Burst limit: <strong>{{ formatNumber(createForm.get('tier')?.value?.burstLimit || createForm.get('tier')?.value?.requestsPerMinute * 2) }}</strong> requests
+                              </li>
+                            </ul>
+                          </div>
+                          <ng-template #noTierSelected>
+                            <p class="mb-0 text-body-secondary">Please select a rate limit tier above.</p>
+                          </ng-template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Step 3: Permissions -->
+              <div *ngIf="currentStep === 2" class="wizard-step" id="step-permissions">
+                <div class="card border-0 shadow-sm bg-body">
+                  <div class="card-header bg-gradient-subtle border-0 py-4">
+                    <div class="d-flex align-items-center">
+                      <div class="step-header-icon me-3">
+                        <i class="bi bi-shield-check"></i>
+                      </div>
+                      <div>
+                        <h4 class="card-title mb-1 fw-bold text-body-emphasis">{{ getCurrentStep().title }}</h4>
+                        <p class="text-body-secondary mb-0">{{ getCurrentStep().subtitle }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body p-4">
+                    <!-- Permissions Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                      <div>
+                        <h6 class="fw-semibold text-body-emphasis mb-1">
+                          <i class="bi bi-shield-check me-2 text-primary"></i>
+                          API Permissions
+                        </h6>
+                        <small class="text-body-secondary">Select the permissions this API key should have</small>
+                      </div>
+                      <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
+                          {{ selectedScopes.size }} selected
+                        </span>
+                        <div class="btn-group btn-group-sm">
+                          <button 
+                            type="button" 
+                            class="btn btn-outline-primary"
+                            (click)="selectAllScopes()"
+                            [disabled]="loading">
+                            <i class="bi bi-check-all me-1"></i>
+                            All
+                          </button>
+                          <button 
+                            type="button" 
+                            class="btn btn-outline-secondary"
+                            (click)="clearAllScopes()"
+                            [disabled]="loading">
+                            <i class="bi bi-x-circle me-1"></i>
+                            Clear
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Permissions Groups -->
+                    <div class="permissions-container">
+                      <div *ngFor="let group of scopeGroups; let groupIndex = index" class="permission-group mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                          <div>
+                            <h6 class="fw-semibold text-body-emphasis mb-1">
+                              <i class="bi-folder me-2 text-primary"></i>
+                              {{ group.name }}
+                            </h6>
+                            <small class="text-body-secondary">{{ group.description }}</small>
+                          </div>
+                          <div class="btn-group btn-group-sm">
+                            <button 
+                              type="button" 
+                              class="btn btn-outline-primary btn-sm"
+                              (click)="selectAllInGroup(group)"
+                              [disabled]="loading">
+                              Select All
+                            </button>
+                            <button 
+                              type="button" 
+                              class="btn btn-outline-secondary btn-sm"
+                              (click)="deselectAllInGroup(group)"
+                              [disabled]="loading">
+                              Clear
+                            </button>
+                          </div>
+                        </div>
+
+                        <div class="row g-2">
+                          <div *ngFor="let scope of group.scopes" class="col-md-6 col-lg-4">
+                            <div class="form-check p-0">
+                              <div class="card h-100 border scope-card permission-card"
+                                   [class.border-primary]="isScopeSelected(scope.key)"
+                                   [class.bg-primary-subtle]="isScopeSelected(scope.key)"
+                                   [class.border-warning]="scope.dangerous"
+                                   [class.opacity-50]="scope.adminOnly"
+                                   [class.shadow-sm]="isScopeSelected(scope.key)"
+                                   (click)="!scope.adminOnly && toggleScope(scope.key)"
+                                   [style.cursor]="scope.adminOnly ? 'not-allowed' : 'pointer'"
+                                   [attr.tabindex]="scope.adminOnly ? '-1' : '0'"
+                                   [attr.aria-selected]="isScopeSelected(scope.key)"
+                                   role="button">
+                                <div class="card-body p-3">
+                                  <div class="d-flex align-items-start">
+                                    <input 
+                                      class="form-check-input me-2 mt-1" 
+                                      type="checkbox" 
+                                      [checked]="isScopeSelected(scope.key)"
+                                      [disabled]="scope.adminOnly"
+                                      (change)="toggleScope(scope.key)"
+                                      [id]="'wizard-scope-' + scope.key">
+                                    <div class="flex-grow-1">
+                                      <label [for]="'wizard-scope-' + scope.key" class="fw-semibold mb-1 text-body-emphasis small d-block" style="cursor: pointer;">
+                                        {{ scope.name }}
+                                      </label>
+                                      <p class="text-body-secondary small mb-2 lh-sm">{{ scope.description }}</p>
+                                      <div class="d-flex flex-wrap gap-1">
+                                        <span *ngIf="scope.dangerous" class="badge bg-danger-subtle text-danger rounded-pill small">
+                                          <i class="bi bi-exclamation-triangle me-1"></i>
+                                          Dangerous
+                                        </span>
+                                        <span *ngIf="scope.adminOnly" class="badge bg-warning-subtle text-warning rounded-pill small">
+                                          <i class="bi bi-shield-lock me-1"></i>
+                                          Admin Only
+                                        </span>
+
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Selection Warning -->
+                    <div *ngIf="selectedScopes.size === 0" class="alert alert-warning border-0 bg-warning-subtle">
+                      <div class="d-flex align-items-start">
+                        <i class="bi bi-exclamation-triangle-fill me-3 text-warning mt-1"></i>
+                        <div>
+                          <h6 class="fw-semibold mb-1">No Permissions Selected</h6>
+                          <p class="mb-0">Please select at least one permission for your API key to function properly.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Selection Summary -->
+                    <div *ngIf="selectedScopes.size > 0" class="alert alert-success border-0 bg-success-subtle">
+                      <div class="d-flex align-items-start">
+                        <i class="bi bi-check-circle-fill me-3 text-success mt-1"></i>
+                        <div>
+                          <h6 class="fw-semibold mb-2">Permissions Selected</h6>
+                          <p class="mb-2">Your API key will have access to <strong>{{ selectedScopes.size }}</strong> permission{{ selectedScopes.size !== 1 ? 's' : '' }}:</p>
+                          <div class="d-flex flex-wrap gap-1">
+                            <span *ngFor="let scopeKey of getSelectedScopeKeys()" class="badge bg-success-subtle text-success rounded-pill small">
+                              {{ getScopeDisplayName(scopeKey) }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Step 4: Summary -->
+              <div *ngIf="currentStep === 3" class="wizard-step" id="step-summary">
+                <div class="card border-0 shadow-sm bg-body">
+                  <div class="card-header bg-gradient-subtle border-0 py-4">
+                    <div class="d-flex align-items-center">
+                      <div class="step-header-icon me-3">
+                        <i class="bi bi-check-circle-fill"></i>
+                      </div>
+                      <div>
+                        <h4 class="card-title mb-1 fw-bold text-body-emphasis">{{ getCurrentStep().title }}</h4>
+                        <p class="text-body-secondary mb-0">{{ getCurrentStep().subtitle }}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-body p-4">
+                    <!-- Configuration Summary -->
+                    <div class="summary-sections">
+                      
+                      <!-- Basic Information Summary -->
+                      <div class="summary-section mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                          <div class="summary-section-icon me-3">
+                            <i class="bi bi-info-circle-fill"></i>
+                          </div>
+                          <h6 class="fw-semibold text-body-emphasis mb-0">Basic Information</h6>
+                        </div>
+                        <div class="row g-3">
+                          <div class="col-md-6">
+                            <div class="summary-item">
+                              <label class="small text-body-secondary text-uppercase fw-semibold letter-spacing">API Key Name</label>
+                              <p class="mb-0 text-body-emphasis fw-medium">
+                                {{ createForm.get('name')?.value || 'Not specified' }}
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="summary-item">
+                              <label class="small text-body-secondary text-uppercase fw-semibold letter-spacing">Environment</label>
+                              <p class="mb-0">
+                                <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
+                                  <i class="bi bi-globe me-1"></i>
+                                  {{ createForm.get('environment')?.value || 'Not selected' }}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="summary-item">
+                              <label class="small text-body-secondary text-uppercase fw-semibold letter-spacing">Key Prefix</label>
+                              <p class="mb-0 font-monospace text-body-emphasis">
+                                {{ createForm.get('prefix')?.value || 'mk' }}_{{ createForm.get('environment')?.value || 'env' }}_
+                              </p>
+                            </div>
+                          </div>
+                          <div class="col-md-6" *ngIf="createForm.get('description')?.value">
+                            <div class="summary-item">
+                              <label class="small text-body-secondary text-uppercase fw-semibold letter-spacing">Description</label>
+                              <p class="mb-0 text-body-secondary small">
+                                {{ createForm.get('description')?.value }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Rate Limits Summary -->
+                      <div class="summary-section mb-4">
+                        <div class="d-flex align-items-center mb-3">
+                          <div class="summary-section-icon me-3">
+                            <i class="bi bi-speedometer2"></i>
+                          </div>
+                          <h6 class="fw-semibold text-body-emphasis mb-0">Rate Limits</h6>
+                        </div>
+                        <div class="row g-3">
+                          <div class="col-md-6">
+                            <div class="summary-item">
+                              <label class="small text-body-secondary text-uppercase fw-semibold letter-spacing">Tier</label>
+                              <p class="mb-0 text-body-emphasis fw-medium">
+                                {{ createForm.get('tier')?.value?.tier || 'Not selected' }}
+                              </p>
+                              <small class="text-body-secondary" *ngIf="createForm.get('tier')?.value?.description">
+                                {{ createForm.get('tier')?.value?.description }}
+                              </small>
+                            </div>
+                          </div>
+                          <div class="col-md-6" *ngIf="createForm.get('tier')?.value">
+                            <div class="summary-item">
+                              <label class="small text-body-secondary text-uppercase fw-semibold letter-spacing">Limits</label>
+                              <div class="d-flex flex-wrap gap-2">
+                                <span class="badge bg-info-subtle text-info px-2 py-1 rounded-pill small">
+                                  {{ formatNumber(createForm.get('tier')?.value?.requestsPerDay) }}/day
+                                </span>
+                                <span class="badge bg-info-subtle text-info px-2 py-1 rounded-pill small">
+                                  {{ formatNumber(createForm.get('tier')?.value?.requestsPerMinute) }}/min
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-6">
+                            <div class="summary-item">
+                              <label class="small text-body-secondary text-uppercase fw-semibold letter-spacing">Expiration</label>
+                              <p class="mb-0 text-body-emphasis fw-medium">
+                                <i class="bi bi-calendar-event me-1"></i>
+                                {{ createForm.get('expirationDate')?.value ? (createForm.get('expirationDate')?.value | date:'mediumDate') : 'Never expires' }}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Permissions Summary -->
+                      <div class="summary-section mb-4">
+                        <div class="d-flex align-items-center justify-content-between mb-3">
+                          <div class="d-flex align-items-center">
+                            <div class="summary-section-icon me-3">
+                              <i class="bi bi-shield-check"></i>
+                            </div>
+                            <h6 class="fw-semibold text-body-emphasis mb-0">Permissions</h6>
+                          </div>
+                          <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
+                            {{ selectedScopes.size }} scope{{ selectedScopes.size !== 1 ? 's' : '' }} selected
+                          </span>
+                        </div>
+                        
+                        <div *ngIf="selectedScopes.size > 0; else noPermissions">
+                          <div class="permissions-summary">
+                            <div class="d-flex flex-wrap gap-2">
+                              <span *ngFor="let scopeKey of getSelectedScopeKeys()" 
+                                    class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
+                                {{ getScopeDisplayName(scopeKey) }}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <ng-template #noPermissions>
+                          <div class="alert alert-warning border-0 bg-warning-subtle mb-0">
+                            <i class="bi bi-exclamation-triangle me-2"></i>
+                            No permissions selected. Please go back to the Permissions step.
+                          </div>
+                        </ng-template>
+                      </div>
+
+                    </div>
+
+                    <!-- Final Confirmation -->
+                    <div class="final-confirmation">
+                      <div class="alert alert-info border-0 bg-info-subtle">
+                        <div class="d-flex align-items-start">
+                          <i class="bi bi-info-circle-fill me-3 text-info mt-1"></i>
+                          <div>
+                            <h6 class="fw-semibold mb-2">Ready to Create Your API Key?</h6>
+                            <p class="mb-2">
+                              Please review your configuration above. Once created, you'll need to copy and save your API key immediately 
+                              as <strong>it won't be shown again</strong> for security reasons.
+                            </p>
+                            <ul class="list-unstyled mb-0 small">
+                              <li class="mb-1">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                Store your API key in a secure location
+                              </li>
+                              <li class="mb-1">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                Never share your API key in public repositories
+                              </li>
+                              <li class="mb-0">
+                                <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                Use environment variables in your applications
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </form>
+          </div>
+          
+          <!-- Wizard Navigation -->
+          <div class="wizard-navigation mt-4">
+            <div class="card border-0 shadow-sm bg-body">
+              <div class="card-body p-4">
+                <div class="row align-items-center">
+                  <div class="col-md-6">
+                    <!-- Step Validation Errors -->
+                    <div *ngIf="getStepErrors().length > 0" class="validation-errors">
+                      <div class="alert alert-warning border-0 mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Please fix the following:</strong>
+                        <ul class="mb-0 mt-2">
+                          <li *ngFor="let error of getStepErrors()">{{ error }}</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="col-md-6">
+                    <div class="d-flex justify-content-end gap-2">
+                      <!-- Previous Button -->
+                      <button 
+                        type="button" 
+                        class="btn btn-outline-secondary btn-lg px-4"
+                        [disabled]="currentStep === 0 || loading"
+                        (click)="previousStep()">
+                        <i class="bi bi-arrow-left me-2"></i>
+                        Previous
+                      </button>
+                      
+                      <!-- Next Button -->
+                      <button 
+                        *ngIf="currentStep < steps.length - 1"
+                        type="button" 
+                        class="btn btn-primary btn-lg px-4"
+                        [disabled]="!isCurrentStepValid() || loading"
+                        (click)="nextStep()">
+                        Next
+                        <i class="bi bi-arrow-right ms-2"></i>
+                      </button>
+                      
+                      <!-- Submit Button -->
+                      <button 
+                        *ngIf="currentStep === steps.length - 1"
+                        type="submit" 
+                        class="btn btn-success btn-lg px-4"
+                        [disabled]="!isCurrentStepValid() || loading">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        <i *ngIf="!loading" class="bi bi-check-lg me-2"></i>
+                        Create API Key
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        
+        <!-- Wizard Sidebar -->
+        <div class="col-lg-4 col-12 order-1 order-lg-2">
+          <div class="sticky-lg-top wizard-sidebar" style="top: 2rem;">
+            
+            <!-- Current Step Summary -->
+            <div class="card border-0 shadow-sm bg-body mb-4">
+              <div class="card-header bg-gradient-subtle border-0 py-4">
+                <div class="d-flex align-items-center">
+                  <div class="summary-icon me-3">
+                    <i class="{{ getCurrentStep().icon }}"></i>
+                  </div>
+                  <div>
+                    <h5 class="card-title mb-1 fw-bold text-body-emphasis">Current Step</h5>
+                    <small class="text-body-secondary">{{ getCurrentStep().title }}</small>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body p-4">
+                <p class="text-body-secondary mb-3">{{ getCurrentStep().subtitle }}</p>
+                
+                <!-- Step-specific help content -->
+                <div class="step-help">
+                  <div *ngIf="currentStep === 0" class="help-content">
+                    <h6 class="fw-semibold mb-2">
+                      <i class="bi bi-lightbulb me-2 text-warning"></i>
+                      Tips for Basic Information
+                    </h6>
+                    <ul class="list-unstyled small text-body-secondary">
+                      <li class="mb-2">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        Choose a descriptive name for easy identification
+                      </li>
+                      <li class="mb-2">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        Select the appropriate environment
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div *ngIf="currentStep === 1" class="help-content">
+                    <h6 class="fw-semibold mb-2">
+                      <i class="bi bi-lightbulb me-2 text-warning"></i>
+                      Rate Limit Guidelines
+                    </h6>
+                    <ul class="list-unstyled small text-body-secondary">
+                      <li class="mb-2">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        Choose tier based on expected usage
+                      </li>
+                      <li class="mb-2">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        Set expiration for security
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div *ngIf="currentStep === 2" class="help-content">
+                    <h6 class="fw-semibold mb-2">
+                      <i class="bi bi-lightbulb me-2 text-warning"></i>
+                      Permission Best Practices
+                    </h6>
+                    <ul class="list-unstyled small text-body-secondary">
+                      <li class="mb-2">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        Select only necessary permissions
+                      </li>
+                      <li class="mb-2">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        Follow principle of least privilege
+                      </li>
+                    </ul>
+                  </div>
+                  
+                  <div *ngIf="currentStep === 3" class="help-content">
+                    <h6 class="fw-semibold mb-2">
+                      <i class="bi bi-lightbulb me-2 text-warning"></i>
+                      Final Review
+                    </h6>
+                    <ul class="list-unstyled small text-body-secondary">
+                      <li class="mb-2">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        Review all settings carefully
+                      </li>
+                      <li class="mb-2">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        Save the key securely after creation
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Need Assistance -->
+            <div class="card border-0 shadow-sm bg-body">
+              <div class="card-header bg-gradient-subtle border-0 py-4">
+                <div class="d-flex align-items-center">
+                  <div class="help-icon me-3">
+                    <i class="bi bi-question-circle"></i>
+                  </div>
+                  <div>
+                    <h5 class="card-title mb-1 fw-bold text-body-emphasis">Need Assistance?</h5>
+                    <small class="text-body-secondary">Get help with API key creation</small>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body p-4">
+                <div class="d-grid gap-2">
+                  <a href="/docs/api-keys" target="_blank" class="btn btn-outline-info btn-sm rounded-pill">
+                    <i class="bi bi-book me-2"></i>
+                    View Documentation
+                    <i class="bi bi-arrow-up-right ms-2 small"></i>
+                  </a>
+                  
+                  <a href="/support" target="_blank" class="btn btn-outline-secondary btn-sm rounded-pill">
+                    <i class="bi bi-headset me-2"></i>
+                    Contact Support
+                    <i class="bi bi-arrow-up-right ms-2 small"></i>
+                  </a>
+                  
+                  <button type="button" class="btn btn-outline-primary btn-sm rounded-pill" (click)="scrollToTop()">
+                    <i class="bi bi-arrow-up me-2"></i>
+                    Back to Top
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- ==================== CLASSIC MODE TEMPLATE ==================== -->
+    <div *ngIf="!success && !wizardMode" class="form-container classic-mode" id="main-content-classic">
+      <form [formGroup]="createForm" (ngSubmit)="onSubmit()" class="needs-validation" novalidate 
+            role="form" aria-label="Create API Key Form">
+        <div class="row g-4">
+          
+          <!-- Enhanced Sidebar Column (appears first on mobile, second on desktop) -->
+          <div class="col-lg-4 col-12 order-1 order-lg-2 sidebar-column">
+            <div class="sticky-lg-top info-sidebar" style="top: 2rem;">
+              
+              <!-- Progress Indicator -->
+              <div class="card border-0 shadow-sm bg-body mb-4 progress-card">
+                <div class="card-body p-4">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="progress-icon me-3">
+                      <i class="bi bi-list-check text-primary"></i>
+                    </div>
+                    <div>
+                      <h6 class="mb-1 fw-bold text-body-emphasis">Form Progress</h6>
+                      <small class="text-body-secondary">Complete all required fields</small>
+                    </div>
+                  </div>
+                  
+                  <div class="progress mb-2" style="height: 8px;">
+                    <div class="progress-bar bg-gradient" 
+                         role="progressbar" 
+                         [style.width.%]="getFormProgress()"
+                         [attr.aria-valuenow]="getFormProgress()"
+                         aria-valuemin="0" 
+                         aria-valuemax="100">
+                    </div>
+                  </div>
+                  <small class="text-body-secondary">{{ getFormProgress() }}% Complete</small>
+                </div>
+              </div>
+              
+              <!-- Enhanced Summary Card -->
+              <div class="card border-0 shadow-sm bg-body mb-4 summary-card">
+                <div class="card-header bg-gradient-subtle border-0 py-4">
+                  <div class="d-flex align-items-center">
+                    <div class="summary-icon me-3">
+                      <i class="bi bi-clipboard-check"></i>
+                    </div>
+                    <div>
+                      <h5 class="card-title mb-1 fw-bold text-body-emphasis">Configuration Summary</h5>
+                      <small class="text-body-secondary">Review your API key settings</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body p-4">
+                  
+                  <!-- Key Name Preview -->
+                  <div class="summary-item mb-4">
+                    <div class="d-flex align-items-center mb-2">
+                      <i class="bi bi-tag-fill text-primary me-2"></i>
+                      <small class="text-body-secondary text-uppercase fw-semibold letter-spacing">Key Name</small>
+                    </div>
+                    <p class="mb-0 text-body-emphasis fw-medium summary-value">
+                      {{ createForm.get('name')?.value || 'Not specified' }}
+                    </p>
+                  </div>
+                  
+                  <!-- Environment Preview -->
+                  <div class="summary-item mb-4">
+                    <div class="d-flex align-items-center mb-2">
+                      <i class="bi bi-gear-fill text-success me-2"></i>
+                      <small class="text-body-secondary text-uppercase fw-semibold letter-spacing">Environment</small>
+                    </div>
+                    <p class="mb-0">
+                      <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill">
+                        {{ createForm.get('environment')?.value || 'Not selected' }}
+                      </span>
+                    </p>
+                  </div>
+                  
+                  <!-- Tier Preview -->
+                  <div class="summary-item mb-4">
+                    <div class="d-flex align-items-center mb-2">
+                      <i class="bi bi-speedometer2 text-warning me-2"></i>
+                      <small class="text-body-secondary text-uppercase fw-semibold letter-spacing">Rate Limit Tier</small>
+                    </div>
+                    <p class="mb-0 text-body-emphasis fw-medium summary-value">
+                      {{ createForm.get('tier')?.value?.tier || 'Not selected' }}
+                    </p>
+                  </div>
+                  
+                  <!-- Expiration Preview -->
+                  <div class="summary-item mb-4">
+                    <div class="d-flex align-items-center mb-2">
+                      <i class="bi bi-calendar-event text-info me-2"></i>
+                      <small class="text-body-secondary text-uppercase fw-semibold letter-spacing">Expiration</small>
+                    </div>
+                    <p class="mb-0 text-body-emphasis fw-medium summary-value">
+                      {{ createForm.get('expirationDate')?.value ? (createForm.get('expirationDate')?.value | date:'mediumDate') : 'Never expires' }}
+                    </p>
+                  </div>
+                  
+                  <!-- Permissions Count -->
+                  <div class="summary-item mb-0">
+                    <div class="d-flex align-items-center mb-2">
+                      <i class="bi bi-shield-check text-success me-2"></i>
+                      <small class="text-body-secondary text-uppercase fw-semibold letter-spacing">Permissions</small>
+                    </div>
+                    <p class="mb-0">
+                      <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill">
+                        {{ selectedScopes.size }} scope{{ selectedScopes.size !== 1 ? 's' : '' }} selected
+                      </span>
+                    </p>
+                  </div>
+                  
+                </div>
+              </div>
+              
+              <!-- Enhanced Help Card -->
+              <div class="card border-0 shadow-sm bg-body help-card">
+                <div class="card-header bg-gradient-subtle border-0 py-4">
+                  <div class="d-flex align-items-center">
+                    <div class="help-icon me-3">
+                      <i class="bi bi-question-circle"></i>
+                    </div>
+                    <div>
+                      <h5 class="card-title mb-1 fw-bold text-body-emphasis">Need Assistance?</h5>
+                      <small class="text-body-secondary">Get help with API key creation</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body p-4">
+                  <p class="text-body-secondary mb-4">
+                    Learn more about API keys and how to use them securely in your applications.
+                  </p>
+                  
+                  <!-- Help Options -->
+                  <div class="help-options">
+                    <div class="help-option mb-3">
+                      <a href="/docs/api-keys" target="_blank" class="btn btn-outline-info w-100 rounded-pill">
+                        <div class="d-flex align-items-center justify-content-center">
+                          <i class="bi bi-book me-2"></i>
+                          <span>View Documentation</span>
+                          <i class="bi bi-arrow-up-right ms-2 small"></i>
+                        </div>
+                      </a>
+                    </div>
+                    
+                    <div class="help-option mb-3">
+                      <a href="/support" target="_blank" class="btn btn-outline-secondary w-100 rounded-pill">
+                        <div class="d-flex align-items-center justify-content-center">
+                          <i class="bi bi-headset me-2"></i>
+                          <span>Contact Support</span>
+                          <i class="bi bi-arrow-up-right ms-2 small"></i>
+                        </div>
+                      </a>
+                    </div>
+                    
+                    <div class="help-option">
+                      <button type="button" class="btn btn-outline-primary w-100 rounded-pill" (click)="scrollToTop()">
+                        <div class="d-flex align-items-center justify-content-center">
+                          <i class="bi bi-arrow-up me-2"></i>
+                          <span>Back to Top</span>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <!-- Quick Tips -->
+                  <div class="mt-4 pt-3 border-top">
+                    <h6 class="fw-semibold text-body-emphasis mb-3">
+                      <i class="bi bi-lightbulb me-2 text-warning"></i>
+                      Quick Tips
+                    </h6>
+                    <ul class="list-unstyled small text-body-secondary">
+                      <li class="mb-2">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        Choose descriptive names for easy identification
+                      </li>
+                      <li class="mb-2">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        Set appropriate expiration dates for security
+                      </li>
+                      <li class="mb-0">
+                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                        Select only necessary permissions
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          
+          <!-- Main Form Column (appears second on mobile, first on desktop) -->
+          <div class="col-lg-8 col-12 order-2 order-lg-1 main-form-column">
+            
+            <!-- Basic Information Card -->
+            <div class="form-card mb-4">
+              <div class="card border-0 shadow-sm bg-body h-100">
+                <div class="card-header bg-body border-0 py-4">
+                  <div class="d-flex align-items-center">
+                    <div class="icon-wrapper me-3">
+                      <i class="bi bi-info-circle-fill text-primary"></i>
+                    </div>
+                    <div>
+                      <h5 class="card-title mb-1 fw-bold text-body-emphasis">Basic Information</h5>
+                      <p class="text-body-secondary mb-0 small">Configure your API key's basic settings</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body p-4 pt-0">
+                
+                  <!-- Enhanced API Key Name -->
+                  <div class="form-group mb-4">
+                    <label for="name" class="form-label fw-semibold text-body-emphasis d-flex align-items-center">
+                      <i class="bi bi-tag me-2 text-primary"></i>
+                      API Key Name 
+                      <span class="text-danger ms-1">*</span>
+                      <span class="badge bg-primary-subtle text-primary ms-2 small">Required</span>
+                    </label>
+                    <div class="input-group input-group-lg">
+                      <span class="input-group-text bg-body border-end-0">
+                        <i class="bi bi-key text-body-secondary"></i>
+                      </span>
+                      <input 
+                        type="text" 
+                        class="form-control border-start-0"
+                        [class.is-invalid]="hasFieldError('name')"
+                        [class.is-valid]="createForm.get('name')?.valid && createForm.get('name')?.touched"
+                        id="name" 
+                        formControlName="name"
+                        placeholder="e.g., Production API Key, Mobile App Key, Analytics Service"
+                        autocomplete="off"
+                        maxlength="100"
+                        aria-required="true"
+                        aria-describedby="name-help name-error"
+                        [attr.aria-invalid]="hasFieldError('name') ? 'true' : 'false'">
+                      <button 
+                        type="button" 
+                        class="btn btn-outline-primary" 
+                        (click)="generateName()"
+                        [disabled]="loading"
+                        title="Generate a suggested name based on your settings">
+                        <i class="bi bi-magic me-1"></i>
+                        <span class="d-none d-sm-inline">Generate</span>
+                      </button>
+                    </div>
+                    <div *ngIf="hasFieldError('name')" class="invalid-feedback d-block" id="name-error" role="alert">
+                      <i class="bi bi-exclamation-circle me-1"></i>
+                      {{ getFieldError('name') }}
+                    </div>
+                    <div class="form-text text-body-secondary" id="name-help">
+                      <i class="bi bi-lightbulb me-1"></i>
+                      Choose a descriptive name that helps you identify this key's purpose and environment
+                    </div>
+                  </div>
+
+                <!-- Description -->
+                <div class="mb-4">
+                  <label for="description" class="form-label fw-semibold text-body-emphasis d-flex align-items-center">
+                    <i class="bi bi-file-text me-2 text-primary"></i>
+                    Description
+                    <span class="badge bg-secondary-subtle text-secondary ms-2 small">Optional</span>
+                  </label>
+                  <textarea 
+                    class="form-control" 
+                    id="description" 
+                    formControlName="description"
+                    rows="3"
+                    placeholder="Optional description of what this API key will be used for"
+                    aria-describedby="description-help"
+                    maxlength="500"></textarea>
+                  <small class="form-text text-body-secondary" id="description-help">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Help your team understand the purpose of this key (max 500 characters)
+                  </small>
+                </div>
+
+                  <!-- Enhanced API Key Prefix -->
+                  <div class="form-group mb-4">
+                    <label for="prefix" class="form-label fw-semibold text-body-emphasis d-flex align-items-center">
+                      <i class="bi bi-code-slash me-2 text-primary"></i>
+                      API Key Prefix 
+                      <span class="text-danger ms-1">*</span>
+                      <span class="badge bg-primary-subtle text-primary ms-2 small">Required</span>
+                    </label>
+                    <!-- Desktop Layout -->
+                    <div class="input-group input-group-lg d-none d-md-flex api-prefix-input">
+                      <span class="input-group-text bg-body">
+                        <i class="bi bi-hash text-body-secondary"></i>
+                      </span>
+                      <input 
+                        type="text" 
+                        class="form-control"
+                        [class.is-invalid]="hasFieldError('prefix')"
+                        [class.is-valid]="createForm.get('prefix')?.valid && createForm.get('prefix')?.touched"
+                        id="prefix" 
+                        formControlName="prefix"
+                        placeholder="mk"
+                        maxlength="10">
+                      <span class="input-group-text bg-body-secondary">_</span>
+                      <span class="input-group-text bg-body-tertiary text-body-secondary font-monospace">
+                        {{ createForm.get('environment')?.value || 'env' }}_************************
+                      </span>
+                    </div>
+
+                    <!-- Mobile Layout -->
+                    <div class="d-md-none">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <div class="input-group">
+                            <span class="input-group-text bg-body">
+                              <i class="bi bi-hash text-body-secondary"></i>
+                            </span>
+                            <input 
+                              type="text" 
+                              class="form-control"
+                              [class.is-invalid]="hasFieldError('prefix')"
+                              [class.is-valid]="createForm.get('prefix')?.valid && createForm.get('prefix')?.touched"
+                              id="prefix-mobile" 
+                              formControlName="prefix"
+                              placeholder="mk"
+                              maxlength="10">
+                          </div>
+                        </div>
+                        <div class="col-12">
+                          <div class="alert alert-info py-2 mb-0">
+                            <small class="font-monospace">
+                              Preview: <strong>{{ createForm.get('prefix')?.value || 'mk' }}_{{ createForm.get('environment')?.value || 'env' }}_************************</strong>
+                            </small>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="hasFieldError('prefix')" class="invalid-feedback d-block">
+                      <i class="bi bi-exclamation-circle me-1"></i>
+                      {{ getFieldError('prefix') }}
+                    </div>
+                    <div class="form-text text-body-secondary">
+                      <i class="bi bi-info-circle me-1"></i>
+                      This prefix will appear at the beginning of your API key (e.g., <code>mk_dev_abc123...</code>)
+                    </div>
+                  </div>
+
+                  <!-- Enhanced Expiration Date with Popup -->
+                  <div class="form-group mb-4">
+                    <div class="d-flex align-items-center mb-3">
+                      <i class="bi bi-calendar-event me-2 text-primary"></i>
+                      <span class="form-label fw-semibold text-body-emphasis mb-0">Expiration Date</span>
+                      <span class="badge bg-secondary-subtle text-secondary ms-2 small">Optional</span>
+                    </div>
+                    
+                    <!-- Date Picker Popup Component -->
+                    <app-date-picker-popup
+                      [value]="createForm.get('expirationDate')?.value"
+                      [config]="datePickerConfig"
+                      [disabled]="loading"
+                      [error]="hasFieldError('expirationDate') ? getFieldError('expirationDate') : ''"
+                      (valueChange)="createForm.get('expirationDate')?.setValue($event)"
+                      class="date-picker-wrapper">
+                    </app-date-picker-popup>
+                    
+                    <div class="form-text text-body-secondary mt-2">
+                      <div class="d-flex align-items-start">
+                        <i class="bi bi-shield-check me-2 text-success mt-1"></i>
+                        <div>
+                          <strong>Security Tip:</strong> Set an expiration date for better security. 
+                          You can always extend or create new keys later.
+                          <br>
+                          <small class="text-body-tertiary">Leave empty for no expiration (not recommended for production)</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                <!-- Environment -->
+                <div class="mb-4">
+                  <label class="form-label fw-semibold text-body-emphasis">
+                    Environment <span class="text-danger">*</span>
+                  </label>
+                  <!-- Responsive Button Group -->
+                  <div class="btn-group w-100 d-none d-md-flex" role="group">
+                    <input type="radio" class="btn-check" name="environment" id="env-dev" value="development" formControlName="environment">
+                    <label class="btn btn-outline-primary" for="env-dev">
+                      <i class="bi bi-code-slash me-1"></i>
+                      Development
+                    </label>
+
+                    <input type="radio" class="btn-check" name="environment" id="env-staging" value="staging" formControlName="environment">
+                    <label class="btn btn-outline-primary" for="env-staging">
+                      <i class="bi bi-gear me-1"></i>
+                      Staging
+                    </label>
+
+                    <input type="radio" class="btn-check" name="environment" id="env-prod" value="production" formControlName="environment">
+                    <label class="btn btn-outline-primary" for="env-prod">
+                      <i class="bi bi-shield-check me-1"></i>
+                      Production
+                    </label>
+                  </div>
+
+                  <!-- Mobile Stack Layout -->
+                  <div class="d-md-none">
+                    <div class="row g-2">
+                      <div class="col-12">
+                        <input type="radio" class="btn-check" name="environment-mobile" id="env-dev-mobile" value="development" formControlName="environment">
+                        <label class="btn btn-outline-primary w-100" for="env-dev-mobile">
+                          <i class="bi bi-code-slash me-2"></i>
+                          Development
+                        </label>
+                      </div>
+                      <div class="col-12">
+                        <input type="radio" class="btn-check" name="environment-mobile" id="env-staging-mobile" value="staging" formControlName="environment">
+                        <label class="btn btn-outline-primary w-100" for="env-staging-mobile">
+                          <i class="bi bi-gear me-2"></i>
+                          Staging
+                        </label>
+                      </div>
+                      <div class="col-12">
+                        <input type="radio" class="btn-check" name="environment-mobile" id="env-prod-mobile" value="production" formControlName="environment">
+                        <label class="btn btn-outline-primary w-100" for="env-prod-mobile">
+                          <i class="bi bi-shield-check me-2"></i>
+                          Production
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Rate Limiting -->
+            <div id="rate-limiting-section" class="card border-0 shadow-sm bg-body mb-4">
+              <div class="card-header bg-body border-0 py-3">
+                <h5 class="card-title mb-0 fw-bold text-body-emphasis">Rate Limiting</h5>
+              </div>
+              <div class="card-body p-4">
+                <div class="row g-3">
+                  <div *ngFor="let tier of rateLimitTiers" class="col-md-6 col-lg-4">
+                    <div class="card h-100 border" 
+                         [class.border-primary]="createForm.get('tier')?.value === tier"
+                         [class.bg-primary-subtle]="createForm.get('tier')?.value === tier"
+                         (click)="selectRateLimitTier(tier)"
+                         style="cursor: pointer;">
+                      <div class="card-body p-3 text-center">
+                        <h6 class="fw-bold text-body-emphasis">{{ tier.tier }}</h6>
+                        <p class="text-body-secondary small mb-2">{{ tier.description }}</p>
+                        <div class="fw-bold text-primary">
+                          {{ formatNumber(tier.requestsPerDay) }}/day
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Permissions -->
+            <div id="permissions-section" class="card border-0 shadow-sm bg-body mb-4">
+              <div class="card-header bg-body border-0 py-3">
+                <div class="d-flex justify-content-between align-items-center">
+                  <h5 class="card-title mb-0 fw-bold text-body-emphasis">Permissions</h5>
+                  <small class="text-body-secondary">{{ selectedScopes.size }} selected</small>
+                </div>
+              </div>
+              <div class="card-body p-4">
+                
+                <div *ngFor="let group of scopeGroups" class="mb-4">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                      <h6 class="fw-semibold text-body-emphasis mb-1">{{ group.name }}</h6>
+                      <small class="text-body-secondary">{{ group.description }}</small>
+                    </div>
+                    <div class="btn-group btn-group-sm">
+                      <button 
+                        type="button" 
+                        class="btn btn-outline-primary btn-sm"
+                        (click)="selectAllInGroup(group)">
+                        Select All
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-outline-secondary btn-sm"
+                        (click)="deselectAllInGroup(group)">
+                        Clear
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="row g-2">
+                    <div *ngFor="let scope of group.scopes" class="col-md-6 col-lg-4">
+                      <div class="form-check p-0">
+                        <div class="card h-100 border scope-card"
+                             [class.border-primary]="isScopeSelected(scope.key)"
+                             [class.bg-primary-subtle]="isScopeSelected(scope.key)"
+                             [class.border-warning]="scope.dangerous"
+                             [class.opacity-50]="scope.adminOnly"
+                             (click)="!scope.adminOnly && toggleScope(scope.key)"
+                             [style.cursor]="scope.adminOnly ? 'not-allowed' : 'pointer'">
+                          <div class="card-body p-3">
+                            <div class="d-flex align-items-start">
+                              <input 
+                                class="form-check-input me-2 mt-1" 
+                                type="checkbox" 
+                                [checked]="isScopeSelected(scope.key)"
+                                [disabled]="scope.adminOnly"
+                                (change)="toggleScope(scope.key)">
+                              <div class="flex-grow-1">
+                                <h6 class="fw-semibold mb-1 text-body-emphasis small">{{ scope.name }}</h6>
+                                <p class="text-body-secondary small mb-0">{{ scope.description }}</p>
+                                <div class="mt-2">
+                                  <span *ngIf="scope.dangerous" class="badge bg-danger rounded-pill small">Dangerous</span>
+                                  <span *ngIf="scope.adminOnly" class="badge bg-warning rounded-pill small">Admin Only</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="selectedScopes.size === 0" class="alert alert-warning border-0">
+                  <i class="bi bi-exclamation-triangle me-2"></i>
+                  Please select at least one permission for your API key.
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        
+        <!-- Enhanced Form Submission Section -->
+        <div class="row mt-5">
+          <div class="col-12">
+            <div class="card border-0 shadow-sm bg-body form-submission-section">
+              <div class="card-body p-4">
+                <div class="row align-items-center">
+                  <div class="col-lg-8">
+                    <div class="d-flex align-items-center">
+                      <div class="me-3">
+                        <i class="bi bi-shield-check text-success" style="font-size: 2rem;"></i>
+                      </div>
+                      <div>
+                        <h5 class="mb-1 fw-bold text-body-emphasis">Ready to Create Your API Key?</h5>
+                        <p class="text-body-secondary mb-0 small">
+                          Review your settings above and click "Create API Key" to generate your new key.
+                          <strong>Make sure to save it securely</strong> - you won't be able to see it again.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="d-grid gap-2 d-lg-flex justify-content-lg-end">
+                      <!-- Cancel Button -->
+                      <button 
+                        type="button" 
+                        class="btn btn-outline-secondary btn-lg px-4 btn-cancel"
+                        [disabled]="loading"
+                        (click)="onCancel()"
+                        aria-label="Cancel API key creation">
+                        <i class="bi bi-x-circle me-2"></i>
+                        Cancel
+                      </button>
+                      
+                      <!-- Submit Button -->
+                      <button 
+                        type="submit" 
+                        class="btn btn-primary btn-lg px-4 position-relative btn-submit"
+                        [class.btn-loading]="loading"
+                        [disabled]="createForm.invalid || loading || selectedScopes.size === 0"
+                        [attr.aria-describedby]="createForm.invalid ? 'form-validation-errors' : null">
+                        
+                        <!-- Loading Spinner -->
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                        
+                        <!-- Button Icon and Text -->
+                        <i *ngIf="!loading" class="bi bi-key me-2"></i>
+                        <span *ngIf="!loading">Create API Key</span>
+                        <span *ngIf="loading">Creating...</span>
+                        
+                        <!-- Success Animation Overlay -->
+                        <div *ngIf="loading" class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-primary rounded">
+                          <div class="d-flex align-items-center text-white">
+                            <div class="spinner-border spinner-border-sm me-2" role="status">
+                              <span class="visually-hidden">Creating API Key...</span>
+                            </div>
+                            <span class="fw-medium">Creating...</span>
+                          </div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Form Validation Summary -->
+                <div *ngIf="createForm.invalid && (createForm.dirty || createForm.touched)" 
+                     class="alert alert-danger border-0 mt-3 validation-summary" 
+                     id="form-validation-errors"
+                     role="alert">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-exclamation-triangle-fill me-2 mt-1"></i>
+                    <div>
+                      <h6 class="alert-heading mb-2">Please fix the following issues:</h6>
+                      <ul class="mb-0 small">
+                        <li *ngIf="hasFieldError('name')">API Key Name is required</li>
+                        <li *ngIf="hasFieldError('environment')">Environment selection is required</li>
+                        <li *ngIf="hasFieldError('tier')">Rate limit tier selection is required</li>
+                        <li *ngIf="hasFieldError('prefix')">API Key Prefix is required</li>
+                        <li *ngIf="selectedScopes.size === 0">At least one permission must be selected</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Security Notice -->
+                <div class="alert alert-info border-0 mt-3 security-notice" role="alert">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-info-circle-fill me-2 mt-1"></i>
+                    <div>
+                      <h6 class="alert-heading mb-1">Security Notice</h6>
+                      <p class="mb-0 small">
+                        Your API key will be displayed only once after creation. Make sure to copy and store it securely.
+                        We recommend using environment variables or a secure key management system.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Floating Back to Top Button -->
+  <div class="floating-back-to-top" 
+       [class.show]="showBackToTop" 
+       (click)="scrollToTop()"
+       role="button"
+       tabindex="0"
+       aria-label="Back to top"
+       (keydown.enter)="scrollToTop()"
+       (keydown.space)="scrollToTop()">
+    <i class="bi bi-arrow-up"></i>
+  </div>
+</div>

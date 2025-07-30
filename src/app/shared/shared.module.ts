@@ -10,6 +10,8 @@ import { SearchModalComponent } from './components/search-modal/search-modal.com
 import { LoadingSpinnerComponent } from './components/loading-spinner/loading-spinner.component';
 import { ConfirmationDialogComponent } from './components/confirmation-dialog/confirmation-dialog.component';
 import { DataTableComponent } from './components/data-table/data-table.component';
+import { DatePickerPopupComponent } from './components/date-picker-popup/date-picker-popup.component';
+import { ModalPopupComponent } from './components/modal-popup/modal-popup.component';
 
 // Shared Directives
 import { AutoFocusDirective } from './directives/auto-focus.directive';
@@ -55,6 +57,8 @@ import { ErrorHandlerService } from './services/error-handler.service';
     LoadingSpinnerComponent,
     ConfirmationDialogComponent,
     DataTableComponent,
+    DatePickerPopupComponent,
+    ModalPopupComponent,
     
     // Import standalone directives
     AutoFocusDirective,
@@ -88,6 +92,8 @@ import { ErrorHandlerService } from './services/error-handler.service';
     LoadingSpinnerComponent,
     ConfirmationDialogComponent,
     DataTableComponent,
+    DatePickerPopupComponent,
+    ModalPopupComponent,
     
     // Standalone directives
     AutoFocusDirective,

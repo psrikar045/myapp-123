@@ -1,0 +1,464 @@
+<!-- Loading State -->
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+<!-- Error State -->
+<app-error-display *ngIf="error && !loading" [message]="error" (retry)="ngOnInit()"></app-error-display>
+
+<!-- Main Content -->
+<div *ngIf="!loading && !error && apiKey" class="container-fluid p-4">
+  <!-- Header -->
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <div class="d-flex align-items-center">
+      <button class="btn btn-outline-secondary me-3" (click)="goBack()">
+        <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+      </button>
+      <div>
+        <h2 class="mb-1">{{ apiKey.name }}</h2>
+        <div class="d-flex align-items-center gap-2">
+          <span [class]="getStatusBadgeClass(apiKey.status)">{{ apiKey.status }}</span>
+          <small class="text-body-secondary">Created {{ apiKey.createdAt | date:'medium' }}</small>
+        </div>
+      </div>
+    </div>
+    
+    <div class="d-flex gap-2">
+      <button class="btn btn-outline-primary" (click)="copyApiKey()">
+        <i class="bi bi-clipboard me-2"></i>Copy Key
+      </button>
+      <div class="dropdown">
+        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          <i class="bi bi-three-dots-vertical"></i>
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#" (click)="regenerateApiKey()">
+            <i class="bi bi-arrow-clockwise me-2"></i>Regenerate Key
+          </a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-danger" href="#" (click)="revokeApiKey()">
+            <i class="bi bi-trash me-2"></i>Revoke Key
+          </a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Key Information Card -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8">
+              <h6 class="card-title mb-3">API Key</h6>
+              <div class="d-flex align-items-center p-3 bg-body-secondary rounded">
+                <code class="flex-grow-1 text-body-emphasis">{{ apiKey.maskedKey }}</code>
+                <button class="btn btn-sm btn-outline-primary ms-2" (click)="copyApiKey()">
+                  <i class="bi bi-clipboard"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <h6 class="card-title mb-3">Usage Today</h6>
+              <div class="d-flex align-items-center justify-content-between mb-2">
+                <span>{{ formatNumber(apiKey.usage.requestsToday) }} / {{ formatNumber(apiKey.usage.requestsToday + apiKey.usage.remainingToday) }}</span>
+                <span class="text-body-secondary">{{ getUsagePercentage() }}%</span>
+              </div>
+              <div class="progress" style="height: 8px;">
+                <div class="progress-bar" 
+                     [class]="getUsagePercentage() >= 90 ? 'bg-danger' : getUsagePercentage() >= 75 ? 'bg-warning' : 'bg-success'"
+                     [style.width.%]="getUsagePercentage()"></div>
+              </div>
+              <small class="text-body-secondary">Last used: {{ apiKey.usage.lastUsed | date:'short' }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <button class="nav-link" 
+              [class.active]="activeTab === 'overview'"
+              (click)="setActiveTab('overview')">
+        <i class="bi bi-speedometer2 me-2"></i>Overview
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" 
+              [class.active]="activeTab === 'analytics'"
+              (click)="setActiveTab('analytics')">
+        <i class="bi bi-graph-up me-2"></i>Analytics
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" 
+              [class.active]="activeTab === 'security'"
+              (click)="setActiveTab('security')">
+        <i class="bi bi-shield-check me-2"></i>Security
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" 
+              [class.active]="activeTab === 'permissions'"
+              (click)="setActiveTab('permissions')">
+        <i class="bi bi-person-check me-2"></i>Permissions
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" 
+              [class.active]="activeTab === 'expiration'"
+              (click)="setActiveTab('expiration')">
+        <i class="bi bi-calendar-event me-2"></i>Expiration
+      </button>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+    
+    <!-- Overview Tab -->
+    <div *ngIf="activeTab === 'overview'" class="tab-pane fade show active">
+      <div class="row">
+        <!-- Key Details -->
+        <div class="col-lg-6 mb-4">
+          <div class="card h-100">
+            <div class="card-header">
+              <h6 class="mb-0">Key Details</h6>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-6">
+                  <small class="text-body-secondary text-uppercase fw-semibold">Name</small>
+                  <p class="mb-0">{{ apiKey.name }}</p>
+                </div>
+                <div class="col-6">
+                  <small class="text-body-secondary text-uppercase fw-semibold">Tier</small>
+                  <p class="mb-0">{{ apiKey.tier }}</p>
+                </div>
+                <div class="col-6">
+                  <small class="text-body-secondary text-uppercase fw-semibold">Status</small>
+                  <p class="mb-0">
+                    <span [class]="getStatusBadgeClass(apiKey.status)">{{ apiKey.status }}</span>
+                  </p>
+                </div>
+                <div class="col-6">
+                  <small class="text-body-secondary text-uppercase fw-semibold">Created</small>
+                  <p class="mb-0">{{ apiKey.createdAt | date:'short' }}</p>
+                </div>
+                <div class="col-12" *ngIf="apiKey.expiresAt">
+                  <small class="text-body-secondary text-uppercase fw-semibold">Expires</small>
+                  <p class="mb-0">{{ apiKey.expiresAt | date:'short' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scopes -->
+        <div class="col-lg-6 mb-4">
+          <div class="card h-100">
+            <div class="card-header">
+              <h6 class="mb-0">Permissions & Scopes</h6>
+            </div>
+            <div class="card-body">
+              <div class="d-flex flex-wrap gap-2">
+                <span *ngFor="let scope of apiKey.scopes" class="badge bg-primary">{{ scope }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0">Recent Activity</h6>
+        </div>
+        <div class="card-body">
+          <div *ngIf="usageAnalytics?.recentActivity?.length > 0; else noActivity">
+            <div *ngFor="let activity of usageAnalytics.recentActivity" class="d-flex align-items-center py-2 border-bottom">
+              <div class="flex-grow-1">
+                <div class="fw-medium">{{ activity.endpoint }}</div>
+                <small class="text-body-secondary">{{ activity.method }} • {{ activity.timestamp | date:'short' }}</small>
+              </div>
+              <div class="text-end">
+                <span class="badge" [class]="activity.status >= 200 && activity.status < 300 ? 'bg-success' : 'bg-danger'">
+                  {{ activity.status }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <ng-template #noActivity>
+            <div class="text-center py-4 text-body-secondary">
+              <i class="bi bi-activity display-4 d-block mb-2"></i>
+              <p>No recent activity</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Tab -->
+    <div *ngIf="activeTab === 'analytics'" class="tab-pane fade show active">
+      <div class="row">
+        <!-- Usage Statistics -->
+        <div class="col-lg-8 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">Usage Over Time</h6>
+            </div>
+            <div class="card-body">
+              <!-- Chart placeholder - integrate with Chart.js or similar -->
+              <div class="text-center py-5 text-body-secondary">
+                <i class="bi bi-graph-up display-4 d-block mb-2"></i>
+                <p>Usage analytics chart will be displayed here</p>
+                <small>Integrate with Chart.js or similar charting library</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Usage Summary -->
+        <div class="col-lg-4 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <h6 class="mb-0">Usage Summary</h6>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <small class="text-body-secondary text-uppercase fw-semibold">Today</small>
+                <div class="h4 mb-0">{{ formatNumber(apiKey.usage.requestsToday) }}</div>
+              </div>
+              <div class="mb-3">
+                <small class="text-body-secondary text-uppercase fw-semibold">This Week</small>
+                <div class="h4 mb-0">{{ formatNumber(usageAnalytics?.weeklyUsage || 0) }}</div>
+              </div>
+              <div class="mb-3">
+                <small class="text-body-secondary text-uppercase fw-semibold">This Month</small>
+                <div class="h4 mb-0">{{ formatNumber(usageAnalytics?.monthlyUsage || 0) }}</div>
+              </div>
+              <div>
+                <small class="text-body-secondary text-uppercase fw-semibold">Rate Limit Status</small>
+                <div>
+                  <span class="badge" [class]="apiKey.usage.rateLimitStatus === 'OK' ? 'bg-success' : apiKey.usage.rateLimitStatus === 'WARNING' ? 'bg-warning' : 'bg-danger'">
+                    {{ apiKey.usage.rateLimitStatus }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Security Tab -->
+    <div *ngIf="activeTab === 'security'" class="tab-pane fade show active">
+      <form [formGroup]="securityForm" (ngSubmit)="updateSecuritySettings()">
+        <div class="row">
+          <!-- IP Restrictions -->
+          <div class="col-lg-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <div class="d-flex align-items-center justify-content-between">
+                  <h6 class="mb-0">IP Restrictions</h6>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" formControlName="ipRestrictionsEnabled" id="ipRestrictionsEnabled">
+                    <label class="form-check-label" for="ipRestrictionsEnabled">Enable</label>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="mb-3">
+                  <label for="ipWhitelist" class="form-label">Allowed IP Addresses</label>
+                  <textarea class="form-control" id="ipWhitelist" formControlName="ipWhitelist" 
+                            rows="4" placeholder="Enter IP addresses, one per line&#10;192.168.1.1&#10;10.0.0.0/8"
+                            [disabled]="!securityForm.get('ipRestrictionsEnabled')?.value"></textarea>
+                  <div class="form-text">Enter IP addresses or CIDR blocks, one per line</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Domain Restrictions -->
+          <div class="col-lg-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <div class="d-flex align-items-center justify-content-between">
+                  <h6 class="mb-0">Domain Restrictions</h6>
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" formControlName="domainRestrictionsEnabled" id="domainRestrictionsEnabled">
+                    <label class="form-check-label" for="domainRestrictionsEnabled">Enable</label>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="mb-3">
+                  <label for="allowedDomains" class="form-label">Allowed Domains</label>
+                  <textarea class="form-control" id="allowedDomains" formControlName="allowedDomains" 
+                            rows="4" placeholder="Enter domains, one per line&#10;example.com&#10;*.mydomain.com"
+                            [disabled]="!securityForm.get('domainRestrictionsEnabled')?.value"></textarea>
+                  <div class="form-text">Enter domains, one per line. Use * for wildcards</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Webhook URLs -->
+          <div class="col-lg-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">Webhook URLs</h6>
+              </div>
+              <div class="card-body">
+                <div class="mb-3">
+                  <label for="webhookUrls" class="form-label">Webhook Endpoints</label>
+                  <textarea class="form-control" id="webhookUrls" formControlName="webhookUrls" 
+                            rows="4" placeholder="Enter webhook URLs, one per line&#10;https://api.example.com/webhook"></textarea>
+                  <div class="form-text">URLs to receive API key events and notifications</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Allowed Origins -->
+          <div class="col-lg-6 mb-4">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">CORS Origins</h6>
+              </div>
+              <div class="card-body">
+                <div class="mb-3">
+                  <label for="allowedOrigins" class="form-label">Allowed Origins</label>
+                  <textarea class="form-control" id="allowedOrigins" formControlName="allowedOrigins" 
+                            rows="4" placeholder="Enter origins, one per line&#10;https://myapp.com&#10;https://localhost:3000"></textarea>
+                  <div class="form-text">Origins allowed to make CORS requests</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary" [disabled]="securityForm.invalid">
+            <i class="bi bi-check-lg me-2"></i>Update Security Settings
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Permissions Tab -->
+    <div *ngIf="activeTab === 'permissions'" class="tab-pane fade show active">
+      <div class="card">
+        <div class="card-header">
+          <h6 class="mb-0">API Permissions</h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-4 mb-3" *ngFor="let scope of apiKey.scopes">
+              <div class="d-flex align-items-center p-3 border rounded">
+                <i class="bi bi-check-circle-fill text-success me-3"></i>
+                <div>
+                  <div class="fw-medium">{{ scope }}</div>
+                  <small class="text-body-secondary">Permission granted</small>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="alert alert-info mt-3">
+            <i class="bi bi-info-circle me-2"></i>
+            To modify permissions, please create a new API key with the desired scopes.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Expiration Tab -->
+    <div *ngIf="activeTab === 'expiration'" class="tab-pane fade show active">
+      <form [formGroup]="expirationForm" (ngSubmit)="updateExpirationSettings()">
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="card">
+              <div class="card-header">
+                <h6 class="mb-0">Expiration Settings</h6>
+              </div>
+              <div class="card-body">
+                <div class="mb-3">
+                  <label class="form-label">Expiration Type</label>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" formControlName="type" value="never" id="expirationNever">
+                        <label class="form-check-label" for="expirationNever">
+                          Never expires
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" formControlName="type" value="fixed" id="expirationFixed">
+                        <label class="form-check-label" for="expirationFixed">
+                          Fixed date
+                        </label>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-check">
+                        <input class="form-check-input" type="radio" formControlName="type" value="rolling" id="expirationRolling">
+                        <label class="form-check-label" for="expirationRolling">
+                          Rolling expiration
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="mb-3" *ngIf="expirationForm.get('type')?.value === 'fixed'">
+                  <label for="expiresAt" class="form-label">Expiration Date</label>
+                  <input type="datetime-local" class="form-control" id="expiresAt" formControlName="expiresAt">
+                </div>
+
+                <div class="mb-3">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" formControlName="autoRotate" id="autoRotate">
+                    <label class="form-check-label" for="autoRotate">
+                      Enable automatic key rotation
+                    </label>
+                  </div>
+                </div>
+
+                <div class="mb-3" *ngIf="expirationForm.get('autoRotate')?.value">
+                  <label for="rotationInterval" class="form-label">Rotation Interval (days)</label>
+                  <input type="number" class="form-control" id="rotationInterval" formControlName="rotationInterval" min="1" max="365">
+                </div>
+
+                <div class="mb-3">
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" formControlName="notifyBeforeExpiry" id="notifyBeforeExpiry">
+                    <label class="form-check-label" for="notifyBeforeExpiry">
+                      Notify before expiration
+                    </label>
+                  </div>
+                </div>
+
+                <div class="mb-3" *ngIf="expirationForm.get('notifyBeforeExpiry')?.value">
+                  <label for="notificationDays" class="form-label">Notification days before expiry</label>
+                  <input type="number" class="form-control" id="notificationDays" formControlName="notificationDays" min="1" max="30">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end mt-3">
+          <button type="submit" class="btn btn-primary" [disabled]="expirationForm.invalid">
+            <i class="bi bi-check-lg me-2"></i>Update Expiration Settings
+          </button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

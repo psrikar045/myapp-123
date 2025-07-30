@@ -49,4 +49,7 @@ export class HomePageComponent implements OnInit {
   navigateToDevelopers(): void {
     this.router.navigate(['/developer']);
   }
+   navigateToAccountHub(): void {
+    this.router.navigate(['/brands/account-hub']);
+  }
 }
