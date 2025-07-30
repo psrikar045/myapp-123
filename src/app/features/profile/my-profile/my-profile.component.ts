@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../../../layout/header/header.component';
@@ -55,7 +55,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   private readonly authService = inject(AuthService);
   // Removed MatSnackBar dependency
   private readonly phoneService = inject(PhoneService);
-    constructor(private router: Router, private toolbarService: ToolbarService) {
+    constructor(private router: Router, private toolbarService: ToolbarService, private cdr: ChangeDetectorRef) {
     // Listen for route changes and set logged-in toolbar if on /my-profile
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -399,6 +399,11 @@ if (this.dobShow) {
     this.selectedFile = null;
     this.previewUrl = null;
     this.stopCamera();
+    
+    // Reset file input if it exists
+    if (this.fileInput && this.fileInput.nativeElement) {
+      this.fileInput.nativeElement.value = '';
+    }
   }
 
   selectCameraOption() {
@@ -410,7 +415,11 @@ if (this.dobShow) {
   selectUploadOption() {
     this.showFilePreview = true;
     this.showCameraView = false;
-    this.fileInput.nativeElement.click();
+    // Force change detection and then trigger file input
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.fileInput.nativeElement.click();
+    }, 0);
   }
 
   async startCamera() {
@@ -470,6 +479,8 @@ if (this.dobShow) {
       const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
       if (!allowedTypes.includes(file.type)) {
         this.showToast('Please select a valid image file (JPG or PNG)', 'error');
+        // Reset file input
+        event.target.value = '';
         return;
       }
 
@@ -477,6 +488,8 @@ if (this.dobShow) {
       const maxSize = 5 * 1024 * 1024; // 5MB
       if (file.size > maxSize) {
         this.showToast('Image size should be less than 5MB', 'error');
+        // Reset file input
+        event.target.value = '';
         return;
       }
 
@@ -486,9 +499,18 @@ if (this.dobShow) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.previewUrl = e.target.result;
+        // Force change detection to update UI immediately
+        this.cdr.detectChanges();
       };
       reader.readAsDataURL(file);
+    } else {
+      // If no file selected (user cancelled), reset states
+      this.selectedFile = null;
+      this.previewUrl = null;
     }
+    
+    // Reset file input value to allow selecting the same file again if needed
+    event.target.value = '';
   }
 
   async saveImage() {
@@ -544,6 +566,37 @@ if (this.dobShow) {
       this.showToast('Error processing image', 'error');
       this.isUploadingImage = false;
     }
+  }
+
+  // Method to handle choosing a different file
+  chooseDifferentFile() {
+    // Clear current selection
+    this.selectedFile = null;
+    this.previewUrl = null;
+    
+    // Reset file input
+    if (this.fileInput && this.fileInput.nativeElement) {
+      this.fileInput.nativeElement.value = '';
+    }
+    
+    // Force change detection and trigger file selection
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.fileInput.nativeElement.click();
+    }, 0);
+  }
+
+  // Method to handle initial file selection
+  selectFile() {
+    // Reset file input
+    if (this.fileInput && this.fileInput.nativeElement) {
+      this.fileInput.nativeElement.value = '';
+    }
+    
+    // Trigger file selection
+    setTimeout(() => {
+      this.fileInput.nativeElement.click();
+    }, 0);
   }
 
   ngOnDestroy() {

@@ -502,7 +502,7 @@
             <i class="bi bi-cloud-upload display-1 text-muted mb-3"></i>
             <h6>No image selected</h6>
             <p class="text-muted">Please select a JPG or PNG image file</p>
-            <button class="btn btn-primary" (click)="fileInput.click()">
+            <button class="btn btn-primary" (click)="selectFile()">
               <i class="bi bi-folder2-open me-2"></i>
               Choose File
             </button>
@@ -527,7 +527,7 @@
                   Uploading...
                 </span>
               </button>
-              <button class="btn btn-outline-warning me-2" (click)="fileInput.click()" [disabled]="isUploadingImage">
+              <button class="btn btn-outline-warning me-2" (click)="chooseDifferentFile()" [disabled]="isUploadingImage">
                 <i class="bi bi-arrow-clockwise me-2"></i>
                 Choose Different
               </button>
