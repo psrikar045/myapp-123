@@ -272,7 +272,8 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   // Hero section logic
   heroHeadline = {
     main: "Know any company's",
-    main1: 'Brand reputation instantly with',
+    main1: 'Brand reputation instantly',
+    suffix:'With ',
     highlight: 'RIVO9',
     waveIcon: true
   };
