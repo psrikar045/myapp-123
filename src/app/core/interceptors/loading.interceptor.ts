@@ -13,7 +13,9 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   const skipLoadingUrls = [
     '/assets/',
     '/api/health',
-    '/api/ping'
+    '/api/ping',
+    '/myapp/forward',
+    '/public-forward'
   ];
 
   const shouldSkipLoading = 

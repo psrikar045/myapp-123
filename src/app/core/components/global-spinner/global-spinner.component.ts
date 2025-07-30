@@ -22,7 +22,7 @@ import { SpinnerService } from '../../services/spinner.service';
             <div class="spinner-ring inner-ring"></div>
             <!-- Center Logo -->
             <div class="center-logo">
-              <span class="logo-letter">M</span>
+              <span class="logo-letter">R9</span>
             </div>
           </div>
           

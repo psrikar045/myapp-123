@@ -26,7 +26,7 @@ export class CompanyDataComponent implements OnInit, OnDestroy {
   errorMessage = '';
   
   // Animation type selector - default to minimalist but flexible
-  selectedAnimationType: AnimationType = 'minimalist';
+  selectedAnimationType: AnimationType = 'card-based';
   
   isDarkMode = false;
   private themeSubscription!: Subscription;
