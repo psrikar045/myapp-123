@@ -1110,5 +1110,17 @@ generateUsername(firstName: string, lastName: string): string {
     );
   }
 
+  /**
+   * Upload profile image
+   * @param formData FormData containing the image file and userId
+   * @returns Observable of upload response
+   */
+  uploadProfileImage(formData: FormData): Observable<any> {
+    return this.http.post<any>(`${this.API_BASE_URL}/user/upload-profile-image`, formData).pipe(
+      tap((response: any) => console.log('Profile image uploaded successfully.', response)),
+      catchError(this.handleError)
+    );
+  }
+
 
 }

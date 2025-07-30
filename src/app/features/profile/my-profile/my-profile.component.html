@@ -35,7 +35,7 @@
               <!-- Left Side: Avatar and Basic Info -->
               <div class="col-lg-4 col-md-5 col-12">
                 <div class="profile-main-info d-flex align-items-center">
-                  <div class="profile-avatar-container me-4">
+                  <div class="profile-avatar-container me-4" (click)="onAvatarClick()" style="cursor: pointer;">
                     <img [src]="profile.avatar" alt="Profile" class="profile-avatar-img" />
                     <div class="avatar-edit-overlay">
                       <i class="bi bi-camera-fill"></i>
@@ -414,3 +414,135 @@
     </div>
   </div>
 </div>
+
+<!-- Image Upload Modal -->
+<div class="modal fade" [class.show]="showImageModal" [style.display]="showImageModal ? 'block' : 'none'" 
+     tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imageModalLabel">
+          <i class="bi bi-camera-fill me-2"></i>
+          Update Profile Picture
+        </h5>
+        <button type="button" class="btn-close" (click)="closeImageModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Option Selection -->
+        <div *ngIf="!showCameraView && !showFilePreview" class="text-center">
+          <h6 class="mb-4">Choose how you'd like to update your profile picture:</h6>
+          
+          <div class="row g-3">
+            <div class="col-md-6">
+              <button class="btn btn-outline-primary w-100 py-3" (click)="selectCameraOption()">
+                <i class="bi bi-camera-fill display-6 d-block mb-2"></i>
+                <strong>Take Photo</strong>
+                <small class="d-block text-muted">Use your camera</small>
+              </button>
+            </div>
+            <div class="col-md-6">
+              <button class="btn btn-outline-secondary w-100 py-3" (click)="selectUploadOption()">
+                <i class="bi bi-upload display-6 d-block mb-2"></i>
+                <strong>Upload Image</strong>
+                <small class="d-block text-muted">Choose from gallery</small>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Camera View -->
+        <div *ngIf="showCameraView" class="camera-section">
+          <div *ngIf="!capturedImageData" class="text-center">
+            <video #videoElement width="100%" height="300" autoplay muted playsinline class="rounded border mb-3"></video>
+            <canvas #canvasElement style="display: none;"></canvas>
+            
+            <div class="camera-controls">
+              <button class="btn btn-primary btn-lg me-2" (click)="captureImage()">
+                <i class="bi bi-camera-fill me-2"></i>
+                Capture Photo
+              </button>
+              <button class="btn btn-outline-secondary" (click)="resetImageStates()">
+                <i class="bi bi-arrow-left me-2"></i>
+                Back
+              </button>
+            </div>
+          </div>
+
+          <!-- Captured Image Preview -->
+          <div *ngIf="capturedImageData" class="text-center">
+            <img [src]="capturedImageData" alt="Captured" class="img-fluid rounded border mb-3" style="max-height: 300px;">
+            
+            <div class="camera-controls">
+              <button class="btn btn-success btn-lg me-2" (click)="saveImage()" [disabled]="isUploadingImage">
+                <i class="bi bi-check-lg me-2"></i>
+                <span *ngIf="!isUploadingImage">Save Photo</span>
+                <span *ngIf="isUploadingImage">
+                  <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                  Uploading...
+                </span>
+              </button>
+              <button class="btn btn-outline-warning me-2" (click)="retakePhoto()" [disabled]="isUploadingImage">
+                <i class="bi bi-arrow-clockwise me-2"></i>
+                Retake
+              </button>
+              <button class="btn btn-outline-secondary" (click)="resetImageStates()" [disabled]="isUploadingImage">
+                <i class="bi bi-arrow-left me-2"></i>
+                Back
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- File Upload View -->
+        <div *ngIf="showFilePreview" class="upload-section">
+          <input type="file" #fileInput accept="image/jpeg,image/jpg,image/png" (change)="onFileSelected($event)" style="display: none;">
+          
+          <div *ngIf="!previewUrl" class="text-center py-5">
+            <i class="bi bi-cloud-upload display-1 text-muted mb-3"></i>
+            <h6>No image selected</h6>
+            <p class="text-muted">Please select a JPG or PNG image file</p>
+            <button class="btn btn-primary" (click)="fileInput.click()">
+              <i class="bi bi-folder2-open me-2"></i>
+              Choose File
+            </button>
+            <div class="mt-3">
+              <button class="btn btn-outline-secondary" (click)="resetImageStates()">
+                <i class="bi bi-arrow-left me-2"></i>
+                Back
+              </button>
+            </div>
+          </div>
+
+          <!-- File Preview -->
+          <div *ngIf="previewUrl" class="text-center">
+            <img [src]="previewUrl" alt="Preview" class="img-fluid rounded border mb-3" style="max-height: 300px;">
+            
+            <div class="upload-controls">
+              <button class="btn btn-success btn-lg me-2" (click)="saveImage()" [disabled]="isUploadingImage">
+                <i class="bi bi-check-lg me-2"></i>
+                <span *ngIf="!isUploadingImage">Upload Image</span>
+                <span *ngIf="isUploadingImage">
+                  <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                  Uploading...
+                </span>
+              </button>
+              <button class="btn btn-outline-warning me-2" (click)="fileInput.click()" [disabled]="isUploadingImage">
+                <i class="bi bi-arrow-clockwise me-2"></i>
+                Choose Different
+              </button>
+              <button class="btn btn-outline-secondary" (click)="resetImageStates()" [disabled]="isUploadingImage">
+                <i class="bi bi-arrow-left me-2"></i>
+                Back
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div *ngIf="showImageModal" class="modal-backdrop fade show" (click)="closeImageModal()"></div>

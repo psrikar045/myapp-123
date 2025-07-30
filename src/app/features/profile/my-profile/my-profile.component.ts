@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../../../layout/header/header.component';
@@ -25,7 +25,11 @@ import { PhoneService } from '../../../shared/services/phone.service';
   templateUrl: './my-profile.component.html',
   styleUrl: './my-profile.component.scss'
 })
-export class MyProfileComponent implements OnInit {
+export class MyProfileComponent implements OnInit, OnDestroy {
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
+  @ViewChild('canvasElement') canvasElement!: ElementRef<HTMLCanvasElement>;
+
   sidebarMenu = [
     { label: 'Edit Profile', active: true, disabled: false },
     { label: 'Notifications', active: false, disabled: false },
@@ -36,6 +40,18 @@ export class MyProfileComponent implements OnInit {
   userProfile: any;
   selectedSidebarIndex = 0;
   isProfileLoading = true;
+  
+  // Image upload properties
+  showImageModal = false;
+  showCameraView = false;
+  showFilePreview = false;
+  capturedImageData: string | null = null;
+  selectedFile: File | null = null;
+  previewUrl: string | null = null;
+  mediaStream: MediaStream | null = null;
+  isCapturing = false;
+  isUploadingImage = false;
+
   private readonly authService = inject(AuthService);
   // Removed MatSnackBar dependency
   private readonly phoneService = inject(PhoneService);
@@ -364,5 +380,173 @@ if (this.dobShow) {
     container.style.zIndex = '9999';
     document.body.appendChild(container);
     return container;
+  }
+
+  // Image Upload Methods
+  onAvatarClick() {
+    this.showImageModal = true;
+  }
+
+  closeImageModal() {
+    this.showImageModal = false;
+    this.resetImageStates();
+  }
+
+  resetImageStates() {
+    this.showCameraView = false;
+    this.showFilePreview = false;
+    this.capturedImageData = null;
+    this.selectedFile = null;
+    this.previewUrl = null;
+    this.stopCamera();
+  }
+
+  selectCameraOption() {
+    this.showCameraView = true;
+    this.showFilePreview = false;
+    this.startCamera();
+  }
+
+  selectUploadOption() {
+    this.showFilePreview = true;
+    this.showCameraView = false;
+    this.fileInput.nativeElement.click();
+  }
+
+  async startCamera() {
+    try {
+      this.mediaStream = await navigator.mediaDevices.getUserMedia({ 
+        video: { 
+          width: { ideal: 640 },
+          height: { ideal: 480 },
+          facingMode: 'user' 
+        } 
+      });
+      
+      if (this.videoElement && this.videoElement.nativeElement) {
+        this.videoElement.nativeElement.srcObject = this.mediaStream;
+        this.videoElement.nativeElement.play();
+      }
+    } catch (error) {
+      console.error('Error accessing camera:', error);
+      this.showToast('Failed to access camera. Please check permissions.', 'error');
+      this.showCameraView = false;
+    }
+  }
+
+  stopCamera() {
+    if (this.mediaStream) {
+      this.mediaStream.getTracks().forEach(track => track.stop());
+      this.mediaStream = null;
+    }
+  }
+
+  captureImage() {
+    if (!this.videoElement || !this.canvasElement) return;
+
+    const video = this.videoElement.nativeElement;
+    const canvas = this.canvasElement.nativeElement;
+    const context = canvas.getContext('2d');
+
+    if (context && video) {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      context.drawImage(video, 0, 0);
+      
+      this.capturedImageData = canvas.toDataURL('image/jpeg', 0.8);
+      this.stopCamera();
+    }
+  }
+
+  retakePhoto() {
+    this.capturedImageData = null;
+    this.startCamera();
+  }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+      if (!allowedTypes.includes(file.type)) {
+        this.showToast('Please select a valid image file (JPG or PNG)', 'error');
+        return;
+      }
+
+      // Validate file size (5MB limit)
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSize) {
+        this.showToast('Image size should be less than 5MB', 'error');
+        return;
+      }
+
+      this.selectedFile = file;
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.previewUrl = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  async saveImage() {
+    if (!this.capturedImageData && !this.selectedFile) {
+      this.showToast('No image selected', 'error');
+      return;
+    }
+
+    this.isUploadingImage = true;
+
+    try {
+      let imageData: string | File;
+      
+      if (this.capturedImageData) {
+        // Convert base64 to blob for camera capture
+        const response = await fetch(this.capturedImageData);
+        const blob = await response.blob();
+        imageData = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+      } else {
+        imageData = this.selectedFile!;
+      }
+
+      // Create FormData for file upload
+      const formData = new FormData();
+      formData.append('profileImage', imageData);
+      formData.append('userId', this.getIdFromLocalStorage());
+
+      // Call the upload API
+      this.authService.uploadProfileImage(formData).subscribe({
+        next: (response: any) => {
+          console.log('Image uploaded successfully:', response);
+          
+          // Update the profile avatar with the new URL
+          if (response.profilePictureUrl) {
+            this.profile.avatar = response.profilePictureUrl;
+            this.toolbarService.setProfileAvatar(this.profile.avatar);
+            this.showToast('Profile image updated successfully!', 'success');
+          }
+          
+          this.closeImageModal();
+        },
+        error: (error: any) => {
+          console.error('Error uploading image:', error);
+          this.showToast('Failed to upload image. Please try again.', 'error');
+        },
+        complete: () => {
+          this.isUploadingImage = false;
+        }
+      });
+
+    } catch (error) {
+      console.error('Error processing image:', error);
+      this.showToast('Error processing image', 'error');
+      this.isUploadingImage = false;
+    }
+  }
+
+  ngOnDestroy() {
+    this.stopCamera();
   }
 }
