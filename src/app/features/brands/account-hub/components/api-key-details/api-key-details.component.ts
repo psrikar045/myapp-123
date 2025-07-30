@@ -6,6 +6,7 @@ import { Subject, takeUntil, forkJoin } from 'rxjs';
 
 import { ApiKeyService } from '../../services/api-key.service';
 import { AppThemeService } from '../../../../../core/services/app-theme.service';
+import { ErrorHandlerService } from '../../../../../shared/services/error-handler.service';
 import { ApiKey, SecuritySettings, ExpirationSettings } from '../../models/api-key.model';
 import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
 import { ErrorDisplayComponent } from '../error-display/error-display.component';
@@ -44,6 +45,7 @@ export class ApiKeyDetailsComponent implements OnInit, OnDestroy {
     private router: Router,
     private apiKeyService: ApiKeyService,
     private themeService: AppThemeService,
+    private errorHandler: ErrorHandlerService,
     private fb: FormBuilder
   ) {
     this.securityForm = this.initializeSecurityForm();
@@ -188,12 +190,15 @@ export class ApiKeyDetailsComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
-            console.log('Security settings updated successfully');
-            // Show success message
+            this.errorHandler.showSuccess('Security settings updated successfully');
+            // Update local API key object
+            if (this.apiKey) {
+              this.apiKey.security = securitySettings;
+            }
           },
           error: (error) => {
             console.error('Error updating security settings:', error);
-            // Show error message
+            this.errorHandler.showWarning(error.error?.message || 'Failed to update security settings');
           }
         });
     }
@@ -218,12 +223,15 @@ export class ApiKeyDetailsComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
-            console.log('Expiration settings updated successfully');
-            // Show success message
+            this.errorHandler.showSuccess('Expiration settings updated successfully');
+            // Update local API key object
+            if (this.apiKey) {
+              this.apiKey.expiresAt = expirationSettings.expiresAt?.toISOString();
+            }
           },
           error: (error) => {
             console.error('Error updating expiration settings:', error);
-            // Show error message
+            this.errorHandler.showWarning(error.error?.message || 'Failed to update expiration settings');
           }
         });
     }
@@ -239,12 +247,11 @@ export class ApiKeyDetailsComponent implements OnInit, OnDestroy {
         .subscribe({
           next: (response) => {
             this.apiKey = response.apiKey;
-            console.log('API key regenerated successfully');
-            // Show success message with new key
+            this.errorHandler.showSuccess('API key regenerated successfully! Make sure to update your applications with the new key.');
           },
           error: (error) => {
             console.error('Error regenerating API key:', error);
-            // Show error message
+            this.errorHandler.showWarning(error.error?.message || 'Failed to regenerate API key');
           }
         });
     }
@@ -262,12 +269,15 @@ export class ApiKeyDetailsComponent implements OnInit, OnDestroy {
             if (this.apiKey) {
               this.apiKey.status = 'REVOKED';
             }
-            console.log('API key revoked successfully');
-            // Show success message
+            this.errorHandler.showSuccess('API key revoked successfully');
+            // Navigate back to account hub after a short delay
+            setTimeout(() => {
+              this.goBack();
+            }, 2000);
           },
           error: (error) => {
             console.error('Error revoking API key:', error);
-            // Show error message
+            this.errorHandler.showWarning(error.error?.message || 'Failed to revoke API key');
           }
         });
     }
@@ -279,10 +289,10 @@ export class ApiKeyDetailsComponent implements OnInit, OnDestroy {
   copyApiKey(): void {
     if (this.apiKey?.maskedKey && typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(this.apiKey.maskedKey).then(() => {
-        console.log('API key copied to clipboard');
-        // Show success message
+        this.errorHandler.showInfo('API key copied to clipboard');
       }).catch(err => {
         console.error('Failed to copy API key:', err);
+        this.errorHandler.showWarning('Failed to copy API key to clipboard');
       });
     }
   }

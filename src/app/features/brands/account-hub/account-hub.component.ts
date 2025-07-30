@@ -6,6 +6,7 @@ import { AccountHubService } from './services/account-hub.service';
 import { ApiKeyService } from './services/api-key.service';
 import { AppThemeService } from '../../../core/services/app-theme.service';
 import { SpinnerService } from '../../../core/services/spinner.service';
+import { ErrorHandlerService } from '../../../shared/services/error-handler.service';
 
 import { ErrorDisplayComponent } from './components/error-display/error-display.component';
 import { AccountHubData, DashboardStats, RecentProject } from './models/dashboard.model';
@@ -42,6 +43,7 @@ export class AccountHubComponent implements OnInit, OnDestroy {
     private apiKeyService: ApiKeyService,
     private themeService: AppThemeService,
     private spinnerService: SpinnerService,
+    private errorHandler: ErrorHandlerService,
     private router: Router
   ) {}
 
@@ -260,10 +262,10 @@ export class AccountHubComponent implements OnInit, OnDestroy {
   copyApiKey(maskedKey: string): void {
     if (maskedKey && typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(maskedKey).then(() => {
-        console.log('API key copied to clipboard');
-        // You could show a toast notification here
+        this.errorHandler.showInfo('API key copied to clipboard');
       }).catch(err => {
         console.error('Failed to copy API key:', err);
+        this.errorHandler.showWarning('Failed to copy API key to clipboard');
       });
     }
   }
@@ -316,9 +318,11 @@ export class AccountHubComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           apiKey.status = newStatus;
+          this.errorHandler.showSuccess(`API key ${newStatus.toLowerCase()} successfully`);
         },
         error: (error) => {
           console.error('Error updating API key status:', error);
+          this.errorHandler.showWarning(error.error?.message || 'Failed to update API key status');
         }
       });
   }
@@ -333,9 +337,11 @@ export class AccountHubComponent implements OnInit, OnDestroy {
         .subscribe({
           next: () => {
             apiKey.status = 'REVOKED';
+            this.errorHandler.showSuccess('API key revoked successfully');
           },
           error: (error) => {
             console.error('Error revoking API key:', error);
+            this.errorHandler.showWarning(error.error?.message || 'Failed to revoke API key');
           }
         });
     }
@@ -352,9 +358,11 @@ export class AccountHubComponent implements OnInit, OnDestroy {
           next: (response) => {
             // Update the API key with new data
             Object.assign(apiKey, response.apiKey);
+            this.errorHandler.showSuccess('API key regenerated successfully! Make sure to update your applications with the new key.');
           },
           error: (error) => {
             console.error('Error regenerating API key:', error);
+            this.errorHandler.showWarning(error.error?.message || 'Failed to regenerate API key');
           }
         });
     }

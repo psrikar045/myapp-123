@@ -8,6 +8,7 @@ import { addDays } from 'date-fns';
 
 import { ApiKeyService } from '../../services/api-key.service';
 import { AppThemeService } from '../../../../../core/services/app-theme.service';
+import { ErrorHandlerService } from '../../../../../shared/services/error-handler.service';
 import { SCOPE_GROUPS, ScopeGroup, ScopeDefinition } from '../../models/scope.model';
 import { ApiKey, RateLimitTier } from '../../models/api-key.model';
 import { DatePickerPopupComponent, DatePickerConfig } from '../../../../../shared/components/date-picker-popup/date-picker-popup.component';
@@ -70,7 +71,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
   
   // UI State
   loading = false;
-  error: string | null = null;
+  error: string | any = null;
   success = false;
   createdApiKey: ApiKey | any = null;
   copyButtonText = 'Copy';
@@ -165,6 +166,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private apiKeyService: ApiKeyService,
     private themeService: AppThemeService,
+    private errorHandler: ErrorHandlerService,
     private router: Router
   ) {
     this.createForm = this.initializeForm();
@@ -256,10 +258,21 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
             this.createdApiKey = response.apiKey;
             this.success = true;
             this.loading = false;
+            
+            // Show success message
+            this.errorHandler.showSuccess('API key created successfully! Make sure to copy and save it securely.');
+            
+            // Auto-redirect to account hub after 5 seconds, or user can click "Back to Account Hub"
+            setTimeout(() => {
+              if (this.success) { // Only redirect if still on success page
+                this.goBackToAccountHub();
+              }
+            }, 2000);
           },
           error: (error) => {
             console.error('Error creating API key:', error);
             this.error = error.error?.message || 'Failed to create API key. Please try again.';
+            this.errorHandler.showWarning(this.error);
             this.loading = false;
           }
         });
@@ -405,6 +418,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
     if (this.createdApiKey?.key && typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(this.createdApiKey.key).then(() => {
         this.copyButtonText = 'Copied!';
+        this.errorHandler.showInfo('API key copied to clipboard');
         setTimeout(() => {
           this.copyButtonText = 'Copy';
         }, 2000);
@@ -432,11 +446,13 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
     try {
       document.execCommand('copy');
       this.copyButtonText = 'Copied!';
+      this.errorHandler.showInfo('API key copied to clipboard');
       setTimeout(() => {
         this.copyButtonText = 'Copy';
       }, 2000);
     } catch (err) {
       console.error('Fallback: Could not copy text: ', err);
+      this.errorHandler.showWarning('Failed to copy API key to clipboard');
     }
     
     document.body.removeChild(textArea);
@@ -504,6 +520,13 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
    * Navigate back to account hub
    */
   goBack(): void {
+    this.router.navigate(['/brands/account-hub']);
+  }
+
+  /**
+   * Navigate back to account hub with success message
+   */
+  goBackToAccountHub(): void {
     this.router.navigate(['/brands/account-hub']);
   }
 
