@@ -6,9 +6,121 @@
   min-height: calc(100vh - 72px);
   background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
   padding-top: 2rem;
+  position: relative;
+  z-index: 1; // Ensure proper layering
+  transition: all 0.3s ease; // Smooth transitions for sidenav changes
   
   @media (max-width: 767.98px) {
     padding-top: 1rem;
+  }
+  
+  // Ensure content stays above sidenav during zoom
+  @media screen and (min-resolution: 120dpi), 
+         screen and (-webkit-min-device-pixel-ratio: 1.25) {
+    z-index: 1;
+  }
+  
+  @media screen and (min-resolution: 192dpi),
+         screen and (-webkit-min-device-pixel-ratio: 2) {
+    z-index: 1;
+  }
+  
+  // Handle sidenav state changes
+  .content-wrapper.with-sidenav & {
+    // Desktop: content adjusts to sidenav width
+    @media (min-width: 992px) {
+      width: 100%;
+      max-width: 100%;
+    }
+    
+    // Mobile: content stays full width, sidenav overlays
+    @media (max-width: 991.98px) {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+}
+
+// Additional zoom handling for container
+.container-fluid {
+  position: relative;
+  z-index: 1;
+  
+  // Ensure proper overflow handling during zoom
+  @media screen and (min-resolution: 120dpi), 
+         screen and (-webkit-min-device-pixel-ratio: 1.25) {
+    overflow-x: auto;
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  @media screen and (min-resolution: 192dpi),
+         screen and (-webkit-min-device-pixel-ratio: 2) {
+    overflow-x: auto;
+    max-width: 100%;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  // Handle sidenav state changes
+  .content-wrapper.with-sidenav & {
+    // Desktop: adjust padding for sidenav
+    @media (min-width: 992px) {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+    
+    // Mobile: maintain full padding
+    @media (max-width: 991.98px) {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+  }
+}
+
+// Ensure rows don't overflow during zoom
+.row {
+  @media screen and (min-resolution: 120dpi), 
+         screen and (-webkit-min-device-pixel-ratio: 1.25) {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+  }
+  
+  @media screen and (min-resolution: 192dpi),
+         screen and (-webkit-min-device-pixel-ratio: 2) {
+    margin-left: -0.25rem;
+    margin-right: -0.25rem;
+  }
+}
+
+// Ensure columns don't overflow during zoom
+.col-12, .col-lg-3, .col-lg-4, .col-lg-8, .col-md-5, .col-md-6, .col-md-7 {
+  @media screen and (min-resolution: 120dpi), 
+         screen and (-webkit-min-device-pixel-ratio: 1.25) {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  @media screen and (min-resolution: 192dpi),
+         screen and (-webkit-min-device-pixel-ratio: 2) {
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+  
+  // Handle sidenav state changes
+  .content-wrapper.with-sidenav & {
+    // Desktop: maintain proper spacing
+    @media (min-width: 992px) {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+    
+    // Mobile: maintain spacing
+    @media (max-width: 991.98px) {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
   }
 }
 
@@ -41,6 +153,7 @@
   overflow: hidden;
   transition: all 0.3s ease;
   position: relative;
+  z-index: 1; // Ensure proper layering
   
   &:hover {
     transform: translateY(-5px);
@@ -91,6 +204,7 @@
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
+  z-index: 1; // Ensure proper layering
   overflow: hidden;
   
   &::before {
@@ -162,6 +276,8 @@
   border-radius: 0.75rem;
   transition: all 0.3s ease;
   border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 1; // Ensure proper layering
   
   &:hover {
     transform: translateY(-3px);

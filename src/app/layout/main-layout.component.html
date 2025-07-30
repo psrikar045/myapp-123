@@ -10,7 +10,9 @@
   <div class="content-wrapper"
        [class.with-sidenav]="(sidenavService.isVisible$ | async) && !(sidenavService.isOverlayMode$ | async)"
        [class.sidenav-collapsed]="(sidenavService.isVisible$ | async) && !(sidenavService.isOverlayMode$ | async) && (sidenavService.config$ | async)?.collapsed"
-       [class.sidenav-expanded]="(sidenavService.isVisible$ | async) && !(sidenavService.isOverlayMode$ | async) && !(sidenavService.config$ | async)?.collapsed">
+       [class.sidenav-expanded]="(sidenavService.isVisible$ | async) && !(sidenavService.isOverlayMode$ | async) && !(sidenavService.config$ | async)?.collapsed"
+       [class.sidenav-overlay-active]="(sidenavService.isVisible$ | async) && (sidenavService.isOverlayMode$ | async)"
+       (click)="onContentWrapperClick($event)">
     
     <!-- Header -->
     <app-header 

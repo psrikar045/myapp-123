@@ -511,7 +511,7 @@
 .brand-cards-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr); // Exactly 4 cards per row
-  grid-template-rows: repeat(3, 1fr); // Exactly 3 rows
+  // grid-template-rows: repeat(3, 1fr); // Exactly 3 rows
   gap: 1.75rem; // Better spacing between cards
   flex: 1;
   align-content: start;

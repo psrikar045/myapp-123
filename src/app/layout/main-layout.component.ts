@@ -97,4 +97,14 @@ export class MainLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     this.destroy$.next();
     this.destroy$.complete();
   }
+  
+  // Handle backdrop click to close sidenav on mobile
+  onContentWrapperClick(event: Event): void {
+    // Only close sidenav if we're in overlay mode and clicking on the backdrop
+    const target = event.target as HTMLElement;
+    if (target.classList.contains('content-wrapper') && 
+        target.classList.contains('sidenav-overlay-active')) {
+      this.sidenavService.setCollapsed(true);
+    }
+  }
 }
