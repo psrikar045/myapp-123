@@ -30,6 +30,7 @@
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.11.1",
     "express": "^4.18.2",
+    "date-fns": "^4.1.0",
     "jwt-decode": "^4.0.0",
     "ngx-json-viewer": "^3.2.1",
     "rxjs": "~7.8.0",
