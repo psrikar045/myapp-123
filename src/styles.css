@@ -129,7 +129,7 @@ a:hover {
   /* Potential for larger font sizes or wider containers if design calls for it */
   /* html { font-size: 17px; } */
   .container {
-    max-width: 1600px; /* Example: Wider container for large screens */
+    max-width: 1500px; /* Optimized max-width for large screens */
   }
 }
 
@@ -137,7 +137,7 @@ a:hover {
 @media (min-width: 1920px) {
   /* html { font-size: 18px; } */
   .container {
-    max-width: 1600px; /* Example: Even wider container */
+    max-width: 1500px; /* Optimized max-width for extra large screens */
   }
 }
 
@@ -426,8 +426,8 @@ body.dark-theme .mat-mdc-menu-item {
 body.dark-theme .mat-mdc-menu-item:hover:not([disabled]) {
   background-color: rgba(255, 255, 255, 0.08) !important;
 }
-.pad100{padding-left:100px;padding-right:100px;}
-.CustomContainer{width:1600px !important;}
+.pad100{padding-left:100px !important;padding-right:100px !important;}
+.CustomContainer{width:100% !important;}
 .mar100{margin-left:100px;margin-right:100px;}
 
 /* :root {

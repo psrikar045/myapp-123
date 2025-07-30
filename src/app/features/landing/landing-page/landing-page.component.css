@@ -875,7 +875,7 @@ width: 100%;
   box-shadow: 0 8px 40px 0 rgba(16,30,54,0.10);
   background: #fff;
 }
-@media (max-width: 1600px) {
+@media (max-width: 1500px) {
   /* .section-inner {
     max-width: 1000px;
     padding-left: 24px;
@@ -934,7 +934,7 @@ width: 100%;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  max-width: 1600px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 69px 40px 69px 40px;
 }
@@ -1077,7 +1077,7 @@ width: 100%;
   width: 100%;
 }
 .pricing-section-inner {
-  max-width: 1600px;
+  max-width: 1500px;
   margin: 0 auto;
     text-align: center;
     padding: 69px 0px;
@@ -1379,7 +1379,7 @@ width: 100%;
 }
 
 .core-capabilities-container {
-  max-width: 1600px;
+  max-width: 1500px;
   margin: 0 auto;
   padding-left: 0px;
   padding-right: 0px;

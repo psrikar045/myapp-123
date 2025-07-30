@@ -13,7 +13,7 @@ body, .categories-main-layout, .categories-bg, .categories-content, .categories-
 
 .categories-content {
   width: 100%;
-  max-width: 1600px;
+  max-width: 1500px;
   margin: 0 auto;
   text-align: center;
   display: flex;
@@ -334,7 +334,7 @@ body, .categories-main-layout, .categories-bg, .categories-content, .categories-
   flex-direction: column;
   gap: 0;
   width: 100%;
-  max-width: 1600px;
+  max-width: 1500px;
   margin-top: 32px;
   margin-bottom: 40px;
   align-items: stretch;

@@ -848,13 +848,13 @@ body {
 // Support for existing custom classes
 .CustomContainer {
   @extend .container-fluid;
-  max-width: 1400px !important;
+   max-width: 100% !important;
 }
 
 .pad100 {
   @include media-breakpoint-up(lg) {
-    padding-left: 100px;
-    padding-right: 100px;
+  padding-left: 100px !important;
+    padding-right: 100px !important;
   }
   
   @include media-breakpoint-down(md) {
@@ -902,8 +902,9 @@ body {
   .container,
   .container-fluid,
   .container-custom {
-    width: auto !important;
-    max-width: none !important;
+    max-width: 1500px !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
   }
 }
 
@@ -1517,7 +1518,7 @@ html, body {
 .container-xl,
 .container-xxl {
   width: 100%;
-  max-width: 100%;
+  max-width: 1500px;
   padding-left: clamp(0.5rem, 2vw, 1.5rem);
   padding-right: clamp(0.5rem, 2vw, 1.5rem);
   margin-left: auto;
@@ -1536,7 +1537,7 @@ html, body {
 }
 
 // Enhanced responsive breakpoints for zoom
-@media (max-width: 1600px) {
+@media (max-width: 1500px) {
   .container-fluid {
     padding-left: 1rem;
     padding-right: 1rem;

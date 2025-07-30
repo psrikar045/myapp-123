@@ -36,7 +36,11 @@
       width: calc(100% - 70px);
     }
   }
-  
+  nav#HeaderStyle {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
   // Ensure header doesn't overlap with sidenav at any zoom level
   @media screen and (min-resolution: 144dpi) {
     // 150% zoom and above
@@ -58,7 +62,7 @@
   }
   
   .container-fluid {
-    max-width: 1400px;
+    max-width: 100%;
     margin: 0 auto;
     display: flex;
     align-items: center;

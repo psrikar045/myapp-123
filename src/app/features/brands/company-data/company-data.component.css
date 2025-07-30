@@ -36,7 +36,7 @@ body, html, app-root {
 }
 .brand-analyzer-content {
   width: 100%;
-  max-width: 1600px;
+  max-width: 1500px;
   padding: 64px 48px 72px 48px;
   display: flex;
   flex-direction: column;
