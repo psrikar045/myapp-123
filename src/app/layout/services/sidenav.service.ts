@@ -292,12 +292,13 @@ private readonly sidenavVisibleRoutes = [
             id: 'brand-manager',
             label: 'Brands Api',
             route: '/brands/company/:domain'
-          },
-          {
-            id: 'brand-intelligence',
-            label: 'Developers',
-            route: '/brand/intelligence'
           }
+          // ,
+          // {
+          //   id: 'brand-intelligence',
+          //   label: 'Developers',
+          //   route: '/brand/intelligence'
+          // }
         ]
       },
 

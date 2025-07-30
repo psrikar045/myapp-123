@@ -21,8 +21,9 @@ const routes: Routes = [
       {
         path: 'view/:brand',
         component: SearchViewComponent,
-        title: 'Search Results - RIVO9',
-        canActivate: [authGuard]
+        title: 'Search Results - RIVO9'
+        // ,
+        // canActivate: [authGuard]
       },
       {
         path: 'api',
