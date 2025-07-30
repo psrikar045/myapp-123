@@ -38,17 +38,17 @@ export class HomePageComponent implements OnInit {
   }
 
   // Navigation methods for the cards
-  navigateToBrands(): void {
-    this.router.navigate(['/all-categories']);
-  }
+  // navigateToBrands(): void {
+  //   this.router.navigate(['/all-categories']);
+  // }
 
   navigateToBrandApi(): void {
     this.router.navigate(['/brandApi']);
   }
 
-  navigateToDevelopers(): void {
-    this.router.navigate(['/developer']);
-  }
+  // navigateToDevelopers(): void {
+  //   this.router.navigate(['/developer']);
+  // }
    navigateToAccountHub(): void {
     this.router.navigate(['/brands/account-hub']);
   }
