@@ -68,4 +68,5 @@ export interface UserProfileUpdateRequest {
   country?: string; // Maps to futureV3
   city?: string; // Maps to futureV4
   username?: string;
+  id?: string; // Optional, for backend consistency
 }

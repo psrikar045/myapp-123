@@ -95,7 +95,7 @@ export class MyProfileComponent implements OnInit {
         this.profileForm.surname = response.lastName || '';
         this.profileForm.nationalCode = response.futureI1 || '';
         this.profileForm.dob = response.futureT1 || '';
-
+        this.dobShow = response.futureT1 ? new Date(response.futureT1) : null; // Initialize date picker
         this.profileForm.email = response.email || '';
         this.profileForm.phoneCountry = response.futureV2 || '+91';
         this.profileForm.phoneNumber = response.phoneNumber || '';
@@ -156,7 +156,25 @@ export class MyProfileComponent implements OnInit {
     emailVerified: false,
     profileCompletion: 0
   };
-
+  dobShow: Date | null = null;
+  
+  // Getter for date input - converts Date to YYYY-MM-DD string format
+  get dobForInput(): string {
+    if (!this.dobShow) return '';
+    const year = this.dobShow.getFullYear();
+    const month = String(this.dobShow.getMonth() + 1).padStart(2, '0');
+    const day = String(this.dobShow.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  
+  // Setter for date input - converts YYYY-MM-DD string to Date
+  set dobForInput(value: string) {
+    if (value) {
+      this.dobShow = new Date(value);
+    } else {
+      this.dobShow = null;
+    }
+  }
   profileForm = {
     firstName: '',
     surname: '',
@@ -232,10 +250,32 @@ export class MyProfileComponent implements OnInit {
         return a.localeCompare(b);
       });
   }
-
+getIdFromLocalStorage(){
+  let data = localStorage.getItem('user_details') || '';
+  if (data) {
+    try {
+      const parsedData = JSON.parse(data);
+      return parsedData.userId || '';
+    } catch (e) {
+      console.error('Error parsing user details from localStorage:', e);
+      return '';
+    }
+  }
+}
   onSave() {
     const data = this.profileForm;
-//"dob": "2000-01-15T12:00:00.000Z",
+    let id = this.getIdFromLocalStorage(); // Assuming you have a method to get user ID from local storage
+let dobToSend = null;
+if (this.dobShow) {
+  // Create a new Date object from the existing one to avoid modifying the original
+  const date = new Date(this.dobShow);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+  const day = String(date.getDate()).padStart(2, '0');
+
+  dobToSend = `${year}-${month}-${day}`;
+}
     const updateRequest: UserProfileUpdateRequest = {
       firstName: this.profileForm.firstName,
       surname: this.profileForm.surname, // Maps to backend's lastName
@@ -246,7 +286,8 @@ export class MyProfileComponent implements OnInit {
       country: this.profileForm.country,
       city: this.profileForm.city,
       username: this.profileForm.username,
-      dob: this.profileForm.dob ? this.profileForm.dob: null // Convert to ISO string
+      dob: dobToSend,
+      id: id
     };
  this.authService.userProfileUpdate( updateRequest).subscribe({
       next: (response: any) => {
