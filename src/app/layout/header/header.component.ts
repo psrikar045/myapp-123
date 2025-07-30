@@ -248,6 +248,21 @@ this.authService.checkAuthStatusAndNavigate();
     
     // Force immediate toolbar update
     this.toolbarService.setLoggedOutToolbar();
+    
+    // Force immediate header layout adjustment to remove left offset
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        const navbar = document.querySelector('.navbar') as HTMLElement;
+        if (navbar) {
+          // Remove any sidenav-related classes immediately
+          navbar.classList.remove('with-sidenav-expanded', 'with-sidenav-collapsed');
+          // Force reset header position
+          navbar.style.left = '0px';
+          navbar.style.width = '100%';
+          navbar.style.maxWidth = '100%';
+        }
+      }, 0);
+    }
   }
   
   onUpgradeClick() {

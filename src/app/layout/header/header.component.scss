@@ -36,6 +36,15 @@
       width: calc(100% - 70px);
     }
   }
+  
+  // Ensure header returns to default position when no sidenav classes are applied
+  &:not(.with-sidenav-expanded):not(.with-sidenav-collapsed) {
+    @include media-breakpoint-up(lg) {
+      left: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+  }
   nav#HeaderStyle {
     width: 100% !important;
     max-width: 100% !important;
