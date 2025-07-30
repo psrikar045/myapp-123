@@ -1116,7 +1116,7 @@ generateUsername(firstName: string, lastName: string): string {
    * @returns Observable of upload response
    */
   uploadProfileImage(formData: FormData): Observable<any> {
-    return this.http.post<any>(`${this.API_BASE_URL}/user/upload-profile-image`, formData).pipe(
+    return this.http.put<any>(`${this.API_BASE_URL}/api/users/profile/image`, formData).pipe(
       tap((response: any) => console.log('Profile image uploaded successfully.', response)),
       catchError(this.handleError)
     );
