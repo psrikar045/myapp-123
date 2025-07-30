@@ -15,7 +15,7 @@ const routes: Routes = [
       {
         path: '',
         component: MyProfileComponent,
-        title: 'My Profile - Marketify'
+        title: 'My Profile - RIVO9'
       }
     ]
   }

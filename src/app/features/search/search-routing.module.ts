@@ -16,18 +16,18 @@ const routes: Routes = [
       {
         path: '',
         component: SearchComponent,
-        title: 'Search - Marketify'
+        title: 'Search - RIVO9'
       },
       {
         path: 'view/:brand',
         component: SearchViewComponent,
-        title: 'Search Results - Marketify',
+        title: 'Search Results - RIVO9',
         canActivate: [authGuard]
       },
       {
         path: 'api',
         component: SearchApiComponent,
-        title: 'Search API - Marketify',
+        title: 'Search API - RIVO9',
         canActivate: [authGuard]
       }
     ]

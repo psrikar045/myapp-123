@@ -12,12 +12,12 @@ const routes: Routes = [
       {
         path: '',
         component: BlogComponent,
-        title: 'Blog - Marketify'
+        title: 'Blog - RIVO9'
       },
       {
         path: ':id',
         component: BlogDetailsComponent,
-        title: 'Blog Post - Marketify'
+        title: 'Blog Post - RIVO9'
       }
     ]
   }

@@ -12,12 +12,12 @@ const routes: Routes = [
       {
         path: 'login',
         component: LoginComponent,
-        title: 'Login - Marketify'
+        title: 'Login - RIVO9'
       },
       {
         path: 'forgot-password',
         component: ResetPasswordComponent,
-        title: 'Reset Password - Marketify'
+        title: 'Reset Password - RIVO9'
       },
       {
         path: '',

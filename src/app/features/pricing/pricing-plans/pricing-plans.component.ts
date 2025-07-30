@@ -81,21 +81,21 @@ export class PricingPlansComponent implements OnInit {
 
   cta = {
     title: 'Unlock the power of brand data',
-    subtitle: 'Start your free trial today and see how Marketify can streamline your workflow, boost your team’s productivity, and keep your brand assets always up to date.',
+    subtitle: 'Start your free trial today and see how RIVO9 can streamline your workflow, boost your team’s productivity, and keep your brand assets always up to date.',
     button: 'Start free trial'
   };
 
   faqsCol1 = [
-    { q: 'What is Marketify?', a: 'Marketify is a platform that lets you instantly access logos, brand colors, fonts, and social links by simply entering a domain name.', open: false },
-    { q: 'How can designers benefit from Marketify?', a: 'Designers can streamline their workflow by instantly accessing brand assets, color palettes, and typography, ensuring brand consistency and saving hours on manual asset collection.', open: false },
-    { q: 'How does Marketify help developers?', a: 'Developers can integrate real-time brand data into apps and websites using our robust API and SDKs, automating branding, onboarding, and more.', open: false },
-    { q: 'Can I use Marketify for brand monitoring?', a: 'Yes, Marketify helps marketers maintain consistency and credibility by providing the latest brand assets and monitoring changes across all channels.', open: false },
+    { q: 'What is RIVO9?', a: 'RIVO9 is a platform that lets you instantly access logos, brand colors, fonts, and social links by simply entering a domain name.', open: false },
+    { q: 'How can designers benefit from RIVO9?', a: 'Designers can streamline their workflow by instantly accessing brand assets, color palettes, and typography, ensuring brand consistency and saving hours on manual asset collection.', open: false },
+    { q: 'How does RIVO9 help developers?', a: 'Developers can integrate real-time brand data into apps and websites using our robust API and SDKs, automating branding, onboarding, and more.', open: false },
+    { q: 'Can I use RIVO9 for brand monitoring?', a: 'Yes, RIVO9 helps marketers maintain consistency and credibility by providing the latest brand assets and monitoring changes across all channels.', open: false },
   ];
   faqsCol2 = [
     { q: 'What kind of brand data can I fetch?', a: 'You can fetch logos, brand colors, fonts, social links, and other official brand assets for thousands of companies.', open: false },
-    { q: 'Is there an API for developers?', a: 'Yes, Marketify offers a REST API and SDKs for quick integration, allowing you to fetch brand assets programmatically.', open: false },
-    { q: 'How do I get started with Marketify?', a: 'Simply enter a domain name to access brand data, or sign up for advanced features like asset libraries and campaign-ready downloads.', open: false },
-    { q: 'Is Marketify suitable for teams?', a: 'Absolutely! Marketify is trusted by forward-thinking teams and is designed for designers, developers, and marketers alike.', open: false },
+    { q: 'Is there an API for developers?', a: 'Yes, RIVO9 offers a REST API and SDKs for quick integration, allowing you to fetch brand assets programmatically.', open: false },
+    { q: 'How do I get started with RIVO9?', a: 'Simply enter a domain name to access brand data, or sign up for advanced features like asset libraries and campaign-ready downloads.', open: false },
+    { q: 'Is RIVO9 suitable for teams?', a: 'Absolutely! RIVO9 is trusted by forward-thinking teams and is designed for designers, developers, and marketers alike.', open: false },
   ];
 
   constructor(private toolbar: ToolbarService) {}

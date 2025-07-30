@@ -253,8 +253,8 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   logo = {
     src: 'assets/landing/logo.svg', // Replace with your logo path or use the SVG inline
-    alt: 'Marketify Logo',
-    text: 'Marketify',
+    alt: 'RIVO9 Logo',
+    text: 'RIVO9',
   };
 
   menuItems = [
@@ -283,12 +283,12 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   heroHeadline = {
     main: 'Fetch Company',
     main1: 'Brand Data Instantly with',
-    highlight: 'Marketify',
+    highlight: 'RIVO9',
     waveIcon: true
   };
   heroSubheadline = 'Access logos, brand colors, fonts and social links by simply entering a domain name';
   ctas = [
-    { label: 'Try Marketify now', style: 'primary', icon: 'arrow' },
+    { label: 'Try RIVO9 now', style: 'primary', icon: 'arrow' },
     { label: 'View Docs', style: 'secondary', icon: 'arrow' }
   ];
   rating = {
@@ -315,7 +315,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     { src: 'assets/company/Item.svg', alt: 'Company 5' }
   ];
   // Core capabilities section logic
-  coreHeadline = "Discover Marketify’s Core Capabilities";
+  coreHeadline = "Discover RIVO9’s Core Capabilities";
   coreSubheadline = "Everything you need to build powerful brand integrations";
   cards = [
     {
@@ -343,7 +343,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   allSections = [
     {
       title: 'For Designers',
-      description: 'Instantly access brand assets, color palettes, and typography to streamline your creative workflow. Marketify makes it easy to maintain brand consistency and save hours on manual asset collection.',
+      description: 'Instantly access brand assets, color palettes, and typography to streamline your creative workflow. RIVO9 makes it easy to maintain brand consistency and save hours on manual asset collection.',
       image: 'assets/landing/Section_1.png',
       cards: [
         { icon: 'bi bi-journal-bookmark', title: 'Brand Guidelines', subtitle: 'Official brand rules at your fingertips' },
@@ -354,7 +354,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     },
     {
       title: 'For Developers',
-      description: 'Integrate real-time brand data into your apps and websites with our robust API and SDKs. Marketify empowers you to automate branding, onboarding, and more.',
+      description: 'Integrate real-time brand data into your apps and websites with our robust API and SDKs. RIVO9 empowers you to automate branding, onboarding, and more.',
       cards: [
         { icon: 'bi bi-plug', title: 'REST API', subtitle: 'Fetch brand assets programmatically' },
         { icon: 'bi bi-boxes', title: 'SDKs Available', subtitle: 'Quick integration in your language' },
@@ -364,7 +364,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     },
     {
       title: 'For Marketers',
-      description: 'Ensure your campaigns and content always use the latest brand assets. Marketify helps you maintain consistency and credibility across all channels.',
+      description: 'Ensure your campaigns and content always use the latest brand assets. RIVO9 helps you maintain consistency and credibility across all channels.',
       image: 'assets/landing/Section_3.png',
       cards: [
         { icon: 'bi bi-geo-alt', title: 'Social Links', subtitle: 'Find official social profiles' },
@@ -376,7 +376,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   ];
   // Supercharge workflow section logic
   superchargeHeadline = 'Ready to Supercharge Your Workflow';
-  superchargeSubheadline = 'Start fetching brand data in minutes with Marketify.';
+  superchargeSubheadline = 'Start fetching brand data in minutes with RIVO9.';
   superchargeCta = 'Get Started';
   // Pricing section logic
   pricingHeadline = 'Expand your options with a subscription';

@@ -5,19 +5,19 @@
 
 export const APP_CONSTANTS = {
   // Application Info
-  APP_NAME: 'Marketify',
+  APP_NAME: 'RIVO9',
   APP_VERSION: '1.0.0',
   APP_DESCRIPTION: 'Your Ultimate Brand Discovery Platform',
 
   // Storage Keys
   STORAGE_KEYS: {
-    AUTH_TOKEN: 'marketify_auth_token',
-    REFRESH_TOKEN: 'marketify_refresh_token',
-    USER_PROFILE: 'marketify_user_profile',
-    THEME_PREFERENCE: 'marketify_theme',
-    SEARCH_HISTORY: 'marketify_search_history',
-    LANGUAGE_PREFERENCE: 'marketify_language',
-    SIDEBAR_STATE: 'marketify_sidebar_state'
+    AUTH_TOKEN: 'RIVO9_auth_token',
+    REFRESH_TOKEN: 'RIVO9_refresh_token',
+    USER_PROFILE: 'RIVO9_user_profile',
+    THEME_PREFERENCE: 'RIVO9_theme',
+    SEARCH_HISTORY: 'RIVO9_search_history',
+    LANGUAGE_PREFERENCE: 'RIVO9_language',
+    SIDEBAR_STATE: 'RIVO9_sidebar_state'
   },
 
   // Pagination
@@ -87,18 +87,18 @@ export const APP_CONSTANTS = {
 
   // Social Media
   SOCIAL_LINKS: {
-    TWITTER: 'https://twitter.com/marketify',
-    FACEBOOK: 'https://facebook.com/marketify',
-    LINKEDIN: 'https://linkedin.com/company/marketify',
-    GITHUB: 'https://github.com/marketify'
+    TWITTER: 'https://twitter.com/RIVO9',
+    FACEBOOK: 'https://facebook.com/RIVO9',
+    LINKEDIN: 'https://linkedin.com/company/RIVO9',
+    GITHUB: 'https://github.com/RIVO9'
   },
 
   // Support
   SUPPORT: {
-    EMAIL: 'support@marketify.com',
-    PHONE: '+1-800-MARKETIFY',
-    HELP_CENTER: 'https://help.marketify.com',
-    STATUS_PAGE: 'https://status.marketify.com'
+    EMAIL: 'support@RIVO9.com',
+    PHONE: '+1-800-RIVO9',
+    HELP_CENTER: 'https://help.RIVO9.com',
+    STATUS_PAGE: 'https://status.RIVO9.com'
   }
 } as const;
 
@@ -110,7 +110,7 @@ export const ENV_CONSTANTS = {
     ENABLE_DEBUG: true
   },
   PRODUCTION: {
-    API_BASE_URL: 'https://api.marketify.com',
+    API_BASE_URL: 'https://api.RIVO9.com',
     ENABLE_LOGGING: false,
     ENABLE_DEBUG: false
   }

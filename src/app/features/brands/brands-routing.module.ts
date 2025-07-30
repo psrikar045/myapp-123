@@ -16,17 +16,17 @@ const routes: Routes = [
       {
         path: 'categories',
         component: AllCategoriesComponent,
-        title: 'Browse Categories - Marketify'
+        title: 'Browse Categories - RIVO9'
       },
       {
         path: 'category/:id',
         component: CategoryListComponent,
-        title: 'Category - Marketify'
+        title: 'Category - RIVO9'
       },
       {
         path: 'company/:domain',
         component: CompanyDataComponent,
-        title: 'Company Data - Marketify',
+        title: 'Company Data - RIVO9',
         canActivate: [authGuard]
       },
       {

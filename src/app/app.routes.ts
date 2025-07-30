@@ -23,25 +23,25 @@ export const routes: Routes = [
   {
     path: 'landing',
     component: LandingPageComponent,
-    title: 'Welcome to Marketify'
+    title: 'Welcome to RIVO9'
   },
   {
     path: 'home',
     component: HomePageComponent,
-    title: 'Home - Marketify'
+    title: 'Home - RIVO9'
   },
   {
     path: 'logo-link',
     component: LogoLinkComponent,
     canActivate: [authGuard],
-    title: 'Logo Link - Marketify'
+    title: 'Logo Link - RIVO9'
   },
 
   // 3. Feature Modules (Lazy Loaded)
   {
     path: 'auth',
     loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthModule),
-    title: 'Authentication - Marketify'
+    title: 'Authentication - RIVO9'
   },
   {
     path: 'brandApi',
@@ -52,44 +52,44 @@ export const routes: Routes = [
     path: 'dashboard',
     loadChildren: () => import('./features/dashboard/dashboard.module').then(m => m.DashboardModule),
     canActivate: [authGuard],
-    title: 'Dashboard - Marketify'
+    title: 'Dashboard - RIVO9'
   },
   {
     path: 'brands',
     loadChildren: () => import('./features/brands/brands.module').then(m => m.BrandsModule),
-    title: 'Brands - Marketify'
+    title: 'Brands - RIVO9'
   },
   {
     path: 'search',
     loadChildren: () => import('./features/search/search.module').then(m => m.SearchModule),
-    title: 'Search - Marketify'
+    title: 'Search - RIVO9'
   },
   {
     path: 'blog',
     loadChildren: () => import('./features/blog/blog.module').then(m => m.BlogModule),
-    title: 'Blog - Marketify'
+    title: 'Blog - RIVO9'
   },
   {
     path: 'pricing',
     loadChildren: () => import('./features/pricing/pricing.module').then(m => m.PricingModule),
-    title: 'Pricing - Marketify'
+    title: 'Pricing - RIVO9'
   },
   {
     path: 'profile',
     loadChildren: () => import('./features/profile/profile.module').then(m => m.ProfileModule),
     canActivate: [authGuard],
-    title: 'Profile - Marketify'
+    title: 'Profile - RIVO9'
   },
   {
     path: 'developer',
     loadChildren: () => import('./features/developer/developer.module').then(m => m.DeveloperModule),
-    title: 'Developer - Marketify'
+    title: 'Developer - RIVO9'
   },
   {
     path: 'admin',
     loadChildren: () => import('./features/admin/admin.module').then(m => m.AdminModule),
     canActivate: [authGuard, roleGuard],
-    title: 'Admin - Marketify'
+    title: 'Admin - RIVO9'
   },
 
   // 4. Legacy route redirects (for backward compatibility)

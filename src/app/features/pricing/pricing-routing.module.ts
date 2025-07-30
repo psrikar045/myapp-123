@@ -16,17 +16,17 @@ const routes: Routes = [
       {
         path: 'plans',
         component: PricingPlansComponent,
-        title: 'Pricing Plans - Marketify'
+        title: 'Pricing Plans - RIVO9'
       },
       {
         path: 'choose',
         component: ChoosePlanComponent,
-        title: 'Choose Plan - Marketify'
+        title: 'Choose Plan - RIVO9'
       },
       {
         path: 'my-plan',
         component: MyPlanComponent,
-        title: 'My Plan - Marketify',
+        title: 'My Plan - RIVO9',
         canActivate: [authGuard]
       },
       {

@@ -11,7 +11,7 @@ const routes: Routes = [
       {
         path: '',
         component: DeveloperComponent,
-        title: 'Developer Tools - Marketify'
+        title: 'Developer Tools - RIVO9'
       }
     ]
   }

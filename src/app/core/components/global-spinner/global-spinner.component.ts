@@ -12,8 +12,8 @@ import { SpinnerService } from '../../services/spinner.service';
     <div class="global-spinner-overlay" *ngIf="isLoading$ | async" [@fadeInOut]>
       <div class="spinner-container">
         <div class="spinner-wrapper">
-          <!-- Enhanced Modern Spinner with Marketify Branding -->
-          <div class="marketify-spinner">
+          <!-- Enhanced Modern Spinner with RIVO9 Branding -->
+          <div class="RIVO9-spinner">
             <!-- Outer Ring -->
             <div class="spinner-ring outer-ring"></div>
             <!-- Middle Ring -->
@@ -40,7 +40,7 @@ import { SpinnerService } from '../../services/spinner.service';
           
           <!-- Brand Text -->
           <div class="brand-text">
-            <span class="brand-name">Marketify</span>
+            <span class="brand-name">RIVO9</span>
             <span class="brand-tagline">Marketing Hub</span>
           </div>
         </div>
@@ -79,8 +79,8 @@ import { SpinnerService } from '../../services/spinner.service';
       gap: 1.5rem;
     }
     
-    /* Enhanced Marketify Spinner */
-    .marketify-spinner {
+    /* Enhanced RIVO9 Spinner */
+    .RIVO9-spinner {
       position: relative;
       width: 100px;
       height: 100px;

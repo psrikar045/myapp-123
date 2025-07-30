@@ -10,9 +10,9 @@ import { RouterModule, Router } from '@angular/router';
   styleUrl: './footer.component.scss'
 })
 export class FooterComponent implements OnInit, OnDestroy {
-  companyName = 'Marketify';
+  companyName = 'RIVO9';
   companyDescription = 'Access logos, brand colors, fonts and social links by simply entering a domain name';
-  copyright = '© Copyright 2025 Marketify. All rights reserved.';
+  copyright = '© Copyright 2025 RIVO9. All rights reserved.';
   currentYear = new Date().getFullYear();
   
   showBackToTop = false;

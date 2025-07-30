@@ -30,7 +30,7 @@ export class ToolbarService {
   private isAuthPage: boolean = false;
   private logo$ = new BehaviorSubject<ToolbarLogo>({
     src: 'assets/images/logo.svg',
-    alt: 'Marketify Logo',
+    alt: 'RIVO9 Logo',
     link: '/'
   });
 
@@ -96,7 +96,7 @@ export class ToolbarService {
     console.log('Setting logged in toolbar');
     this.logo$.next({
       src: 'assets/images/logo.svg',
-      alt: 'Marketify Logo',
+      alt: 'RIVO9 Logo',
       link: '/home'
     });
     // Remove Pricing and Blog from logged-in header
@@ -116,7 +116,7 @@ export class ToolbarService {
     console.log('Setting logged out toolbar, isAuthPage:', this.isAuthPage);
     this.logo$.next({
       src: 'assets/images/logo.svg',
-      alt: 'Marketify Logo',
+      alt: 'RIVO9 Logo',
       link: '/landing'
     });
     this.navItems$.next([

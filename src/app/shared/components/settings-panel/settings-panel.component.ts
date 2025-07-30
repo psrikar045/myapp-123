@@ -392,7 +392,7 @@ export class SettingsPanelComponent implements OnInit, OnDestroy {
     const url = URL.createObjectURL(dataBlob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'marketify-settings.json';
+    link.download = 'RIVO9-settings.json';
     link.click();
     URL.revokeObjectURL(url);
   }
