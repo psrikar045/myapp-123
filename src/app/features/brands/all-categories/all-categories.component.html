@@ -5,7 +5,7 @@
       <span class="highlight">Browse Categories & Discover Top Brands</span>
     </h1>
     <p class="categories-desc">
-      Explore and filter the world’s most popular digital products, platforms, and creative tools by category and subcategory—all in one place.
+      Explore and filter the world's most popular digital products, platforms, and creative tools by category and subcategory—all in one place.
     </p>
     <form class="categories-search-bar" (ngSubmit)="onSearch()">
       <span class="search-icon">
@@ -23,6 +23,15 @@
         </svg>
       </button>
     </form>
+    
+    <!-- Mobile Categories Button -->
+    <div class="mobile-categories-toggle" *ngIf="isMobile">
+      <button class="btn btn-primary d-flex align-items-center gap-2" (click)="toggleMobileSidebar()">
+        <i class="bi bi-list"></i>
+        Categories
+      </button>
+    </div>
+
     <div class="categories-main-layout">
       <div *ngIf="isLoadingBrands" class="loading-container">
         <div class="loading-content">
@@ -31,8 +40,8 @@
         </div>
       </div>
       <div class="categories-main-layout-content" *ngIf="!isLoadingBrands && filteredCategories.length > 0">
-        <!-- Sidebar Accordion -->
-        <aside class="categories-sidebar">
+        <!-- Desktop Sidebar -->
+        <aside class="categories-sidebar desktop-sidebar" *ngIf="!isMobile">
           <!-- Sidebar Header -->
           <div class="sidebar-header">
             <h4 class="sidebar-title">
@@ -62,11 +71,48 @@
             </div>
           </div>
         </aside>
-        <!-- Main Brand Cards Grid or No Data -->
+
+        <!-- Mobile Sidebar -->
+        <aside class="categories-sidebar mobile-sidebar" 
+               [class.visible]="isMobile"
+               [class.open]="isMobileSidebarOpen">
+          <!-- Mobile Sidebar Header -->
+          <div class="sidebar-header">
+            <h4 class="sidebar-title">
+              <i class="bi bi-funnel-fill me-2"></i>
+              Categories
+            </h4>
+            <button class="btn-close" (click)="closeMobileSidebar()">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+          
+          <div *ngFor="let cat of filteredCategories" class="sidebar-category">
+            <button class="sidebar-category-btn"
+              [class.active]="cat.label === selectedCategory"
+              [class.expanded]="cat.label === expandedCategory"
+              (click)="toggleCategoryAccordion(cat.label)">
+              {{ cat.label }}
+              <span class="accordion-arrow" [class.open]="cat.label === expandedCategory">
+                <i class="bi bi-chevron-down"></i>
+              </span>
+            </button>
+            <div class="sidebar-subcategories" *ngIf="cat.label === expandedCategory && cat.label !== 'All' && subCategoryMap[cat.label]">
+              <button *ngFor="let sub of subCategoryMap[cat.label]"
+                class="sidebar-subcategory-btn"
+                [class.active]="selectedSubCategory === sub.name"
+                (click)="goToSubCategory(sub.name); closeMobileSidebar()">
+                {{ sub.name }}
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Main Brand Cards Grid -->
         <div class="categories-main-layout-right">
           <div class="brands-content-wrapper">
             <ng-container *ngIf="pagedBrands.length > 0; else noData">
-              <section class="brand-cards-grid">
+              <section class="brand-cards-grid" [class.with-sidebar]="isMobile && isMobileSidebarOpen">
               <div *ngFor="let brand of pagedBrands" class="brand-card"
                 [ngStyle]="{ 'background': getNonWhiteColorWithOpacity(brand, 0.3) }"
                 (click)="goToBrand(brand)">
@@ -90,11 +136,39 @@
             </section>
             <div class="pagination-bottom-center-wrapper" *ngIf="pagedBrands.length > 0">
               <div class="categories-pagination">
-                <button class="page nav" (click)="selectPage(currentPage === 1 ? 1 : currentPage - 1)">
+                <button class="page nav" 
+                        [disabled]="currentPage === 1"
+                        (click)="selectPage(currentPage === 1 ? 1 : currentPage - 1)">
                   <i class="bi bi-chevron-left"></i>
                 </button>
-                <button *ngFor="let page of pages" class="page" [class.active]="page === currentPage" (click)="selectPage(page)">{{ page }}</button>
-                <button class="page nav" (click)="selectPage(currentPage === pages.length ? pages.length : currentPage + 1)">
+                
+                <!-- Show first page -->
+                <button *ngIf="pages.length > 0" 
+                        class="page" 
+                        [class.active]="1 === currentPage" 
+                        (click)="selectPage(1)">1</button>
+                
+                <!-- Show ellipsis if there are many pages and we're not near the beginning -->
+                <span *ngIf="pages.length > 7 && currentPage > 4" class="page-ellipsis">...</span>
+                
+                <!-- Show middle pages -->
+                <button *ngFor="let page of getVisiblePages()" 
+                        class="page" 
+                        [class.active]="page === currentPage" 
+                        (click)="selectPage(page)">{{ page }}</button>
+                
+                <!-- Show ellipsis if there are many pages and we're not near the end -->
+                <span *ngIf="pages.length > 7 && currentPage < pages.length - 3" class="page-ellipsis">...</span>
+                
+                <!-- Show last page if different from first -->
+                <button *ngIf="pages.length > 1" 
+                        class="page" 
+                        [class.active]="pages.length === currentPage" 
+                        (click)="selectPage(pages.length)">{{ pages.length }}</button>
+                
+                <button class="page nav" 
+                        [disabled]="currentPage === pages.length"
+                        (click)="selectPage(currentPage === pages.length ? pages.length : currentPage + 1)">
                   <i class="bi bi-chevron-right"></i>
                 </button>
               </div>

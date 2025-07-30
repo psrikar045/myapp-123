@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -25,7 +25,7 @@ interface SubCategory {
   templateUrl: './all-categories.component.html',
   styleUrl: './all-categories.component.scss'
 })
-export class AllCategoriesComponent implements OnInit {
+export class AllCategoriesComponent implements OnInit, OnDestroy {
   categories:any = [];
   selectedCategory = 'All';
   
@@ -39,6 +39,10 @@ export class AllCategoriesComponent implements OnInit {
   brandStatistics: any = {};
   isLoadingBrands = false;
   brandSearchFilters: BrandSearchFilters = {};
+
+  // Mobile sidebar functionality
+  isMobileSidebarOpen = false;
+  isMobile = false;
 
   // Static brand data for fallback/demo purposes
   allBrands:any = [
@@ -98,6 +102,10 @@ export class AllCategoriesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadBrandData();
+    this.checkScreenSize();
+    window.addEventListener('resize', () => this.checkScreenSize());
+    
     // Subscribe to query parameters
     this.route.queryParams.subscribe(params => {
       if (params['category']) {
@@ -130,14 +138,34 @@ export class AllCategoriesComponent implements OnInit {
           this.selectedSubCategory = '';
           this.searchTerm = '';
           this.filteredCategories = this.categories;
+        } else {
+          // If no category in URL, reset to default state
+          this.selectedCategory = 'All';
+          this.expandedCategory = 'All';
+          this.selectedSubCategory = '';
         }
-      } else {
-        // If no category in URL, reset to default state
-        this.selectedCategory = 'All';
-        this.expandedCategory = 'All';
-        this.selectedSubCategory = '';
       }
     });
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('resize', () => this.checkScreenSize());
+  }
+
+  // Mobile sidebar methods
+  checkScreenSize() {
+    this.isMobile = window.innerWidth < 992; // Bootstrap md and below
+    if (!this.isMobile) {
+      this.isMobileSidebarOpen = false;
+    }
+  }
+
+  toggleMobileSidebar() {
+    this.isMobileSidebarOpen = !this.isMobileSidebarOpen;
+  }
+
+  closeMobileSidebar() {
+    this.isMobileSidebarOpen = false;
   }
 
 setDefaultCategories() {
@@ -304,6 +332,48 @@ getAllCategories() {
 
   get pages() {
     return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  getVisiblePages(): number[] {
+    const totalPages = this.totalPages;
+    const currentPage = this.currentPage;
+    
+    // If only 1 page, return empty array (first page is shown separately)
+    if (totalPages <= 1) {
+      return [];
+    }
+    
+    // If 2-7 pages, show middle pages only
+    if (totalPages <= 7) {
+      const middlePages = [];
+      for (let i = 2; i < totalPages; i++) {
+        middlePages.push(i);
+      }
+      return middlePages;
+    }
+    
+    // For more than 7 pages, show pages around current page
+    let startPage = Math.max(2, currentPage - 1);
+    let endPage = Math.min(totalPages - 1, currentPage + 1);
+    
+    // Adjust if we're near the beginning
+    if (currentPage <= 3) {
+      startPage = 2;
+      endPage = Math.min(totalPages - 1, 4);
+    }
+    
+    // Adjust if we're near the end
+    if (currentPage >= totalPages - 2) {
+      startPage = Math.max(2, totalPages - 3);
+      endPage = totalPages - 1;
+    }
+    
+    const pages = [];
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    
+    return pages;
   }
 
   onSearch() {
