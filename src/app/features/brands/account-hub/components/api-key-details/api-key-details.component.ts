@@ -277,10 +277,12 @@ export class ApiKeyDetailsComponent implements OnInit, OnDestroy {
    * Copy API key to clipboard
    */
   copyApiKey(): void {
-    if (this.apiKey?.maskedKey) {
+    if (this.apiKey?.maskedKey && typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(this.apiKey.maskedKey).then(() => {
         console.log('API key copied to clipboard');
         // Show success message
+      }).catch(err => {
+        console.error('Failed to copy API key:', err);
       });
     }
   }

@@ -112,7 +112,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   timerWarning = false;
   private timerSubscription?: Subscription;
   private passwordSubscription?: Subscription;
-  private submitTimeoutId?: number;
+  private submitTimeoutId?: any;
   private apiSubscription?: Subscription;
   // Injected services
   private readonly authService = inject(AuthService);
@@ -362,7 +362,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     this.buttonState = 'loading';
     
     // Simulate API call
-   this.submitTimeoutId = window.setTimeout(() => {
+   this.submitTimeoutId = setTimeout(() => {
       // Only proceed if we're still on step 2 (user hasn't navigated away)
       if (this.currentStep === 2) {
         this.isLoading = false;
@@ -421,7 +421,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     this.showSuccessMessage = false;
     
     // Store the timeout ID so we can clear it if needed
-    this.submitTimeoutId = window.setTimeout(() => {
+    this.submitTimeoutId = setTimeout(() => {
       // Only proceed if we're still on step 1 (user hasn't navigated back)
       if (this.currentStep === 1) {
         this.isLoading = false;
@@ -490,7 +490,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     this.emailForm.patchValue({ email: email! });
     
     // Store the timeout ID so we can clear it if needed
-    this.submitTimeoutId = window.setTimeout(() => {
+    this.submitTimeoutId = setTimeout(() => {
       // Only proceed if we're still on step 1 (user hasn't navigated back)
       if (this.currentStep === 1) {
         this.isLoading = false;
@@ -648,7 +648,7 @@ userId: response?.userId,
     }
     
     // Store the timeout ID so we can clear it if needed
-    this.submitTimeoutId = window.setTimeout(() => {
+    this.submitTimeoutId = setTimeout(() => {
       // Only proceed if we're still on step 3 (user hasn't navigated back)
       if (this.currentStep === 3) {
         this.isLoading = false;

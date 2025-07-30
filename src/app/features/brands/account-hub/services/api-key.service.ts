@@ -20,7 +20,7 @@ import { MockDataService } from './mock-data.service';
   providedIn: 'root'
 })
 export class ApiKeyService {
-  private readonly apiUrl = `${environment.baseApiUrl}/api/v1/account/api-keys`;
+  private readonly apiUrl = `${environment.baseApiUrl}/api/v1/api-keys`;
   private apiKeysSubject = new BehaviorSubject<ApiKey[]>([]);
   public apiKeys$ = this.apiKeysSubject.asObservable();
 

@@ -258,10 +258,12 @@ export class AccountHubComponent implements OnInit, OnDestroy {
    * Copy API key to clipboard
    */
   copyApiKey(maskedKey: string): void {
-    if (maskedKey) {
+    if (maskedKey && typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(maskedKey).then(() => {
         console.log('API key copied to clipboard');
         // You could show a toast notification here
+      }).catch(err => {
+        console.error('Failed to copy API key:', err);
       });
     }
   }

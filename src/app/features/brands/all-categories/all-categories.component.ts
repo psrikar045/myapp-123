@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -26,6 +26,8 @@ interface SubCategory {
   styleUrl: './all-categories.component.scss'
 })
 export class AllCategoriesComponent implements OnInit, OnDestroy {
+  private platformId = inject(PLATFORM_ID);
+  
   categories:any = [];
   selectedCategory = 'All';
   
@@ -104,7 +106,9 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadBrandData();
     this.checkScreenSize();
-    window.addEventListener('resize', () => this.checkScreenSize());
+    if (isPlatformBrowser(this.platformId)) {
+      window.addEventListener('resize', () => this.checkScreenSize());
+    }
     
     // Subscribe to query parameters
     this.route.queryParams.subscribe(params => {
@@ -149,14 +153,18 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    window.removeEventListener('resize', () => this.checkScreenSize());
+    if (isPlatformBrowser(this.platformId)) {
+      window.removeEventListener('resize', () => this.checkScreenSize());
+    }
   }
 
   // Mobile sidebar methods
   checkScreenSize() {
-    this.isMobile = window.innerWidth < 992; // Bootstrap md and below
-    if (!this.isMobile) {
-      this.isMobileSidebarOpen = false;
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobile = window.innerWidth < 992; // Bootstrap md and below
+      if (!this.isMobile) {
+        this.isMobileSidebarOpen = false;
+      }
     }
   }
 

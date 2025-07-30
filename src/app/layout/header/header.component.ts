@@ -153,6 +153,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private handleZoomChanges(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    
     // Listen for resize events that might indicate zoom changes
     window.addEventListener('resize', () => {
       this.adjustLayoutForZoom();
@@ -181,7 +183,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         const sidenavWidth = sidenav.offsetWidth;
         const isCollapsed = sidenav.classList.contains('collapsed');
         
-        if (window.innerWidth >= 992) { // Desktop
+        if (typeof window !== 'undefined' && window.innerWidth >= 992) { // Desktop
           navbar.style.left = `${sidenavWidth}px`;
           navbar.style.width = `calc(100vw - ${sidenavWidth}px)`;
           navbar.style.maxWidth = `calc(100vw - ${sidenavWidth}px)`;
@@ -273,6 +275,7 @@ this.authService.checkAuthStatusAndNavigate();
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
+    if (!isPlatformBrowser(this.platformId)) return;
     const currentScrollY = window.scrollY;
     // Only update isScrolled for background/shadow, but always keep isVisible true
     if (this.isLanding) {

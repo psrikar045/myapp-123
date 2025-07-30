@@ -1,14 +1,30 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StorageService {
+  private platformId = inject(PLATFORM_ID);
+
   private isLocalStorageAvailable(): boolean {
+    if (!isPlatformBrowser(this.platformId)) return false;
     try {
       const test = '__localStorage_test__';
       localStorage.setItem(test, test);
       localStorage.removeItem(test);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  private isSessionStorageAvailable(): boolean {
+    if (!isPlatformBrowser(this.platformId)) return false;
+    try {
+      const test = '__sessionStorage_test__';
+      sessionStorage.setItem(test, test);
+      sessionStorage.removeItem(test);
       return true;
     } catch {
       return false;
@@ -60,28 +76,35 @@ export class StorageService {
 
   // Session Storage methods
   setSessionItem(key: string, value: any): void {
-    try {
-      sessionStorage.setItem(key, JSON.stringify(value));
-    } catch (error) {
-      console.error('Error saving to sessionStorage:', error);
+    if (this.isSessionStorageAvailable()) {
+      try {
+        sessionStorage.setItem(key, JSON.stringify(value));
+      } catch (error) {
+        console.error('Error saving to sessionStorage:', error);
+      }
     }
   }
 
   getSessionItem<T>(key: string): T | null {
-    try {
-      const item = sessionStorage.getItem(key);
-      return item ? JSON.parse(item) : null;
-    } catch (error) {
-      console.error('Error reading from sessionStorage:', error);
-      return null;
+    if (this.isSessionStorageAvailable()) {
+      try {
+        const item = sessionStorage.getItem(key);
+        return item ? JSON.parse(item) : null;
+      } catch (error) {
+        console.error('Error reading from sessionStorage:', error);
+        return null;
+      }
     }
+    return null;
   }
 
   removeSessionItem(key: string): void {
-    try {
-      sessionStorage.removeItem(key);
-    } catch (error) {
-      console.error('Error removing from sessionStorage:', error);
+    if (this.isSessionStorageAvailable()) {
+      try {
+        sessionStorage.removeItem(key);
+      } catch (error) {
+        console.error('Error removing from sessionStorage:', error);
+      }
     }
   }
 }

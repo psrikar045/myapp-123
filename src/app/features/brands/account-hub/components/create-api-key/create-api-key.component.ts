@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { addDays } from 'date-fns';
 
@@ -33,6 +33,7 @@ interface WizardStep {
   styleUrls: ['./create-api-key.component.scss']
 })
 export class CreateApiKeyComponent implements OnInit, OnDestroy {
+  private platformId = inject(PLATFORM_ID);
   private destroy$ = new Subject<void>();
   
   // Form
@@ -401,7 +402,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
    * Enhanced copy API key with visual feedback
    */
   copyApiKey(): void {
-    if (this.createdApiKey?.key) {
+    if (this.createdApiKey?.key && typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(this.createdApiKey.key).then(() => {
         this.copyButtonText = 'Copied!';
         setTimeout(() => {
@@ -553,18 +554,20 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
    * Scroll to top of the page smoothly
    */
   scrollToTop(): void {
-    const mainContent = document.getElementById('main-content');
-    if (mainContent) {
-      mainContent.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start' 
-      });
-    } else {
-      // Fallback to window scroll
-      window.scrollTo({ 
-        top: 0, 
-        behavior: 'smooth' 
-      });
+    if (isPlatformBrowser(this.platformId)) {
+      const mainContent = document.getElementById('main-content');
+      if (mainContent) {
+        mainContent.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      } else {
+        // Fallback to window scroll
+        window.scrollTo({ 
+          top: 0, 
+          behavior: 'smooth' 
+        });
+      }
     }
   }
 
@@ -572,9 +575,11 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
    * Setup scroll listener for back to top button
    */
   private setupScrollListener(): void {
-    window.addEventListener('scroll', () => {
-      this.showBackToTop = window.pageYOffset > 300;
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      window.addEventListener('scroll', () => {
+        this.showBackToTop = window.pageYOffset > 300;
+      });
+    }
   }
 
   // ==================== WIZARD NAVIGATION METHODS ====================

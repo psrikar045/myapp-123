@@ -1,10 +1,12 @@
-import { Directive, ElementRef, HostListener, Input, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, Renderer2, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Directive({
   selector: '[appTooltip]',
   standalone: true
 })
 export class TooltipDirective {
+  private platformId = inject(PLATFORM_ID);
   @Input('appTooltip') tooltipText = '';
   @Input() placement: 'top' | 'bottom' | 'left' | 'right' = 'top';
   @Input() delay = 0;
@@ -47,7 +49,8 @@ export class TooltipDirective {
 
     const hostPos = this.el.nativeElement.getBoundingClientRect();
     const tooltipPos = this.tooltip.getBoundingClientRect();
-    const scrollPos = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    const scrollPos = isPlatformBrowser(this.platformId) ? 
+      (window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0) : 0;
 
     let top: number, left: number;
 

@@ -177,7 +177,7 @@ export class AppThemeService {
     this.applyTheme(this._themeConfig.value);
 
     // Listen for system theme changes
-    if (window.matchMedia) {
+    if (isPlatformBrowser(this.platformId) && window.matchMedia) {
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
         if (this._themeConfig.value.mode === 'auto') {
           this.applyTheme(this._themeConfig.value);
@@ -199,7 +199,7 @@ export class AppThemeService {
 
   private isSystemDarkMode(): boolean {
     if (!isPlatformBrowser(this.platformId)) return false;
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
 
   private loadFromStorage(): Partial<AppThemeConfig> | null {

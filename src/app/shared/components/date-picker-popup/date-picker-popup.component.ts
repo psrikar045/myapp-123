@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ElementRef, ViewChild, inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ModalConfig, ModalButton, ModalPopupComponent } from '../modal-popup/modal-popup.component';
 import { 
@@ -39,6 +39,8 @@ export interface DatePickerConfig {
   styleUrls: ['./date-picker-popup.component.scss']
 })
 export class DatePickerPopupComponent implements OnInit, OnDestroy {
+  private platformId = inject(PLATFORM_ID);
+  
   @Input() value: Date | string | null = null;
   @Input() config: DatePickerConfig = {};
   @Input() disabled = false;
@@ -101,11 +103,13 @@ export class DatePickerPopupComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.clickListener) {
-      document.removeEventListener('click', this.clickListener);
-    }
-    if (this.resizeListener) {
-      window.removeEventListener('resize', this.resizeListener);
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.clickListener) {
+        document.removeEventListener('click', this.clickListener);
+      }
+      if (this.resizeListener) {
+        window.removeEventListener('resize', this.resizeListener);
+      }
     }
     if (this.scrollListener) {
       window.removeEventListener('scroll', this.scrollListener, true);
@@ -201,7 +205,9 @@ export class DatePickerPopupComponent implements OnInit, OnDestroy {
       }, 300);
     };
 
-    window.addEventListener('resize', this.resizeListener);
+    if (isPlatformBrowser(this.platformId)) {
+      window.addEventListener('resize', this.resizeListener);
+    }
     // Don't add scroll listener to prevent conflicts
   }
 

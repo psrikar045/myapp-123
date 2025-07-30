@@ -256,10 +256,12 @@ export class ValidationUtils {
 // Browser utilities
 export class BrowserUtils {
   static isMobile(): boolean {
+    if (typeof navigator === 'undefined') return false;
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
   }
 
   static isTablet(): boolean {
+    if (typeof navigator === 'undefined') return false;
     return /iPad|Android(?!.*Mobile)/i.test(navigator.userAgent);
   }
 
@@ -268,6 +270,9 @@ export class BrowserUtils {
   }
 
   static getViewportSize(): { width: number; height: number } {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return { width: 1024, height: 768 }; // Default fallback
+    }
     return {
       width: Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0),
       height: Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
@@ -275,6 +280,10 @@ export class BrowserUtils {
   }
 
   static copyToClipboard(text: string): Promise<void> {
+    if (typeof navigator === 'undefined' || typeof document === 'undefined') {
+      return Promise.reject(new Error('Clipboard API not available in SSR'));
+    }
+    
     if (navigator.clipboard) {
       return navigator.clipboard.writeText(text);
     } else {
@@ -291,6 +300,11 @@ export class BrowserUtils {
   }
 
   static downloadFile(data: Blob, filename: string): void {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      console.warn('File download not available in SSR');
+      return;
+    }
+    
     const url = window.URL.createObjectURL(data);
     const link = document.createElement('a');
     link.href = url;

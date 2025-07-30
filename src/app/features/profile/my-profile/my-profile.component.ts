@@ -438,6 +438,11 @@ if (this.dobShow) {
   }
 
   async startCamera() {
+    if (typeof navigator === 'undefined' || !navigator.mediaDevices) {
+      console.warn('Camera API not available in SSR');
+      return;
+    }
+    
     try {
       this.mediaStream = await navigator.mediaDevices.getUserMedia({ 
         video: { 
