@@ -1,26 +1,21 @@
-<!-- Bootstrap Responsive Hero Section -->
+<!-- Hero Section -->
 <section class="hero-section position-relative overflow-hidden" id="brands-section">
-  <!-- Background Elements -->
   <div class="hero-bg-elements">
     <img src="assets/landing/SectionBg1.png" alt="Decorative Circle" class="hero-yellow-circle position-absolute d-none d-lg-block" />
   </div>
   <div class="container pad100">
-    <div class="row align-items-center py-4 heroZidex">
-      <!-- Left Column: Content -->
+    <div class="row align-items-center py-4">
       <div class="col-lg-6 col-12 order-2 order-lg-1">
         <div class="hero-content">
-          <!-- Main Headline -->
           <div class="hero-white-circle position-absolute rounded-circle"></div>
           <h1 class="hero-headline display-3 fw-bold mb-4 fade-in-up">
             {{ heroHeadline.main }}<br class="d-none d-md-block"> 
             {{ heroHeadline.main1 }}<br class="d-none d-md-block"> 
             <span class="hero-highlight text-gradient">{{ heroHeadline.highlight }}</span>
           </h1>
-          <!-- Subheadline -->
           <p class="hero-subheadline lead text-muted mb-4 fade-in-up" style="animation-delay: 0.2s;">
             {{ heroSubheadline }}
           </p>
-          <!-- Search Bar -->
           <div class="hero-search-container mb-4 fade-in-up" style="animation-delay: 0.4s;">
             <form class="hero-search-form position-relative" autocomplete="off">
               <div class="input-group input-group-lg shadow-lg">
@@ -44,7 +39,6 @@
               </div>
             </form>
           </div>
-          <!-- Ratings Block -->
           <div class="hero-rating-container fade-in-up" style="animation-delay: 0.6s;">
               <div class="row align-items-center g-3">
                 <div class="col-auto">
@@ -70,7 +64,6 @@
           </div>
         </div>
       </div>
-      <!-- Right Column: Illustration -->
       <div class="col-lg-6 col-12 order-1 order-lg-2 mb-5 mb-lg-0">
         <div class="hero-illustration text-center">
           <img src="assets/landing/Hero_img.png" alt="RIVO9 Hero Illustration" class="img-fluid hero-main-image fade-in-up" style="animation-delay: 0.3s; max-height: 500px;" loading="lazy">
@@ -79,51 +72,44 @@
     </div>
   </div>
 </section>
+<!-- Hero Section End -->
 
-
-<!-- Company Logos Section -->
-<section class="company-logos-section py-5 bg-white">
-  <div class="container">
-    <div class="row">
-      <div class="col-12 text-center mb-4">
-        <h3 class="fw-bold text-muted">Trusted by leading companies</h3>
-      </div>
-    </div>
+<!-- Logos Section -->
+<section class="company-logos-section">
+  <div class="container pad100">
     <div class="row justify-content-center align-items-center g-4">
       <div class="col-lg-2 col-md-3 col-sm-4 col-6" *ngFor="let logo of orbitLogos">
         <div class="logo-container text-center">
-           <!-- style="max-height: 60px; opacity: 0.7; transition: opacity 0.3s ease;" -->
-          <img [src]="logo.src" 
-               [alt]="logo.alt" 
-               class="img-fluid company-logo"
+          <img [src]="logo.src" [alt]="logo.alt" class="img-fluid company-logo"
                (mouseenter)="onLogoHover($event, true)"
-               (mouseleave)="onLogoHover($event, false)">
+               (mouseleave)="onLogoHover($event, false)" style="opacity: 1 !important;">
         </div>
       </div>
     </div>
   </div>
 </section>
+<!-- Logos Section End -->
+
 
 <!-- Features Section -->
 <section class="features-section section-padding SectionProperties">
-  <img src="assets/landing/SectionBg3.png" alt="RIVO9" class="SectionBgImage" />
-  <div class="container">
+  <div class="container pad100">
+      <img src="assets/landing/SectionBg3.png" alt="RIVO9" class="SectionBgImage" />
     <div class="row text-center mb-5">
       <div class="col-12">
-        <h2 class="display-5 fw-bold mb-3">Why Choose RIVO9?</h2>
-        <p class="lead text-muted">Everything you need to integrate brand assets into your applications</p>
+        <h2 class="h2FontSize mb-3">Why Choose RIVO9?</h2>
+        <p class="lead rivo9-section-subtitle">Everything you need to integrate brand assets into your applications</p>
       </div>
     </div>
-    
     <div class="row g-4">
-      <div class="col-lg-4 col-md-6 col-12" *ngFor="let feature of features; let i = index">
-        <div class="card h-100 border-0 shadow-sm hover-lift">
+      <div class="col-lg-3 col-md-6 col-12 " *ngFor="let feature of features; let i = index">
+        <div class="card h-100 border-0 shadow-sm hover-lift rivo9-feature-card" [ngClass]="'rivo9-card-' + i">
           <div class="card-body text-center p-4">
             <div class="feature-icon mb-3">
-              <i [class]="feature.icon" class="display-4 text-primary"></i>
+              <i [class]="feature.icon" class="display-4"></i>
             </div>
             <h5 class="card-title fw-bold mb-3">{{ feature.title }}</h5>
-            <p class="card-text text-muted">{{ feature.description }}</p>
+            <p class="card-text pt-2">{{ feature.description }} </p>
           </div>
         </div>
       </div>
@@ -131,60 +117,15 @@
   </div>
 </section>
 
-<!-- Stats Section -->
-<section class="stats-section section-padding">
-  <div class="container">
-    <div class="row text-center g-4">
-      <div class="col-lg-3 col-md-6 col-12" *ngFor="let stat of stats">
-        <div class="stat-item">
-          <div class="stat-number display-4 fw-bold mb-2">{{ stat.number }}</div>
-          <div class="stat-label">{{ stat.label }}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Core Capabilities Section -->
-<section class="core-capabilities-section py-5 bg-light position-relative">
-  <div class="container">
-    <div class="row text-center mb-5">
-      <div class="col-12">
-        <h2 class="display-5 fw-bold mb-3">{{ coreHeadline }}</h2>
-        <p class="lead text-muted">{{ coreSubheadline }}</p>
-      </div>
-    </div>
-    
-    <div class="row g-4">
-      <div class="col-lg-4 col-md-6 col-12" *ngFor="let card of cards">
-        <div class="card h-100 border-0 shadow-sm text-center hover-lift">
-          <div class="card-body p-4">
-            <div class="capability-icon mb-3">
-              <i [class]="card.icon" class="display-4 text-primary"></i>
-            </div>
-            <h5 class="card-title fw-bold">{{ card.title }}</h5>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Background Illustration -->
-  <div class="position-absolute top-50 end-0 translate-middle-y d-none d-xl-block" style="z-index: -1;">
-    <img src="landing/Group 1000003638.svg" 
-         alt="Background Illustration" 
-         class="img-fluid opacity-25"
-         style="max-width: 300px;">
-  </div>
-</section>
+ 
 
 <!-- Dynamic Sections -->
 <div class="dynamic-sections">
   <section *ngFor="let section of allSections; let i = index" 
-           class="py-5"
+           class="section-padding"
            [class.bg-light]="i % 2 === 0"
            [id]="i === 1 ? 'developers-section' : null">
-    <div class="container">
+    <div class="container pad100">
       <div class="row align-items-center g-5">
         
         <!-- Content Column -->
@@ -199,7 +140,7 @@
             <!-- Feature Cards -->
             <div class="row g-3" *ngIf="section.cards">
               <div class="col-md-6 col-12" *ngFor="let card of section.cards">
-                <div class="d-flex align-items-start">
+                <div class="d-flex align-items-start cardBg">
                   <div class="feature-icon me-3 mt-1">
                     <i [class]="card.icon" class="text-primary fs-4"></i>
                   </div>

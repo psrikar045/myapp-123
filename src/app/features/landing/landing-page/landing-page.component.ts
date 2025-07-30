@@ -35,33 +35,23 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     {
       icon: 'bi bi-lightning-charge',
       title: 'Lightning Fast',
-      description: 'Get brand assets instantly with our optimized API endpoints and CDN delivery.'
+      description: 'Learn More'
     },
     {
       icon: 'bi bi-shield-check',
       title: 'Always Accurate',
-      description: 'Our AI-powered system ensures you get the most up-to-date brand information.'
+      description: 'Learn More'
     },
     {
       icon: 'bi bi-code-slash',
       title: 'Developer Friendly',
-      description: 'Simple REST API with comprehensive documentation and SDKs for popular languages.'
+      description: 'Learn More'
     },
     {
       icon: 'bi bi-palette',
       title: 'Rich Brand Data',
-      description: 'Access logos, colors, fonts, social links, and more for thousands of brands.'
+      description: 'Learn More'
     },
-    {
-      icon: 'bi bi-graph-up',
-      title: 'Scalable',
-      description: 'From startup to enterprise, our infrastructure scales with your needs.'
-    },
-    {
-      icon: 'bi bi-headset',
-      title: '24/7 Support',
-      description: 'Get help when you need it with our dedicated developer support team.'
-    }
   ];
 
   stats = [
@@ -281,8 +271,8 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   ];
   // Hero section logic
   heroHeadline = {
-    main: 'Fetch Company',
-    main1: 'Brand Data Instantly with',
+    main: "Know any company's",
+    main1: 'Brand reputation instantly with',
     highlight: 'RIVO9',
     waveIcon: true
   };
