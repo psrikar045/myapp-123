@@ -28,7 +28,7 @@ export class BlogService {
     },
     {
       img: 'assets/images/Image (2).jpg',
-      author: 'july 20, 2025',
+      author: 'Balakrishna',
       date: 'August 15, 2022',
       title: 'How to Automatically Fetch Logos, Brand Colors & Fonts Using RIVO9 API',
       summary:'Step-by-step guide on how to integrate RIVO9 with your application and automatically pull visual brand assets from any domain in seconds.',

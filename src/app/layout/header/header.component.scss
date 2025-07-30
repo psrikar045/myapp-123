@@ -25,15 +25,17 @@
   // Adjust header position based on sidenav state
   &.with-sidenav-expanded {
     @include media-breakpoint-up(lg) {
-      left: 280px;
-      width: calc(100% - 280px);
+      left: 280px !important;
+      width: calc(100% - 280px) !important;
+      max-width: calc(100% - 280px) !important;
     }
   }
   
   &.with-sidenav-collapsed {
     @include media-breakpoint-up(lg) {
-      left: 70px;
-      width: calc(100% - 70px);
+      left: 70px !important;
+      width: calc(100% - 70px) !important;
+      max-width: calc(100% - 70px) !important;
     }
   }
   

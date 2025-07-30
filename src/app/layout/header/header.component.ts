@@ -117,6 +117,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.currentTheme = isDark ? 'dark' : 'light';
       });
 
+    // Subscribe to sidenav config changes to handle collapse/expand transitions
+    this.sidenavService.config$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(config => {
+        // Force header layout adjustment when sidenav state changes
+        if (isPlatformBrowser(this.platformId)) {
+          setTimeout(() => {
+            this.adjustHeaderForSidenavState(config.collapsed);
+          }, 0);
+        }
+      });
+
     // Initialize responsive behavior
     this.initializeResponsiveBehavior();
   }
@@ -198,6 +210,40 @@ export class HeaderComponent implements OnInit, OnDestroy {
         navbar.style.maxWidth = '100vw';
       }
     });
+  }
+
+  /**
+   * Adjust header positioning based on sidenav collapsed state
+   */
+  private adjustHeaderForSidenavState(isCollapsed: boolean): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const navbar = document.querySelector('.navbar') as HTMLElement;
+    if (!navbar) return;
+
+    // Check if user is authenticated and sidenav should be visible
+    const isAuthenticated = this.authService.isAuthenticated();
+    const shouldShowSidenav = isAuthenticated && this.sidenavService.shouldShowSidenavForRoute(this.currentRoute, isAuthenticated);
+
+    if (shouldShowSidenav && typeof window !== 'undefined' && window.innerWidth >= 992) {
+      // Desktop with sidenav visible
+      if (isCollapsed) {
+        // Collapsed sidenav - 70px width
+        navbar.style.left = '70px';
+        navbar.style.width = 'calc(100% - 70px)';
+        navbar.style.maxWidth = 'calc(100% - 70px)';
+      } else {
+        // Expanded sidenav - 280px width  
+        navbar.style.left = '280px';
+        navbar.style.width = 'calc(100% - 280px)';
+        navbar.style.maxWidth = 'calc(100% - 280px)';
+      }
+    } else {
+      // Mobile or no sidenav - full width
+      navbar.style.left = '0px';
+      navbar.style.width = '100%';
+      navbar.style.maxWidth = '100%';
+    }
   }
 login() {
 this.authService.checkAuthStatusAndNavigate();
@@ -335,6 +381,14 @@ this.authService.checkAuthStatusAndNavigate();
 
   toggleSidenav() {
     this.sidenavService.toggleCollapsed();
+    
+    // Force immediate header adjustment after toggle
+    if (isPlatformBrowser(this.platformId)) {
+      setTimeout(() => {
+        const currentConfig = this.sidenavService.getCurrentConfig();
+        this.adjustHeaderForSidenavState(currentConfig.collapsed);
+      }, 0);
+    }
   }
 
   toggleTheme() {
