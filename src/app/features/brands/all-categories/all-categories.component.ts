@@ -506,7 +506,10 @@ getAllCategories() {
   goToBrand(brand: any) {
     this.utilService.searchResult = brand; // Set the selected brand for search-view
     const brandName = encodeURIComponent(brand.name);
-    this.router.navigate(['/search/view', brandName], { queryParams: { from: 'brands' } });
+     this.router.navigate(['/search/view', brandName], { 
+      queryParams: { from: 'brands' },
+      state: { brandData: brand }
+    });
   }
 
   // Returns a style object for the brand card background using top 2 colors as a gradient

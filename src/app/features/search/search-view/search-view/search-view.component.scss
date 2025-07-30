@@ -1,9 +1,49 @@
 /* ============================================================================
-   RESPONSIVE SEARCH VIEW STYLES
+   ENHANCED SEARCH VIEW STYLES WITH DARK/LIGHT THEME SUPPORT
    ============================================================================ */
 
+// CSS Variables for Theme Support
+:root {
+  // Light Theme Variables
+  --bg-primary: linear-gradient(120deg, #f8fafc 0%, #fbeee6 100%);
+  --bg-secondary: rgba(255, 255, 255, 0.85);
+  --bg-card: #ffffff;
+  --bg-overlay: rgba(255, 255, 255, 0.7);
+  --text-primary: #181c32;
+  --text-secondary: #23272f;
+  --text-muted: #6b7280;
+  --border-color: #f3f6fd;
+  --shadow-light: 0 2px 16px rgba(37, 99, 235, 0.06);
+  --shadow-medium: 0 4px 24px rgba(37, 99, 235, 0.10);
+  --shadow-heavy: 0 8px 32px rgba(37, 99, 235, 0.18);
+  --accent-primary: #2563eb;
+  --accent-secondary: #e6f7fa;
+}
+
+[data-theme="dark"] {
+  // Dark Theme Variables
+  --bg-primary: linear-gradient(120deg, #1a1a1a 0%, #2d2d2d 100%);
+  --bg-secondary: rgba(58, 58, 58, 0.85);
+  --bg-card: #3a3a3a;
+  --bg-overlay: rgba(58, 58, 58, 0.7);
+  --text-primary: #ffffff;
+  --text-secondary: #e5e7eb;
+  --text-muted: #9ca3af;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --shadow-light: 0 2px 16px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 4px 24px rgba(0, 0, 0, 0.4);
+  --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --accent-primary: #3b82f6;
+  --accent-secondary: rgba(59, 130, 246, 0.2);
+}
+
+// Main Container
 .search-view-container {
-  background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+  font-family: "Inter", sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  margin: 0;
+  padding: 0;
   min-height: 100vh;
   padding-top: 2rem;
   
@@ -12,343 +52,746 @@
   }
 }
 
-// Company Banner Card
-.company-banner-card {
-  border-radius: 1rem;
+.container-fluid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 20px 64px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-top: 137px;
+  border-radius: 32px;
+  margin-bottom: 40px;
+
+  @media (max-width: 900px) {
+    padding: 0 4px 32px 4px;
+    margin-top: 80px;
+    gap: 24px;
+  }
+
+  @media (max-width: 1200px) {
+    max-width: 98vw;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+}
+
+// Back Arrow Button
+.back-arrow-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  color: var(--accent-primary);
+  border: none;
+  font-size: 1.1rem;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    color: var(--accent-primary);
+    transform: translateX(-2px);
+  }
+
+  svg {
+    transition: transform 0.2s ease;
+  }
+
+  &:hover svg {
+    transform: translateX(-2px);
+  }
+}
+
+// Company Banner
+.company-banner-wrapper {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  left: 0;
+  right: 0;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 32px;
+}
+
+.company-banner {
+  width: 100%;
+  max-width: 1400px;
+  height: 260px;
+  border-radius: 32px;
   overflow: hidden;
-  
-  .banner-wrapper {
-    .banner-image {
-      transition: transform 0.3s ease;
-    }
-    
-    &:hover .banner-image {
-      transform: scale(1.02);
-    }
-    
-    .company-logo-wrapper {
-      .logo-circle {
-        transition: all 0.3s ease;
-        border: 3px solid #ffffff;
-        
-        &:hover {
-          transform: scale(1.1);
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .company-logo {
-          transition: transform 0.3s ease;
-        }
-      }
-    }
+  position: relative;
+  background: var(--text-primary);
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  margin: 0 auto;
+  z-index: 1;
+  box-shadow: var(--shadow-medium);
+
+  @media (max-width: 900px) {
+    height: 140px;
+    max-width: 98vw;
+    border-radius: 18px;
   }
 }
 
-// Brand Info Card
-.brand-info-card {
-  border-radius: 1rem;
-  
-  .brand-header {
-    .brand-name {
-      color: #1a1a1a;
-      line-height: 1.2;
-      
-      @media (max-width: 767.98px) {
-        font-size: 2rem;
-      }
-    }
-    
-    .badge {
-      font-size: 0.8rem;
-      padding: 0.5rem 1rem;
-    }
+.banner-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  filter: brightness(0.8) contrast(1.1);
+  transition: filter 0.3s ease;
+}
+
+.banner-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
+
+.banner-logo-circle {
+  width: 110px;
+  height: 110px;
+  background: var(--bg-card);
+  border-radius: 50%;
+  box-shadow: var(--shadow-heavy), 0 0 0 8px var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  bottom: -55px;
+  left: 40px;
+  z-index: 10;
+  border: 4px solid var(--bg-card);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-heavy), 0 0 0 12px var(--border-color);
   }
-  
-  .social-links {
-    a {
-      transition: all 0.3s ease;
-      
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-      }
-    }
+
+  @media (max-width: 900px) {
+    width: 60px;
+    height: 60px;
+    left: 16px;
+    bottom: -30px;
   }
 }
 
-// Description Card
-.description-card {
-  border-radius: 1rem;
-  
-  .description-content {
-    .btn-link {
-      font-weight: 600;
-      text-decoration: none;
-      
-      &:hover {
-        text-decoration: underline;
-      }
-      
-      &.disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-      }
-    }
+.banner-logo {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 12px rgba(37, 99, 235, 0.2));
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  position: static;
+  transition: transform 0.3s ease;
+
+  @media (max-width: 900px) {
+    width: 36px;
+    height: 36px;
   }
 }
 
-// Filter Card
-.filter-card {
-  border-radius: 1rem;
-  
-  .btn {
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border-radius: 2rem;
-    padding: 0.5rem 1.5rem;
-    
+.default-banner-logo {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, var(--accent-primary) 0%, #764ba2 100%);
+  border-radius: 50%;
+  color: white;
+  font-size: 32px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (max-width: 900px) {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+}
+
+// Brand Info Row
+.brand-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 45px;
+  margin-bottom: 24px;
+  gap: 32px;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 30px;
+  }
+}
+
+.brand-info-main {
+  flex: 1 1 60%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-left: 40px;
+
+  @media (max-width: 900px) {
+    padding-left: 10px;
+  }
+}
+
+.brand-title-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 8px;
+}
+
+.brand-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  text-align: left;
+  line-break: auto;
+  line-height: 1;
+  margin: 0;
+
+  @media (max-width: 900px) {
+    font-size: 1.3rem;
+  }
+}
+
+.claimed-badge {
+  display: flex;
+  align-items: center;
+  background: var(--accent-secondary);
+  color: var(--accent-primary);
+  border-radius: 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 4px 14px 4px 10px;
+  margin-left: 8px;
+  gap: 6px;
+
+  i {
+    font-size: 1.2rem;
+    margin-right: 4px;
+  }
+}
+
+.brand-info-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 16px;
+  min-width: 180px;
+
+  @media (max-width: 900px) {
+    min-width: 100px;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+.share-btn {
+  background: var(--bg-card);
+  color: var(--accent-primary);
+  border: 1.5px solid var(--accent-primary);
+  border-radius: 18px;
+  padding: 7px 18px;
+  font-size: 1.05rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow-light);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+
+  i {
+    font-size: 1.2rem;
+  }
+
+  &:hover {
+    background: var(--accent-primary);
+    color: var(--bg-card);
+    transform: translateY(-2px);
+  }
+}
+
+.company-socials {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+
+  a {
+    text-decoration: none;
+    margin: 0 4px;
+    display: inline-flex;
+    align-items: center;
+    transition: transform 0.2s ease;
+
     &:hover {
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
+
+    i.bi {
+      font-size: 1.7rem;
+      color: var(--accent-primary);
+      background: var(--bg-card);
+      border-radius: 50%;
+      padding: 4px;
+      box-shadow: var(--shadow-light);
+      transition: all 0.2s ease;
+      vertical-align: middle;
+
+      &:hover {
+        filter: brightness(1.2);
+        transform: scale(1.15);
+      }
+    }
+
+    &[aria-label="Instagram"] i { color: #E1306C; }
+    &[aria-label="LinkedIn"] i { color: #0077B5; }
+    &[aria-label="Facebook"] i { color: #1877F3; }
+    &[aria-label="Twitter"] i { color: #1DA1F2; }
+  }
+}
+
+// Brand Description
+.brand-description {
+  font-size: 1.15rem;
+  color: var(--text-secondary);
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  margin-bottom: 0;
+  text-align: left;
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  margin-left: 0;
+  margin-top: -28px;
+  padding: 0px 40px;
+
+  @media (max-width: 900px) {
+    padding: 0px 10px;
+    font-size: 1.05rem;
+  }
+}
+
+.view-more-btn-inline {
+  color: var(--accent-primary);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    text-decoration: underline;
+    color: var(--accent-primary);
+  }
+
+  &.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Filter Buttons
+.company-filters {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 32px;
+  box-shadow: var(--shadow-light);
+  padding: 12px 20px;
+  align-items: center;
+  margin-bottom: 24px;
+
+  @media (max-width: 767.98px) {
+    gap: 12px;
+    padding: 10px 16px;
+  }
+
+  &.no-brand-margin {
+    margin-top: 28px !important;
+  }
+}
+
+.filter-btn {
+  background: var(--bg-card, #ffffff);
+  color: var(--accent-primary, #2563eb);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 18px;
+  padding: 10px 32px;
+  font-size: 1.12rem;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--shadow-light);
+  transition: all 0.2s ease;
+  margin: 0 2px;
+  position: relative;
+
+  @media (max-width: 767.98px) {
+    padding: 8px 20px;
+    font-size: 1rem;
+  }
+
+  &.active {
+    background: var(--accent-primary, #2563eb) !important;
+    color: #ffffff !important;
+    border-color: var(--accent-primary, #2563eb) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+    font-weight: 700 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 2;
+  }
+
+  &:hover:not(.active) {
+    background: var(--accent-secondary);
+    color: var(--accent-primary);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-medium);
+  }
+}
+
+// Additional specificity for active filter buttons
+.company-filters .filter-btn.active {
+  background: #2563eb !important;
+  color: #ffffff !important;
+  border-color: #2563eb !important;
+  font-weight: 700 !important;
+}
+
+// Dark theme specific styles for filter buttons
+[data-theme="dark"] .company-filters .filter-btn {
+  background: #3a3a3a;
+  color: #3b82f6;
+  border-color: rgba(255, 255, 255, 0.1);
+  
+  &.active {
+    background: #3b82f6 !important;
+    color: #ffffff !important;
+    border-color: #3b82f6 !important;
+  }
+  
+  &:hover:not(.active) {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+  }
+}
+
+// Company Sections
+.company-section {
+  margin-bottom: 32px;
+  background: var(--bg-secondary);
+  border-radius: 28px;
+  box-shadow: var(--shadow-light);
+  padding: 40px 40px 32px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 32px;
+  animation: fadeInUp 0.6s ease-out;
+
+  @media (max-width: 900px) {
+    padding: 18px 8px 18px 8px;
+    border-radius: 18px;
+    gap: 18px;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    font-size: 2.1rem;
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 18px;
+    margin-top: 0;
+
+    @media (max-width: 767.98px) {
+      font-size: 1.8rem;
+    }
+  }
+}
+
+.company-section-desc {
+  font-size: 1.12rem;
+  color: var(--text-secondary);
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  margin-bottom: 12px;
+  max-width: 800px;
+  line-height: 1.6;
+
+  @media (max-width: 767.98px) {
+    font-size: 1rem;
+  }
+}
+
+// Logos Section
+.company-logos {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  margin-bottom: 0;
+  justify-content: flex-start;
+
+  @media (max-width: 900px) {
+    gap: 14px;
+    justify-content: center;
+  }
+}
+
+.logo-card {
+  background: var(--bg-card);
+  border-radius: 22px;
+  box-shadow: var(--shadow-medium);
+  padding: 32px 22px 20px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 130px;
+  min-height: 130px;
+  transition: all 0.3s ease;
+  border: 1.5px solid var(--border-color);
+  gap: 10px;
+
+  &:hover {
+    box-shadow: var(--shadow-heavy);
+    transform: translateY(-4px) scale(1.04);
+  }
+
+  img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin-bottom: 0;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.1);
+  }
+}
+
+.logo-labels {
+  display: flex;
+  gap: 10px;
+  font-size: 1.05rem;
+  color: var(--accent-primary);
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  text-align: center;
+}
+
+// Color Palette
+.company-color-palette {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 22px 22px;
+  margin-bottom: 0;
+  width: 100%;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 8px;
+  }
+
+  @media (max-width: 575.98px) {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 12px;
+  }
+}
+
+.color-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  height: 72px;
+  border-radius: 14px;
+  padding: 14px 16px 10px 16px;
+  color: #fff;
+  font-size: 1.08rem;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  box-shadow: var(--shadow-medium);
+  position: relative;
+  min-width: 120px;
+  margin-bottom: 0;
+  border: 1.5px solid var(--border-color);
+  background-clip: padding-box;
+  gap: 2px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: var(--shadow-heavy);
+  }
+
+  span:last-child {
+    font-size: 0.92rem;
+    font-weight: 400;
+    color: #f7f8fa;
+    opacity: 0.85;
+  }
+
+  &[style*="#FFFFFF"],
+  &[style*="#ffffff"],
+  &[style*="#fff"] {
+    color: #222b45 !important;
+    border: 1.5px solid #e0e0e0;
     
-    &.active {
-      background-color: var(--bs-primary);
-      border-color: var(--bs-primary);
-      color: #ffffff;
+    span:last-child {
+      color: #666 !important;
+    }
+  }
+}
+
+// Fonts Section
+.company-fonts-display {
+  width: 100%;
+
+  .font-preview-card {
+    border: 1px solid var(--border-color);
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    background-color: var(--bg-card);
+    box-shadow: var(--shadow-light);
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: var(--shadow-medium);
       transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(var(--bs-primary-rgb), 0.4);
     }
-  }
-}
 
-// Logos Section Card
-.logos-section-card {
-  border-radius: 1rem;
-  
-  .logo-item {
-    transition: all 0.3s ease;
-    border-radius: 0.75rem;
-    
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    .font-name {
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: var(--text-primary);
     }
-    
-    .logo-image-wrapper {
-      img {
-        transition: transform 0.3s ease;
-      }
-    }
-    
-    &:hover .logo-image-wrapper img {
-      transform: scale(1.1);
-    }
-    
-    .logo-info {
-      h6 {
-        color: #1a1a1a;
+
+    .font-sample-text {
+      font-size: 1.1em;
+      line-height: 1.4;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+
+      .font-details {
+        font-size: 0.9em;
+        color: var(--text-muted);
+        display: block;
+        margin-top: 5px;
       }
     }
   }
 }
 
-// Colors Section Card
-.colors-section-card {
-  border-radius: 1rem;
-  
-  .color-swatch-card {
-    transition: all 0.3s ease;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    }
-    
-    .color-preview {
-      transition: transform 0.3s ease;
-    }
-    
-    &:hover .color-preview {
-      transform: scale(1.05);
-    }
-    
-    .card-body {
-      small {
-        &.fw-bold {
-          color: #1a1a1a;
-        }
-      }
-    }
+// Images Gallery
+.company-images-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 15px;
+  padding: 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background-color: var(--bg-overlay);
+  width: 100%;
+
+  @media (max-width: 767.98px) {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    padding: 10px;
   }
 }
 
-// Empty State Styles
-.text-center {
+.image-card {
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-light);
+  background-color: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-medium);
+    transform: translateY(-2px);
+  }
+
+  img {
+    width: 100%;
+    height: 150px;
+    object-fit: contain;
+    background-color: var(--bg-overlay);
+    padding: 10px;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.05);
+  }
+}
+
+// No Content Messages
+.no-content-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  width: 100%;
+
   i.display-1 {
     opacity: 0.5;
+    color: var(--text-muted);
   }
-  
+
   h5 {
     margin-bottom: 0.5rem;
+    color: var(--text-muted);
   }
-  
+
   p {
     margin-bottom: 0;
+    color: var(--text-muted);
   }
 }
 
-// Responsive Adjustments
-@media (max-width: 991.98px) {
-  .company-banner-card {
-    .banner-wrapper {
-      .company-logo-wrapper {
-        left: 1rem !important;
-        
-        .logo-circle {
-          width: 70px !important;
-          height: 70px !important;
-          
-          .company-logo {
-            max-width: 50px !important;
-            max-height: 50px !important;
-          }
-        }
-      }
-    }
-  }
-  
-  .brand-info-card {
-    .card-body {
-      padding-top: 2.5rem !important;
-    }
-    
-    .social-links {
-      justify-content: center !important;
-      margin-top: 1rem;
-    }
-  }
-}
-
-@media (max-width: 767.98px) {
-  .search-view-container {
-    .container-fluid {
-      padding-left: 1rem;
-      padding-right: 1rem;
-    }
-  }
-  
-  .company-banner-card {
-    .banner-wrapper {
-      .banner-image {
-        height: 150px !important;
-      }
-      
-      .company-logo-wrapper {
-        bottom: -25px !important;
-        left: 50% !important;
-        transform: translateX(-50%);
-        
-        .logo-circle {
-          width: 60px !important;
-          height: 60px !important;
-          
-          .company-logo {
-            max-width: 40px !important;
-            max-height: 40px !important;
-          }
-        }
-      }
-    }
-  }
-  
-  .brand-info-card {
-    .card-body {
-      text-align: center;
-      padding-top: 2rem !important;
-    }
-    
-    .brand-header {
-      .brand-name {
-        font-size: 1.75rem;
-      }
-    }
-    
-    .social-links {
-      justify-content: center !important;
-    }
-  }
-  
-  .filter-card {
-    .d-flex {
-      justify-content: center !important;
-    }
-    
-    .btn {
-      font-size: 0.9rem;
-      padding: 0.4rem 1rem;
-    }
-  }
-  
-  .logos-section-card,
-  .colors-section-card {
-    .card-body {
-      padding: 2rem 1rem !important;
-    }
-  }
-}
-
-@media (max-width: 575.98px) {
-  .company-banner-card {
-    .banner-wrapper {
-      .banner-image {
-        height: 120px !important;
-      }
-    }
-  }
-  
-  .brand-info-card {
-    .brand-header {
-      .brand-name {
-        font-size: 1.5rem;
-      }
-    }
-    
-    .social-links {
-      a {
-        width: 35px !important;
-        height: 35px !important;
-        
-        i {
-          font-size: 0.9rem;
-        }
-      }
-    }
-  }
-  
-  .filter-card {
-    .btn {
-      font-size: 0.85rem;
-      padding: 0.35rem 0.8rem;
-    }
-  }
-  
-  .colors-section-card {
-    .color-swatch-card {
-      .color-preview {
-        height: 60px !important;
-      }
-    }
-  }
-}
-
-// Animation for cards
-@keyframes cardFadeIn {
+// Animations
+@keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -356,68 +799,104 @@
   }
 }
 
-.company-banner-card,
-.brand-info-card,
-.description-card,
-.filter-card,
-.logos-section-card,
-.colors-section-card {
-  animation: cardFadeIn 0.6s ease-out;
+// Staggered animation delays
+.company-section:nth-child(1) { animation-delay: 0.1s; }
+.company-section:nth-child(2) { animation-delay: 0.2s; }
+.company-section:nth-child(3) { animation-delay: 0.3s; }
+.company-section:nth-child(4) { animation-delay: 0.4s; }
+.company-section:nth-child(5) { animation-delay: 0.5s; }
+
+// Alert Styles for Error Messages
+.alert {
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: none;
+  box-shadow: var(--shadow-light);
+
+  &.alert-warning {
+    background-color: #fef3cd;
+    color: #664d03;
+    
+    [data-theme="dark"] & {
+      background-color: rgba(255, 193, 7, 0.2);
+      color: #ffc107;
+    }
+  }
+
+  h4 {
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  p {
+    margin-bottom: 15px;
+  }
+
+  .btn {
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+  }
 }
 
-.brand-info-card { animation-delay: 0.1s; }
-.description-card { animation-delay: 0.2s; }
-.filter-card { animation-delay: 0.3s; }
-.logos-section-card { animation-delay: 0.4s; }
-.colors-section-card { animation-delay: 0.5s; }
-
-// Dark Theme Support
-[data-bs-theme="dark"] {
+// Responsive Design Enhancements
+@media (max-width: 575.98px) {
   .search-view-container {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  }
-  
-  .company-banner-card,
-  .brand-info-card,
-  .description-card,
-  .filter-card,
-  .logos-section-card,
-  .colors-section-card {
-    background-color: #3a3a3a;
-    border-color: rgba(255, 255, 255, 0.1);
-    
-    .card-header {
-      background-color: #2d2d2d;
-      border-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    .card-title,
-    .brand-name,
-    h3, h5, h6 {
-      color: #ffffff;
-    }
-    
-    .card-text,
-    p {
-      color: #b0b0b0;
+    .container-fluid {
+      padding-left: 10px;
+      padding-right: 10px;
     }
   }
-  
-  .logo-item,
-  .color-swatch-card {
-    background-color: #2d2d2d;
-    border-color: rgba(255, 255, 255, 0.1);
+
+  .brand-title {
+    font-size: 1.5rem !important;
+  }
+
+  .company-section {
+    padding: 15px 10px !important;
     
-    .logo-info h6 {
-      color: #ffffff;
+    h2 {
+      font-size: 1.5rem !important;
     }
+  }
+
+  .company-section-desc {
+    font-size: 0.95rem !important;
+  }
+
+  .filter-btn {
+    padding: 6px 16px !important;
+    font-size: 0.9rem !important;
+  }
+
+  .logo-card {
+    min-width: 100px !important;
+    min-height: 100px !important;
+    padding: 20px 15px 15px 15px !important;
+
+    img {
+      width: 50px !important;
+      height: 50px !important;
+    }
+  }
+
+  .color-swatch {
+    height: 60px !important;
+    min-width: 100px !important;
+    font-size: 1rem !important;
+  }
+
+  .company-images-gallery {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)) !important;
     
-    small {
-      color: #b0b0b0;
-      
-      &.fw-bold {
-        color: #ffffff;
-      }
+    .image-card img {
+      height: 120px !important;
     }
   }
 }
@@ -425,51 +904,19 @@
 // Print Styles
 @media print {
   .search-view-container {
-    background: #ffffff !important;
+    background: white !important;
+    color: black !important;
   }
-  
-  .company-banner-card,
-  .brand-info-card,
-  .description-card,
-  .filter-card,
-  .logos-section-card,
-  .colors-section-card {
-    background: #ffffff !important;
-    box-shadow: none !important;
-    border: 1px solid #000000;
-  }
-  
-  .btn {
-    display: none !important;
-  }
-  
-  .social-links {
-    display: none !important;
-  }
-}
 
-// Reduced Motion
-@media (prefers-reduced-motion: reduce) {
-  .company-banner-card,
-  .brand-info-card,
-  .description-card,
-  .filter-card,
-  .logos-section-card,
-  .colors-section-card,
-  .logo-item,
-  .color-swatch-card,
-  .btn,
-  .banner-image,
-  .company-logo,
-  .logo-circle {
-    transition: none !important;
-    animation: none !important;
+  .back-arrow-btn,
+  .share-btn,
+  .company-socials {
+    display: none !important;
   }
-  
-  .company-banner-card:hover .banner-image,
-  .logo-item:hover,
-  .color-swatch-card:hover,
-  .btn:hover {
-    transform: none !important;
+
+  .company-section {
+    break-inside: avoid;
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
   }
 }

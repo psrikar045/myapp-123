@@ -41,12 +41,32 @@ export class SearchViewComponent implements OnInit, OnDestroy {
     this.themeSubscription = this.appThemeService.isDarkMode$.subscribe((isDark: boolean) => {
       this.isDarkMode = isDark;
     });
-    // Get initial dark mode state
-    this.appThemeService.isDarkMode$.subscribe(isDark => this.isDarkMode = isDark);
-    const rawResult = this.utilService.searchResult;
     
-    // Debug logging
-    console.log('Raw search result:', rawResult);
+    // Check for route state data first (fallback for navigation issues)
+    const navigation = this.router.getCurrentNavigation();
+    const routeStateData = navigation?.extras?.state?.['brandData'] || 
+                          (history.state && history.state.brandData);
+    
+    if (routeStateData) {
+      console.log('SearchViewComponent: Found brand data in route state:', routeStateData);
+      this.processSearchResult(routeStateData);
+      // Also update the service with the route data
+      this.utilService.searchResult = routeStateData;
+      return;
+    }
+    // Also get initial data
+    const initialResult = this.utilService.searchResult;
+    console.log('SearchViewComponent: Initial search result from service:', initialResult);
+    this.processSearchResult(initialResult);
+  }
+
+  private processSearchResult(rawResult: any): void {
+    if (!rawResult) {
+      console.warn('No search result available');
+      this.searchResult = null;
+      return;
+    }
+
     // If coming from all-categories, map BrandDataResponse to expected structure
     if (rawResult && !rawResult.Company) {
       // Try to get logo from assets where assetType is 'logo', then images, then any asset
@@ -127,17 +147,10 @@ export class SearchViewComponent implements OnInit, OnDestroy {
     }
     
     // Debug logging for mapped result
-    console.log('Mapped search result:', this.searchResult);
-    
-    // Handle case where no search result is available
-    if (!this.searchResult) {
-      console.warn('No search result available, redirecting to search page');
-      this.router.navigate(['/search']);
-      return;
-    }
+    console.log('SearchViewComponent: Mapped search result:', this.searchResult);
     
     // Ensure minimum required data structure
-    if (!this.searchResult.Company) {
+    if (this.searchResult && !this.searchResult.Company) {
       this.searchResult.Company = {
         Name: 'Unknown Brand',
         Description: 'No description available',
@@ -150,7 +163,6 @@ export class SearchViewComponent implements OnInit, OnDestroy {
       };
     }
     
-    // Remove sessionStorage usage; just read the query param when needed
     // Check if description has more than 3 lines
     const desc = this.searchResult?.Company?.Description || '';
     this.shouldShowViewMore = desc.split(/\r?\n|\r|\n|(?<=\S)\s+/).length > 3 || desc.length > 300;
