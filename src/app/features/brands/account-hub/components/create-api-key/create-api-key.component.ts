@@ -140,6 +140,21 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
   getTodayDate(): string {
     return new Date().toISOString().split('T')[0];
   }
+
+  /**
+   * Format date for backend API (LocalDateTime format)
+   */
+  private formatDateForBackend(date: Date | string): string {
+    const dateObj = typeof date === 'string' ? new Date(date) : date;
+    
+    // Ensure the date is valid
+    if (isNaN(dateObj.getTime())) {
+      throw new Error('Invalid date provided');
+    }
+    
+    // Format as ISO string for LocalDateTime (Java backend expects this format)
+    return dateObj.toISOString();
+  }
   
   // Expose Array constructor and Infinity for template
   Array = Array;
@@ -185,10 +200,10 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
    */
   private initializeForm(): FormGroup {
     return this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      description: ['', [Validators.maxLength(200)]],
-      prefix: ['mk', [Validators.required, Validators.minLength(2), Validators.maxLength(10), Validators.pattern(/^[a-zA-Z0-9_-]+$/)]],
-      environment: ['development', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
+      description: ['', [Validators.maxLength(1000)]],
+      prefix: ['', [Validators.maxLength(10), Validators.pattern(/^[a-zA-Z0-9_-]*$/)]],
+      environment: ['development', Validators.required], // Keep for UI, not sent to backend
       tier: [null, Validators.required],
       expirationDate: [null] // Optional expiration date
     });
@@ -207,47 +222,51 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
     this.error = null;
 
     const formValue = this.createForm.value;
-    const createRequest = {
-      name: formValue.name,
-      description: formValue.description || '',
-      prefix: formValue.prefix || 'mk',
-      environment: formValue.environment,
-      tier: formValue.tier.tier,
-      scopes: Array.from(this.selectedScopes),
-      rateLimits: {
-        requestsPerDay: formValue.tier.requestsPerDay,
-        requestsPerMinute: formValue.tier.requestsPerMinute
-      },
-      expiration: formValue.expirationDate ? {
-        type: 'fixed' as const,
-        expiresAt: formValue.expirationDate,
-        autoRotate: false,
-        rotationInterval: 30,
-        notifyBeforeExpiry: true,
-        notificationDays: 7
-      } : {
-        type: 'never' as const,
-        autoRotate: false,
-        rotationInterval: 30,
-        notifyBeforeExpiry: false,
-        notificationDays: 7
-      }
-    };
+    
+    try {
+      // Create request payload matching ApiKeyCreateRequestDTO
+      const createRequest: any = {
+        name: formValue.name.trim(),
+        description: formValue.description?.trim() || undefined,
+        prefix: formValue.prefix?.trim() || undefined,
+        rateLimitTier: formValue.tier?.tier || 'BASIC',
+        scopes: Array.from(this.selectedScopes)
+      };
 
-    this.apiKeyService.createApiKey(createRequest)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe({
-        next: (response) => {
-          this.createdApiKey = response.apiKey;
-          this.success = true;
-          this.loading = false;
-        },
-        error: (error) => {
-          console.error('Error creating API key:', error);
-          this.error = error.error?.message || 'Failed to create API key. Please try again.';
-          this.loading = false;
+      // Add expiration date if provided
+      if (formValue.expirationDate) {
+        createRequest.expiresAt = this.formatDateForBackend(formValue.expirationDate);
+      }
+
+      // Remove undefined properties to keep payload clean
+      Object.keys(createRequest).forEach(key => {
+        if (createRequest[key] === undefined) {
+          delete createRequest[key];
         }
       });
+
+      // Log the request payload for debugging
+      console.log('API Key Create Request Payload:', createRequest);
+
+      this.apiKeyService.createApiKey(createRequest)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (response) => {
+            this.createdApiKey = response.apiKey;
+            this.success = true;
+            this.loading = false;
+          },
+          error: (error) => {
+            console.error('Error creating API key:', error);
+            this.error = error.error?.message || 'Failed to create API key. Please try again.';
+            this.loading = false;
+          }
+        });
+    } catch (error) {
+      console.error('Error preparing API key request:', error);
+      this.error = 'Invalid form data. Please check your inputs and try again.';
+      this.loading = false;
+    }
   }
 
   /**

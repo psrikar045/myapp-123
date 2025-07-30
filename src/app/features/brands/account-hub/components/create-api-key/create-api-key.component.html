@@ -1055,6 +1055,7 @@
                         *ngIf="currentStep === steps.length - 1"
                         type="submit" 
                         class="btn btn-success btn-lg px-4"
+                        (click)="onSubmit()"
                         [disabled]="!isCurrentStepValid() || loading">
                         <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                         <i *ngIf="!loading" class="bi bi-check-lg me-2"></i>
@@ -1544,6 +1545,71 @@
                     </div>
                   </div>
 
+                  <!-- Enhanced Environment Selection -->
+                  <div class="form-group mb-4">
+                    <label class="form-label fw-semibold text-body-emphasis d-flex align-items-center">
+                      <i class="bi bi-gear me-2 text-primary"></i>
+                      Environment 
+                      <span class="text-danger ms-1">*</span>
+                      <span class="badge bg-primary-subtle text-primary ms-2 small">Required</span>
+                    </label>
+                    <!-- Responsive Button Group -->
+                    <div class="btn-group w-100 d-none d-md-flex" role="group" aria-label="Environment selection">
+                      <input type="radio" class="btn-check" name="environment" id="env-dev" value="development" formControlName="environment">
+                      <label class="btn btn-outline-primary" for="env-dev">
+                        <i class="bi bi-code-slash me-1"></i>
+                        Development
+                      </label>
+
+                      <input type="radio" class="btn-check" name="environment" id="env-staging" value="staging" formControlName="environment">
+                      <label class="btn btn-outline-primary" for="env-staging">
+                        <i class="bi bi-gear me-1"></i>
+                        Staging
+                      </label>
+
+                      <input type="radio" class="btn-check" name="environment" id="env-prod" value="production" formControlName="environment">
+                      <label class="btn btn-outline-primary" for="env-prod">
+                        <i class="bi bi-shield-check me-1"></i>
+                        Production
+                      </label>
+                    </div>
+
+                    <!-- Mobile Stack Layout -->
+                    <div class="d-md-none">
+                      <div class="row g-2">
+                        <div class="col-12">
+                          <input type="radio" class="btn-check" name="environment-mobile" id="env-dev-mobile" value="development" formControlName="environment">
+                          <label class="btn btn-outline-primary w-100" for="env-dev-mobile">
+                            <i class="bi bi-code-slash me-2"></i>
+                            Development
+                          </label>
+                        </div>
+                        <div class="col-12">
+                          <input type="radio" class="btn-check" name="environment-mobile" id="env-staging-mobile" value="staging" formControlName="environment">
+                          <label class="btn btn-outline-primary w-100" for="env-staging-mobile">
+                            <i class="bi bi-gear me-2"></i>
+                            Staging
+                          </label>
+                        </div>
+                        <div class="col-12">
+                          <input type="radio" class="btn-check" name="environment-mobile" id="env-prod-mobile" value="production" formControlName="environment">
+                          <label class="btn btn-outline-primary w-100" for="env-prod-mobile">
+                            <i class="bi bi-shield-check me-2"></i>
+                            Production
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="hasFieldError('environment')" class="invalid-feedback d-block">
+                      <i class="bi bi-exclamation-circle me-1"></i>
+                      {{ getFieldError('environment') }}
+                    </div>
+                    <div class="form-text text-body-secondary">
+                      <i class="bi bi-info-circle me-1"></i>
+                      Select the environment where this API key will be used
+                    </div>
+                  </div>
+
                   <!-- Enhanced Expiration Date with Popup -->
                   <div class="form-group mb-4">
                     <div class="d-flex align-items-center mb-3">
@@ -1575,83 +1641,78 @@
                     </div>
                   </div>
 
-                <!-- Environment -->
-                <div class="mb-4">
-                  <label class="form-label fw-semibold text-body-emphasis">
-                    Environment <span class="text-danger">*</span>
-                  </label>
-                  <!-- Responsive Button Group -->
-                  <div class="btn-group w-100 d-none d-md-flex" role="group">
-                    <input type="radio" class="btn-check" name="environment" id="env-dev" value="development" formControlName="environment">
-                    <label class="btn btn-outline-primary" for="env-dev">
-                      <i class="bi bi-code-slash me-1"></i>
-                      Development
-                    </label>
-
-                    <input type="radio" class="btn-check" name="environment" id="env-staging" value="staging" formControlName="environment">
-                    <label class="btn btn-outline-primary" for="env-staging">
-                      <i class="bi bi-gear me-1"></i>
-                      Staging
-                    </label>
-
-                    <input type="radio" class="btn-check" name="environment" id="env-prod" value="production" formControlName="environment">
-                    <label class="btn btn-outline-primary" for="env-prod">
-                      <i class="bi bi-shield-check me-1"></i>
-                      Production
-                    </label>
-                  </div>
-
-                  <!-- Mobile Stack Layout -->
-                  <div class="d-md-none">
-                    <div class="row g-2">
-                      <div class="col-12">
-                        <input type="radio" class="btn-check" name="environment-mobile" id="env-dev-mobile" value="development" formControlName="environment">
-                        <label class="btn btn-outline-primary w-100" for="env-dev-mobile">
-                          <i class="bi bi-code-slash me-2"></i>
-                          Development
-                        </label>
-                      </div>
-                      <div class="col-12">
-                        <input type="radio" class="btn-check" name="environment-mobile" id="env-staging-mobile" value="staging" formControlName="environment">
-                        <label class="btn btn-outline-primary w-100" for="env-staging-mobile">
-                          <i class="bi bi-gear me-2"></i>
-                          Staging
-                        </label>
-                      </div>
-                      <div class="col-12">
-                        <input type="radio" class="btn-check" name="environment-mobile" id="env-prod-mobile" value="production" formControlName="environment">
-                        <label class="btn btn-outline-primary w-100" for="env-prod-mobile">
-                          <i class="bi bi-shield-check me-2"></i>
-                          Production
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
               </div>
             </div>
 
-            <!-- Rate Limiting -->
+            <!-- Enhanced Rate Limiting -->
             <div id="rate-limiting-section" class="card border-0 shadow-sm bg-body mb-4">
-              <div class="card-header bg-body border-0 py-3">
-                <h5 class="card-title mb-0 fw-bold text-body-emphasis">Rate Limiting</h5>
+              <div class="card-header bg-gradient-subtle border-0 py-4">
+                <div class="d-flex align-items-center">
+                  <div class="icon-wrapper me-3">
+                    <i class="bi bi-speedometer2 text-primary"></i>
+                  </div>
+                  <div>
+                    <h5 class="card-title mb-1 fw-bold text-body-emphasis">Rate Limiting</h5>
+                    <p class="text-body-secondary mb-0 small">Choose the appropriate rate limit tier for your use case</p>
+                  </div>
+                </div>
               </div>
               <div class="card-body p-4">
                 <div class="row g-3">
                   <div *ngFor="let tier of rateLimitTiers" class="col-md-6 col-lg-4">
-                    <div class="card h-100 border" 
+                    <div class="card h-100 border tier-card" 
                          [class.border-primary]="createForm.get('tier')?.value === tier"
                          [class.bg-primary-subtle]="createForm.get('tier')?.value === tier"
+                         [class.shadow-sm]="createForm.get('tier')?.value === tier"
                          (click)="selectRateLimitTier(tier)"
-                         style="cursor: pointer;">
+                         [attr.tabindex]="0"
+                         [attr.aria-selected]="createForm.get('tier')?.value === tier"
+                         role="button">
                       <div class="card-body p-3 text-center">
-                        <h6 class="fw-bold text-body-emphasis">{{ tier.tier }}</h6>
-                        <p class="text-body-secondary small mb-2">{{ tier.description }}</p>
-                        <div class="fw-bold text-primary">
+                        <div class="mb-2">
+                          <i class="bi bi-speedometer2 text-primary" style="font-size: 2rem;"></i>
+                        </div>
+                        <h6 class="fw-bold text-body-emphasis mb-2">{{ tier.tier }}</h6>
+                        <p class="text-body-secondary small mb-3">{{ tier.description }}</p>
+                        <div class="fw-bold text-primary mb-2">
                           {{ formatNumber(tier.requestsPerDay) }}/day
                         </div>
+                        <div class="small text-body-secondary">
+                          {{ formatNumber(tier.requestsPerMinute) }}/minute
+                        </div>
+                        <div *ngIf="createForm.get('tier')?.value === tier" class="mt-2">
+                          <i class="bi bi-check-circle-fill text-success"></i>
+                          <small class="text-success ms-1">Selected</small>
+                        </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Rate Limit Summary -->
+                <div *ngIf="createForm.get('tier')?.value" class="alert alert-info border-0 bg-info-subtle mt-4">
+                  <div class="d-flex align-items-start">
+                    <i class="bi bi-info-circle-fill me-3 text-info mt-1"></i>
+                    <div>
+                      <h6 class="fw-semibold mb-2">Selected Rate Limit</h6>
+                      <p class="mb-2">
+                        <strong>{{ createForm.get('tier')?.value?.tier }}</strong> - 
+                        {{ createForm.get('tier')?.value?.description }}
+                      </p>
+                      <ul class="list-unstyled mb-0 small">
+                        <li class="mb-1">
+                          <i class="bi bi-check-circle-fill text-success me-2"></i>
+                          <strong>{{ formatNumber(createForm.get('tier')?.value?.requestsPerDay) }}</strong> requests per day
+                        </li>
+                        <li class="mb-1">
+                          <i class="bi bi-check-circle-fill text-success me-2"></i>
+                          <strong>{{ formatNumber(createForm.get('tier')?.value?.requestsPerMinute) }}</strong> requests per minute
+                        </li>
+                        <li class="mb-0">
+                          <i class="bi bi-check-circle-fill text-success me-2"></i>
+                          Burst limit: <strong>{{ formatNumber(createForm.get('tier')?.value?.burstLimit || createForm.get('tier')?.value?.requestsPerMinute * 2) }}</strong> requests
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>

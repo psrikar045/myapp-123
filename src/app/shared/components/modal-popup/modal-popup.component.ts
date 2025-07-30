@@ -166,6 +166,7 @@ export class ModalPopupComponent implements OnInit, OnDestroy {
   onBackdropClick(event: Event): void {
     if (event.target === event.currentTarget && this.config.backdrop) {
       this.backdropClick.emit();
+      this.closeModal();
     }
   }
 

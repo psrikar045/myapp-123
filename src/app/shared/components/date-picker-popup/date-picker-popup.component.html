@@ -64,7 +64,8 @@
         [(ngModel)]="displayDate"
         [placeholder]="config.placeholder || 'Select a date'"
         (blur)="onDateInputChange($event)"
-        (keyup.enter)="onDateInputChange($event)">
+        (keyup.enter)="onDateInputChange($event)"
+        (click)="$event.stopPropagation()">
       <div class="invalid-feedback" *ngIf="dateInputError">
         {{ dateInputError }}
       </div>
@@ -78,7 +79,7 @@
           <button
             type="button"
             class="btn btn-sm btn-ghost calendar-nav-btn"
-            (click)="previousMonth()"
+            (click)="previousMonth(); $event.stopPropagation()"
             title="Previous month">
             <i class="bi bi-chevron-left"></i>
           </button>
@@ -90,7 +91,7 @@
           <button
             type="button"
             class="btn btn-sm btn-ghost calendar-nav-btn"
-            (click)="nextMonth()"
+            (click)="nextMonth(); $event.stopPropagation()"
             title="Next month">
             <i class="bi bi-chevron-right"></i>
           </button>
@@ -120,7 +121,7 @@
             [class.other-month]="!isDateInCurrentMonth(day)"
             [class.disabled]="isDateDisabled(day)"
             [disabled]="isDateDisabled(day)"
-            (click)="selectDate(day)"
+            (click)="selectDate(day); $event.stopPropagation()"
             [title]="day | date:'fullDate'">
             {{ day.getDate() }}
           </button>
@@ -139,6 +140,7 @@
           class="form-control form-control-sm"
           [(ngModel)]="timeValue"
           (change)="onTimeChange()"
+          (click)="$event.stopPropagation()"
           [disabled]="!selectedDate">
       </div>
     </div>
@@ -149,7 +151,7 @@
         <button
           type="button"
           class="btn btn-sm btn-outline-primary"
-          (click)="goToToday()"
+          (click)="goToToday(); $event.stopPropagation()"
           [disabled]="isDateDisabled(getCurrentDate())">
           <i class="bi bi-calendar-check me-1"></i>
           Today

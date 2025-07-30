@@ -44,7 +44,12 @@ export class ApiKeyService {
    * Create a new API key
    */
   createApiKey(request: CreateApiKeyRequest): Observable<CreateApiKeyResponse> {
-    return this.http.post<CreateApiKeyResponse>(this.apiUrl, request);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    return this.http.post<CreateApiKeyResponse>(this.apiUrl, request, { headers });
   }
 
   /**

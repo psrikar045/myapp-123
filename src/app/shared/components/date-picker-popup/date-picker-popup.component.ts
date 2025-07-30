@@ -270,11 +270,8 @@ export class DatePickerPopupComponent implements OnInit, OnDestroy {
       this.timeValue = format(date, 'HH:mm');
     }
     
-    // Don't auto-close for time picker
-    if (!this.config.showTime) {
-      // Auto-save for date-only picker
-      setTimeout(() => this.saveSelection(), 200);
-    }
+    // Don't auto-close - let user manually save or cancel
+    // The popup should only close when Save, Cancel, or Close button is clicked
   }
 
   /**
@@ -327,6 +324,10 @@ export class DatePickerPopupComponent implements OnInit, OnDestroy {
     this.displayDate = '';
     this.inputValue = '';
     this.timeValue = '00:00';
+    this.value = null;
+    this.emitChange();
+    this.onChange(null);
+    this.onTouched();
     this.generateCalendar();
   }
 
@@ -641,6 +642,8 @@ export class DatePickerPopupComponent implements OnInit, OnDestroy {
     if (this.selectedDate) {
       this.value = this.selectedDate;
       this.inputValue = this.formatDate(this.selectedDate);
+      this.updateInputValue();
+      this.emitChange();
       this.onChange(this.selectedDate);
       this.onTouched();
     }

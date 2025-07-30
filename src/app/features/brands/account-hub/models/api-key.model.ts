@@ -94,15 +94,11 @@ export interface CreateApiKeyRequest {
   name: string;
   description?: string;
   prefix?: string;
-  environment: string;
-  tier: string;
-  scopes: string[];
-  rateLimits?: {
-    requestsPerDay: number;
-    requestsPerMinute: number;
-  };
-  security?: SecuritySettings;
-  expiration?: ExpirationSettings;
+  expiresAt?: string; // ISO string format for LocalDateTime
+  allowedIps?: string[];
+  allowedDomains?: string[];
+  rateLimitTier?: 'BASIC' | 'STANDARD' | 'PREMIUM' | 'ENTERPRISE' | 'UNLIMITED';
+  scopes?: string[];
 }
 
 export interface CreateApiKeyResponse {
