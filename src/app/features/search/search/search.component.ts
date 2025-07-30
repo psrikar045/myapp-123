@@ -98,7 +98,7 @@ export class SearchComponent {
   }
 
   goToResults(brand: string) {
-    this.router.navigate(['/search-view', brand.toLowerCase()], { queryParams: { from: 'search' } });
+    this.router.navigate(['/search/view', brand.toLowerCase()], { queryParams: { from: 'search' } });
   }
   // Validation methods now use ValidationService
 

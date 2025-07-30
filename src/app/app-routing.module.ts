@@ -77,10 +77,7 @@ const routes: Routes = [
     path: 'forgot-password',
     component: ResetPasswordComponent
   },
-  {
-    path: 'search-view/:brand',
-    loadChildren: () => import('./features/search/search.module').then(m => m.SearchModule)
-  },
+
   {
     path: 'logo-link',
     component: LogoLinkComponent,
