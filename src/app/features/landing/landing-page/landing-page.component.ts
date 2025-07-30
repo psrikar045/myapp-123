@@ -369,6 +369,9 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   superchargeHeadline = 'Ready to Supercharge Your Workflow';
   superchargeSubheadline = 'Start fetching brand data in minutes with RIVO9.';
   superchargeCta = 'Get Started';
+  
+  // Email subscription
+  subscriptionEmail: string = '';
   // Pricing section logic
   pricingHeadline = 'Expand your options with a subscription';
   pricingSubheadline = 'Graphs displaying your performance for metrics like follower evolution, average rate per post and reach and impressions to give you the insights.';
@@ -485,4 +488,18 @@ export class LandingPageComponent implements OnInit, OnDestroy {
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     }
   ];
+
+  // Email subscription handler
+  handleEmailSubscription(): void {
+    if (this.subscriptionEmail && this.subscriptionEmail.trim()) {
+      // TODO: Implement actual email subscription logic
+      console.log('Email subscription requested:', this.subscriptionEmail);
+      
+      // Show success feedback (you can implement a toast/notification service)
+      alert(`Thank you! We'll notify you at ${this.subscriptionEmail}`);
+      
+      // Reset the form
+      this.subscriptionEmail = '';
+    }
+  }
 }
