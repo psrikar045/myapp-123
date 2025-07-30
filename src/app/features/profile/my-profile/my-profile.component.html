@@ -36,7 +36,10 @@
               <div class="col-lg-4 col-md-5 col-12">
                 <div class="profile-main-info d-flex align-items-center">
                   <div class="profile-avatar-container me-4" (click)="onAvatarClick()" style="cursor: pointer;">
-                    <img [src]="profile.avatar" alt="Profile" class="profile-avatar-img" />
+                    <img [src]="profile.avatar || defaultAvatarUrl" 
+                         alt="Profile" 
+                         class="profile-avatar-img" 
+                         (error)="onAvatarError($event)" />
                     <div class="avatar-edit-overlay">
                       <i class="bi bi-camera-fill"></i>
                     </div>
