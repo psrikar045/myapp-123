@@ -28,7 +28,8 @@ export const routes: Routes = [
   {
     path: 'home',
     component: HomePageComponent,
-    title: 'Home - RIVO9'
+    title: 'Home - RIVO9',
+    canActivate: [authGuard]
   },
   {
     path: 'logo-link',
