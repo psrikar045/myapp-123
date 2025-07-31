@@ -267,6 +267,11 @@ setDefaultCategories() {
   }
 
 getAllCategories() {
+    // Skip API calls during SSR/prerendering
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    
     this.authService.categoryFetch().subscribe({
       next : (response: any) => {
         console.log('Categories API response:', response);
@@ -561,6 +566,11 @@ getAllCategories() {
    * Load brand data from API
    */
   loadBrandData(): void {
+    // Skip API calls during SSR/prerendering
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
+    
     this.isLoadingBrands = true;
     this.authService.getAllBrands(0, 20).subscribe({
       next: (response: any) => {
