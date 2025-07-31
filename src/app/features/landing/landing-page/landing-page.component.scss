@@ -97,7 +97,7 @@
 }
 
 .hero-headline {
-font-size: clamp(2.3rem, 5vw, 2.3rem);
+  font-size: clamp(3rem, 5vw, 3rem);
   line-height: 1.2;
   color: var(--theme-text);
   margin-bottom: 1.5rem;
@@ -1064,7 +1064,7 @@ font-size: clamp(2.3rem, 5vw, 2.3rem);
 img.SectionBgImage {
    position: absolute;
     right: 0px;
-    transform: translate(20%, 110%);
+    transform: translate(20%, 120%);
     width: 190px;
     height: 190px;
     object-fit: contain;
@@ -1083,6 +1083,11 @@ img.SectionBgImage {
 .Sectionbg {
     background: #ffff !important;
 }
+.mt-80{margin-top: 80px;} 
+.mb-40{margin-bottom: 40px !important;}
+.designers-section-image {margin-top: 45px;}
+.developers-section-image {margin-top: 45px;}
+.marketers-section-image {margin-top: 45px;}
 
 // Supercharge Email CTA Styles
 .supercharge-email-cta {

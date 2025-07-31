@@ -213,6 +213,32 @@ html[data-animations="false"] * {
 // GLOBAL TYPOGRAPHY IMPROVEMENTS
 // ============================================================================
 
+
+// ============================================================================
+// RIVO9Font Text Font Start
+// ============================================================================
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('assets/fonts/RIVO9/Plus_Jakarta_Sans/PlusJakartaSans-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('assets/fonts/RIVO9/Plus_Jakarta_Sans/PlusJakartaSans-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+.RIVO9Font {
+  font-family: 'Plus Jakarta Sans';
+}
+
+// ============================================================================
+// RIVO9Font Text Font End
+// ============================================================================
+
 * {
   box-sizing: border-box;
 }
