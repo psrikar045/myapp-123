@@ -21,6 +21,9 @@
 // Import unified theme system (after Bootstrap)
 @use 'app/styles/unified-theme.scss';
 
+// Import minimal Material theme (only for Material components)
+@use 'app/styles/material-theme.scss';
+
 // Bootstrap Icons are imported in angular.json for better performance
 
 // Google Fonts are imported in index.html for better performance
