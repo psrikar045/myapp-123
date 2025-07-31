@@ -178,6 +178,71 @@
                 </div>
               </div>
 
+              <!-- API Key Prefix -->
+              <div class="mb-3">
+                <label for="prefix" class="form-label fw-semibold d-flex align-items-center">
+                  <i class="bi bi-code-slash me-2 text-primary"></i>
+                  API Key Prefix
+                  <span class="badge bg-info-subtle text-info ms-2 small">Optional</span>
+                </label>
+                <!-- Desktop Layout -->
+                <div class="input-group d-none d-md-flex">
+                  <span class="input-group-text bg-body">
+                    <i class="bi bi-hash text-body-secondary"></i>
+                  </span>
+                  <input 
+                    type="text" 
+                    class="form-control"
+                    [class.is-invalid]="hasFieldError('prefix')"
+                    [class.is-valid]="createForm.get('prefix')?.valid && createForm.get('prefix')?.touched"
+                    id="prefix" 
+                    formControlName="prefix"
+                    placeholder="mk"
+                    maxlength="10">
+                  <span class="input-group-text bg-body-secondary">_</span>
+                  <span class="input-group-text bg-body-tertiary text-body-secondary font-monospace">
+                    {{ createForm.get('environment')?.value || 'env' }}_************************
+                  </span>
+                </div>
+
+                <!-- Mobile Layout -->
+                <div class="d-md-none">
+                  <div class="row g-2">
+                    <div class="col-12">
+                      <div class="input-group">
+                        <span class="input-group-text bg-body">
+                          <i class="bi bi-hash text-body-secondary"></i>
+                        </span>
+                        <input 
+                          type="text" 
+                          class="form-control"
+                          [class.is-invalid]="hasFieldError('prefix')"
+                          [class.is-valid]="createForm.get('prefix')?.valid && createForm.get('prefix')?.touched"
+                          id="prefix-mobile" 
+                          formControlName="prefix"
+                          placeholder="mk"
+                          maxlength="10">
+                      </div>
+                    </div>
+                    <div class="col-12">
+                      <div class="alert alert-info py-2 mb-0">
+                        <small class="font-monospace">
+                          Preview: <strong>{{ createForm.get('prefix')?.value || 'mk' }}_{{ createForm.get('environment')?.value || 'env' }}_************************</strong>
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="hasFieldError('prefix')" class="invalid-feedback d-block">
+                  <i class="bi bi-exclamation-circle me-1"></i>
+                  {{ getFieldError('prefix') }}
+                </div>
+                <div class="form-text text-body-secondary">
+                  <i class="bi bi-info-circle me-1"></i>
+                  This prefix will appear at the beginning of your API key (e.g., <code>mk_dev_abc123...</code>)
+                </div>
+              </div>
+
               <!-- Environment Field -->
               <div class="mb-3">
                 <label for="environment" class="form-label fw-semibold">

@@ -235,6 +235,19 @@
     .btn {
       border-left: 1px solid rgba(var(--theme-text), 0.2);
     }
+
+    // API Prefix specific styling
+    .form-control[formControlName="prefix"] {
+      min-width: 120px;
+      max-width: 200px;
+      flex: 0 0 auto;
+    }
+
+    .input-group-text {
+      background-color: var(--theme-surface);
+      border-color: rgba(var(--theme-text), 0.2);
+      color: var(--theme-text);
+    }
   }
 
   // Badges
@@ -277,6 +290,15 @@
       
       .btn {
         width: 100%;
+      }
+    }
+
+    // Mobile API prefix input
+    .input-group {
+      .form-control[formControlName="prefix"] {
+        min-width: 100px;
+        max-width: 150px;
+        font-size: 0.9rem;
       }
     }
   }
