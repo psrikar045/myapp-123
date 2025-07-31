@@ -243,7 +243,11 @@
         &:hover {
           background: var(--bs-primary);
           border-color: var(--bs-primary);
-          color: white;
+          color: white !important;
+          
+          i {
+            color: white !important;
+          }
         }
       }
 
@@ -251,7 +255,11 @@
         &:hover {
           background: var(--bs-secondary);
           border-color: var(--bs-secondary);
-          color: white;
+          color: white !important;
+          
+          i {
+            color: white !important;
+          }
         }
       }
 
@@ -264,6 +272,10 @@
           background: rgba(var(--bs-primary-rgb), 0.1) !important;
           color: var(--bs-primary) !important;
           transform: scale(1.1);
+          
+          i {
+            color: var(--bs-primary) !important;
+          }
         }
 
         &:focus {
@@ -275,6 +287,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        transition: color 0.3s ease;
       }
     }
 
@@ -1101,3 +1114,10 @@
       color: var(--bs-gray-200) !important;
     }
   }
+.rounded-pill:hover{
+  // background-color: var(--theme-primary);
+color: white !important;
+}
+.bi-eye :hover{
+color: white !important;
+}
