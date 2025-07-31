@@ -21,11 +21,9 @@
 // Import unified theme system (after Bootstrap)
 @use 'app/styles/unified-theme.scss';
 
-// Import Bootstrap Icons (CSS files require @import)
-@import 'bootstrap-icons/font/bootstrap-icons.css';
+// Bootstrap Icons are imported in angular.json for better performance
 
-// Import Google Fonts
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+// Google Fonts are imported in index.html for better performance
 
 // ============================================================================
 // CUSTOM CSS VARIABLES (DESIGN TOKENS)
