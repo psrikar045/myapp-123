@@ -1,0 +1,1103 @@
+// API Dashboard Styles - Using Existing Theme System
+
+// Enhanced API Keys List Scrolling
+.api-keys-list {
+  overflow-y: auto !important;
+  height: 430px !important;
+  max-height: 430px !important;
+  padding-right: 4px !important;
+  
+  // Enhanced Custom Scrollbar for Webkit browsers (Chrome, Safari, Edge)
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: rgba(var(--bs-secondary-rgb), 0.1);
+    border-radius: 10px;
+    margin: 4px 0;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--bs-primary), rgba(var(--bs-primary-rgb), 0.8));
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      background: linear-gradient(180deg, rgba(var(--bs-primary-rgb), 0.9), var(--bs-primary));
+      transform: scaleX(1.2);
+    }
+    
+    &:active {
+      background: var(--bs-primary);
+    }
+  }
+  
+  &::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  
+  // Enhanced Firefox scrollbar
+  scrollbar-width: thin;
+  scrollbar-color: var(--bs-primary) rgba(var(--bs-secondary-rgb), 0.1);
+  
+  // Smooth scrolling behavior
+  scroll-behavior: smooth;
+  
+  // Add subtle fade effect at top and bottom
+  &::before,
+  &::after {
+    content: '';
+    position: sticky;
+    display: block;
+    height: 8px;
+    background: linear-gradient(to bottom, var(--theme-surface), transparent);
+    z-index: 1;
+    pointer-events: none;
+  }
+  
+  &::before {
+    top: 0;
+    margin-bottom: -8px;
+  }
+  
+  &::after {
+    bottom: 0;
+    margin-top: -8px;
+    background: linear-gradient(to top, var(--theme-surface), transparent);
+  }
+  
+  // Add scroll indicators
+  &.scrollable-top::before {
+    box-shadow: inset 0 10px 8px -8px rgba(var(--bs-primary-rgb), 0.15);
+  }
+  
+  &.scrollable-bottom::after {
+    box-shadow: inset 0 -10px 8px -8px rgba(var(--bs-primary-rgb), 0.15);
+  }
+  
+  // Enhanced mobile scrolling
+  @media (max-width: 768px) {
+    // Increase touch target area
+    padding-right: 8px !important;
+    
+    // Better mobile scrollbar
+    &::-webkit-scrollbar {
+      width: 12px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+  }
+  
+  // Momentum scrolling for iOS
+  -webkit-overflow-scrolling: touch;
+  
+  // Better focus management
+  &:focus-within {
+    outline: 2px solid rgba(var(--bs-primary-rgb), 0.5);
+    outline-offset: 2px;
+  }
+}
+
+.api-dashboard {
+  min-height: 100vh;
+  background-color: var(--theme-background);
+  color: var(--theme-text);
+  transition: var(--theme-animations);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+
+  .welcome-header {
+    .display-6 {
+      color: var(--theme-text);
+      transition: var(--theme-animations);
+    }
+
+    .lead {
+      font-size: 1.1rem;
+      color: var(--bs-secondary);
+      transition: var(--theme-animations);
+    }
+  }
+
+  // Stats Cards - Using theme system
+  .stats-card {
+    transition: var(--theme-animations);
+    border-radius: var(--theme-border-radius);
+    background-color: var(--theme-surface);
+    box-shadow: var(--theme-shadows);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .card-body {
+      position: relative;
+      overflow: hidden;
+      transition: var(--theme-animations);
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--theme-primary), var(--theme-accent));
+        opacity: 0;
+        transition: var(--theme-animations);
+
+  // Enhanced API Key Cards - Compact Version (removed conflicting api-keys-container style)
+
+  .api-key-item {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 250, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(var(--bs-primary-rgb), 0.1) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    min-height: 120px; // Compact height
+    max-height: 140px; // Prevent excessive height
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s;
+    }
+
+    &:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 6px 20px rgba(var(--bs-primary-rgb), 0.15);
+      border-color: rgba(var(--bs-primary-rgb), 0.3) !important;
+
+      &::before {
+        left: 100%;
+      }
+
+      .api-key-icon {
+        transform: scale(1.1);
+        background: rgba(var(--bs-primary-rgb), 0.2) !important;
+      }
+
+      .btn {
+        transform: translateY(-1px);
+      }
+    }
+
+    .api-key-icon {
+      transition: all 0.3s ease;
+      
+      i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    .progress {
+      background: rgba(var(--bs-secondary-rgb), 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+
+      .progress-bar {
+        transition: all 0.3s ease;
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+          animation: shimmer 2s infinite;
+        }
+      }
+    }
+
+    .btn {
+      transition: all 0.3s ease;
+      font-weight: 600;
+      border-width: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(var(--bs-primary-rgb), 0.3);
+      }
+
+      &.btn-outline-primary {
+        &:hover {
+          background: var(--bs-primary);
+          border-color: var(--bs-primary);
+          color: white;
+        }
+      }
+
+      &.btn-outline-secondary {
+        &:hover {
+          background: var(--bs-secondary);
+          border-color: var(--bs-secondary);
+          color: white;
+        }
+      }
+
+      &.btn-link {
+        border: none !important;
+        background: none !important;
+        box-shadow: none !important;
+        
+        &:hover {
+          background: rgba(var(--bs-primary-rgb), 0.1) !important;
+          color: var(--bs-primary) !important;
+          transform: scale(1.1);
+        }
+
+        &:focus {
+          box-shadow: 0 0 0 2px rgba(var(--bs-primary-rgb), 0.25) !important;
+        }
+      }
+
+      i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    code {
+      background: rgba(var(--bs-dark-rgb), 0.05) !important;
+      border: 1px solid rgba(var(--bs-dark-rgb), 0.1);
+      font-family: 'Courier New', monospace;
+      font-weight: 500;
+      transition: all 0.3s ease;
+
+      &:hover {
+        background: rgba(var(--bs-primary-rgb), 0.1) !important;
+        border-color: rgba(var(--bs-primary-rgb), 0.3);
+      }
+    }
+
+    .badge {
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(5px);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      
+      i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    // Ensure all small elements are properly aligned
+    small {
+      display: flex;
+      align-items: center;
+      
+      i {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+
+    // Code element alignment
+    code {
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+
+  // Enhanced Action Buttons Styling
+  .mt-auto {
+    .btn {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 600;
+      letter-spacing: 0.025em;
+      
+      &.btn-primary {
+        background: linear-gradient(135deg, var(--bs-primary) 0%, rgba(var(--bs-primary-rgb), 0.8) 100%);
+        border: none;
+        box-shadow: 0 2px 8px rgba(var(--bs-primary-rgb), 0.3);
+        
+        &:hover {
+          background: linear-gradient(135deg, rgba(var(--bs-primary-rgb), 0.9) 0%, var(--bs-primary) 100%);
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.4);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+
+      &.btn-outline-primary {
+        border: 2px solid var(--bs-primary);
+        color: var(--bs-primary);
+        background: rgba(var(--bs-primary-rgb), 0.05);
+        
+        &:hover {
+          background: var(--bs-primary);
+          color: white;
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.3);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
+    }
+  }
+
+  // Height balance for main content sections
+  .row.g-4 {
+    .col-lg-8, .col-lg-4 {
+      .card {
+        // Remove min-height to allow our custom card heights to work
+        &:not(.api-key-management-card) {
+          min-height: 500px; // Only apply to other cards, not our API key management card
+        }
+        
+        @media (max-width: 991.98px) {
+          min-height: auto; // Remove height constraint on mobile
+        }
+      }
+    }
+  }
+
+  // Shimmer animation for progress bars
+  @keyframes shimmer {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+      }
+
+      &:hover::before {
+        opacity: 1;
+      }
+    }
+  }
+
+  // Cards - Using theme system
+  .card {
+    border-radius: var(--theme-border-radius);
+    background-color: var(--theme-surface);
+    transition: var(--theme-animations);
+    box-shadow: var(--theme-shadows);
+
+    &:hover {
+      box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.12) !important;
+    }
+
+    .card-header {
+      border-radius: var(--theme-border-radius) var(--theme-border-radius) 0 0;
+      background-color: var(--theme-surface);
+      transition: var(--theme-animations);
+    }
+  }
+
+  // Table Styles - Bootstrap themed
+  .table {
+    .cursor-pointer {
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: var(--bs-primary-bg-subtle, rgba(var(--bs-primary-rgb), 0.05)) !important;
+      }
+    }
+
+    th {
+      font-weight: 600;
+      font-size: 0.75rem;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      vertical-align: middle;
+    }
+  }
+
+  // API Key Items - Using theme system
+  .api-key-item {
+    transition: var(--theme-animations);
+    background-color: var(--theme-surface);
+    border-radius: var(--theme-border-radius);
+
+    &:hover {
+      background-color: rgba(var(--theme-primary), 0.05);
+    }
+
+    code {
+      font-size: 0.75rem;
+      font-family: var(--theme-font-family);
+      background-color: transparent;
+      color: var(--theme-text);
+    }
+  }
+
+  // Badges - Use Bootstrap defaults with transitions
+  .badge {
+    font-weight: 500;
+    padding: 0.375rem 0.75rem;
+    transition: all 0.3s ease;
+  }
+
+  // Progress Bars - Bootstrap themed
+  .progress {
+    overflow: hidden;
+
+    .progress-bar {
+      transition: width 0.6s ease;
+    }
+  }
+
+  // Buttons - Using theme system
+  .btn {
+    font-weight: var(--theme-font-weight);
+    font-family: var(--theme-font-family);
+    transition: var(--theme-animations);
+    border-radius: var(--theme-border-radius);
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &.rounded-pill {
+      border-radius: 50rem !important;
+    }
+
+    &.btn-primary {
+      background-color: var(--theme-primary);
+      border-color: var(--theme-primary);
+    }
+  }
+
+  // Alert Styles - Using theme system
+  .alert {
+    transition: var(--theme-animations);
+    border-radius: var(--theme-border-radius);
+  }
+}
+
+// Responsive Design - Bootstrap breakpoints
+@media (max-width: 767.98px) {
+  .api-dashboard {
+    .welcome-header {
+      text-align: center;
+      
+      .display-6 {
+        font-size: 1.75rem;
+      }
+    }
+
+    .table-responsive {
+      font-size: 0.875rem;
+    }
+  }
+}
+
+@media (max-width: 575.98px) {
+  .api-dashboard {
+    .container-fluid {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+
+    .welcome-header {
+      .display-6 {
+        font-size: 1.5rem;
+      }
+
+      .lead {
+        font-size: 1rem;
+      }
+    }
+
+    .stats-card {
+      .card-body {
+        padding: 1.5rem;
+      }
+
+      .fs-2 {
+        font-size: 1.5rem !important;
+      }
+    }
+  }
+}
+
+// Theme-aware responsive adjustments
+.api-dashboard {
+  // Ensure proper contrast in all themes
+  .text-body-emphasis {
+    color: var(--theme-text) !important;
+  }
+
+  .text-body-secondary {
+    color: rgba(var(--theme-text), 0.7) !important;
+  }
+
+  .bg-body {
+    background-color: var(--theme-surface) !important;
+  }
+
+  .bg-body-tertiary {
+    background-color: var(--theme-background) !important;
+  }
+
+  // Theme-aware shadows
+  .shadow-sm {
+    box-shadow: var(--theme-shadows) !important;
+  }
+
+  // Theme-aware borders
+  .border {
+    border-color: rgba(var(--theme-text), 0.1) !important;
+  }
+}
+
+// Enhanced Responsive Design & Zoom Support
+@media (max-width: 1400px) {
+  .api-dashboard {
+    .container-fluid {
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    
+    .row {
+      margin-left: -0.5rem;
+      margin-right: -0.5rem;
+      
+      > * {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 1200px) {
+  .api-dashboard {
+    .col-xl-3,
+    .col-lg-6 {
+      flex: 0 0 auto;
+      width: 50%;
+    }
+    
+    .col-xl-6,
+    .col-xl-12 {
+      flex: 0 0 auto;
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .api-dashboard {
+    .col-xl-3,
+    .col-lg-6,
+    .col-xl-6,
+    .col-xl-12 {
+      flex: 0 0 auto;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    
+    .stats-card {
+      &:hover {
+        transform: none; // Disable hover effects on touch devices
+      }
+    }
+    
+    .api-key-item {
+      &:hover {
+        transform: none; // Disable hover effects on touch devices
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .api-dashboard {
+    padding: 0.5rem;
+    
+    .welcome-header {
+      margin-bottom: 1.5rem;
+      
+      .display-6 {
+        font-size: 1.5rem;
+        line-height: 1.3;
+      }
+      
+      .lead {
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+      }
+    }
+    
+    .stats-card {
+      margin-bottom: 1rem;
+      
+      .card-body {
+        padding: 1rem;
+      }
+      
+      .fs-2 {
+        font-size: 1.25rem !important;
+      }
+    }
+    
+    .api-key-item {
+      margin-bottom: 0.75rem;
+      padding: 0.75rem;
+      min-height: auto;
+      max-height: none;
+      
+      .api-key-icon {
+        width: 24px !important;
+        height: 24px !important;
+        
+        i {
+          font-size: 0.7rem !important;
+        }
+      }
+      
+      .btn {
+        min-width: 28px !important;
+        height: 24px !important;
+        padding: 0.2rem 0.4rem !important;
+        
+        i {
+          font-size: 0.65rem !important;
+        }
+      }
+    }
+  }
+}
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+  .api-dashboard {
+    .api-key-item {
+      border: 2px solid var(--bs-dark) !important;
+      
+      &:hover {
+        border-color: var(--bs-primary) !important;
+      }
+    }
+    
+    .badge {
+      border: 1px solid currentColor;
+    }
+  }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+  .api-dashboard {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    
+    .api-key-item {
+      &:hover {
+        transform: none;
+      }
+    }
+    
+    .stats-card {
+      &:hover {
+        transform: none;
+      }
+    }
+    
+    .btn {
+      &:hover {
+        transform: none;
+      }
+    }
+  }
+
+  // ==================== API KEY LIST SCROLLING STYLES ====================
+  
+  // API Key Management Card - Fixed height container
+  .api-key-management-card {
+    height: 600px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important; // Prevent card itself from scrolling
+    
+    // Card header - fixed height
+    .card-header {
+      height: 80px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    
+    // Search section - fixed height with proper styling
+    .api-key-search-section {
+      height: 80px !important;
+      flex-shrink: 0 !important;
+      overflow: hidden !important;
+      background-color: var(--bs-body-bg) !important;
+      
+      // Fix search input styling
+      .input-group {
+        .input-group-text {
+          background-color: var(--bs-body-bg) !important;
+          border-color: var(--bs-border-color) !important;
+          color: var(--bs-body-color) !important;
+        }
+        
+        .form-control {
+          background-color: var(--bs-body-bg) !important;
+          border-color: var(--bs-border-color) !important;
+          color: var(--bs-body-color) !important;
+          
+          &:focus {
+            background-color: var(--bs-body-bg) !important;
+            border-color: var(--bs-primary) !important;
+            color: var(--bs-body-color) !important;
+            box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25) !important;
+          }
+          
+          &::placeholder {
+            color: var(--bs-secondary-color) !important;
+          }
+        }
+      }
+      
+      // Fix dropdown/select styling
+      .form-select {
+        background-color: var(--bs-body-bg) !important;
+        border-color: var(--bs-border-color) !important;
+        color: var(--bs-body-color) !important;
+        
+        &:focus {
+          background-color: var(--bs-body-bg) !important;
+          border-color: var(--bs-primary) !important;
+          color: var(--bs-body-color) !important;
+          box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25) !important;
+        }
+        
+        option {
+          background-color: var(--bs-body-bg) !important;
+          color: var(--bs-body-color) !important;
+        }
+      }
+    }
+  }
+  
+  // API Keys Container - Just a wrapper, no scrolling here
+  .api-keys-container {
+    flex: 1 1 auto; // Take remaining space
+    overflow: visible; // Let the inner list handle scrolling
+  }
+  
+  // Remove duplicate styles - using enhanced version at top
+    
+    .api-key-list-item {
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      min-height: 80px;
+      
+      &:hover {
+        background-color: rgba(var(--bs-primary-rgb), 0.05) !important;
+      }
+      
+      &.selected {
+        background-color: rgba(var(--bs-primary-rgb), 0.15) !important;
+        border-left: 4px solid var(--bs-primary) !important;
+        box-shadow: 0 2px 8px rgba(var(--bs-primary-rgb), 0.2) !important;
+        transform: translateX(2px);
+        
+        .api-key-icon {
+          background-color: var(--bs-primary) !important;
+          
+          i {
+            color: white !important;
+          }
+        }
+        
+        .api-key-name {
+          color: var(--bs-primary) !important;
+          font-weight: 700 !important;
+        }
+        
+        .api-key-code {
+          background-color: rgba(var(--bs-primary-rgb), 0.1) !important;
+          border: 1px solid rgba(var(--bs-primary-rgb), 0.3) !important;
+        }
+      }
+      
+      &:last-child {
+        border-bottom: none !important;
+      }
+      
+      // API Key Icon
+      .api-key-icon {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+        
+        i {
+          font-size: 0.8rem;
+        }
+      }
+      
+      // API Key Name
+      .api-key-name {
+        font-size: 0.9rem;
+      }
+      
+      // API Key Meta Info
+      .api-key-meta {
+        font-size: 0.75rem;
+      }
+      
+      // API Key Value Section
+      .api-key-value {
+        margin-left: 30px;
+      }
+      
+      // API Key Code
+      .api-key-code {
+        font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
+        font-size: 0.7rem;
+        background-color: var(--bs-gray-100);
+        border: 1px solid var(--bs-gray-200);
+        transition: all 0.2s ease;
+      }
+      
+      // Copy Button
+      .api-key-copy-btn {
+        transition: all 0.2s ease;
+        
+        &:hover {
+          color: var(--bs-primary) !important;
+          transform: scale(1.1);
+        }
+        
+        i {
+          font-size: 0.7rem;
+        }
+      }
+      
+      // Usage Info
+      .api-key-usage {
+        margin-left: 30px;
+      }
+      
+      .api-key-usage-text {
+        font-size: 0.7rem;
+      }
+      
+      // Action Buttons
+      .api-key-action-btn {
+        padding: 0.2rem 0.4rem;
+        font-size: 0.7rem;
+        transition: all 0.2s ease;
+        
+        &:hover {
+          transform: translateY(-1px);
+        }
+        
+        i {
+          font-size: 0.75rem;
+        }
+      }
+      
+      // Selection Indicator
+      .api-key-selection-indicator {
+        width: 4px;
+        height: 100%;
+      }
+    }
+  }
+  
+  // Search and Filter Controls
+  .input-group {
+    .input-group-text {
+      background-color: var(--bs-gray-50);
+      border-color: var(--bs-gray-300);
+    }
+    
+    .form-control {
+      border-color: var(--bs-gray-300);
+      
+      &:focus {
+        border-color: var(--bs-primary);
+        box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+      }
+    }
+  }
+  
+  .form-select {
+    border-color: var(--bs-gray-300);
+    
+    &:focus {
+      border-color: var(--bs-primary);
+      box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+    }
+  }
+  
+  // Responsive adjustments for API key list
+  @media (max-width: 1200px) {
+    .api-key-management-card {
+      height: 550px !important;
+    }
+    
+    .api-keys-list {
+      height: 380px !important; // 550px - 80px - 80px - 10px padding = 380px
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .api-key-management-card {
+      height: 500px !important;
+    }
+    
+    .api-keys-list {
+      height: 330px !important; // 500px - 80px - 80px - 10px padding = 330px
+    }
+    
+    .api-keys-list {
+      .api-key-list-item {
+        padding: 0.75rem !important;
+        min-height: 70px;
+        
+        .api-key-icon {
+          width: 24px !important;
+          height: 24px !important;
+          margin-right: 0.5rem !important;
+          
+          i {
+            font-size: 0.7rem !important;
+          }
+        }
+        
+        .api-key-name {
+          font-size: 0.8rem !important;
+        }
+        
+        .api-key-meta {
+          font-size: 0.7rem !important;
+        }
+        
+        .api-key-value {
+          margin-left: 26px !important;
+        }
+        
+        .api-key-usage {
+          margin-left: 26px !important;
+        }
+        
+        .api-key-code {
+          font-size: 0.65rem !important;
+          padding: 0.15rem 0.3rem !important;
+        }
+        
+        .api-key-copy-btn {
+          i {
+            font-size: 0.65rem !important;
+          }
+        }
+        
+        .api-key-usage-text {
+          font-size: 0.65rem !important;
+        }
+        
+        .api-key-action-btn {
+          padding: 0.15rem 0.3rem !important;
+          font-size: 0.65rem !important;
+          
+          i {
+            font-size: 0.6rem !important;
+          }
+        }
+      }
+    }
+    
+    // Stack details on top for mobile
+    .col-lg-4 {
+      order: -1;
+      margin-bottom: 1rem;
+    }
+    
+    .col-lg-8 {
+      order: 1;
+    }
+  }
+  
+  // Dark mode support for new elements
+  @media (prefers-color-scheme: dark) {
+    .api-keys-list {
+      .api-key-list-item {
+        &:hover {
+          background-color: rgba(var(--bs-primary-rgb), 0.15) !important;
+        }
+        
+        &.selected {
+          background-color: rgba(var(--bs-primary-rgb), 0.25) !important;
+          border-left: 4px solid var(--bs-primary) !important;
+          box-shadow: 0 2px 8px rgba(var(--bs-primary-rgb), 0.3) !important;
+          transform: translateX(2px);
+          
+          .api-key-name {
+            color: var(--bs-primary) !important;
+            font-weight: 700 !important;
+          }
+          
+          .api-key-code {
+            background-color: rgba(var(--bs-primary-rgb), 0.2) !important;
+            border: 1px solid rgba(var(--bs-primary-rgb), 0.4) !important;
+          }
+        }
+        
+        code {
+          background-color: var(--bs-gray-800);
+          border-color: var(--bs-gray-700);
+          color: var(--bs-gray-200);
+        }
+      }
+    }
+    
+    .input-group-text {
+      background-color: var(--bs-gray-800) !important;
+      border-color: var(--bs-gray-700) !important;
+      color: var(--bs-gray-200) !important;
+    }
+    
+    .form-control, .form-select {
+      background-color: var(--bs-gray-800) !important;
+      border-color: var(--bs-gray-700) !important;
+      color: var(--bs-gray-200) !important;
+    }
+  }

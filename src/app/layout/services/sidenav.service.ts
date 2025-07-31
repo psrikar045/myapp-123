@@ -49,6 +49,7 @@ private readonly sidenavVisibleRoutes = [
     '/brandApi',       // Brand API page (legacy route)
     '/brands/company', // Brands API page (new route)
     '/brands/account-hub', // Account Hub and API Key management
+    '/brands/api-dashboard', // New API Dashboard
     '/dashboard',      // Dashboard pages
     '/analytics',      // Analytics pages
     '/account'         // Account pages
@@ -277,17 +278,17 @@ private readonly sidenavVisibleRoutes = [
         icon: 'bi-award',
         children: [
           {
-            id: 'account-hub',
-            label: 'Account Hub',
-            route: '/brands/account-hub',
-            icon: 'bi-speedometer2'
+            id: 'api-dashboard',
+            label: 'API Dashboard',
+            route: '/brands/api-dashboard',
+            icon: 'bi-speedometer2',
           },
-          {
-            id: 'api-keys',
-            label: 'API Keys',
-            route: '/brands/account-hub/api-keys/manage',
-            icon: 'bi-key'
-          },
+          // {
+          //   id: 'api-keys',
+          //   label: 'API Keys',
+          //   route: '/brands/account-hub/api-keys/manage',
+          //   icon: 'bi-key'
+          // },
           {
             id: 'brand-manager',
             label: 'Brands Api',

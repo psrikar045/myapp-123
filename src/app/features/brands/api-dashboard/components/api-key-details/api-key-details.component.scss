@@ -1,0 +1,272 @@
+// API Key Details Component Styles
+
+.api-key-details {
+  height: 100%;
+  
+  // API Key Details Card - Fixed height, no expansion
+  .api-key-details-card {
+    max-height: 600px;
+    min-height: 400px;
+    height: fit-content;
+  }
+  
+  .api-key-details-body {
+    max-height: 500px;
+    overflow-y: auto;
+    
+    // Custom scrollbar
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: var(--bs-gray-100);
+      border-radius: 2px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--bs-gray-400);
+      border-radius: 2px;
+      
+      &:hover {
+        background: var(--bs-gray-500);
+      }
+    }
+  }
+
+  .api-key-icon {
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+  }
+
+  .api-key-info {
+    .form-control {
+      font-size: 0.875rem;
+      border: 1px solid var(--bs-border-color);
+      
+      &:focus {
+        border-color: var(--bs-primary);
+        box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+      }
+    }
+  }
+
+  .usage-stats {
+    .progress {
+      background-color: var(--bs-gray-200);
+      height: 8px;
+      
+      .progress-bar {
+        transition: width 0.6s ease;
+      }
+    }
+    
+    // Custom usage stats cards with bright white background
+    .usage-stat-card {
+      background-color: #ffffff !important;
+      border: 2px solid #e3f2fd !important;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background-color: #f8f9fa !important;
+        border-color: #2196f3 !important;
+        box-shadow: 0 4px 12px rgba(33, 150, 243, 0.15) !important;
+        transform: translateY(-2px);
+      }
+      
+      .text-primary {
+        color: #1976d2 !important;
+        font-weight: 700 !important;
+      }
+      
+      .text-secondary {
+        color: #666666 !important;
+        font-weight: 600 !important;
+      }
+    }
+  }
+
+  .recent-activity {
+    .activity-item {
+      transition: all 0.3s ease;
+      
+      // Icon container styling
+      .rounded-circle {
+        width: 32px;
+        height: 32px;
+      }
+    }
+    
+    // Custom activity card with bright white background
+    .activity-card {
+      background-color: #ffffff !important;
+      border: 2px solid #e8f5e8 !important;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background-color: #f8f9fa !important;
+        border-color: #4caf50 !important;
+        box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15) !important;
+        transform: translateY(-2px);
+      }
+      
+      .text-dark {
+        color: #333333 !important;
+        font-weight: 600 !important;
+      }
+      
+      .text-muted {
+        color: #666666 !important;
+        font-weight: 500 !important;
+      }
+      
+      .bg-success {
+        &.bg-opacity-10 {
+          background-color: rgba(76, 175, 80, 0.15) !important;
+        }
+      }
+      
+      .text-success {
+        color: #2e7d32 !important;
+        font-weight: 600 !important;
+      }
+    }
+  }
+
+  // Button styles
+  .btn {
+    transition: all 0.2s ease;
+    
+    &:hover {
+      transform: translateY(-1px);
+    }
+    
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // Badge styles
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+  }
+
+  // Alert styles
+  .alert-sm {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+  
+  // Empty State
+  .api-key-empty-state {
+    height: 300px;
+  }
+  
+  .api-key-empty-body {
+    height: 100%;
+  }
+  
+  .api-key-empty-icon {
+    opacity: 0.3;
+    font-size: 3rem;
+  }
+
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    .api-key-details-card {
+      max-height: 400px;
+      min-height: 300px;
+    }
+    
+    .api-key-details-body {
+      max-height: 300px;
+      padding: 1rem !important;
+    }
+    
+    .row.g-3 {
+      --bs-gutter-x: 0.75rem;
+    }
+    
+    .btn {
+      font-size: 0.875rem;
+      padding: 0.5rem 1rem;
+    }
+    
+    .btn-sm {
+      font-size: 0.8125rem;
+      padding: 0.375rem 0.75rem;
+    }
+    
+    .api-key-empty-icon {
+      font-size: 2.5rem;
+    }
+  }
+
+  // Animation for loading state
+  .spinner-border {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .api-key-details {
+    .form-control {
+      background-color: var(--bs-gray-800);
+      border-color: var(--bs-gray-700);
+      color: var(--bs-gray-100);
+    }
+    
+    .bg-body-secondary {
+      background-color: var(--bs-gray-800) !important;
+    }
+    
+    .progress {
+      background-color: var(--bs-gray-700);
+    }
+    
+    // Dark mode for custom cards - Better contrast
+    .usage-stats .usage-stat-card {
+      background-color: #2d3748 !important;
+      border-color: #4a5568 !important;
+      
+      &:hover {
+        background-color: #374151 !important;
+        border-color: #60a5fa !important;
+      }
+      
+      .text-primary {
+        color: #60a5fa !important;
+      }
+      
+      .text-secondary {
+        color: #d1d5db !important;
+      }
+    }
+    
+    .recent-activity .activity-card {
+      background-color: #2d3748 !important;
+      border-color: #4a5568 !important;
+      
+      &:hover {
+        background-color: #374151 !important;
+        border-color: #34d399 !important;
+      }
+      
+      .text-dark {
+        color: #f9fafb !important;
+      }
+      
+      .text-muted {
+        color: #d1d5db !important;
+      }
+      
+      .text-success {
+        color: #34d399 !important;
+      }
+    }
+  }
+}

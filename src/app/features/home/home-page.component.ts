@@ -50,6 +50,6 @@ export class HomePageComponent implements OnInit {
   //   this.router.navigate(['/developer']);
   // }
    navigateToAccountHub(): void {
-    this.router.navigate(['/brands/account-hub']);
+     this.router.navigate(['/brands/api-dashboard']);
   }
 }

@@ -1,0 +1,372 @@
+<!-- Create API Key Form -->
+<div class="create-api-key-container">
+  <div class="container-fluid px-lg-4 px-md-3 px-2 py-4">
+    
+    <!-- Header -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="d-flex align-items-center mb-3">
+          <button 
+            class="btn btn-outline-secondary rounded-pill me-3" 
+            (click)="goBack()"
+            [disabled]="loading">
+            <i class="bi bi-arrow-left me-1"></i>
+            Back
+          </button>
+          <div>
+            <h1 class="h2 fw-bold mb-1 text-body-emphasis">Create New API Key</h1>
+            <p class="text-body-secondary mb-0">Generate a secure API key for your application integration</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success State -->
+    <div *ngIf="success && createdApiKey" class="row justify-content-center">
+      <div class="col-lg-8 col-12">
+        <div class="success-container">
+          <div class="text-center mb-4">
+            <i class="bi bi-check-circle-fill text-success display-1 mb-3"></i>
+            <h2 class="fw-bold text-body-emphasis mb-2">API Key Created Successfully!</h2>
+            <p class="text-body-secondary lead">Your new API key has been generated and is ready to use.</p>
+          </div>
+
+          <!-- Security Notice -->
+          <div class="alert alert-warning border-0 rounded-4 mb-4">
+            <div class="d-flex align-items-start">
+              <i class="bi bi-exclamation-triangle-fill me-3 text-warning"></i>
+              <div>
+                <h6 class="alert-heading mb-2">Important Security Notice</h6>
+                <p class="mb-0">
+                  <strong>Copy this key immediately!</strong> For security reasons, this is the only time you'll be able to view the complete API key.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- API Key Display -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4">
+              <h5 class="card-title mb-3">
+                <i class="bi bi-key-fill me-2 text-primary"></i>
+                Your API Key
+              </h5>
+              
+              <div class="input-group mb-3">
+                <input 
+                  type="text" 
+                  class="form-control form-control-lg font-monospace"
+                  [value]="createdApiKey.key"
+                  readonly>
+                <button 
+                  class="btn btn-primary"
+                  type="button"
+                  (click)="copyApiKey()">
+                  <i class="bi bi-clipboard me-1"></i>
+                  {{ copyButtonText }}
+                </button>
+              </div>
+
+              <!-- Key Details -->
+              <div class="row g-3">
+                <div class="col-md-3">
+                  <small class="text-body-secondary">Name</small>
+                  <p class="mb-0 fw-semibold">{{ createdApiKey.name }}</p>
+                </div>
+                <div class="col-md-3">
+                  <small class="text-body-secondary">Tier</small>
+                  <p class="mb-0 fw-semibold">{{ createdApiKey.tier }}</p>
+                </div>
+                <div class="col-md-3">
+                  <small class="text-body-secondary">Status</small>
+                  <span class="badge bg-success">{{ createdApiKey.status }}</span>
+                </div>
+                <div class="col-md-3">
+                  <small class="text-body-secondary">Expires</small>
+                  <p class="mb-0 fw-semibold">{{ createdApiKey.expiresAt ? (createdApiKey.expiresAt | date:'mediumDate') : 'Never' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="d-flex gap-3 justify-content-center">
+            <button 
+              class="btn btn-primary btn-lg rounded-pill"
+              (click)="goBackToAccountHub()">
+              <i class="bi bi-house-door me-2"></i>
+              Back to Dashboard
+            </button>
+            <button 
+              class="btn btn-outline-secondary btn-lg rounded-pill"
+              (click)="createAnother()">
+              <i class="bi bi-plus-circle me-2"></i>
+              Create Another
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form State -->
+    <div *ngIf="!success" class="row justify-content-center">
+      <div class="col-lg-8 col-12">
+        
+        <!-- Error Display -->
+        <div *ngIf="error" class="alert alert-danger border-0 rounded-4 mb-4">
+          <div class="d-flex align-items-start">
+            <i class="bi bi-exclamation-triangle-fill me-3 text-danger"></i>
+            <div>
+              <h6 class="alert-heading mb-2">Error Creating API Key</h6>
+              <p class="mb-0">{{ error }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
+          
+          <!-- Basic Information -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-body border-0 py-3">
+              <h5 class="card-title mb-0 fw-bold">
+                <i class="bi bi-info-circle me-2 text-primary"></i>
+                Basic Information
+              </h5>
+            </div>
+            <div class="card-body p-4">
+              
+              <!-- Name Field -->
+              <div class="mb-3">
+                <label for="name" class="form-label fw-semibold">
+                  API Key Name <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                  <input 
+                    type="text" 
+                    class="form-control"
+                    id="name"
+                    formControlName="name"
+                    placeholder="Enter a descriptive name for your API key"
+                    [class.is-invalid]="hasFieldError('name')">
+                  <button 
+                    type="button" 
+                    class="btn btn-outline-secondary"
+                    (click)="generateName()"
+                    title="Generate random name">
+                    <i class="bi bi-shuffle"></i>
+                  </button>
+                </div>
+                <div *ngIf="hasFieldError('name')" class="invalid-feedback">
+                  {{ getFieldError('name') }}
+                </div>
+              </div>
+
+              <!-- Description Field -->
+              <div class="mb-3">
+                <label for="description" class="form-label fw-semibold">Description</label>
+                <textarea 
+                  class="form-control"
+                  id="description"
+                  formControlName="description"
+                  rows="3"
+                  placeholder="Optional description of what this API key will be used for"
+                  [class.is-invalid]="hasFieldError('description')">
+                </textarea>
+                <div *ngIf="hasFieldError('description')" class="invalid-feedback">
+                  {{ getFieldError('description') }}
+                </div>
+              </div>
+
+              <!-- Environment Field -->
+              <div class="mb-3">
+                <label for="environment" class="form-label fw-semibold">
+                  Environment <span class="text-danger">*</span>
+                </label>
+                <select 
+                  class="form-select"
+                  id="environment"
+                  formControlName="environment"
+                  [class.is-invalid]="hasFieldError('environment')">
+                  <option value="development">Development</option>
+                  <option value="staging">Staging</option>
+                  <option value="production">Production</option>
+                </select>
+                <div *ngIf="hasFieldError('environment')" class="invalid-feedback">
+                  {{ getFieldError('environment') }}
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Rate Limits -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-body border-0 py-3">
+              <h5 class="card-title mb-0 fw-bold">
+                <i class="bi bi-speedometer2 me-2 text-success"></i>
+                Rate Limits
+              </h5>
+            </div>
+            <div class="card-body p-4">
+              
+              <!-- Tier Selection -->
+              <div class="mb-3">
+                <label class="form-label fw-semibold">
+                  Rate Limit Tier <span class="text-danger">*</span>
+                </label>
+                <div class="row g-3">
+                  <div 
+                    *ngFor="let tier of rateLimitTiers" 
+                    class="col-md-6 col-lg-3">
+                    <div 
+                      class="tier-card"
+                      [class.selected]="createForm.get('tier')?.value?.tier === tier.tier"
+                      (click)="selectRateLimitTier(tier)">
+                      <div class="tier-header">
+                        <h6 class="tier-name">{{ tier.tier }}</h6>
+                        <p class="tier-description">{{ tier.description }}</p>
+                      </div>
+                      <div class="tier-limits">
+                        <div class="limit-item">
+                          <span class="limit-value">{{ formatNumber(tier.requestsPerDay) }}</span>
+                          <span class="limit-label">requests/day</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Expiration Date -->
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Expiration Date</label>
+                <app-date-picker-popup
+                  [value]="createForm.get('expirationDate')?.value"
+                  [config]="datePickerConfig"
+                  (valueChange)="onExpirationDateChange($event)">
+                </app-date-picker-popup>
+                <small class="form-text text-body-secondary">
+                  Leave empty for no expiration
+                </small>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Permissions -->
+          <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-body border-0 py-3">
+              <h5 class="card-title mb-0 fw-bold">
+                <i class="bi bi-shield-check me-2 text-warning"></i>
+                Permissions
+              </h5>
+            </div>
+            <div class="card-body p-4">
+              
+              <div class="mb-3">
+                <p class="text-body-secondary">
+                  Select the API scopes this key should have access to. 
+                  <span class="badge bg-info-subtle text-info">{{ selectedScopes.size }} selected</span>
+                </p>
+              </div>
+
+              <!-- Scope Groups -->
+              <div class="scope-groups">
+                <div 
+                  *ngFor="let group of scopeGroups" 
+                  class="scope-group mb-4">
+                  
+                  <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h6 class="scope-group-title mb-0">{{ group.name }}</h6>
+                    <div class="btn-group btn-group-sm">
+                      <button 
+                        type="button" 
+                        class="btn btn-outline-primary btn-sm"
+                        (click)="selectAllInGroup(group)">
+                        Select All
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-outline-secondary btn-sm"
+                        (click)="deselectAllInGroup(group)">
+                        Clear All
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <p class="scope-group-description text-body-secondary small mb-3">
+                    {{ group.description }}
+                  </p>
+                  
+                  <div class="row g-2">
+                    <div 
+                      *ngFor="let scope of group.scopes" 
+                      class="col-md-6 col-lg-4">
+                      <div 
+                        class="scope-item"
+                        [class.selected]="isScopeSelected(scope.key)"
+                        [class.disabled]="scope.adminOnly"
+                        (click)="!scope.adminOnly && toggleScope(scope.key)">
+                        
+                        <div class="form-check">
+                          <input 
+                            class="form-check-input"
+                            type="checkbox"
+                            [id]="scope.key"
+                            [checked]="isScopeSelected(scope.key)"
+                            [disabled]="scope.adminOnly"
+                            (change)="toggleScope(scope.key)">
+                          <label class="form-check-label" [for]="scope.key">
+                            <div class="scope-name">{{ scope.name }}</div>
+                            <div class="scope-description">{{ scope.description }}</div>
+                            <div *ngIf="scope.dangerous" class="scope-warning">
+                              <i class="bi bi-exclamation-triangle text-warning"></i>
+                              Dangerous
+                            </div>
+                            <div *ngIf="scope.adminOnly" class="scope-admin">
+                              <i class="bi bi-shield-lock text-secondary"></i>
+                              Admin Only
+                            </div>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Scope Selection Error -->
+              <div *ngIf="selectedScopes.size === 0" class="alert alert-warning border-0 rounded-3 mt-3">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                Please select at least one permission scope for your API key.
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="d-flex gap-3 justify-content-center">
+            <button 
+              type="submit" 
+              class="btn btn-primary btn-lg rounded-pill px-5"
+              [disabled]="loading || createForm.invalid || selectedScopes.size === 0">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!loading" class="bi bi-plus-circle me-2"></i>
+              {{ loading ? 'Creating...' : 'Create API Key' }}
+            </button>
+            <button 
+              type="button" 
+              class="btn btn-outline-secondary btn-lg rounded-pill px-4"
+              (click)="goBack()"
+              [disabled]="loading">
+              Cancel
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

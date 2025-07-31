@@ -15,6 +15,32 @@ const routes: Routes = [
   {
     path: '',
     children: [
+      // New API Dashboard Routes
+      {
+        path: 'api-dashboard',
+        loadComponent: () => import('./api-dashboard/api-dashboard.component').then(m => m.ApiDashboardComponent),
+        title: 'API Dashboard - RIVO9',
+        canActivate: [authGuard]
+      },
+      {
+        path: 'api-dashboard/api-keys/create',
+        loadComponent: () => import('./api-dashboard/components/create-api-key/create-api-key.component').then(m => m.CreateApiKeyComponent),
+        title: 'Create API Key - RIVO9',
+        canActivate: [authGuard]
+      },
+      {
+        path: 'api-dashboard/api-keys/manage',
+        loadComponent: () => import('./account-hub/components/api-key-management/api-key-management.component').then(m => m.ApiKeyManagementComponent),
+        title: 'API Key Management - RIVO9',
+        canActivate: [authGuard]
+      },
+      {
+        path: 'api-dashboard/api-keys/:id',
+        loadComponent: () => import('./account-hub/components/api-key-details/api-key-details.component').then(m => m.ApiKeyDetailsComponent),
+        title: 'API Key Details - RIVO9',
+        canActivate: [authGuard]
+      },
+      // Legacy Account Hub Routes (keep for backward compatibility)
       {
         path: 'account-hub',
         component: AccountHubComponent,
