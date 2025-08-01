@@ -295,7 +295,7 @@ private readonly sidenavVisibleRoutes = [
           // },
           {
             id: 'brand-manager',
-            label: 'Brands Api',
+            label: 'Brand Analyzer',
             route: '/brands/company/:domain'
           }
           // ,
