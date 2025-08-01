@@ -52,14 +52,16 @@ private readonly sidenavVisibleRoutes = [
     '/brands/api-dashboard', // New API Dashboard
     '/dashboard',      // Dashboard pages
     '/analytics',      // Analytics pages
-    '/account'         // Account pages
+    '/account',        // Account pages
+    '/pricing/my-plan', // My Plan page (authenticated)
+    '/pricing/choose'   // Choose Plan page (authenticated)
   ];
 
   // Routes where sidenav should never be visible
   // This includes public/marketing pages that should remain clean
   private readonly sidenavHiddenRoutes = [
     '/landing',        // Landing page
-    '/pricing',        // Pricing pages (public marketing page)
+    '/pricing/plans',  // Public pricing plans page
     '/blog',           // Blog pages (public content)
     '/login',          // Login page
     '/register',       // Register page
@@ -237,39 +239,41 @@ private readonly sidenavVisibleRoutes = [
  private initializeNavigationItems(): void {
     const navigationItems: SidenavItem[] = [
       // Home - Single item
-      {
-        id: 'home',
-        label: 'Home',
-        icon: 'bi-house',
-        route: '/home'
-      },
+      // {
+      //   id: 'home',
+      //   label: 'Home',
+      //   icon: 'bi-house',
+      //   route: '/home'
+      // },
       
       // Dashboard - Collapsible group
       {
         id: 'dashboard',
         label: 'Dashboard',
         icon: 'bi-speedometer2',
+        route: '/home',
+        
         children: [
-          {
-            id: 'dashboard-overview',
-            label: 'Overview',
-            route: '/dashboard'
-          },
-          {
-            id: 'dashboard-analytics',
-            label: 'Analytics',
-            route: '/dashboard/analytics'
-          }
+          // {
+          //   id: 'dashboard-overview',
+          //   label: 'Overview',
+          //   route: '/dashboard'
+          // },
+          // {
+          //   id: 'dashboard-analytics',
+          //   label: 'Analytics',
+          //   route: '/dashboard/analytics'
+          // }
         ]
       },
 
       // Analytics - Single item
-      {
-        id: 'analytics',
-        label: 'Analytics',
-        icon: 'bi-graph-up'
-        // ,route: '/analytics'
-      },
+      // {
+      //   id: 'analytics',
+      //   label: 'Analytics',
+      //   icon: 'bi-graph-up'
+      //   // ,route: '/analytics'
+      // },
 
       // Brand - Collapsible group
       {
@@ -304,48 +308,48 @@ private readonly sidenavVisibleRoutes = [
       },
 
       // Insights & Reports - Collapsible group
-      {
-        id: 'insights-reports',
-        label: 'Insights & Reports',
-        icon: 'bi-file-earmark-text',
-        children: [
-          {
-            id: 'sentiment-news',
-            label: 'Sentiment & News',
-            route: '/insights/sentiment'
-          },
-          {
-            id: 'data-aggregation',
-            label: 'Data Aggregation Log',
-            route: '/insights/data-log'
-          }
-        ]
-      },
+      // {
+      //   id: 'insights-reports',
+      //   label: 'Insights & Reports',
+      //   icon: 'bi-file-earmark-text',
+      //   children: [
+      //     {
+      //       id: 'sentiment-news',
+      //       label: 'Sentiment & News',
+      //       route: '/insights/sentiment'
+      //     },
+      //     {
+      //       id: 'data-aggregation',
+      //       label: 'Data Aggregation Log',
+      //       route: '/insights/data-log'
+      //     }
+      //   ]
+      // },
 
       // Technology Stack - Collapsible group
-      {
-        id: 'technology-stack',
-        label: 'Technology Stack',
-        icon: 'bi-stack',
-        children: [
+      // {
+      //   id: 'technology-stack',
+      //   label: 'Technology Stack',
+      //   icon: 'bi-stack',
+      //   children: [
          
-        ]
-      },
+      //   ]
+      // },
 
       // AI - Single item
-      {
-        id: 'ai',
-        label: 'AI',
-        icon: 'bi-robot',
-        children: [
-          {
-            id: 'ai-tools',
-            label: 'AI Tools',
-            route: '/tech/ai-tools',
-            badge: { text: 'NEW', type: 'success' }
-          }
-        ]
-      },
+      // {
+      //   id: 'ai',
+      //   label: 'AI',
+      //   icon: 'bi-robot',
+      //   children: [
+      //     {
+      //       id: 'ai-tools',
+      //       label: 'AI Tools',
+      //       route: '/tech/ai-tools',
+      //       badge: { text: 'NEW', type: 'success' }
+      //     }
+      //   ]
+      // },
 
       // Account - Collapsible group
       {
@@ -354,27 +358,28 @@ private readonly sidenavVisibleRoutes = [
         icon: 'bi-person-circle',
         children: [
           {
-            id: 'account-dashboard',
-            label: 'Dashboard',
-            route: '/brands/account-hub',
+            id: 'My plan',
+            label: 'My plan',
+            route: '/pricing/my-plan',
             icon: 'bi-speedometer2'
           },
           {
-            id: 'api-management',
-            label: 'API Management',
-            route: '/brands/account-hub/api-keys/manage',
+            id: 'choose plan',
+            label: 'Choose plan',
+            route: '/pricing/choose',
             icon: 'bi-key'
-          },
-          {
-            id: 'support',
-            label: 'Support',
-            route: '/account/support'
-          },
-          {
-            id: 'my-account',
-            label: 'My Account',
-            route: '/account/profile'
           }
+          // ,
+          // {
+          //   id: 'support',
+          //   label: 'Support',
+          //   route: '/account/support'
+          // },
+          // {
+          //   id: 'my-account',
+          //   label: 'My Account',
+          //   route: '/account/profile'
+          // }
         ]
       }
     ];

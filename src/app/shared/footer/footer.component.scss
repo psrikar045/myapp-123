@@ -267,7 +267,9 @@
       transform: translateY(-2px);
     }
   }
-  
+  .bi-arrow-up{
+font-size: 17px !important;
+  }
   &:active {
     transform: translateY(-3px) scale(1.05);
   }
