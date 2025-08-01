@@ -15,9 +15,10 @@
   background: linear-gradient(135deg, #4a73f1 0%, #151aaf 100%);
   position: relative;
   overflow: hidden;
-  min-height: 60vh;
+  // min-height: 60vh;
   display: flex;
   align-items: center;
+  height: 390px;
   
   &::before {
     content: '';

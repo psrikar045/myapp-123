@@ -3,7 +3,7 @@
   width: 100%;
   background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
   padding: 2rem 0;
-  margin-top: 75px;
+  /* margin-top: 75px; */
   
   @media (max-width: 768px) {
     padding: 1rem 0;
@@ -381,7 +381,7 @@ p{
 
 .blog-details-content {
   display: flex;
-  gap: 20px;
+  gap: 50px;
 }
 
 .back-button-container {
