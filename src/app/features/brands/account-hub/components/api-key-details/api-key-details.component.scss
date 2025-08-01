@@ -34,7 +34,7 @@
     border: 2px dashed var(--bs-border-color);
     border-radius: 0.5rem;
     padding: 1rem;
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-family: var(--font-family-mono);
     font-size: 0.875rem;
     position: relative;
     transition: all 0.2s ease;

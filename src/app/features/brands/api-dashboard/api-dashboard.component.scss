@@ -294,7 +294,6 @@
     code {
       background: rgba(var(--bs-dark-rgb), 0.05) !important;
       border: 1px solid rgba(var(--bs-dark-rgb), 0.1);
-      font-family: 'Courier New', monospace;
       font-weight: 500;
       transition: all 0.3s ease;
 
@@ -466,7 +465,6 @@
 
     code {
       font-size: 0.75rem;
-      font-family: var(--theme-font-family);
       background-color: transparent;
       color: var(--theme-text);
     }
@@ -491,7 +489,6 @@
   // Buttons - Using theme system
   .btn {
     font-weight: var(--theme-font-weight);
-    font-family: var(--theme-font-family);
     transition: var(--theme-animations);
     border-radius: var(--theme-border-radius);
 
@@ -902,7 +899,6 @@
       
       // API Key Code
       .api-key-code {
-        font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
         font-size: 0.7rem;
         background-color: var(--bs-gray-100);
         border: 1px solid var(--bs-gray-200);

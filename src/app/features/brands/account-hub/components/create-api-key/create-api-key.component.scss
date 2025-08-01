@@ -348,7 +348,6 @@
           background: rgba(255, 255, 255, 0.9);
           border: 1px solid rgba(255, 255, 255, 0.2);
           color: var(--bs-dark);
-          font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
           font-size: 0.9rem;
           letter-spacing: 0.5px;
         }
@@ -597,7 +596,7 @@
 
   // Code Display
   code {
-    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-family: var(--font-family-mono);
     font-size: 0.875rem;
     word-break: break-all;
   }
@@ -1492,7 +1491,7 @@
     
     // Ensure API key is readable when printed
     .font-monospace {
-      font-family: 'Courier New', monospace !important;
+      font-family: var(--font-family-mono) !important;
       font-size: 12pt !important;
     }
   }
@@ -3008,7 +3007,7 @@
       max-width: 250px !important;
       flex: 0 0 auto;
       font-weight: 600;
-      font-family: 'Courier New', monospace;
+      font-family: var(--font-family-mono);
       background: rgba(255, 255, 255, 0.95);
       border: 2px solid rgba(var(--bs-primary-rgb), 0.2);
       
@@ -3058,7 +3057,7 @@
       &.bg-body-tertiary {
         background: rgba(var(--bs-tertiary-bg-rgb), 0.8);
         color: var(--bs-body-secondary);
-        font-family: 'Courier New', monospace;
+        font-family: var(--font-family-mono);
         font-size: 0.9rem;
         min-width: 200px;
         max-width: 300px;

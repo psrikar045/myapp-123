@@ -84,7 +84,6 @@
 }
 
 .categories-title {
-  font-family: var(--font-family-secondary) !important;
   font-size: clamp(2.5rem, 5vw, 3.5rem); // Larger title
   font-weight: var(--font-weight-bold);
   line-height: 1.1;
@@ -124,7 +123,6 @@
 }
 
 .categories-desc {
-  font-family: var(--font-family-primary);
   font-size: 1.2rem;
   line-height: 1.6;
   text-align: center;
@@ -176,7 +174,6 @@
     outline: none;
     padding: 1.5rem 0; // Increased padding
     font-size: 1.2rem; // Larger font
-    font-family: var(--font-family-primary);
     background: transparent;
     font-weight: 400;
     
@@ -339,7 +336,6 @@
   border-bottom: 2px solid rgba(var(--bs-primary-rgb), 0.1);
   
   .sidebar-title {
-    font-family: var(--font-family-secondary);
     font-size: 1.3rem;
     font-weight: 600;
     color: #1a202c;
@@ -635,7 +631,6 @@
 }
 
 .brand-card-title {
-  font-family: var(--font-family-secondary);
   font-weight: 600;
   font-size: 0.9rem; // Even smaller for 4x3 grid
   color: #2d3748;

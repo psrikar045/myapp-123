@@ -41,7 +41,7 @@ body {
 
 body {
   margin: 0;
-  font-family: "Inter", sans-serif !important;
+  /* Font family inherited from global styles */
   line-height: 1.6; /* Slightly increased line-height for better readability on mobile */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -49,7 +49,7 @@ body {
   color: #333; /* Default light theme text color */
   overflow-x: hidden;
 }
-button{font-family: "Inter", sans-serif !important;}
+/* Button font family inherited from global styles */
 
 /* Basic responsive media elements */
 img,
@@ -441,54 +441,42 @@ body.dark-theme .mat-mdc-menu-item:hover:not([disabled]) {
   --ngx-json-null-bg: transparent;
 }
 .ngx-json-viewer {
-  font-family: 'Inter',  sans-serif !important;  /* Customize font */
+  /* Font family inherited from global styles */
   line-height: 1.8 !important;                               /* Adjust spacing */
   font-size: 16px;                                           /* Optional: size */
 }
-html, body {
-  font-family: "Inter", sans-serif !important;
-}
-:root {
-  font-family: "Inter", sans-serif !important;
-}
+/* HTML and body font family inherited from global styles */
+/* Root font family inherited from global styles */
 
-input{
-  font-family: "Inter", sans-serif !important;  
-}
-mat-label{
-   font-family: "Inter", sans-serif !important;  
-}
-mat-form-field{
-   font-family: "Inter", sans-serif !important;  
-}
+/* Input font family inherited from global styles */
+/* Mat-label font family inherited from global styles */
+/* Mat-form-field font family inherited from global styles */
 /* * {
   font-family: inherit !important;
 } */
 .sidebar-title{
    font-weight: 700 !important;
 }
-.nsm7Bb-HzV7m-LgbsSe .nsm7Bb-HzV7m-LgbsSe-BPrWId{
-  font-family: "Inter", sans-serif !important; 
-}
+/* Google Sign-In button font family inherited from global styles */
 h2{
-  font-family: "Inter", sans-serif !important; 
+  /* Font family inherited from global styles */
   /* font: 500 20px / 32px "Inter", Roboto, sans-serif !important; */
 }
 .mat-typography h2 {
-  font-family: "Inter", sans-serif !important;
+  /* Font family inherited from global styles */
   /* font: 500 20px / 32px "Inter", Roboto, sans-serif !important; */
 }
 
 .mat-typography h3 {
-  font-family: "Inter", sans-serif !important;
+  /* Font family inherited from global styles */
   /* font: 723 20px / 26px "Inter", Roboto, sans-serif !important; */
 }
  .mat-typography{
-  font-family: "Inter", sans-serif !important;
+  /* Font family inherited from global styles */
   /* font: "Inter", Roboto, sans-serif !important; */
  }
 
-/* Force Inter font on all Angular Material menus and overlays */
+/* Angular Material menus and overlays font family inherited from global styles */
 .cdk-overlay-container .mat-menu-panel,
 .cdk-overlay-container .mat-menu-item,
 .mat-menu-panel,
@@ -498,17 +486,17 @@ h2{
 [style*='font-family: Roboto'],
 [style*='font-family: "Roboto"'],
 [style*='font-family:Roboto'] {
-  font-family: "Inter", sans-serif !important;
+  /* Font family inherited from global styles */
 }
 
-/* Force Inter font on overlay text, but NOT on icons */
+/* Overlay text font family inherited from global styles */
 .cdk-overlay-container *:not(.mat-icon):not([class*="material-icons"]) {
-  font-family: "Inter", sans-serif !important;
+  /* Font family inherited from global styles */
 }
 
-/* Force Inter font on all Angular Material headings */
+/* Angular Material headings font family inherited from global styles */
 .mat-h1, .mat-headline-5, .mat-typography .mat-h1, .mat-typography .mat-headline-5, .mat-typography h1 {
-  font-family: "Inter", sans-serif !important;
+  /* Font family inherited from global styles */
 }
 
 /* Ensure my-profile dropdown is positioned at right: 100px */

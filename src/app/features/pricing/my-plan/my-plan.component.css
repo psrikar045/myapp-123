@@ -265,7 +265,6 @@
 }
 
 .progress-value {
-  font-family: "Inter", sans-serif;
   letter-spacing: 0.5px;
 }
 
@@ -409,7 +408,6 @@
   font-size: 1.5rem;
   font-weight: 700;
   color: #2563eb;
-  font-family: "Inter", sans-serif;
 }
 
 /* Responsive adjustments */

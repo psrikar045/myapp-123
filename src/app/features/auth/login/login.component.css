@@ -11,7 +11,6 @@
   background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
   padding: 1rem;
   box-sizing: border-box;
-  font-family: var(--theme-font-family);
   transition: var(--theme-animations);
   color: var(--theme-text);
   
@@ -447,7 +446,6 @@ mat-form-field {
 
 /* Enhanced Button Styles */
 .login-button, .register-button {
-  font-family: var(--font-family-primary, 'Inter', sans-serif) !important;
   font-weight: 600 !important;
   border-radius: 0.5rem !important;
   padding: 0.875rem 1.5rem !important;
@@ -792,5 +790,5 @@ mat-form-field {
   }
 }
 #googleSignInButton * {
-  font-family: 'Inter', sans-serif !important;
+  /* Font family inherited from global styles */
 }

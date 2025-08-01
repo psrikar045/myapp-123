@@ -55,7 +55,6 @@
   }
   
   .hero-title {
-    font-family: var(--font-family-secondary) !important;
     font-weight: var(--font-weight-bold);
     font-size: clamp(2.5rem, 5vw, 3.5rem);
     line-height: 1.2;
@@ -67,7 +66,6 @@
   }
   
   .hero-subtitle {
-    font-family: var(--font-family-primary) !important;
     font-size: 1.125rem;
     line-height: 1.6;
     opacity: 0.9;

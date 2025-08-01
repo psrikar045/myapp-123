@@ -91,7 +91,6 @@
   .footer-section {
     h5 {
       color: #ffffff !important;
-      font-family: var(--font-family-secondary);
       font-size: 1.1rem;
       font-weight: var(--font-weight-semibold);
       letter-spacing: 0.025em;
@@ -114,7 +113,6 @@
     
     .footer-link {
       transition: all 0.3s ease;
-      font-family: var(--font-family-primary);
       font-size: 0.9rem;
       font-weight: var(--font-weight-normal);
       color: rgba(255, 255, 255, 0.85) !important;
@@ -132,7 +130,6 @@
     // Footer text elements - Light text on dark background
     p {
       color: rgba(255, 255, 255, 0.95) !important; // Light text for contrast
-      font-family: var(--font-family-primary);
       line-height: 1.6;
       margin-bottom: 1rem;
       text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); // Dark shadow

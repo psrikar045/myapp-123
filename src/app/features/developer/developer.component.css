@@ -1,5 +1,5 @@
         * {
-            font-family: "Inter", sans-serif;
+            /* Font family inherited from global styles */
         }
         
         .dev-container {
@@ -151,7 +151,7 @@
             border-radius: 12px;
             padding: 16px;
             height: 240px;
-            font-family: 'Monaco', 'Menlo', monospace;
+            font-family: var(--font-family-mono);
             font-size: 13px;
             line-height: 1.5;
             overflow: hidden;
@@ -491,7 +491,7 @@
         }
 
         .code-content {
-            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-family: var(--font-family-mono);
             font-size: 13px;
             line-height: 1.6;
             color: #e2e8f0;
@@ -837,7 +837,7 @@
             border-radius: 8px;
             padding: 20px;
             margin-top: 15px;
-            font-family: 'Monaco', monospace;
+            font-family: var(--font-family-mono);
             font-size: 12px;
             color: #e5e7eb;
         }
@@ -1171,7 +1171,7 @@ img.codeImgcu {
   margin: 0 auto 40px auto;
   padding: 32px 24px;
   text-align: left;
-  font-family: 'Fira Mono', 'Menlo', 'Monaco', monospace;
+  font-family: var(--font-family-mono);
   font-size: 1rem;
   overflow-x: auto;
 }
@@ -1245,10 +1245,10 @@ img.codeImgcu {
   .workflow-code-block { font-size: 0.95rem; }
 }
 :host {
-  font-family: "Inter", sans-serif;
+  /* Font family inherited from global styles */
 }
 body, .dev-container, .container, .features-section, .marketing-section, .innovation-section, .workflow-section-mock, .final-hero-section {
-  font-family: "Inter", sans-serif;
+  /* Font family inherited from global styles */
 }
 /* .BGlastSection{background: linear-gradient(180deg, #0550D2 0%, #003184 100%);} */
 .BGlastSection{
