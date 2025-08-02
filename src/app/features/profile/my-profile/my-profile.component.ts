@@ -33,8 +33,8 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   sidebarMenu = [
     { label: 'Edit Profile', active: true, disabled: false },
     { label: 'Notifications', active: false, disabled: false },
-    { label: 'My Plan', active: false, disabled: false },
-    { label: 'Choose Plan', active: false, disabled: false },
+    // { label: 'My Plan', active: false, disabled: false },
+    // { label: 'Choose Plan', active: false, disabled: false },
     { label: 'Password & Security', active: false, disabled: false }
   ];
   userProfile: any;
