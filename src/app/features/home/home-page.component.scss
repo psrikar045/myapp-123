@@ -131,18 +131,14 @@
   h1 {
     color: #1a1a1a;
     font-weight: 700;
-    
-    @media (max-width: 767.98px) {
-      font-size: 2rem;
-    }
   }
   
   .lead {
     color: #6b7280;
-    font-size: 1.1rem;
+    /* Font size removed - using global typography system */
     
     @media (max-width: 767.98px) {
-      font-size: 1rem;
+      /* Font size removed - using global typography system */
     }
   }
 }
@@ -251,11 +247,11 @@
   
   .card-title {
     color: #1a1a1a;
-    font-size: 1.25rem;
+    /* Font size removed - using global typography system */
   }
   
   .card-text {
-    font-size: 0.95rem;
+    /* Font size removed - using global typography system */
     line-height: 1.5;
   }
   
@@ -265,7 +261,7 @@
     right: 1rem;
     
     i {
-      font-size: 1.2rem;
+      /* Font size removed - using global typography system */
       transition: all 0.3s ease;
     }
   }
@@ -297,11 +293,11 @@
   
   .card-title {
     color: #1a1a1a;
-    font-size: 1rem;
+    /* Font size removed - using global typography system */
   }
   
   .card-text {
-    font-size: 0.85rem;
+    /* Font size removed - using global typography system */
     line-height: 1.4;
   }
 }
@@ -377,9 +373,7 @@
 
 // Typography Responsive
 h3 {
-  @media (max-width: 767.98px) {
-    font-size: 1.5rem;
-  }
+  // Font size removed - using global typography system
 }
 
 // Card Animations

@@ -93,7 +93,6 @@
   .footer-section {
     h5 {
       color: #ffffff !important;
-      font-size: 1.1rem;
       font-weight: var(--font-weight-semibold);
       letter-spacing: 0.025em;
       margin-bottom: 1rem;
@@ -268,7 +267,7 @@
     }
   }
   .bi-arrow-up{
-font-size: 17px !important;
+    // Font size removed - using global typography system
   }
   &:active {
     transform: translateY(-3px) scale(1.05);

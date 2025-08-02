@@ -363,7 +363,7 @@
     }
     
     .welcome-subtitle {
-      font-size: 1rem;
+      // Font size removed - using global typography system
       color: rgba(255, 255, 255, 0.8);
       margin: 0;
     }
@@ -606,7 +606,7 @@
 .content-subtitle {
   color: #6b7280;
   margin: 0;
-  font-size: 1rem;
+  // Font size removed - using global typography system
 }
 
 .content-meta {
@@ -648,7 +648,7 @@
 }
 
 .form-section-title {
-  font-size: 1.2rem;
+  // Font size removed - using global typography system
   font-weight: 600;
   color: #374151;
   margin-bottom: 1.5rem;
@@ -1465,11 +1465,7 @@
     }
     
     i.display-1 {
-      font-size: 4rem;
-      
-      @media (max-width: 575.98px) {
-        font-size: 3rem;
-      }
+      // Font size removed - using global typography system
     }
     
     h6 {
@@ -1502,11 +1498,7 @@
   }
   
   i.display-6 {
-    font-size: 2.5rem;
-    
-    @media (max-width: 575.98px) {
-      font-size: 2rem;
-    }
+    // Font size removed - using global typography system
   }
   
   strong {

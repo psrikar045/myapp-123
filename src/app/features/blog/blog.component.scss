@@ -870,7 +870,7 @@
     padding: 3rem 0 !important;
     
     h1 {
-      font-size: 2.5rem;
+      // Font size removed - using global typography system
     }
     
     .lead {
@@ -911,7 +911,7 @@
 @media (max-width: 575.98px) {
   .blog-hero-section {
     h1 {
-      font-size: 2rem;
+      // Font size removed - using global typography system
     }
     
     .lead {

@@ -256,7 +256,7 @@ export class LayoutService implements OnDestroy {
       },
       '/pricing': {
         showHeader: true,
-        showFooter: false, // You removed footer from pricing
+        showFooter: true,
         containerClass: 'container-fluid',
         headerType: 'default'
       },
@@ -292,6 +292,12 @@ export class LayoutService implements OnDestroy {
         headerType: 'default'
       },
       '/search': {
+        showHeader: false,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'minimal'
+      },
+      '/search/view': {
         showHeader: true,
         showFooter: false,
         containerClass: 'container-fluid',

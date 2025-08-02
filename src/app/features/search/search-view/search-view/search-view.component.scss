@@ -261,17 +261,13 @@
 }
 
 .brand-title {
-  font-size: 2.6rem;
+  // Font size removed - using global typography system
   font-weight: 800;
   color: var(--text-primary);
   text-align: left;
   line-break: auto;
   line-height: 1;
   margin: 0;
-
-  @media (max-width: 900px) {
-    font-size: 1.3rem;
-  }
 }
 
 .claimed-badge {
@@ -521,29 +517,20 @@
   }
 
   h2 {
-    font-size: 2.1rem;
     font-weight: 700;
     color: var(--text-primary);
     margin-bottom: 18px;
     margin-top: 0;
-
-    @media (max-width: 767.98px) {
-      font-size: 1.8rem;
-    }
   }
 }
 
 .company-section-desc {
-  font-size: 1.12rem;
+  // Font size removed - using global typography system
   color: var(--text-secondary);
   font-weight: 400;
   margin-bottom: 12px;
   max-width: 800px;
   line-height: 1.6;
-
-  @media (max-width: 767.98px) {
-    font-size: 1rem;
-  }
 }
 
 // Logos Section
@@ -845,19 +832,15 @@
   }
 
   .brand-title {
-    font-size: 1.5rem !important;
+    // Font size removed - using global typography system
   }
 
   .company-section {
     padding: 15px 10px !important;
-    
-    h2 {
-      font-size: 1.5rem !important;
-    }
   }
 
   .company-section-desc {
-    font-size: 0.95rem !important;
+    // Font size removed - using global typography system
   }
 
   .filter-btn {

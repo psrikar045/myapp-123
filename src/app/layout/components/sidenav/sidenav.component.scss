@@ -281,14 +281,7 @@
   }
 
   .logo-subtitle {
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: var(--bs-primary);
-    margin-left: 44px; // Align with logo letter + gap
-    line-height: 1;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    opacity: 0.8;
+    // Font size removed - using global typography system
   }
 }
 

@@ -90,11 +90,7 @@
     }
     
     .stat-number {
-      font-size: 2rem;
-      
-      @media (max-width: 767.98px) {
-        font-size: 1.5rem;
-      }
+      // Font size removed - using global typography system
     }
     
     .stat-label {
@@ -157,11 +153,11 @@
     }
     
     h1 {
-      font-size: 2rem;
+      // Font size removed - using global typography system
     }
     
     .lead {
-      font-size: 1rem;
+      // Font size removed - using global typography system
     }
   }
   
@@ -171,11 +167,11 @@
     }
     
     .action-icon i {
-      font-size: 3rem !important;
+      // Font size removed - using global typography system
     }
     
     .card-title {
-      font-size: 1.1rem;
+      // Font size removed - using global typography system
     }
   }
   
@@ -184,11 +180,11 @@
       margin-bottom: 1rem;
       
       .stat-number {
-        font-size: 1.25rem;
+        // Font size removed - using global typography system
       }
       
       .stat-label {
-        font-size: 0.85rem;
+        // Font size removed - using global typography system
       }
     }
   }
@@ -197,17 +193,17 @@
 @media (max-width: 575.98px) {
   .welcome-card {
     h1 {
-      font-size: 1.75rem;
+      // Font size removed - using global typography system
     }
     
     .lead {
-      font-size: 0.95rem;
+      // Font size removed - using global typography system
     }
   }
   
   .action-card {
     .action-icon i {
-      font-size: 2.5rem !important;
+      // Font size removed - using global typography system
     }
   }
 }

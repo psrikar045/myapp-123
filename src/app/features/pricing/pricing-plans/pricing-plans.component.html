@@ -1,124 +1,87 @@
 
 
-<!-- Bootstrap Responsive Pricing Page -->
+<!-- RIVO9 Pricing Page -->
 <div class="pricing-page-container">
   
   <!-- Hero Section -->
-  <div class="pricing-hero-section bg-primary text-white py-5">
+  <div class="pricing-hero-section">
     <div class="container">
-      <div class="row justify-content-center text-center margin-height-hero">
-        <div class="col-lg-8 col-md-10 col-12">
-          <h1 class="display-4 fw-bold mb-3">{{ hero.title }}</h1>
-          <p class="lead mb-0">{{ hero.subtitle }}</p>
-        </div>
+      <div class="hero-content">
+        <h1 class="hero-title">Flexible pricing for every team</h1>
+        <p class="hero-subtitle">Choose a plan that fits your workflow. Instantly access logos, brand colors, fonts, and social links for any company. Upgrade for advanced integrations, asset libraries, and team features.</p>
       </div>
     </div>
   </div>
 
   <!-- Billing Toggle Section -->
-  <div class="billing-toggle-section py-4 bg-light">
+  <div class="billing-toggle-section">
     <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-8 col-12">
-          <div class="billing-toggle-card card border-0 shadow-sm">
-            <div class="card-body p-4">
-              <div class="d-flex align-items-center justify-content-center gap-3">
-                <span class="billing-option fw-semibold" 
-                      [class.text-primary]="!isAnnual"
-                      [class.text-muted]="isAnnual"
-                      (click)="isAnnual = false"
-                      style="cursor: pointer;">
-                  Bill Monthly
-                </span>
-                
-                <div class="form-check form-switch">
-                  <input class="form-check-input" 
-                         type="checkbox" 
-                         id="billing-toggle" 
-                         [(ngModel)]="isAnnual"
-                         style="transform: scale(1.2);">
-                </div>
-                
-                <span class="billing-option fw-semibold position-relative" 
-                      [class.text-primary]="isAnnual"
-                      [class.text-muted]="!isAnnual"
-                      (click)="isAnnual = true"
-                      style="cursor: pointer;">
-                  Bill Annually
-                  <span class="badge bg-success position-absolute top-0 start-100 translate-middle" 
-                        style="font-size: 0.6rem;">
-                    Save 20%
-                  </span>
-                </span>
-              </div>
-            </div>
+      <div class="billing-toggle-wrapper">
+        <div class="billing-toggle">
+          <span class="billing-option" 
+                [class.active]="!isAnnual"
+                (click)="isAnnual = false">
+            Bill Monthly
+          </span>
+          
+          <div class="toggle-switch" (click)="isAnnual = !isAnnual">
+            <div class="toggle-slider" [class.active]="isAnnual"></div>
           </div>
+          
+          <span class="billing-option" 
+                [class.active]="isAnnual"
+                (click)="isAnnual = true">
+            Bill Annually
+          </span>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Pricing Cards Section -->
-  <div class="pricing-cards-section py-5">
+  <div class="pricing-cards-section">
     <div class="container">
-      <div class="row g-4 justify-content-center">
-        <div class="col-lg-4 col-md-6 col-12" *ngFor="let plan of displayPlans; let i = index">
-          <div class="pricing-card card border-0 shadow-sm h-100 position-relative"
-               [class.border-primary]="plan.highlight"
-               [class.shadow-lg]="plan.highlight">
-            
-            <!-- Most Popular Badge -->
-            <div *ngIf="plan.mostPopular" 
-                 class="most-popular-badge position-absolute top-0 start-50 translate-middle">
-              <span class="badge bg-primary px-3 py-2">
-                <i class="bi bi-star-fill me-1"></i>
-                Most Popular
-                <i class="bi bi-star-fill ms-1"></i>
-              </span>
+      <div class="pricing-cards-grid">
+        <div class="pricing-card" 
+             *ngFor="let plan of displayPlans; let i = index"
+             [class.highlighted]="plan.highlight">
+          
+          <!-- Most Popular Badge -->
+          <div class="most-popular-badge" *ngIf="plan.mostPopular">
+            <span>+ Most popular +</span>
+          </div>
+          
+          <!-- Plan Header -->
+          <div class="plan-header">
+            <h2 class="plan-title">{{ plan.name }}</h2>
+            <p class="plan-description">{{ plan.description }}</p>
+          </div>
+          
+          <!-- Plan Price -->
+          <div class="plan-pricing">
+            <div class="price-display">
+              <span class="plan-price">{{ plan.price }}</span>
+              <span class="plan-period">/{{ plan.period }}</span>
             </div>
-            
-            <div class="card-body p-4 text-center d-flex flex-column">
-              <!-- Plan Header -->
-              <div class="plan-header mb-4">
-                <h3 class="plan-title fw-bold mb-2" 
-                    [class.text-primary]="plan.highlight">
-                  {{ plan.name }}
-                </h3>
-                <p class="plan-description text-muted mb-0">{{ plan.description }}</p>
-              </div>
-              
-              <!-- Plan Price -->
-              <div class="plan-pricing mb-4">
-                <div class="price-display">
-                  <span class="plan-price display-4 fw-bold" 
-                        [class.text-primary]="plan.highlight">
-                    {{ plan.price }}
-                  </span>
-                  <span class="plan-period text-muted" *ngIf="plan.period">
-                    / {{ plan.period }}
-                  </span>
-                </div>
-              </div>
-              
-              <!-- Plan Features -->
-              <div class="plan-features-wrapper flex-grow-1 mb-4">
-                <ul class="list-unstyled text-start">
-                  <li class="mb-2" *ngFor="let feature of plan.features">
-                    <i class="bi bi-check-circle-fill text-success me-2"></i>
-                    {{ feature }}
-                  </li>
-                </ul>
-              </div>
-              
-              <!-- Plan Button -->
-              <div class="plan-action mt-auto">
-                <button class="btn w-100 py-3 fw-semibold"
-                        [class.btn-primary]="plan.highlight"
-                        [class.btn-outline-primary]="!plan.highlight">
-                  {{ plan.button }}
-                </button>
-              </div>
-            </div>
+          </div>
+          
+          <!-- Plan Features -->
+          <div class="plan-features">
+            <ul class="features-list">
+              <li class="feature-item" *ngFor="let feature of plan.features">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>{{ feature }}</span>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- Plan Button -->
+          <div class="plan-action">
+            <button class="plan-button" 
+                    [class.primary]="plan.highlight"
+                    [class.secondary]="!plan.highlight">
+              {{ plan.button }}
+            </button>
           </div>
         </div>
       </div>
@@ -126,58 +89,42 @@
   </div>
 
   <!-- FAQ Section -->
-  <div class="faq-section py-5 bg-light">
+  <div class="faq-section">
     <div class="container">
-      <div class="row justify-content-center mb-5">
-        <div class="col-lg-8 col-md-10 col-12 text-center">
-          <h2 class="display-6 fw-bold mb-3">Frequently Asked Questions</h2>
-          <p class="lead text-muted">Everything you need to know about RIVO9 pricing, plans, and features.</p>
-        </div>
+      <div class="faq-header">
+        <h2 class="faq-title">Frequently asked questions</h2>
+        <p class="faq-subtitle">Everything you need to know about RIVO9 pricing, plans, and features.</p>
       </div>
       
-      <div class="row g-4">
+      <div class="faq-grid">
         <!-- FAQ Column 1 -->
-        <div class="col-lg-6 col-12">
-          <div class="faq-column">
-            <div class="faq-item-card card border-0 shadow-sm mb-3" 
-                 *ngFor="let faq of faqsCol1; let i = index">
-              <div class="card-header bg-white border-bottom-0 py-3" 
-                   (click)="toggleFaq(0, i)"
-                   style="cursor: pointer;">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h6 class="fw-semibold mb-0">{{ faq.q }}</h6>
-                  <i class="bi transition-transform" 
-                     [class.bi-chevron-down]="!faq.open"
-                     [class.bi-chevron-up]="faq.open"
-                     [class.text-primary]="faq.open"></i>
-                </div>
-              </div>
-              <div class="card-body py-3" *ngIf="faq.open" [@slideDown]>
-                <p class="text-muted mb-0">{{ faq.a }}</p>
-              </div>
+        <div class="faq-column">
+          <div class="faq-item" 
+               *ngFor="let faq of faqsCol1; let i = index"
+               [class.open]="faq.open"
+               (click)="toggleFaq(0, i)">
+            <div class="faq-question">
+              <span>{{ faq.q }}</span>
+              <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="faq-answer" *ngIf="faq.open" [@slideDown]>
+              <p>{{ faq.a }}</p>
             </div>
           </div>
         </div>
         
         <!-- FAQ Column 2 -->
-        <div class="col-lg-6 col-12">
-          <div class="faq-column">
-            <div class="faq-item-card card border-0 shadow-sm mb-3" 
-                 *ngFor="let faq of faqsCol2; let i = index">
-              <div class="card-header bg-white border-bottom-0 py-3" 
-                   (click)="toggleFaq(1, i)"
-                   style="cursor: pointer;">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h6 class="fw-semibold mb-0">{{ faq.q }}</h6>
-                  <i class="bi transition-transform" 
-                     [class.bi-chevron-down]="!faq.open"
-                     [class.bi-chevron-up]="faq.open"
-                     [class.text-primary]="faq.open"></i>
-                </div>
-              </div>
-              <div class="card-body py-3" *ngIf="faq.open" [@slideDown]>
-                <p class="text-muted mb-0">{{ faq.a }}</p>
-              </div>
+        <div class="faq-column">
+          <div class="faq-item" 
+               *ngFor="let faq of faqsCol2; let i = index"
+               [class.open]="faq.open"
+               (click)="toggleFaq(1, i)">
+            <div class="faq-question">
+              <span>{{ faq.q }}</span>
+              <i class="bi bi-chevron-down"></i>
+            </div>
+            <div class="faq-answer" *ngIf="faq.open" [@slideDown]>
+              <p>{{ faq.a }}</p>
             </div>
           </div>
         </div>
@@ -186,16 +133,14 @@
   </div>
 
   <!-- CTA Section -->
-  <div class="cta-section py-5 bg-primary text-white">
+  <div class="cta-section">
     <div class="container">
-      <div class="row justify-content-center text-center">
-        <div class="col-lg-8 col-md-10 col-12">
-          <h2 class="display-6 fw-bold mb-3">{{ cta.title }}</h2>
-          <p class="lead mb-4">{{ cta.subtitle }}</p>
-          <button class="btn btn-light btn-lg px-5 py-3 fw-semibold">
-            {{ cta.button }}
-          </button>
-        </div>
+      <div class="cta-content">
+        <h2 class="cta-title">Unlock the power of brand data</h2>
+        <p class="cta-subtitle">Start your free trial today and see how RIVO9 can streamline your workflow, boost your team's productivity, and keep your brand assets always up to date.</p>
+        <button class="cta-button">
+          Start free trial
+        </button>
       </div>
     </div>
   </div>

@@ -157,7 +157,7 @@
 
 .section-title {
   margin: 0 0 20px 0;
-  font-size: 1rem;
+  // Font size removed - using global typography system
   font-weight: 600;
   color: #374151;
   display: flex;
@@ -169,7 +169,7 @@
 
   i {
     color: #4A50E0;
-    font-size: 1.125rem;
+    // Font size removed - using global typography system
   }
 }
 

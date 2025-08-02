@@ -97,13 +97,12 @@
 }
 
 .hero-headline {
-  font-size: clamp(3rem, 5vw, 3rem);
+  // Font size removed - using global typography system
   line-height: 1.2;
   color: var(--theme-text);
   margin-bottom: 1.5rem;
   
   @media (max-width: 767.98px) {
-    font-size: clamp(2rem, 8vw, 3rem);
     br {
       display: none;
     }
@@ -129,13 +128,12 @@
 }
 
 .hero-subheadline {
-  font-size: 1.25rem;
+  // Font size removed - using global typography system
   line-height: 1.6;
   color: var(--bs-secondary);
   max-width: 600px;
   
   @media (max-width: 767.98px) {
-    font-size: 1.1rem;
     max-width: 100%;
   }
 }
@@ -253,7 +251,7 @@
   
   .rivo9-section-subtitle {
     color: #6b7280;
-    font-size: 1.25rem;
+    // Font size removed - using global typography system
     font-weight: 400;
     margin: 0 auto;
     line-height: 1.6;
@@ -422,27 +420,27 @@
       margin-bottom: 1.5rem !important;
       
       i {
-        font-size: 3rem !important;
+        // Font size removed - using global typography system
         transition: all 0.3s ease;
       }
     }
     
     .card-title {
-      font-size: 1.2rem;
+      // Font size removed - using global typography system
      font-weight: 500 !important;
       margin-bottom: 1rem !important;
       letter-spacing: -0.025em;
     }
     
     .card-text {
-      font-size: 1rem;
+      // Font size removed - using global typography system
       font-weight: 400;
       letter-spacing: 0.025em;
     }
   }
   h2.h2FontSize {
-    font-size: 30px;
-}
+    // Font size removed - using global typography system
+  }
   // Responsive adjustments
   @media (max-width: 768px) {
     .rivo9-feature-card {
@@ -453,15 +451,15 @@
       }
       
       .feature-icon i {
-        font-size: 2.5rem !important;
+        // Font size removed - using global typography system
       }
       
       .card-title {
-        font-size: 1.25rem;
+        // Font size removed - using global typography system
       }
       
       .card-text {
-        font-size: 0.95rem;
+        // Font size removed - using global typography system
       }
       
       &:hover {
@@ -477,15 +475,15 @@
       }
       
       .feature-icon i {
-        font-size: 2.25rem !important;
+        // Font size removed - using global typography system
       }
       
       .card-title {
-        font-size: 1.15rem;
+        // Font size removed - using global typography system
       }
       
       .card-text {
-        font-size: 0.9rem;
+        // Font size removed - using global typography system
       }
     }
   }
@@ -576,7 +574,7 @@
     
     .stat-label {
       color: rgba(255, 255, 255, 0.9);
-      font-size: 1.1rem;
+      // Font size removed - using global typography system
       font-weight: 500;
     }
   }
@@ -619,19 +617,19 @@
 // Responsive Typography
 @media (max-width: 575.98px) {
   .display-3 {
-    font-size: 2.5rem;
+    // Font size removed - using global typography system
   }
   
   .display-4 {
-    font-size: 2rem;
+    // Font size removed - using global typography system
   }
   
   .display-5 {
-    font-size: 1.75rem;
+    // Font size removed - using global typography system
   }
   
   .lead {
-    font-size: 1.1rem;
+    // Font size removed - using global typography system
   }
 }
 
