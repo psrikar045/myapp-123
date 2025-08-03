@@ -14,25 +14,25 @@ export class MockDataService {
   getMockDashboardStats(): Observable<DashboardStats> {
     const stats: DashboardStats = {
       apiCalls: {
-        current: 12847,
-        change: '+12%',
+        current: 12345,
+        change: '+10%',
         trend: 'up'
       },
       activeProjects: {
-        current: 23,
-        change: '+3',
+        current: 5,
+        change: '+5%',
         trend: 'up'
       },
       brandsAdded: {
-        current: 8,
-        change: '+2',
+        current: 2,
+        change: '+2%',
         trend: 'up'
       },
       remainingQuota: {
-        current: 87153,
-        percentage: 73,
-        total: 100000,
-        resetDate: '2024-03-01'
+        current: 10000,
+        percentage: 75,
+        total: 13333,
+        resetDate: '2024-12-31'
       }
     };
 
@@ -88,14 +88,15 @@ export class MockDataService {
     const keys: ApiKey[] = [
       {
         id: '1',
-        name: 'Production API Key',
-        maskedKey: 'mk_prod_************************ab12',
+        name: 'mk_prod_1234',
+        maskedKey: 'mk_prod_************************1234',
         tier: 'PREMIUM',
+        environment: 'production',
         scopes: ['READ_BRANDS', 'READ_CATEGORIES', 'BUSINESS_READ'],
         usage: {
           requestsToday: 1247,
           remainingToday: 8753,
-          lastUsed: '2024-01-15T08:30:00Z',
+          lastUsed: '2023-11-15T08:30:00Z',
           rateLimitStatus: 'OK'
         },
         security: {
@@ -116,14 +117,15 @@ export class MockDataService {
       },
       {
         id: '2',
-        name: 'Development API Key',
-        maskedKey: 'mk_dev_************************cd34',
+        name: 'mk_test_5678',
+        maskedKey: 'mk_test_************************5678',
         tier: 'STANDARD',
+        environment: 'staging',
         scopes: ['READ_BRANDS', 'READ_CATEGORIES'],
         usage: {
           requestsToday: 156,
           remainingToday: 844,
-          lastUsed: '2024-01-15T12:15:00Z',
+          lastUsed: '2023-10-20T12:15:00Z',
           rateLimitStatus: 'OK'
         },
         security: {
@@ -139,18 +141,19 @@ export class MockDataService {
           allowedOrigins: []
         },
         createdAt: '2024-01-01T00:00:00Z',
-        status: 'ACTIVE'
+        status: 'SUSPENDED'
       },
       {
         id: '3',
-        name: 'Testing API Key',
-        maskedKey: 'mk_test_************************ef56',
+        name: 'mk_dev_9012',
+        maskedKey: 'mk_dev_************************9012',
         tier: 'BASIC',
+        environment: 'development',
         scopes: ['READ_BRANDS'],
         usage: {
           requestsToday: 89,
           remainingToday: 11,
-          lastUsed: '2024-01-15T14:45:00Z',
+          lastUsed: '2023-09-05T14:45:00Z',
           rateLimitStatus: 'WARNING'
         },
         security: {
@@ -171,14 +174,15 @@ export class MockDataService {
       },
       {
         id: '4',
-        name: 'Staging API Key',
-        maskedKey: 'mk_stage_**********************gh78',
+        name: 'mk_prod_3456',
+        maskedKey: 'mk_prod_************************3456',
         tier: 'STANDARD',
+        environment: 'production',
         scopes: ['READ_BRANDS', 'READ_CATEGORIES'],
         usage: {
           requestsToday: 324,
           remainingToday: 676,
-          lastUsed: '2024-01-15T16:20:00Z',
+          lastUsed: '2023-08-12T16:20:00Z',
           rateLimitStatus: 'OK'
         },
         security: {
@@ -198,14 +202,15 @@ export class MockDataService {
       },
       {
         id: '5',
-        name: 'Mobile App API Key',
-        maskedKey: 'mk_mobile_********************ij90',
+        name: 'mk_test_7890',
+        maskedKey: 'mk_test_************************7890',
         tier: 'PREMIUM',
+        environment: 'staging',
         scopes: ['READ_BRANDS', 'READ_CATEGORIES', 'MOBILE_ACCESS'],
         usage: {
           requestsToday: 2156,
           remainingToday: 7844,
-          lastUsed: '2024-01-15T17:45:00Z',
+          lastUsed: '2023-07-28T17:45:00Z',
           rateLimitStatus: 'OK'
         },
         security: {
@@ -222,7 +227,7 @@ export class MockDataService {
         },
         expiresAt: '2024-06-30T23:59:59Z',
         createdAt: '2024-01-05T00:00:00Z',
-        status: 'ACTIVE'
+        status: 'SUSPENDED'
       },
       {
         id: '6',

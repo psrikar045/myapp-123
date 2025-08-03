@@ -435,10 +435,17 @@
   .table {
     .cursor-pointer {
       cursor: pointer;
-      transition: background-color 0.2s ease;
+      transition: all 0.2s ease;
 
       &:hover {
         background-color: var(--bs-primary-bg-subtle, rgba(var(--bs-primary-rgb), 0.05)) !important;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      &.table-active {
+        background-color: rgba(var(--bs-primary-rgb), 0.1) !important;
+        border-left: 3px solid var(--bs-primary);
       }
     }
 
@@ -446,10 +453,73 @@
       font-weight: 600;
       font-size: 0.75rem;
       letter-spacing: 0.5px;
+      padding: 1rem 0.75rem;
+      text-transform: uppercase;
     }
 
     td {
       vertical-align: middle;
+      padding: 0.75rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    tbody tr {
+      border: none;
+      
+      &:hover {
+        background-color: rgba(var(--bs-primary-rgb), 0.03);
+      }
+    }
+  }
+
+  // Enhanced table responsive
+  .table-responsive {
+    border-radius: 0 0 var(--theme-border-radius) var(--theme-border-radius);
+    
+    .table {
+      margin-bottom: 0;
+    }
+  }
+
+  // API Key Details Sidebar
+  .api-key-details-sidebar {
+    .progress {
+      background-color: rgba(var(--bs-primary-rgb), 0.1);
+      
+      .progress-bar {
+        background: linear-gradient(90deg, var(--bs-primary), rgba(var(--bs-primary-rgb), 0.8));
+      }
+    }
+
+    .btn {
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+    }
+  }
+
+  // Compact stats cards
+  .stats-card {
+    .card-body {
+      padding: 1.5rem !important;
+    }
+
+    h3 {
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    h6 {
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    small {
+      font-size: 0.75rem;
+      font-weight: 500;
     }
   }
 

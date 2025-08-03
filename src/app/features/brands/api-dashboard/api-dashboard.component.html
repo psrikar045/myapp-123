@@ -21,8 +21,7 @@
         <div class="col-12">
           <div class="welcome-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
             <div class="flex-grow-1">
-              <h1 class="display-6 fw-bold mb-2 text-body-emphasis">Api Dashboard</h1>
-              <p class="text-body-secondary lead mb-0">Here's what's happening with your API projects today.</p>
+              <h1 class="display-6 fw-bold mb-0 text-body-emphasis">Welcome back, {{ userName }} 👋</h1>
             </div>
             <div class="d-flex gap-2 flex-wrap">
               <button class="btn btn-outline-primary rounded-pill" (click)="refreshDashboard()">
@@ -39,93 +38,65 @@
       </div>
 
       <!-- Stats Cards Row -->
-      <div class="row g-4 mb-4" *ngIf="stats">
+      <div class="row g-3 mb-4" *ngIf="stats">
         
-        <!-- API Calls Card -->
-         <!-- (click)="viewApiAnalytics()"  -->
+        <!-- Total API Calls Card -->
         <div class="col-lg-3 col-md-6 col-12">
-          <div class="card h-100 border-0 shadow-sm stats-card bg-body">
-            <div class="card-body p-4">
-              <div class="d-flex justify-content-between align-items-start mb-3">
-                <div class="stats-icon bg-primary bg-opacity-10 rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                  <i class="bi bi-graph-up text-primary fs-4"></i>
-                </div>
-                <div class="text-end">
-                  <span class="badge bg-body-secondary text-body-emphasis border">
-                    <i class="bi {{ getTrendIcon(stats.apiCalls.trend) }} me-1 {{ getTrendColorClass(stats.apiCalls.trend) }}"></i>
-                    {{ stats.apiCalls.change }}
-                  </span>
-                </div>
-              </div>
-              <h3 class="fw-bold mb-1 text-body-emphasis fs-2">{{ formatNumber(stats.apiCalls.current) }}</h3>
-              <p class="text-body-secondary mb-0 fw-medium">API Calls</p>
-              <small class="text-body-secondary">from last month</small>
+          <div class="card border-0 shadow-sm stats-card bg-body">
+            <div class="card-body p-3">
+              <h6 class="text-body-secondary mb-1 fw-medium">Total API Calls (last 30 days)</h6>
+              <h3 class="fw-bold mb-1 text-body-emphasis">{{ formatNumber(stats.apiCalls.current) }}</h3>
+              <small class="text-success fw-medium">{{ stats.apiCalls.change }}</small>
             </div>
           </div>
         </div>
 
-        <!-- Active Projects Card -->
+        <!-- Active Domains Card -->
         <div class="col-lg-3 col-md-6 col-12">
-          <div class="card h-100 border-0 shadow-sm stats-card bg-body">
-            <div class="card-body p-4">
-              <div class="d-flex justify-content-between align-items-start mb-3">
-                <div class="stats-icon bg-success bg-opacity-10 rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                  <i class="bi bi-folder text-success fs-4"></i>
-                </div>
-                <div class="text-end">
-                  <span class="badge bg-body-secondary text-body-emphasis border">
-                    <i class="bi {{ getTrendIcon(stats.activeProjects.trend) }} me-1 {{ getTrendColorClass(stats.activeProjects.trend) }}"></i>
-                    {{ stats.activeProjects.change }}
-                  </span>
-                </div>
-              </div>
-              <h3 class="fw-bold mb-1 text-body-emphasis fs-2">{{ stats.activeProjects.current }}</h3>
-              <p class="text-body-secondary mb-0 fw-medium">Active Projects</p>
-              <small class="text-body-secondary">new this week</small>
+          <div class="card border-0 shadow-sm stats-card bg-body">
+            <div class="card-body p-3">
+              <h6 class="text-body-secondary mb-1 fw-medium">Active Domains (projects)</h6>
+              <h3 class="fw-bold mb-1 text-body-emphasis">{{ stats.activeProjects.current }}</h3>
+              <small class="text-success fw-medium">{{ stats.activeProjects.change }}</small>
             </div>
           </div>
         </div>
 
-        <!-- Brands Added Card -->
+        <!-- Domains Added Card -->
         <div class="col-lg-3 col-md-6 col-12">
-          <div class="card h-100 border-0 shadow-sm stats-card bg-body">
-            <div class="card-body p-4">
-              <div class="d-flex justify-content-between align-items-start mb-3">
-                <div class="stats-icon bg-warning bg-opacity-10 rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                  <i class="bi bi-building text-warning fs-4"></i>
-                </div>
-                <div class="text-end">
-                  <span class="badge bg-body-secondary text-body-emphasis border">
-                    <i class="bi {{ getTrendIcon(stats.brandsAdded.trend) }} me-1 {{ getTrendColorClass(stats.brandsAdded.trend) }}"></i>
-                    {{ stats.brandsAdded.change }}
-                  </span>
-                </div>
-              </div>
-              <h3 class="fw-bold mb-1 text-body-emphasis fs-2">{{ stats.brandsAdded.current }}</h3>
-              <p class="text-body-secondary mb-0 fw-medium">Brands Added</p>
-              <small class="text-body-secondary">this month</small>
+          <div class="card border-0 shadow-sm stats-card bg-body">
+            <div class="card-body p-3">
+              <h6 class="text-body-secondary mb-1 fw-medium">Domains Added (this month)</h6>
+              <h3 class="fw-bold mb-1 text-body-emphasis">{{ stats.brandsAdded.current }}</h3>
+              <small class="text-success fw-medium">{{ stats.brandsAdded.change }}</small>
             </div>
           </div>
         </div>
 
         <!-- Remaining Quota Card -->
         <div class="col-lg-3 col-md-6 col-12">
-          <div class="card h-100 border-0 shadow-sm stats-card bg-body">
+          <div class="card border-0 shadow-sm stats-card bg-body">
+            <div class="card-body p-3">
+              <h6 class="text-body-secondary mb-1 fw-medium">Remaining Quota</h6>
+              <h3 class="fw-bold mb-1 text-body-emphasis">{{ formatNumber(stats.remainingQuota.current) }}</h3>
+              <small class="text-danger fw-medium">-{{ 100 - stats.remainingQuota.percentage }}%</small>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quota Usage Section -->
+      <div class="row mb-4" *ngIf="stats">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm bg-body">
             <div class="card-body p-4">
-              <div class="d-flex justify-content-between align-items-start mb-3">
-                <div class="stats-icon bg-info bg-opacity-10 rounded-3 p-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                  <i class="bi bi-speedometer2 text-info fs-4"></i>
-                </div>
-                <div class="text-end">
-                  <span class="badge bg-body-secondary text-body-emphasis border">
-                    {{ stats.remainingQuota.percentage }}% remaining
-                  </span>
-                </div>
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="card-title mb-0 fw-bold">Quota Usage</h5>
+                <span class="badge bg-primary">{{ stats.remainingQuota.percentage }}%</span>
               </div>
-              <h3 class="fw-bold mb-1 text-body-emphasis fs-2">{{ formatNumber(stats.remainingQuota.current) }}</h3>
-              <p class="text-body-secondary mb-2 fw-medium">Remaining Quota</p>
-              <div class="progress mb-2" style="height: 8px;">
-                <div class="progress-bar {{ getQuotaProgressClass(stats.remainingQuota.percentage) }} rounded-pill" 
+              <div class="progress mb-2" style="height: 12px;">
+                <div class="progress-bar bg-primary" 
                      role="progressbar" 
                      [style.width.%]="stats.remainingQuota.percentage"
                      [attr.aria-valuenow]="stats.remainingQuota.percentage"
@@ -133,153 +104,73 @@
                      aria-valuemax="100">
                 </div>
               </div>
-              <small class="text-body-secondary">Resets on {{ formatDate(stats.remainingQuota.resetDate) }}</small>
+              <div class="d-flex justify-content-between">
+                <small class="text-body-secondary">{{ formatNumber(stats.remainingQuota.current) }} / {{ formatNumber(stats.remainingQuota.total) }}</small>
+                <small class="text-body-secondary">{{ stats.remainingQuota.percentage }}%</small>
+              </div>
             </div>
           </div>
         </div>
-
       </div>
 
       <!-- Main Content Row -->
       <div class="row g-4">
         
-        <!-- API Key Management List Section -->
+        <!-- Recent API Keys Table Section -->
         <div class="col-lg-8 col-12">
-          <div class="card border-0 shadow-sm bg-body api-key-management-card">
-            <div class="card-header bg-body border-0 py-3">
-              <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2">
-                <div>
-                  <h5 class="card-title mb-0 fw-bold text-body-emphasis">API Key Management</h5>
-                  <small class="text-body-secondary">{{ filteredApiKeys.length }} API keys</small>
-                </div>
-                <div class="d-flex gap-2">
-                  <button class="btn btn-outline-primary rounded-pill" (click)="refreshDashboard()">
-                    <i class="bi bi-arrow-clockwise me-1"></i>
-                    <span class="d-none d-sm-inline">Refresh</span>
-                  </button>
-                  <button class="btn btn-primary btn-sm rounded-pill" (click)="createApiKey()">
-                    <i class="bi bi-plus-lg me-1"></i>
-                    Create New
-                  </button>
-                </div>
+          <div class="card border-0 shadow-sm bg-body">
+            <div class="card-body p-0">
+              <div class="d-flex justify-content-between align-items-center p-4 border-bottom">
+                <h5 class="card-title mb-0 fw-bold">Recent API Keys</h5>
               </div>
-            </div>
-            
-            <!-- Search and Filter Controls -->
-            <div class="api-key-search-section border-bottom py-3 px-3">
-              <div class="row g-2">
-                <div class="col-md-8 col-12">
-                  <div class="input-group">
-                    <span class="input-group-text bg-body border-end-0">
-                      <i class="bi bi-search text-body-secondary"></i>
-                    </span>
-                    <input 
-                      type="search" 
-                      class="form-control border-start-0"
-                      placeholder="Search API keys by name or key..."
-                      [value]="searchTerm"
-                      #searchInput
-                      (input)="onSearchApiKeys(searchInput.value)">
-                  </div>
-                </div>
-                <div class="col-md-4 col-12">
-                  <select 
-                    class="form-select"
-                    [value]="statusFilter"
-                    #statusSelect
-                    (change)="onStatusFilterChange(statusSelect.value)">
-                    <option value="all">All Status</option>
-                    <option value="ACTIVE">Active</option>
-                    <option value="EXPIRED">Expired</option>
-                    <option value="REVOKED">Revoked</option>
-                    <option value="SUSPENDED">Suspended</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <!-- API Keys List -->
-            <div class="api-keys-container">
-              <div class="api-keys-list">
-                <div *ngFor="let apiKey of filteredApiKeys; trackBy: trackByApiKeyId" 
-                     class="api-key-list-item border-bottom border-opacity-25 px-3 py-2 position-relative"
-                     [class.selected]="selectedApiKey?.id === apiKey.id"
-                     (click)="selectApiKey(apiKey)">
-                  
-                  <!-- API Key Item Content -->
-                  <div class="d-flex align-items-start justify-content-between">
-                    
-                    <!-- Left: Key Info -->
-                    <div class="flex-grow-1 me-3">
-                      <div class="d-flex align-items-center mb-1">
-                        <div class="api-key-icon me-2 bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center">
-                          <i class="bi bi-key text-primary"></i>
+              
+              <!-- API Keys Table -->
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="border-0 fw-semibold text-body-secondary">Domain Name</th>
+                      <th class="border-0 fw-semibold text-body-secondary">Key Name</th>
+                      <th class="border-0 fw-semibold text-body-secondary">Environment</th>
+                      <th class="border-0 fw-semibold text-body-secondary">Status</th>
+                      <th class="border-0 fw-semibold text-body-secondary">Last Used</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let apiKey of filteredApiKeys; trackBy: trackByApiKeyId" 
+                        class="cursor-pointer"
+                        (click)="selectApiKey(apiKey)"
+                        [class.table-active]="selectedApiKey?.id === apiKey.id">
+                      <td class="py-3">
+                        <span class="fw-medium text-body-emphasis">{{ getDomainFromApiKey(apiKey) }}</span>
+                      </td>
+                      <td class="py-3">
+                        <div class="d-flex align-items-center">
+                          <span class="fw-medium text-primary">{{ apiKey.name }}</span>
                         </div>
-                        <div class="flex-grow-1">
-                          <h6 class="mb-0 fw-bold text-body-emphasis api-key-name">{{ apiKey.name }}</h6>
-                          <small class="text-body-secondary api-key-meta">{{ apiKey.environment || 'Production' }} • {{ apiKey.tier || 'Standard' }}</small>
-                        </div>
-                      </div>
-                      
-                      <!-- API Key Value -->
-                      <div class="d-flex align-items-center gap-2 mb-1 api-key-value">
-                        <code class="small text-body-secondary bg-body-tertiary px-2 py-1 rounded api-key-code">{{ apiKey.maskedKey }}</code>
-                        <button class="btn btn-link btn-sm p-1 text-body-secondary api-key-copy-btn" 
-                                (click)="copyApiKey(apiKey.maskedKey); $event.stopPropagation()" 
-                                title="Copy API Key">
-                          <i class="bi bi-clipboard"></i>
-                        </button>
-                      </div>
-
-                      <!-- Usage Info -->
-                      <div class="d-flex align-items-center gap-3 api-key-usage" *ngIf="apiKey.usage">
-                        <small class="text-body-secondary api-key-usage-text">
-                          <i class="bi bi-graph-up me-1"></i>
-                          {{ formatNumber(apiKey.usage.requestsToday) }} requests today
-                        </small>
-                        <small class="text-body-secondary api-key-usage-text">
-                          <i class="bi bi-clock me-1"></i>
-                          {{ formatDate(apiKey.usage.lastUsed) }}
-                        </small>
-                      </div>
-                    </div>
-
-                    <!-- Right: Status & Actions -->
-                    <div class="d-flex flex-column align-items-end gap-2">
-                      <span [class]="getApiKeyStatusClass(apiKey.status)" class="rounded-pill small">
-                        {{ apiKey.status }}
-                      </span>
-                      
-                      <!-- Quick Actions -->
-                      <div class="d-flex gap-1">
-                        <button class="btn btn-outline-primary btn-sm rounded-pill api-key-action-btn" 
-                                (click)="viewApiKeyFullDetails(apiKey); $event.stopPropagation()" 
-                                title="View Full Details">
-                          <i class="bi bi-eye"></i>
-                        </button>
-                        <button class="btn btn-outline-secondary btn-sm rounded-pill api-key-action-btn" 
-                                (click)="editApiKey(apiKey); $event.stopPropagation()" 
-                                title="Edit API Key">
-                          <i class="bi bi-pencil"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Selection Indicator -->
-                  <div *ngIf="selectedApiKey?.id === apiKey.id" 
-                       class="position-absolute top-0 start-0 bg-primary api-key-selection-indicator"></div>
-                </div>
+                      </td>
+                      <td class="py-3">
+                        <span class="badge bg-light text-dark border">{{ getEnvironmentDisplayName(apiKey.environment) }}</span>
+                      </td>
+                      <td class="py-3">
+                        <span [class]="getApiKeyStatusBadgeClass(apiKey.status)">
+                          {{ getStatusDisplayName(apiKey.status) }}
+                        </span>
+                      </td>
+                      <td class="py-3">
+                        <span class="text-body-secondary">{{ formatDate(apiKey.usage?.lastUsed || apiKey.createdAt) }}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
               
               <!-- Empty State -->
               <div *ngIf="filteredApiKeys.length === 0" class="text-center py-5">
                 <i class="bi bi-key display-1 text-body-secondary mb-3" style="opacity: 0.5;"></i>
                 <h6 class="text-body-secondary">No API Keys Found</h6>
-                <p class="text-body-secondary small mb-3">
-                  {{ searchTerm || statusFilter !== 'all' ? 'Try adjusting your search or filter criteria' : 'Create your first API key to get started' }}
-                </p>
-                <button *ngIf="!searchTerm && statusFilter === 'all'" class="btn btn-primary btn-sm rounded-pill" (click)="createApiKey()">
+                <p class="text-body-secondary small mb-3">Create your first API key to get started</p>
+                <button class="btn btn-primary btn-sm rounded-pill" (click)="createApiKey()">
                   <i class="bi bi-plus-lg me-1"></i>
                   Create API Key
                 </button>
@@ -288,17 +179,80 @@
           </div>
         </div>
 
-        <!-- Selected API Key Details Section -->
+        <!-- API Key Details Sidebar -->
         <div class="col-lg-4 col-12">
-          <app-api-key-details
-            [apiKey]="selectedApiKey"
-            [loading]="loading"
-            (viewFullDetails)="onApiKeyDetailsViewFullDetails($event)"
-            (editApiKey)="onApiKeyDetailsEdit($event)"
-            (regenerateApiKey)="onApiKeyDetailsRegenerate($event)"
-            (copyApiKey)="onApiKeyDetailsCopy($event)"
-            (toggleApiKeyStatus)="onApiKeyDetailsToggleStatus($event)">
-          </app-api-key-details>
+          <div class="card border-0 shadow-sm bg-body" *ngIf="selectedApiKey">
+            <div class="card-body p-4">
+              <!-- API Key Header -->
+              <div class="d-flex align-items-center justify-content-between mb-4">
+                <div class="d-flex align-items-center">
+                  <div class="bg-warning bg-opacity-10 rounded-3 p-2 me-3">
+                    <i class="bi bi-shield-lock text-warning fs-5"></i>
+                  </div>
+                  <div>
+                    <h6 class="mb-0 fw-bold">{{ selectedApiKey.name }}</h6>
+                    <small class="text-body-secondary">{{ selectedApiKey.tier || 'Standard' }}</small>
+                  </div>
+                </div>
+                <button class="btn btn-outline-primary btn-sm" (click)="viewApiKeyFullDetails(selectedApiKey)">
+                  View Details →
+                </button>
+              </div>
+
+              <!-- Usage Stats -->
+              <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-body-secondary">Usage</span>
+                  <span class="fw-semibold">{{ formatNumber(selectedApiKey.usage?.requestsToday || 0) }} / {{ formatNumber(13333) }}</span>
+                </div>
+                <div class="progress mb-2" style="height: 8px;">
+                  <div class="progress-bar bg-primary" 
+                       role="progressbar" 
+                       [style.width.%]="getApiKeyUsagePercentage(selectedApiKey)"
+                       [attr.aria-valuenow]="getApiKeyUsagePercentage(selectedApiKey)"
+                       aria-valuemin="0" 
+                       aria-valuemax="100">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Details -->
+              <div class="mb-4">
+                <div class="row g-3">
+                  <div class="col-6">
+                    <div class="text-body-secondary small">Tier</div>
+                    <div class="fw-semibold">{{ selectedApiKey.tier || 'Standard' }}</div>
+                  </div>
+                  <div class="col-6">
+                    <div class="text-body-secondary small">Expiry Date</div>
+                    <div class="fw-semibold">{{ selectedApiKey.expiresAt ? formatDate(selectedApiKey.expiresAt) : '2024-12-31' }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="d-grid gap-2">
+                <button class="btn btn-outline-primary btn-sm" (click)="viewApiKeyFullDetails(selectedApiKey)">
+                  View
+                </button>
+                <button class="btn btn-outline-secondary btn-sm" (click)="editApiKey(selectedApiKey)">
+                  Edit
+                </button>
+                <button class="btn btn-outline-danger btn-sm" (click)="revokeApiKey(selectedApiKey)">
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Placeholder when no API key selected -->
+          <div class="card border-0 shadow-sm bg-body" *ngIf="!selectedApiKey && filteredApiKeys.length > 0">
+            <div class="card-body p-4 text-center">
+              <i class="bi bi-key display-1 text-body-secondary mb-3" style="opacity: 0.3;"></i>
+              <h6 class="text-body-secondary">Select an API Key</h6>
+              <p class="text-body-secondary small mb-0">Click on an API key from the table to view its details</p>
+            </div>
+          </div>
         </div>
 
       </div>

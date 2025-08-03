@@ -9,14 +9,13 @@ import { SpinnerService } from '../../../core/services/spinner.service';
 import { ErrorHandlerService } from '../../../shared/services/error-handler.service';
 
 import { ErrorDisplayComponent } from './components/error-display/error-display.component';
-import { ApiKeyDetailsComponent } from './components/api-key-details/api-key-details.component';
 import { ApiDashboardData, DashboardStats, RecentProject } from './models/dashboard.model';
 import { ApiKey } from './models/api-key.model';
 
 @Component({
   selector: 'app-api-dashboard',
   standalone: true,
-  imports: [CommonModule, ErrorDisplayComponent, ApiKeyDetailsComponent],
+  imports: [CommonModule, ErrorDisplayComponent],
   templateUrl: './api-dashboard.component.html',
   styleUrls: ['./api-dashboard.component.scss']
 })
@@ -284,7 +283,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
    * Edit API key
    */
   editApiKey(apiKey: ApiKey): void {
-    this.router.navigate(['/brands/api-dashboard/api-keys', apiKey.id, 'edit']);
+    // this.router.navigate(['/brands/api-dashboard/api-keys', apiKey.id, 'edit']);
   }
 
   /**
@@ -473,6 +472,85 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
     // Auto-select first API key if available
     if (this.apiKeys.length > 0 && !this.selectedApiKey) {
       this.selectedApiKey = this.apiKeys[0];
+    }
+  }
+
+  /**
+   * Get domain name from API key (mock implementation)
+   */
+  getDomainFromApiKey(apiKey: ApiKey): string {
+    // Mock domain names based on API key name or ID
+    const domains = [
+      'example.com',
+      'another-example.com', 
+      'third-example.com',
+      'fourth-example.com',
+      'fifth-example.com'
+    ];
+    
+    // Use a simple hash to consistently assign domains
+    const index = Math.abs(apiKey.id.split('').reduce((a, b) => a + b.charCodeAt(0), 0)) % domains.length;
+    return domains[index];
+  }
+
+  /**
+   * Get API key status badge class for table
+   */
+  getApiKeyStatusBadgeClass(status: string): string {
+    switch (status) {
+      case 'ACTIVE':
+        return 'badge bg-success';
+      case 'SUSPENDED':
+        return 'badge bg-secondary';
+      case 'EXPIRED':
+        return 'badge bg-warning';
+      case 'REVOKED':
+        return 'badge bg-danger';
+      default:
+        return 'badge bg-secondary';
+    }
+  }
+
+  /**
+   * Get API key usage percentage for progress bar
+   */
+  getApiKeyUsagePercentage(apiKey: ApiKey): number {
+    if (!apiKey.usage?.requestsToday) return 0;
+    const total = 13333; // Mock total limit
+    return Math.min((apiKey.usage.requestsToday / total) * 100, 100);
+  }
+
+  /**
+   * Get environment display name
+   */
+  getEnvironmentDisplayName(environment?: string): string {
+    switch (environment) {
+      case 'production':
+        return 'Production';
+      case 'staging':
+        return 'Test';
+      case 'development':
+        return 'Development';
+      default:
+        return 'Production';
+    }
+  }
+
+  /**
+   * Get status display name
+   */
+  getStatusDisplayName(status: string): string {
+    switch (status) {
+      case 'ACTIVE':
+        return 'Active';
+      case 'SUSPENDED':
+        return 'Inactive';
+      case 'EXPIRED':
+        return 'Expired';
+      case 'REVOKED':
+        return 'Revoked';
+      default:
+        return 'Unknown';
     }
   }
 
