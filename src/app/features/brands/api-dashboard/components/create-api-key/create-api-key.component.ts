@@ -126,11 +126,14 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
   // Scope Selection
   selectedScopes = new Set<string>();
   
+  // Permission Groups Expansion
+  expandedGroups = new Set<string>();
+  
   // Date picker configuration
   datePickerConfig: DatePickerConfig = {
     minDate: new Date(), // Can't select past dates
     maxDate: addDays(new Date(), 365 * 2), // Max 2 years from now
-    placeholder: 'Select expiration date (optional)',
+    placeholder: 'Select a date',
     clearable: true,
     position: 'bottom-left',
     showTime: false // Can be changed to true for time selection
@@ -166,7 +169,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Set default tier
+    // Set default tier and environment
     this.createForm.patchValue({
       tier: this.rateLimitTiers[0],
       environment: 'development'
@@ -175,15 +178,9 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
     // Add scroll listener for back to top button
     this.setupScrollListener();
 
-    // Initialize wizard state
-    this.updateStepStatus();
-
-    // Listen to form changes to update wizard status
-    this.createForm.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
-      if (this.wizardMode) {
-        this.updateStepStatus();
-      }
-    });
+    // Add some default scopes for the simplified UI
+    this.selectedScopes.add('READ_BRANDS');
+    this.selectedScopes.add('READ_CATEGORIES');
   }
 
   ngOnDestroy(): void {
@@ -196,10 +193,11 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
    */
   private initializeForm(): FormGroup {
     return this.fb.group({
+      domain: ['', [Validators.maxLength(255)]],
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
       description: ['', [Validators.maxLength(1000)]],
       prefix: ['', [Validators.maxLength(10), Validators.pattern(/^[a-zA-Z0-9_-]*$/)]],
-      environment: ['development', Validators.required], // Keep for UI, not sent to backend
+      environment: ['', Validators.required],
       tier: [null, Validators.required],
       expirationDate: [null] // Optional expiration date
     });
@@ -226,7 +224,8 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
         description: formValue.description?.trim() || undefined,
         prefix: formValue.prefix?.trim() || undefined,
         rateLimitTier: formValue.tier?.tier || 'BASIC',
-        scopes: Array.from(this.selectedScopes)
+        scopes: Array.from(this.selectedScopes),
+        domain: formValue.domain?.trim() || undefined
       };
 
       // Add expiration date if provided
@@ -371,6 +370,17 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
    */
   isScopeSelected(scopeKey: string): boolean {
     return this.selectedScopes.has(scopeKey);
+  }
+
+  /**
+   * Toggle permission group expansion
+   */
+  togglePermissionGroup(groupName: string): void {
+    if (this.expandedGroups.has(groupName)) {
+      this.expandedGroups.delete(groupName);
+    } else {
+      this.expandedGroups.add(groupName);
+    }
   }
 
   /**

@@ -3,20 +3,10 @@
   <div class="container-fluid px-lg-4 px-md-3 px-2 py-4">
     
     <!-- Header -->
-    <div class="row mb-4">
+    <div class="row mb-2">
       <div class="col-12">
-        <div class="d-flex align-items-center mb-3">
-          <button 
-            class="btn btn-outline-secondary rounded-pill me-3" 
-            (click)="goBack()"
-            [disabled]="loading">
-            <i class="bi bi-arrow-left me-1"></i>
-            Back
-          </button>
-          <div>
-            <h1 class="h2 fw-bold mb-1 text-body-emphasis">Create New API Key</h1>
-            <p class="text-body-secondary mb-0">Generate a secure API key for your application integration</p>
-          </div>
+        <div class="mb-4">
+          <h1 class="h2 fw-bold mb-0 text-body-emphasis">Create API Key</h1>
         </div>
       </div>
     </div>
@@ -109,11 +99,12 @@
     </div>
 
     <!-- Form State -->
-    <div *ngIf="!success" class="row justify-content-center">
-      <div class="col-lg-8 col-12">
+     <!-- justify-content-center -->
+    <div *ngIf="!success" class="row ">
+      <div class="col-lg-6 col-12">
         
         <!-- Error Display -->
-        <div *ngIf="error" class="alert alert-danger border-0 rounded-4 mb-4">
+        <div *ngIf="error" class="alert alert-danger border-0 rounded-3 mb-4">
           <div class="d-flex align-items-start">
             <i class="bi bi-exclamation-triangle-fill me-3 text-danger"></i>
             <div>
@@ -126,306 +117,249 @@
         <!-- Form -->
         <form [formGroup]="createForm" (ngSubmit)="onSubmit()">
           
-          <!-- Basic Information -->
-          <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-body border-0 py-3">
-              <h5 class="card-title mb-0 fw-bold">
-                <i class="bi bi-info-circle me-2 text-primary"></i>
-                Basic Information
-              </h5>
-            </div>
-            <div class="card-body p-4">
-              
-              <!-- Name Field -->
-              <div class="mb-3">
-                <label for="name" class="form-label fw-semibold">
-                  API Key Name <span class="text-danger">*</span>
-                </label>
-                <div class="input-group">
-                  <input 
-                    type="text" 
-                    class="form-control"
-                    id="name"
-                    formControlName="name"
-                    placeholder="Enter a descriptive name for your API key"
-                    [class.is-invalid]="hasFieldError('name')">
-                  <button 
-                    type="button" 
-                    class="btn btn-outline-secondary"
-                    (click)="generateName()"
-                    title="Generate random name">
-                    <i class="bi bi-shuffle"></i>
-                  </button>
-                </div>
-                <div *ngIf="hasFieldError('name')" class="invalid-feedback">
-                  {{ getFieldError('name') }}
-                </div>
-              </div>
+          <!-- Domain Field -->
+          <div class="mb-3">
+            <label for="domain" class="form-label fw-medium text-dark">Domain</label>
+            <input 
+              type="text" 
+              class="form-control form-control-lg"
+              id="domain"
+              placeholder="Enter domain or select from dropdown"
+              style="border: 1px solid #e0e0e0; border-radius: 8px;">
+          </div>
 
-              <!-- Description Field -->
-              <div class="mb-3">
-                <label for="description" class="form-label fw-semibold">Description</label>
-                <textarea 
-                  class="form-control"
-                  id="description"
-                  formControlName="description"
-                  rows="3"
-                  placeholder="Optional description of what this API key will be used for"
-                  [class.is-invalid]="hasFieldError('description')">
-                </textarea>
-                <div *ngIf="hasFieldError('description')" class="invalid-feedback">
-                  {{ getFieldError('description') }}
-                </div>
-              </div>
-
-              <!-- API Key Prefix -->
-              <div class="mb-3">
-                <label for="prefix" class="form-label fw-semibold d-flex align-items-center">
-                  <i class="bi bi-code-slash me-2 text-primary"></i>
-                  API Key Prefix
-                  <span class="badge bg-info-subtle text-info ms-2 small">Optional</span>
-                </label>
-                <!-- Desktop Layout -->
-                <div class="input-group d-none d-md-flex">
-                  <span class="input-group-text bg-body">
-                    <i class="bi bi-hash text-body-secondary"></i>
-                  </span>
-                  <input 
-                    type="text" 
-                    class="form-control"
-                    [class.is-invalid]="hasFieldError('prefix')"
-                    [class.is-valid]="createForm.get('prefix')?.valid && createForm.get('prefix')?.touched"
-                    id="prefix" 
-                    formControlName="prefix"
-                    placeholder="mk"
-                    maxlength="10">
-                  <span class="input-group-text bg-body-secondary">_</span>
-                  <span class="input-group-text bg-body-tertiary text-body-secondary font-monospace">
-                    {{ createForm.get('environment')?.value || 'env' }}_************************
-                  </span>
-                </div>
-
-                <!-- Mobile Layout -->
-                <div class="d-md-none">
-                  <div class="row g-2">
-                    <div class="col-12">
-                      <div class="input-group">
-                        <span class="input-group-text bg-body">
-                          <i class="bi bi-hash text-body-secondary"></i>
-                        </span>
-                        <input 
-                          type="text" 
-                          class="form-control"
-                          [class.is-invalid]="hasFieldError('prefix')"
-                          [class.is-valid]="createForm.get('prefix')?.valid && createForm.get('prefix')?.touched"
-                          id="prefix-mobile" 
-                          formControlName="prefix"
-                          placeholder="mk"
-                          maxlength="10">
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <div class="alert alert-info py-2 mb-0">
-                        <small class="font-monospace">
-                          Preview: <strong>{{ createForm.get('prefix')?.value || 'mk' }}_{{ createForm.get('environment')?.value || 'env' }}_************************</strong>
-                        </small>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div *ngIf="hasFieldError('prefix')" class="invalid-feedback d-block">
-                  <i class="bi bi-exclamation-circle me-1"></i>
-                  {{ getFieldError('prefix') }}
-                </div>
-                <div class="form-text text-body-secondary">
-                  <i class="bi bi-info-circle me-1"></i>
-                  This prefix will appear at the beginning of your API key (e.g., <code>mk_dev_abc123...</code>)
-                </div>
-              </div>
-
-              <!-- Environment Field -->
-              <div class="mb-3">
-                <label for="environment" class="form-label fw-semibold">
-                  Environment <span class="text-danger">*</span>
-                </label>
-                <select 
-                  class="form-select"
-                  id="environment"
-                  formControlName="environment"
-                  [class.is-invalid]="hasFieldError('environment')">
-                  <option value="development">Development</option>
-                  <option value="staging">Staging</option>
-                  <option value="production">Production</option>
-                </select>
-                <div *ngIf="hasFieldError('environment')" class="invalid-feedback">
-                  {{ getFieldError('environment') }}
-                </div>
-              </div>
-
+          <!-- API Key Name Field -->
+          <div class="mb-3">
+            <label for="name" class="form-label fw-medium text-dark">API Key Name</label>
+            <input 
+              type="text" 
+              class="form-control form-control-lg"
+              id="name"
+              formControlName="name"
+              placeholder="Enter a name for your API key"
+              style="border: 1px solid #e0e0e0; border-radius: 8px;"
+              [class.is-invalid]="hasFieldError('name')">
+            <div *ngIf="hasFieldError('name')" class="invalid-feedback">
+              {{ getFieldError('name') }}
             </div>
           </div>
 
-          <!-- Rate Limits -->
-          <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-body border-0 py-3">
-              <h5 class="card-title mb-0 fw-bold">
-                <i class="bi bi-speedometer2 me-2 text-success"></i>
-                Rate Limits
-              </h5>
-            </div>
-            <div class="card-body p-4">
-              
-              <!-- Tier Selection -->
-              <div class="mb-3">
-                <label class="form-label fw-semibold">
-                  Rate Limit Tier <span class="text-danger">*</span>
-                </label>
-                <div class="row g-3">
-                  <div 
-                    *ngFor="let tier of rateLimitTiers" 
-                    class="col-md-6 col-lg-3">
-                    <div 
-                      class="tier-card"
-                      [class.selected]="createForm.get('tier')?.value?.tier === tier.tier"
-                      (click)="selectRateLimitTier(tier)">
-                      <div class="tier-header">
-                        <h6 class="tier-name">{{ tier.tier }}</h6>
-                        <p class="tier-description">{{ tier.description }}</p>
-                      </div>
-                      <div class="tier-limits">
-                        <div class="limit-item">
-                          <span class="limit-value">{{ formatNumber(tier.requestsPerDay) }}</span>
-                          <span class="limit-label">requests/day</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Expiration Date -->
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Expiration Date</label>
-                <app-date-picker-popup
-                  [value]="createForm.get('expirationDate')?.value"
-                  [config]="datePickerConfig"
-                  (valueChange)="onExpirationDateChange($event)">
-                </app-date-picker-popup>
-                <small class="form-text text-body-secondary">
-                  Leave empty for no expiration
-                </small>
-              </div>
-
+          <!-- Description Field -->
+          <div class="mb-3">
+            <label for="description" class="form-label fw-medium text-dark">Description (Optional)</label>
+            <textarea 
+              class="form-control form-control-lg"
+              id="description"
+              formControlName="description"
+              rows="4"
+              placeholder="Describe the purpose of this API key"
+              style="border: 1px solid #e0e0e0; border-radius: 8px; resize: vertical;"
+              [class.is-invalid]="hasFieldError('description')">
+            </textarea>
+            <div *ngIf="hasFieldError('description')" class="invalid-feedback">
+              {{ getFieldError('description') }}
             </div>
           </div>
 
-          <!-- Permissions -->
-          <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-body border-0 py-3">
-              <h5 class="card-title mb-0 fw-bold">
-                <i class="bi bi-shield-check me-2 text-warning"></i>
-                Permissions
-              </h5>
+          <!-- Prefix Field -->
+          <div class="mb-3">
+            <label for="prefix" class="form-label fw-medium text-dark">Prefix</label>
+            <div class="input-group">
+              <input 
+                type="text" 
+                class="form-control form-control-lg"
+                id="prefix"
+                formControlName="prefix"
+                placeholder="mk"
+                style="border: 1px solid #e0e0e0; border-radius: 8px 0 0 8px;"
+                [class.is-invalid]="hasFieldError('prefix')">
+              <span class="input-group-text bg-light" style="border: 1px solid #e0e0e0; border-left: none; border-radius: 0 8px 8px 0;">
+                <i class="bi bi-pencil text-muted"></i>
+              </span>
             </div>
-            <div class="card-body p-4">
-              
-              <div class="mb-3">
-                <p class="text-body-secondary">
-                  Select the API scopes this key should have access to. 
-                  <span class="badge bg-info-subtle text-info">{{ selectedScopes.size }} selected</span>
-                </p>
-              </div>
+            <div *ngIf="hasFieldError('prefix')" class="invalid-feedback">
+              {{ getFieldError('prefix') }}
+            </div>
+          </div>
 
-              <!-- Scope Groups -->
-              <div class="scope-groups">
+          <!-- Environment Field -->
+          <div class="mb-3">
+            <label for="environment" class="form-label fw-medium text-dark">Environment</label>
+            <select 
+              class="form-select form-select-lg"
+              id="environment"
+              formControlName="environment"
+              style="border: 1px solid #e0e0e0; border-radius: 8px;"
+              [class.is-invalid]="hasFieldError('environment')">
+              <option value="">Select environment</option>
+              <option value="development">Development</option>
+              <option value="staging">Staging</option>
+              <option value="production">Production</option>
+            </select>
+            <div *ngIf="hasFieldError('environment')" class="invalid-feedback">
+              {{ getFieldError('environment') }}
+            </div>
+          </div>
+
+          <!-- Expiration Date Field -->
+          <div class="mb-4">
+            <label for="expirationDate" class="form-label fw-medium text-dark">Expiration Date</label>
+            <app-date-picker-popup
+              [value]="createForm.get('expirationDate')?.value"
+              [config]="datePickerConfig"
+              (valueChange)="onExpirationDateChange($event)">
+            </app-date-picker-popup>
+          </div>
+
+          <!-- Rate Limit Tier Section -->
+          <div class="mb-4">
+            <h5 class="fw-bold text-dark mb-3">Rate Limit Tier</h5>
+            <div class="row g-3">
+              <div class="col-6">
                 <div 
-                  *ngFor="let group of scopeGroups" 
-                  class="scope-group mb-4">
-                  
-                  <div class="d-flex align-items-center justify-content-between mb-3">
-                    <h6 class="scope-group-title mb-0">{{ group.name }}</h6>
-                    <div class="btn-group btn-group-sm">
-                      <button 
-                        type="button" 
-                        class="btn btn-outline-primary btn-sm squared-pill"
-                        (click)="selectAllInGroup(group)">
-                        Select All
-                      </button>
-                      <button 
-                        type="button" 
-                        class="btn btn-outline-secondary btn-sm"
-                        (click)="deselectAllInGroup(group)">
-                        Clear All
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <p class="scope-group-description text-body-secondary small mb-3">
-                    {{ group.description }}
-                  </p>
-                  
-                  <div class="row g-2">
-                    <div 
-                      *ngFor="let scope of group.scopes" 
-                      class="col-md-6 col-lg-4">
-                      <div 
-                        class="scope-item"
-                        [class.selected]="isScopeSelected(scope.key)"
-                        [class.disabled]="scope.adminOnly"
-                        (click)="!scope.adminOnly && toggleScope(scope.key)">
-                        
-                        <div class="form-check">
-                          <input 
-                            class="form-check-input"
-                            type="checkbox"
-                            [id]="scope.key"
-                            [checked]="isScopeSelected(scope.key)"
-                            [disabled]="scope.adminOnly"
-                            (change)="toggleScope(scope.key)">
-                          <label class="form-check-label" [for]="scope.key">
-                            <div class="scope-name">{{ scope.name }}</div>
-                            <div class="scope-description">{{ scope.description }}</div>
-                            <div *ngIf="scope.dangerous" class="scope-warning">
-                              <i class="bi bi-exclamation-triangle text-warning"></i>
-                              Dangerous
-                            </div>
-                            <div *ngIf="scope.adminOnly" class="scope-admin">
-                              <i class="bi bi-shield-lock text-secondary"></i>
-                              Admin Only
-                            </div>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  class="tier-option p-3 border rounded-3 cursor-pointer"
+                  [class.selected]="createForm.get('tier')?.value?.tier === 'BASIC'"
+                  (click)="selectRateLimitTier(rateLimitTiers[0])"
+                  style="border: 1px solid #e0e0e0; transition: all 0.2s;">
+                  <div class="fw-medium text-dark">Basic (1000 requests/day)</div>
                 </div>
               </div>
-
-              <!-- Scope Selection Error -->
-              <div *ngIf="selectedScopes.size === 0" class="alert alert-warning border-0 rounded-3 mt-3">
-                <i class="bi bi-exclamation-triangle me-2"></i>
-                Please select at least one permission scope for your API key.
+              <div class="col-6">
+                <div 
+                  class="tier-option p-3 border rounded-3 cursor-pointer"
+                  [class.selected]="createForm.get('tier')?.value?.tier === 'STANDARD'"
+                  (click)="selectRateLimitTier(rateLimitTiers[1])"
+                  style="border: 1px solid #e0e0e0; transition: all 0.2s;">
+                  <div class="fw-medium text-dark">Standard (10000 requests/day)</div>
+                </div>
               </div>
-
+              <div class="col-6">
+                <div 
+                  class="tier-option p-3 border rounded-3 cursor-pointer"
+                  [class.selected]="createForm.get('tier')?.value?.tier === 'PREMIUM'"
+                  (click)="selectRateLimitTier(rateLimitTiers[2])"
+                  style="border: 1px solid #e0e0e0; transition: all 0.2s;">
+                  <div class="fw-medium text-dark">Premium (100000 requests/day)</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div 
+                  class="tier-option p-3 border rounded-3 cursor-pointer"
+                  [class.selected]="createForm.get('tier')?.value?.tier === 'ENTERPRISE'"
+                  (click)="selectRateLimitTier(rateLimitTiers[3])"
+                  style="border: 1px solid #e0e0e0; transition: all 0.2s;">
+                  <div class="fw-medium text-dark">Enterprise (Unlimited requests/day)</div>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Submit Button -->
-          <div class="d-flex gap-3 justify-content-center">
-            <button 
-              type="submit" 
-              class="btn btn-primary btn-lg rounded-pill px-5"
-              [disabled]="loading || createForm.invalid || selectedScopes.size === 0">
-              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-              <i *ngIf="!loading" class="bi bi-plus-circle me-2"></i>
-              {{ loading ? 'Creating...' : 'Create API Key' }}
-            </button>
+          <!-- Permissions Section -->
+          <div class="mb-4">
+            <h5 class="fw-bold text-dark mb-3">Permissions</h5>
+            
+            <!-- Users Permission -->
+            <div class="permission-group mb-3">
+              <div class="d-flex justify-content-between align-items-center p-3 border rounded-3 cursor-pointer" 
+                   style="border: 1px solid #e0e0e0;"
+                   (click)="togglePermissionGroup('users')">
+                <span class="fw-medium text-dark">Users</span>
+                <i class="bi bi-chevron-down text-muted" 
+                   [class.rotate-180]="expandedGroups.has('users')"></i>
+              </div>
+              <div *ngIf="expandedGroups.has('users')" class="permission-options p-3 border-start border-end border-bottom rounded-bottom" style="border-color: #e0e0e0;">
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="readUsers" (change)="toggleScope('READ_USERS')" [checked]="isScopeSelected('READ_USERS')">
+                  <label class="form-check-label" for="readUsers">Read Users</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="writeUsers" (change)="toggleScope('WRITE_USERS')" [checked]="isScopeSelected('WRITE_USERS')">
+                  <label class="form-check-label" for="writeUsers">Write Users</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Brands Permission -->
+            <div class="permission-group mb-3">
+              <div class="d-flex justify-content-between align-items-center p-3 border rounded-3 cursor-pointer" 
+                   style="border: 1px solid #e0e0e0;"
+                   (click)="togglePermissionGroup('brands')">
+                <span class="fw-medium text-dark">Brands</span>
+                <i class="bi bi-chevron-down text-muted" 
+                   [class.rotate-180]="expandedGroups.has('brands')"></i>
+              </div>
+              <div *ngIf="expandedGroups.has('brands')" class="permission-options p-3 border-start border-end border-bottom rounded-bottom" style="border-color: #e0e0e0;">
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="readBrands" (change)="toggleScope('READ_BRANDS')" [checked]="isScopeSelected('READ_BRANDS')">
+                  <label class="form-check-label" for="readBrands">Read Brands</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="writeBrands" (change)="toggleScope('WRITE_BRANDS')" [checked]="isScopeSelected('WRITE_BRANDS')">
+                  <label class="form-check-label" for="writeBrands">Write Brands</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Categories Permission -->
+            <div class="permission-group mb-3">
+              <div class="d-flex justify-content-between align-items-center p-3 border rounded-3 cursor-pointer" 
+                   style="border: 1px solid #e0e0e0;"
+                   (click)="togglePermissionGroup('categories')">
+                <span class="fw-medium text-dark">Categories</span>
+                <i class="bi bi-chevron-down text-muted" 
+                   [class.rotate-180]="expandedGroups.has('categories')"></i>
+              </div>
+              <div *ngIf="expandedGroups.has('categories')" class="permission-options p-3 border-start border-end border-bottom rounded-bottom" style="border-color: #e0e0e0;">
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="readCategories" (change)="toggleScope('READ_CATEGORIES')" [checked]="isScopeSelected('READ_CATEGORIES')">
+                  <label class="form-check-label" for="readCategories">Read Categories</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="writeCategories" (change)="toggleScope('WRITE_CATEGORIES')" [checked]="isScopeSelected('WRITE_CATEGORIES')">
+                  <label class="form-check-label" for="writeCategories">Write Categories</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- API Keys Permission -->
+            <div class="permission-group mb-4">
+              <div class="d-flex justify-content-between align-items-center p-3 border rounded-3 cursor-pointer" 
+                   style="border: 1px solid #e0e0e0;"
+                   (click)="togglePermissionGroup('apiKeys')">
+                <span class="fw-medium text-dark">API Keys</span>
+                <i class="bi bi-chevron-down text-muted" 
+                   [class.rotate-180]="expandedGroups.has('apiKeys')"></i>
+              </div>
+              <div *ngIf="expandedGroups.has('apiKeys')" class="permission-options p-3 border-start border-end border-bottom rounded-bottom" style="border-color: #e0e0e0;">
+                <div class="form-check mb-2">
+                  <input class="form-check-input" type="checkbox" id="readApiKeys" (change)="toggleScope('READ_API_KEYS')" [checked]="isScopeSelected('READ_API_KEYS')">
+                  <label class="form-check-label" for="readApiKeys">Read API Keys</label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="manageApiKeys" (change)="toggleScope('MANAGE_API_KEYS')" [checked]="isScopeSelected('MANAGE_API_KEYS')">
+                  <label class="form-check-label" for="manageApiKeys">Manage API Keys</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="d-flex gap-3 justify-content-end">
             <button 
               type="button" 
-              class="btn btn-outline-secondary btn-lg rounded-pill px-4"
+              class="btn btn-outline-secondary btn-lg px-4"
               (click)="goBack()"
-              [disabled]="loading">
+              [disabled]="loading"
+              style="border-radius: 8px;">
               Cancel
+            </button>
+            <button 
+              type="submit" 
+              class="btn btn-primary btn-lg px-4"
+              [disabled]="loading || createForm.invalid"
+              style="border-radius: 8px; background-color: #007bff;">
+              <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+              Create Key
             </button>
           </div>
 

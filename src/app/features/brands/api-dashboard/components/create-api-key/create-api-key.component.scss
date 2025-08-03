@@ -1,9 +1,9 @@
 // Create API Key Form Styles
 .create-api-key-container {
   min-height: 100vh;
-  background-color: var(--theme-background);
-  color: var(--theme-text);
-  transition: var(--theme-animations);
+  background-color: #f8f9fa;
+  color: #212529;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   // Cards
   .card {
@@ -29,81 +29,92 @@
 
   // Form Controls
   .form-control, .form-select {
-    border-radius: var(--theme-border-radius);
-    border: 1px solid rgba(var(--theme-text), 0.2);
-    background-color: var(--theme-surface);
-    color: var(--theme-text);
-    transition: var(--theme-animations);
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: white;
+    color: #212529;
+    transition: all 0.2s ease;
+    font-size: 16px;
+    padding: 12px 16px;
 
     &:focus {
-      border-color: var(--theme-primary);
-      box-shadow: 0 0 0 0.2rem rgba(var(--theme-primary), 0.25);
-      background-color: var(--theme-surface);
-      color: var(--theme-text);
+      border-color: #007bff;
+      box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      background-color: white;
+      outline: none;
     }
 
     &.is-invalid {
-      border-color: var(--bs-danger);
+      border-color: #dc3545;
+    }
+    
+    &::placeholder {
+      color: #6c757d;
     }
   }
+  
+  .form-label {
+    color: #212529;
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
 
-  // Tier Cards
-  .tier-card {
-    border: 2px solid rgba(var(--theme-text), 0.1);
-    border-radius: var(--theme-border-radius);
-    padding: 1rem;
+  // Tier Options
+  .tier-option {
     cursor: pointer;
-    transition: var(--theme-animations);
-    background-color: var(--theme-surface);
-    height: 100%;
-
+    transition: all 0.2s ease;
+    
     &:hover {
-      border-color: var(--theme-primary);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(var(--theme-primary), 0.15);
+      border-color: #007bff !important;
+      background-color: #f8f9ff;
     }
-
+    
     &.selected {
-      border-color: var(--theme-primary);
-      background-color: rgba(var(--theme-primary), 0.05);
+      border-color: #007bff !important;
+      background-color: #e7f3ff;
       
-      .tier-name {
-        color: var(--theme-primary);
+      .fw-medium {
+        color: #007bff;
       }
     }
-
-    .tier-header {
-      margin-bottom: 1rem;
-    }
-
-    .tier-name {
-      font-weight: 600;
-      font-size: 1.1rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .tier-description {
-      font-size: 0.875rem;
-      color: var(--bs-secondary);
-      margin-bottom: 0;
-    }
-
-    .tier-limits {
-      .limit-item {
-        text-align: center;
+  }
+  
+  // Permission Groups
+  .permission-group {
+    .d-flex {
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background-color: #f8f9fa;
+        border-color: #007bff !important;
+      }
+      
+      i {
+        transition: transform 0.2s ease;
         
-        .limit-value {
-          display: block;
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: var(--theme-primary);
+        &.rotate-180 {
+          transform: rotate(180deg);
+        }
+      }
+    }
+    
+    .permission-options {
+      background-color: #f8f9fa;
+      border-top: none !important;
+      margin-top: -1px;
+      
+      .form-check {
+        .form-check-input {
+          &:checked {
+            background-color: #007bff;
+            border-color: #007bff;
+          }
         }
         
-        .limit-label {
-          font-size: 0.75rem;
-          color: var(--bs-secondary);
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
+        .form-check-label {
+          color: #495057;
+          font-weight: 400;
         }
       }
     }
@@ -189,20 +200,58 @@
   // Buttons
   .btn {
     font-weight: 500;
-    transition: var(--theme-animations);
-    border-radius: var(--theme-border-radius);
-
-    &:hover {
-      transform: translateY(-1px);
-    }
-
-    &.rounded-pill {
-      border-radius: 50rem !important;
-    }
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 16px;
 
     &.btn-primary {
-      background-color: var(--theme-primary);
-      border-color: var(--theme-primary);
+      background-color: #007bff;
+      border-color: #007bff;
+      color: white;
+      
+      &:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+        transform: translateY(-1px);
+      }
+    }
+    
+    &.btn-outline-secondary {
+      border-color: #6c757d;
+      color: #6c757d;
+      
+      &:hover {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+      }
+    }
+  }
+  
+  // Utility classes
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  
+  // Date picker custom styling
+  app-date-picker-popup {
+    .date-picker-input {
+      border: 1px solid #e0e0e0 !important;
+      border-radius: 8px !important;
+      background-color: white !important;
+      color: #212529 !important;
+      font-size: 16px !important;
+      padding: 12px 16px !important;
+      
+      &:focus {
+        border-color: #007bff !important;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+      }
+      
+      &::placeholder {
+        color: #6c757d !important;
+      }
     }
   }
 
@@ -238,7 +287,7 @@
 
     // API Prefix specific styling
     .form-control[formControlName="prefix"] {
-      min-width: 120px;
+      min-width: 93%;
       max-width: 200px;
       flex: 0 0 auto;
     }
