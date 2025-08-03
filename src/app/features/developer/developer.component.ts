@@ -5,13 +5,14 @@ import { ToolbarService } from '../../shared/services/toolbar.service';
 import { AuthService } from '../../core/services/auth.service';
 import { Subscription } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
 
 
 
 @Component({
   selector: 'app-developer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,RouterModule],
   templateUrl: './developer.component.html',
   styleUrl: './developer.component.css'
 })
