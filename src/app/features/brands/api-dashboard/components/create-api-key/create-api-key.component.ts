@@ -39,33 +39,25 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
   
   // Form
   createForm: FormGroup;
-  
+    Infinity = Infinity;
   // Data
   scopeGroups: ScopeGroup[] = SCOPE_GROUPS;
   rateLimitTiers: any[] = [
     {
-      tier: 'BASIC',
+      tier: 'FREE_TIER',
       description: 'Perfect for development and testing',
-      requestsPerDay: 1000,
-      requestsPerMinute: 10
+      requestsPerMonth: 100,
     },
     {
-      tier: 'STANDARD',
+      tier: 'PRO_TIER',
       description: 'Great for small to medium applications',
-      requestsPerDay: 10000,
-      requestsPerMinute: 100
+      requestsPerMonth: 10000,
     },
     {
-      tier: 'PREMIUM',
+      tier: 'BUSINESS_TIER',
       description: 'For high-volume production applications',
-      requestsPerDay: 100000,
+      requestsPerMonth: this.Infinity,
       requestsPerMinute: 1000
-    },
-    {
-      tier: 'ENTERPRISE',
-      description: 'Unlimited access for enterprise solutions',
-      requestsPerDay: Number.MAX_SAFE_INTEGER,
-      requestsPerMinute: Number.MAX_SAFE_INTEGER
     }
   ];
   
@@ -156,7 +148,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
   
   // Expose Array constructor and Infinity for template
   Array = Array;
-  Infinity = Infinity;
+  
 
   constructor(
     private fb: FormBuilder,
