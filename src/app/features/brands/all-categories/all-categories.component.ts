@@ -96,15 +96,15 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
     
     // Then try to load from API
     try {
-      this.getAllCategories();
       this.loadBrandData();
+      this.getAllCategories();
     } catch (error) {
       console.error('Error in AllCategoriesComponent constructor:', error);
     }
   }
 
   ngOnInit() {
-    this.loadBrandData();
+    // this.loadBrandData();
     this.checkScreenSize();
     if (isPlatformBrowser(this.platformId)) {
       window.addEventListener('resize', () => this.checkScreenSize());
