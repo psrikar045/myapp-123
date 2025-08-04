@@ -13,17 +13,24 @@ export class GlobalErrorHandler implements ErrorHandler {
   }
 
   handleError(error: any): void {
-    // Lazily inject services here
-    const loggingService = this.injector.get(LoggingService);
-    const spinnerService = this.injector.get(SpinnerService);
+    try {
+      // Lazily inject services here with error handling
+      const loggingService = this.injector.get(LoggingService);
+      const spinnerService = this.injector.get(SpinnerService);
 
-    // Ensure spinner is turned off in case of an error
-    spinnerService.hide(); // Assuming SpinnerService has hide() and a loading$ subject
+      // Ensure spinner is turned off in case of an error
+      spinnerService.hide(); // Assuming SpinnerService has hide() and a loading$ subject
 
-    // Log the error
-    const message = error.message ? error.message : error.toString();
-    // You could add more details, like stack trace
-    loggingService.error(`GlobalErrorHandler caught: ${message}`, error.stack);
+      // Log the error
+      const message = error.message ? error.message : error.toString();
+      // You could add more details, like stack trace
+      loggingService.error(`GlobalErrorHandler caught: ${message}`, error.stack);
+    } catch (injectorError) {
+      // Injector has been destroyed, fall back to console logging
+      console.debug('GlobalErrorHandler: Injector destroyed, using fallback logging');
+      const message = error.message ? error.message : error.toString();
+      console.error(`GlobalErrorHandler caught: ${message}`, error.stack);
+    }
 
     // Further error handling logic can go here:
     // - Check if it's an HttpErrorResponse

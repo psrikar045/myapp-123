@@ -7,7 +7,7 @@ import { of } from 'rxjs';
 
 import { LoginComponent } from './login.component';
 import { AuthService } from '../../../core/services/auth.service';
-import { ThemeService } from '../../../core/services/theme.service';
+import { AppThemeService } from '../../../core/services/app-theme.service';
 import { ToolbarService } from '../../../shared/services/toolbar.service';
 
 describe('LoginComponent', () => {

@@ -215,9 +215,9 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
         name: formValue.name.trim(),
         description: formValue.description?.trim() || undefined,
         prefix: formValue.prefix?.trim() || undefined,
-        rateLimitTier: formValue.tier?.tier || 'BASIC',
+        rateLimitTier: formValue.tier?.tier || 'FREE_TIER',
         scopes: Array.from(this.selectedScopes),
-        domain: formValue.domain?.trim() || undefined,
+        registeredDomain: formValue.domain?.trim() || undefined,
         environment: formValue.environment?.trim() || undefined
       };
 
@@ -240,7 +240,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (response) => {
-            this.createdApiKey = response.apiKey;
+            this.createdApiKey = response.keyValue;
             this.success = true;
             this.loading = false;
             

@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Injectable, OnDestroy } from '@angular/core';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 export type AnimationType = 'default' | 'card-based' | 'minimalist';
 
@@ -35,7 +36,8 @@ export interface SearchModalState {
 @Injectable({
   providedIn: 'root'
 })
-export class SearchModalService {
+export class SearchModalService implements OnDestroy {
+  private destroy$ = new Subject<void>();
   private readonly defaultProgressSteps: ProgressStep[] = [
     { id: 'url-analysis', title: 'URL Analysis & Validation', icon: '🔍', status: 'pending' },
     { id: 'website-check', title: 'Website Scanning & Data Extraction', icon: '🌐', status: 'pending' },
@@ -218,7 +220,10 @@ export class SearchModalService {
     // Execute progress steps
     progressSteps.forEach(({step, progress, delay}) => {
       setTimeout(() => {
-        this.updateProgress(step, progress);
+        // Check if service is still active before updating progress
+        if (!this.destroy$.closed) {
+          this.updateProgress(step, progress);
+        }
       }, delay);
     });
   }
@@ -268,7 +273,15 @@ export class SearchModalService {
     this.updateProgress('Processing and validating results...', 95);
     
     setTimeout(() => {
-      this.hideModal();
+      // Check if service is still active before hiding modal
+      if (!this.destroy$.closed) {
+        this.hideModal();
+      }
     }, 1000);
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

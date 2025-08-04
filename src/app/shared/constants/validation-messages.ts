@@ -102,9 +102,10 @@ export function getValidationMessage(key: ValidationMessageKey, ...args: any[]):
   const message = VALIDATION_MESSAGES[key];
   
   if (typeof message === 'function') {
-    return message(...args);  }
+    return (message as Function)(...args);
+  }
   
-  return message;
+  return message as string;
 }
 
 /**

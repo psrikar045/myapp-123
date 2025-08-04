@@ -29,11 +29,16 @@ Object.defineProperty(document.body.style, 'transform', {
 
 // Mock IntersectionObserver for responsive testing
 global.IntersectionObserver = class IntersectionObserver {
+  root: Element | null = null;
+  rootMargin: string = '';
+  thresholds: ReadonlyArray<number> = [];
+  
   constructor() {}
   disconnect() {}
   observe() {}
   unobserve() {}
-};
+  takeRecords(): IntersectionObserverEntry[] { return []; }
+} as any;
 
 // Mock ResizeObserver for responsive testing
 global.ResizeObserver = class ResizeObserver {
@@ -59,11 +64,13 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // Mock localStorage and sessionStorage
-const createStorageMock = () => ({
+const createStorageMock = (): Storage => ({
   getItem: jest.fn(),
   setItem: jest.fn(),
   removeItem: jest.fn(),
   clear: jest.fn(),
+  length: 0,
+  key: jest.fn()
 });
 
 global.localStorage = createStorageMock();

@@ -1,10 +1,12 @@
-import { Injectable, ComponentRef, ViewContainerRef, inject } from '@angular/core';
+import { Injectable, ComponentRef, ViewContainerRef, inject, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
 import { SettingsPanelComponent } from '../components/settings-panel/settings-panel.component';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SettingsService {
+export class SettingsService implements OnDestroy {
+  private destroy$ = new Subject<void>();
   private settingsPanelRef: ComponentRef<SettingsPanelComponent> | null = null;
   private viewContainerRef: ViewContainerRef | null = null;
 
@@ -32,7 +34,8 @@ export class SettingsService {
       
       // Delay destruction to allow close animation
       setTimeout(() => {
-        if (this.settingsPanelRef) {
+        // Check if service is still active before destroying component
+        if (!this.destroy$.closed && this.settingsPanelRef) {
           this.settingsPanelRef.destroy();
           this.settingsPanelRef = null;
         }
@@ -42,5 +45,16 @@ export class SettingsService {
 
   isSettingsPanelOpen(): boolean {
     return this.settingsPanelRef !== null;
+  }
+
+  ngOnDestroy(): void {
+    // Clean up any open panels
+    if (this.settingsPanelRef) {
+      this.settingsPanelRef.destroy();
+      this.settingsPanelRef = null;
+    }
+    
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

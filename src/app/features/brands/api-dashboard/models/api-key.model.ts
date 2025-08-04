@@ -104,7 +104,20 @@ export interface CreateApiKeyRequest {
 }
 
 export interface CreateApiKeyResponse {
-  apiKey: ApiKey;
-  success: boolean;
-  message?: string;
+  id: string;
+  name: string;
+  description?: string;
+  prefix?: string;
+  keyValue: string;
+  registeredDomain?: string;
+  mainDomain?: string;
+  subdomainPattern?: string;
+  environment: 'development' | 'staging' | 'production' | 'testing';
+  allowedDomains?: string[] | null;
+  allowedIps?: string[] | null;
+  scopes: string;
+  rateLimitTier: string;
+  isActive: boolean;
+  expiresAt?: string;
+  createdAt: string;
 }

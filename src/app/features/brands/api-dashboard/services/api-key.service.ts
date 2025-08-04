@@ -71,7 +71,7 @@ export class ApiKeyService {
       'Accept': 'application/json'
     });
 
-    return this.http.post<CreateApiKeyResponse>(this.apiUrl, request, { headers });
+    return this.http.post<CreateApiKeyResponse>(`${this.apiUrl}/rivo-create-api`, request, { headers })
   }
 
   /**

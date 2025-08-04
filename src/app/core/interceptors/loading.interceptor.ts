@@ -1,5 +1,5 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { inject, Injector } from '@angular/core';
 import { finalize } from 'rxjs/operators';
 import { SpinnerService } from '../services/spinner.service';
 
@@ -8,6 +8,7 @@ let activeRequests = 0;
 
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   const spinnerService = inject(SpinnerService);
+  const injector = inject(Injector);
 
   // Skip loading for certain requests
   const skipLoadingUrls = [
@@ -41,7 +42,14 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
         // Small delay to prevent flickering for rapid requests
         setTimeout(() => {
           if (activeRequests === 0) {
-            spinnerService.hide();
+            try {
+              // Check if injector is still available before accessing service
+              const currentSpinnerService = injector.get(SpinnerService);
+              currentSpinnerService.hide();
+            } catch (error) {
+              // Injector has been destroyed, ignore the error
+              console.debug('LoadingInterceptor: Injector destroyed, skipping spinner hide');
+            }
           }
         }, 100);
       }

@@ -35,7 +35,10 @@ export class ErrorHandlerService {
     // Auto-remove success and info messages after 5 seconds
     if (type === 'success' || type === 'info') {
       setTimeout(() => {
-        this.removeError(error.id);
+        // Check if service is still active before removing error
+        if (!this.errorsSubject.closed) {
+          this.removeError(error.id);
+        }
       }, 5000);
     }
 

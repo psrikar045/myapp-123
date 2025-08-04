@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 export interface ErrorInfo {
   message: string;
@@ -14,7 +15,8 @@ export interface ErrorInfo {
 @Injectable({
   providedIn: 'root'
 })
-export class ErrorHandlerService {
+export class ErrorHandlerService implements OnDestroy {
+  private destroy$ = new Subject<void>();
   private errorLog: ErrorInfo[] = [];
 
   constructor() {}
@@ -315,7 +317,12 @@ export class ErrorHandlerService {
           error: error => {
             attempts++;
             if (attempts < maxRetries) {
-              setTimeout(attempt, delay * attempts);
+              setTimeout(() => {
+                // Check if service is still active before retrying
+                if (!this.destroy$.closed) {
+                  attempt();
+                }
+              }, delay * attempts);
             } else {
               observer.error(error);
             }
@@ -325,5 +332,10 @@ export class ErrorHandlerService {
 
       attempt();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

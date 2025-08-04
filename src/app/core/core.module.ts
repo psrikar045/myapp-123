@@ -8,7 +8,7 @@ import { AuthService } from './services/auth.service';
 import { StorageService } from './services/storage.service';
 import { SpinnerService } from './services/spinner.service';
 import { ErrorHandlerService } from './services/error-handler.service';
-import { ThemeService } from './services/theme.service';
+import { AppThemeService } from './services/app-theme.service';
 import { LoggingService } from './services/logging.service';
 import { LayoutService } from './services/layout.service';
 import { ValidationService } from './services/validation.service';
@@ -49,7 +49,7 @@ import { GlobalErrorHandler } from './handlers/global-error-handler';
     StorageService,
     SpinnerService,
     ErrorHandlerService,
-    ThemeService,
+    AppThemeService,
     LoggingService,
     LayoutService,
     ValidationService,
