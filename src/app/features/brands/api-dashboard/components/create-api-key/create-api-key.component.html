@@ -124,8 +124,13 @@
               type="text" 
               class="form-control form-control-lg"
               id="domain"
+              formControlName="domain"
               placeholder="Enter domain or select from dropdown"
-              style="border: 1px solid #e0e0e0; border-radius: 8px;">
+              style="border: 1px solid #e0e0e0; border-radius: 8px;"
+              [class.is-invalid]="hasFieldError('domain')">
+            <div *ngIf="hasFieldError('domain')" class="invalid-feedback">
+              {{ getFieldError('domain') }}
+            </div>
           </div>
 
           <!-- API Key Name Field -->
