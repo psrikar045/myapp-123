@@ -29,6 +29,12 @@ const routes: Routes = [
         canActivate: [authGuard]
       },
       {
+        path: 'api-dashboard/api-keys/list',
+        loadComponent: () => import('./api-dashboard/components/api-keys-list/api-keys-list.component').then(m => m.ApiKeysListComponent),
+        title: 'All API Keys - RIVO9',
+        canActivate: [authGuard]
+      },
+      {
         path: 'api-dashboard/api-keys/manage',
         loadComponent: () => import('./account-hub/components/api-key-management/api-key-management.component').then(m => m.ApiKeyManagementComponent),
         title: 'API Key Management - RIVO9',

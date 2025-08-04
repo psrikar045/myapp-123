@@ -126,6 +126,13 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Navigate to view all API keys
+   */
+  viewAllApiKeys(): void {
+    this.router.navigate(['/brands/api-dashboard/api-keys/list']);
+  }
+
+  /**
    * Navigate to project details
    */
   viewProject(projectId: string): void {
@@ -432,7 +439,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
    * Navigate to API key details page
    */
   viewApiKeyFullDetails(apiKey: ApiKey): void {
-    this.router.navigate(['/brands/api-dashboard/api-keys', apiKey.id]);
+    // this.router.navigate(['/brands/api-dashboard/api-keys', apiKey.id]);
   }
 
   /**

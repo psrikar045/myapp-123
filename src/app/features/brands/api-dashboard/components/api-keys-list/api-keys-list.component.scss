@@ -1,0 +1,172 @@
+.api-keys-list {
+  min-height: 100vh;
+  background-color: var(--bs-body-bg);
+
+  .card {
+    transition: all 0.2s ease-in-out;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    }
+  }
+
+  .table {
+    tbody tr {
+      transition: all 0.2s ease-in-out;
+      
+      &:hover {
+        background-color: var(--bs-primary-bg-subtle);
+        transform: translateY(-1px);
+      }
+      
+      &.cursor-pointer {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .progress {
+    background-color: var(--bs-gray-200);
+    
+    .progress-bar {
+      transition: width 0.3s ease-in-out;
+    }
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    
+    &.bg-light {
+      color: var(--bs-gray-700) !important;
+      border: 1px solid var(--bs-gray-300);
+    }
+  }
+
+  .btn {
+    transition: all 0.2s ease-in-out;
+    
+    &:hover {
+      transform: translateY(-1px);
+    }
+    
+    &.btn-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+    }
+  }
+
+  .form-select {
+    border: 1px solid var(--bs-gray-300);
+    transition: all 0.2s ease-in-out;
+    
+    &:focus {
+      border-color: var(--bs-primary);
+      box-shadow: 0 0 0 0.2rem rgba(var(--bs-primary-rgb), 0.25);
+    }
+  }
+
+  .form-label {
+    color: var(--bs-gray-700);
+    margin-bottom: 0.5rem;
+  }
+
+  // Dark mode support
+  [data-bs-theme="dark"] & {
+    .form-select {
+      border-color: var(--bs-gray-600);
+      background-color: var(--bs-gray-800);
+      color: var(--bs-gray-100);
+      
+      &:focus {
+        border-color: var(--bs-primary);
+        background-color: var(--bs-gray-800);
+        color: var(--bs-gray-100);
+      }
+    }
+
+    .badge.bg-light {
+      background-color: var(--bs-gray-700) !important;
+      color: var(--bs-gray-100) !important;
+      border-color: var(--bs-gray-600);
+    }
+
+    .progress {
+      background-color: var(--bs-gray-700);
+    }
+
+    .table tbody tr:hover {
+      background-color: var(--bs-gray-800);
+    }
+  }
+
+  // Responsive adjustments
+  @media (max-width: 768px) {
+    .table-responsive {
+      font-size: 0.875rem;
+    }
+    
+    .btn-sm {
+      padding: 0.2rem 0.4rem;
+      font-size: 0.7rem;
+    }
+    
+    .badge {
+      font-size: 0.7rem;
+    }
+  }
+
+  // Animation for loading states
+  .loading-shimmer {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  // Custom scrollbar for table
+  .table-responsive {
+    &::-webkit-scrollbar {
+      height: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: var(--bs-gray-100);
+      border-radius: 4px;
+    }
+    
+    &::-webkit-scrollbar-thumb {
+      background: var(--bs-gray-400);
+      border-radius: 4px;
+      
+      &:hover {
+        background: var(--bs-gray-500);
+      }
+    }
+  }
+
+  [data-bs-theme="dark"] & {
+    .table-responsive {
+      &::-webkit-scrollbar-track {
+        background: var(--bs-gray-800);
+      }
+      
+      &::-webkit-scrollbar-thumb {
+        background: var(--bs-gray-600);
+        
+        &:hover {
+          background: var(--bs-gray-500);
+        }
+      }
+    }
+  }
+}
