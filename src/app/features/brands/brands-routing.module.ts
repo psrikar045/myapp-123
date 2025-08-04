@@ -42,8 +42,8 @@ const routes: Routes = [
       },
       {
         path: 'api-dashboard/api-keys/:id',
-        loadComponent: () => import('./account-hub/components/api-key-details/api-key-details.component').then(m => m.ApiKeyDetailsComponent),
-        title: 'API Key Details - RIVO9',
+        loadComponent: () => import('./api-dashboard/components/domain-api-keys/domain-api-keys.component').then(m => m.DomainApiKeysComponent),
+        title: 'Domain API Keys - RIVO9',
         canActivate: [authGuard]
       },
       // Legacy Account Hub Routes (keep for backward compatibility)

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, delay } from 'rxjs';
+import { Observable, of, delay, map } from 'rxjs';
 import { ApiDashboardData, DashboardStats, RecentProject } from '../models/dashboard.model';
 import { ApiKey } from '../models/api-key.model';
 
@@ -36,7 +36,7 @@ export class MockDataService {
       }
     };
 
-    return of(stats).pipe(delay(500));
+    return of(stats); // No delay
   }
 
   /**
@@ -78,7 +78,7 @@ export class MockDataService {
       }
     ];
 
-    return of({ projects }).pipe(delay(300));
+    return of({ projects }); // No delay
   }
 
   /**
@@ -86,6 +86,7 @@ export class MockDataService {
    */
   getMockApiKeys(): Observable<{ keys: ApiKey[] }> {
     const keys: ApiKey[] = [
+      // mycompany.com domain - Production
       {
         id: '1',
         name: 'mk_prod_1234',
@@ -109,12 +110,13 @@ export class MockDataService {
             allowedDomains: ['mycompany.com']
           },
           webhookUrls: [],
-          allowedOrigins: ['https://myapp.com']
+          allowedOrigins: ['https://mycompany.com']
         },
         expiresAt: '2024-12-31T23:59:59Z',
         createdAt: '2024-01-01T00:00:00Z',
         status: 'ACTIVE'
       },
+      // mycompany.com domain - Staging
       {
         id: '2',
         name: 'mk_test_5678',
@@ -134,27 +136,29 @@ export class MockDataService {
             whitelist: []
           },
           domainRestrictions: {
-            enabled: false,
-            allowedDomains: []
+            enabled: true,
+            allowedDomains: ['mycompany.com']
           },
           webhookUrls: [],
-          allowedOrigins: []
+          allowedOrigins: ['https://staging.mycompany.com']
         },
+        expiresAt: '2024-12-31T23:59:59Z',
         createdAt: '2024-01-01T00:00:00Z',
         status: 'SUSPENDED'
       },
+      // mycompany.com domain - Development
       {
-        id: '3',
-        name: 'mk_dev_9012',
-        maskedKey: 'mk_dev_************************9012',
+        id: '6',
+        name: 'mk_dev_mycompany',
+        maskedKey: 'mk_dev_************************comp',
         tier: 'BASIC',
         environment: 'development',
         scopes: ['READ_BRANDS'],
         usage: {
-          requestsToday: 89,
-          remainingToday: 11,
-          lastUsed: '2023-09-05T14:45:00Z',
-          rateLimitStatus: 'WARNING'
+          requestsToday: 45,
+          remainingToday: 155,
+          lastUsed: '2024-01-15T09:30:00Z',
+          rateLimitStatus: 'OK'
         },
         security: {
           ipRestrictions: {
@@ -162,16 +166,17 @@ export class MockDataService {
             whitelist: []
           },
           domainRestrictions: {
-            enabled: false,
-            allowedDomains: []
+            enabled: true,
+            allowedDomains: ['mycompany.com']
           },
           webhookUrls: [],
-          allowedOrigins: []
+          allowedOrigins: ['https://dev.mycompany.com']
         },
-        expiresAt: '2024-02-15T23:59:59Z',
-        createdAt: '2024-01-15T00:00:00Z',
+        expiresAt: '2024-12-31T23:59:59Z',
+        createdAt: '2024-01-12T00:00:00Z',
         status: 'ACTIVE'
       },
+      // techcorp.io domain - Production
       {
         id: '4',
         name: 'mk_prod_3456',
@@ -191,15 +196,77 @@ export class MockDataService {
             whitelist: ['10.0.0.0/8']
           },
           domainRestrictions: {
-            enabled: false,
-            allowedDomains: []
+            enabled: true,
+            allowedDomains: ['techcorp.io']
           },
           webhookUrls: [],
-          allowedOrigins: ['https://staging.myapp.com']
+          allowedOrigins: ['https://techcorp.io']
         },
+        expiresAt: '2024-12-31T23:59:59Z',
         createdAt: '2024-01-10T00:00:00Z',
         status: 'ACTIVE'
       },
+      // techcorp.io domain - Development
+      {
+        id: '3',
+        name: 'mk_dev_9012',
+        maskedKey: 'mk_dev_************************9012',
+        tier: 'BASIC',
+        environment: 'development',
+        scopes: ['READ_BRANDS'],
+        usage: {
+          requestsToday: 89,
+          remainingToday: 11,
+          lastUsed: '2023-09-05T14:45:00Z',
+          rateLimitStatus: 'WARNING'
+        },
+        security: {
+          ipRestrictions: {
+            enabled: false,
+            whitelist: []
+          },
+          domainRestrictions: {
+            enabled: true,
+            allowedDomains: ['techcorp.io']
+          },
+          webhookUrls: [],
+          allowedOrigins: ['https://dev.techcorp.io']
+        },
+        expiresAt: '2024-02-15T23:59:59Z',
+        createdAt: '2024-01-15T00:00:00Z',
+        status: 'ACTIVE'
+      },
+      // techcorp.io domain - Testing
+      {
+        id: '7',
+        name: 'mk_test_techcorp',
+        maskedKey: 'mk_test_************************tech',
+        tier: 'STANDARD',
+        environment: 'testing',
+        scopes: ['READ_BRANDS'],
+        usage: {
+          requestsToday: 12,
+          remainingToday: 88,
+          lastUsed: '2024-01-14T22:15:00Z',
+          rateLimitStatus: 'OK'
+        },
+        security: {
+          ipRestrictions: {
+            enabled: false,
+            whitelist: []
+          },
+          domainRestrictions: {
+            enabled: true,
+            allowedDomains: ['techcorp.io']
+          },
+          webhookUrls: [],
+          allowedOrigins: ['https://test.techcorp.io']
+        },
+        expiresAt: '2024-12-31T23:59:59Z',
+        createdAt: '2023-12-01T00:00:00Z',
+        status: 'ACTIVE'
+      },
+      // startup.dev domain - Staging
       {
         id: '5',
         name: 'mk_test_7890',
@@ -219,77 +286,24 @@ export class MockDataService {
             whitelist: []
           },
           domainRestrictions: {
-            enabled: false,
-            allowedDomains: []
+            enabled: true,
+            allowedDomains: ['startup.dev']
           },
           webhookUrls: [],
-          allowedOrigins: []
+          allowedOrigins: ['https://startup.dev']
         },
         expiresAt: '2024-06-30T23:59:59Z',
         createdAt: '2024-01-05T00:00:00Z',
         status: 'SUSPENDED'
       },
-      {
-        id: '6',
-        name: 'Analytics API Key',
-        maskedKey: 'mk_analytics_*****************kl12',
-        tier: 'BASIC',
-        scopes: ['READ_ANALYTICS'],
-        usage: {
-          requestsToday: 45,
-          remainingToday: 55,
-          lastUsed: '2024-01-15T09:30:00Z',
-          rateLimitStatus: 'WARNING'
-        },
-        security: {
-          ipRestrictions: {
-            enabled: true,
-            whitelist: ['203.0.113.0/24']
-          },
-          domainRestrictions: {
-            enabled: true,
-            allowedDomains: ['analytics.mycompany.com']
-          },
-          webhookUrls: [],
-          allowedOrigins: ['https://analytics.mycompany.com']
-        },
-        expiresAt: '2024-03-31T23:59:59Z',
-        createdAt: '2024-01-12T00:00:00Z',
-        status: 'ACTIVE'
-      },
-      {
-        id: '7',
-        name: 'Legacy API Key',
-        maskedKey: 'mk_legacy_*******************mn34',
-        tier: 'STANDARD',
-        scopes: ['READ_BRANDS'],
-        usage: {
-          requestsToday: 12,
-          remainingToday: 988,
-          lastUsed: '2024-01-14T22:15:00Z',
-          rateLimitStatus: 'OK'
-        },
-        security: {
-          ipRestrictions: {
-            enabled: false,
-            whitelist: []
-          },
-          domainRestrictions: {
-            enabled: false,
-            allowedDomains: []
-          },
-          webhookUrls: [],
-          allowedOrigins: []
-        },
-        createdAt: '2023-12-01T00:00:00Z',
-        status: 'EXPIRED'
-      },
+      // ecommerce.shop domain - Production
       {
         id: '8',
-        name: 'Webhook API Key',
-        maskedKey: 'mk_webhook_******************op56',
+        name: 'mk_ecommerce_prod',
+        maskedKey: 'mk_ecommerce_****************shop',
         tier: 'PREMIUM',
-        scopes: ['WEBHOOK_ACCESS', 'READ_BRANDS'],
+        environment: 'production',
+        scopes: ['READ_BRANDS', 'READ_CATEGORIES', 'WEBHOOK_ACCESS'],
         usage: {
           requestsToday: 567,
           remainingToday: 9433,
@@ -302,11 +316,11 @@ export class MockDataService {
             whitelist: ['198.51.100.0/24']
           },
           domainRestrictions: {
-            enabled: false,
-            allowedDomains: []
+            enabled: true,
+            allowedDomains: ['ecommerce.shop']
           },
-          webhookUrls: ['https://webhook.myapp.com/api/brands'],
-          allowedOrigins: []
+          webhookUrls: ['https://webhook.ecommerce.shop/api/brands'],
+          allowedOrigins: ['https://ecommerce.shop']
         },
         expiresAt: '2024-12-31T23:59:59Z',
         createdAt: '2024-01-08T00:00:00Z',
@@ -314,7 +328,7 @@ export class MockDataService {
       }
     ];
 
-    return of({ keys }).pipe(delay(400));
+    return of({ keys }); // No delay for instant loading
   }
 
   /**
@@ -403,6 +417,22 @@ export class MockDataService {
       ]
     };
 
-    return of(data).pipe(delay(600));
+    return of(data); // No delay
+  }
+
+  /**
+   * Get mock API key by ID
+   */
+  getMockApiKeyById(id: string): Observable<ApiKey> {
+    // Use the same data as getMockApiKeys for consistency
+    return this.getMockApiKeys().pipe(
+      map(response => {
+        const apiKey = response.keys.find(key => key.id === id);
+        if (!apiKey) {
+          throw new Error(`API key with ID ${id} not found`);
+        }
+        return apiKey;
+      })
+    );
   }
 }

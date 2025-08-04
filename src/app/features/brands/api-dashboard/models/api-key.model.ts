@@ -1,7 +1,7 @@
 export interface ApiKeyBasicInfo {
   name: string;
   description?: string;
-  environment: 'development' | 'staging' | 'production';
+  environment: 'development' | 'staging' | 'production' | 'testing';
 }
 
 export interface RateLimitTier {
@@ -83,7 +83,7 @@ export interface ApiKey {
   key?: string; // Full key (only available during creation)
   maskedKey: string;
   tier: string;
-  environment?: 'development' | 'staging' | 'production';
+  environment?: 'development' | 'staging' | 'production' | 'testing';
   scopes: string[];
   usage: ApiKeyUsage;
   security: SecuritySettings;

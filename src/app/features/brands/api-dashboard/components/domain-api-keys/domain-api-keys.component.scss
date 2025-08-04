@@ -1,0 +1,154 @@
+.api-keys-container {
+  max-width: 1200px;
+}
+
+.environment-section {
+  .api-key-card {
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+  }
+  
+  .api-key-info {
+    h6 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+    
+    .api-key-meta {
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+  }
+}
+
+.environment-badge-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.environment-badge {
+  width: 120px;
+  height: 80px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+  position: relative;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .badge-content {
+    text-align: center;
+    color: white;
+    
+    .badge-icon {
+      font-size: 1.8rem;
+      margin-bottom: 4px;
+      
+      i {
+        display: block;
+      }
+    }
+    
+    .badge-text {
+      .badge-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+      }
+    }
+  }
+  
+  // Production Badge - Green
+  &.badge-production {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    
+    .badge-content {
+      color: white;
+    }
+  }
+  
+  // Development Badge - Blue
+  &.badge-development {
+    background: linear-gradient(135deg, #007bff 0%, #17a2b8 100%);
+    
+    .badge-content {
+      color: white;
+    }
+  }
+  
+  // Testing Badge - Yellow/Orange
+  &.badge-testing {
+    background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+    
+    .badge-content {
+      color: #212529;
+    }
+  }
+}
+
+.btn {
+  transition: all 0.2s ease;
+  border-radius: 8px;
+  
+  &:hover {
+    transform: translateY(-1px);
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .environment-badge {
+    width: 80px;
+    height: 60px;
+    
+    .badge-content {
+      .badge-icon {
+        font-size: 1.4rem;
+        margin-bottom: 2px;
+      }
+      
+      .badge-text {
+        .badge-label {
+          font-size: 0.65rem;
+        }
+      }
+    }
+  }
+  
+  .api-key-card {
+    padding: 16px !important;
+  }
+  
+  .api-key-meta {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    
+    span {
+      &:nth-child(even) {
+        display: none; // Hide bullet points on mobile
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .environment-badge-container {
+    justify-content: center;
+    margin-top: 16px;
+  }
+}

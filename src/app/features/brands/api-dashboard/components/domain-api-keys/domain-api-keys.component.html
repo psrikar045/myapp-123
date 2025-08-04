@@ -1,0 +1,270 @@
+<!-- Loading State -->
+<div *ngIf="loading" class="text-center py-5">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  <p class="mt-2 text-body-secondary">Loading API keys...</p>
+</div>
+
+<!-- Error State -->
+<div *ngIf="error && !loading" class="alert alert-danger" role="alert">
+  <i class="bi bi-exclamation-triangle me-2"></i>
+  {{ error }}
+  <button class="btn btn-outline-danger btn-sm ms-3" (click)="ngOnInit()">
+    <i class="bi bi-arrow-clockwise me-1"></i>
+    Retry
+  </button>
+</div>
+
+<!-- Main Content -->
+<div *ngIf="!loading && !error && selectedApiKey" class="container-fluid px-lg-4 px-md-3 px-2 py-4">
+  
+  <!-- Header -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="d-flex align-items-center">
+          <button class="btn btn-outline-secondary me-3" (click)="goBack()">
+            <i class="bi bi-arrow-left me-2"></i>Back
+          </button>
+          <div>
+            <h1 class="display-6 fw-bold mb-0 text-body-emphasis">API Key Details</h1>
+          </div>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-primary" (click)="copyApiKey(selectedApiKey)">
+            <i class="bi bi-clipboard me-1"></i>
+            Copy Key
+          </button>
+        </div>
+      </div>
+      <p class="text-body-secondary mb-0">Detailed information about your API key and its configuration.</p>
+    </div>
+  </div>
+
+  <!-- API Key Header Card -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm bg-body">
+        <div class="card-body p-4">
+          <div class="row align-items-center">
+            <div class="col-lg-8 col-md-7 col-12">
+              <div class="d-flex align-items-center mb-3">
+                <div class="bg-primary bg-opacity-10 rounded-3 p-3 me-3">
+                  <i class="bi bi-shield-lock text-primary fs-4"></i>
+                </div>
+                <div>
+                  <h3 class="fw-bold mb-1 text-body-emphasis">{{ selectedApiKey.name }}</h3>
+                  <p class="text-body-secondary mb-0">{{ selectedApiKey.tier || 'Standard' }} Tier • Domain: {{ domain }}</p>
+                </div>
+              </div>
+              <div class="d-flex flex-wrap gap-3">
+                <span [class]="getStatusBadgeClass(selectedApiKey.status)">
+                  {{ selectedApiKey.status }}
+                </span>
+                <span class="badge bg-light text-dark border">
+                  {{ getEnvironmentDisplayName(selectedApiKey.environment || 'production') }}
+                </span>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-5 col-12 text-end">
+              <div class="text-body-secondary small mb-1">Created</div>
+              <div class="fw-semibold">{{ formatDate(selectedApiKey.createdAt) }}</div>
+              <div class="text-body-secondary small mb-1 mt-2">Expires</div>
+              <div class="fw-semibold">{{ selectedApiKey.expiresAt ? formatDate(selectedApiKey.expiresAt) : 'Never' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Usage Statistics -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm bg-body">
+        <div class="card-body p-4">
+          <h5 class="card-title fw-bold mb-4">Usage Statistics</h5>
+          <div class="row g-4">
+            <div class="col-lg-3 col-md-6 col-12">
+              <div class="text-center">
+                <div class="text-body-secondary small mb-1">Requests Today</div>
+                <div class="h4 fw-bold text-primary mb-0">{{ formatNumber(selectedApiKey.usage.requestsToday || 0) }}</div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+              <div class="text-center">
+                <div class="text-body-secondary small mb-1">Remaining Today</div>
+                <div class="h4 fw-bold text-success mb-0">{{ formatNumber(selectedApiKey.usage.remainingToday || 13333) }}</div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+              <div class="text-center">
+                <div class="text-body-secondary small mb-1">Usage Percentage</div>
+                <div class="h4 fw-bold text-warning mb-0">{{ getUsagePercentage(selectedApiKey) }}%</div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-12">
+              <div class="text-center">
+                <div class="text-body-secondary small mb-1">Last Used</div>
+                <div class="h6 fw-semibold mb-0">{{ formatDate(selectedApiKey.usage.lastUsed || selectedApiKey.createdAt) }}</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Usage Progress Bar -->
+          <div class="mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="text-body-secondary small">Daily Usage</span>
+              <span class="text-body-secondary small">{{ getUsagePercentage(selectedApiKey) }}%</span>
+            </div>
+            <div class="progress" style="height: 8px;">
+              <div class="progress-bar bg-primary" 
+                   role="progressbar" 
+                   [style.width.%]="getUsagePercentage(selectedApiKey)"
+                   [attr.aria-valuenow]="getUsagePercentage(selectedApiKey)"
+                   aria-valuemin="0" 
+                   aria-valuemax="100">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- API Key Configuration -->
+  <div class="row mb-4">
+    <div class="col-lg-6 col-12 mb-4">
+      <div class="card border-0 shadow-sm bg-body h-100">
+        <div class="card-body p-4">
+          <h5 class="card-title fw-bold mb-4">
+            <i class="bi bi-gear me-2 text-primary"></i>
+            Configuration
+          </h5>
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="d-flex justify-content-between">
+                <span class="text-body-secondary">API Key ID</span>
+                <span class="fw-medium">{{ selectedApiKey.id }}</span>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="d-flex justify-content-between">
+                <span class="text-body-secondary">Masked Key</span>
+                <span class="fw-medium font-monospace">{{ selectedApiKey.maskedKey }}</span>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="d-flex justify-content-between">
+                <span class="text-body-secondary">Tier</span>
+                <span class="fw-medium">{{ selectedApiKey.tier || 'Standard' }}</span>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="d-flex justify-content-between">
+                <span class="text-body-secondary">Environment</span>
+                <span [class]="getStatusBadgeClass(selectedApiKey.environment || 'production')">
+                  {{ getEnvironmentDisplayName(selectedApiKey.environment || 'production') }}
+                </span>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="d-flex justify-content-between">
+                <span class="text-body-secondary">Rate Limit Status</span>
+                <span [class]="'badge bg-' + (selectedApiKey.usage.rateLimitStatus === 'OK' ? 'success' : selectedApiKey.usage.rateLimitStatus === 'WARNING' ? 'warning' : 'danger')">
+                  {{ selectedApiKey.usage.rateLimitStatus || 'OK' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6 col-12 mb-4">
+      <div class="card border-0 shadow-sm bg-body h-100">
+        <div class="card-body p-4">
+          <h5 class="card-title fw-bold mb-4">
+            <i class="bi bi-shield-check me-2 text-success"></i>
+            Security Settings
+          </h5>
+          <div class="row g-3">
+            <div class="col-12" *ngIf="selectedApiKey.security?.domainRestrictions?.enabled">
+              <div class="mb-3">
+                <span class="text-body-secondary d-block mb-2">Allowed Domains</span>
+                <div class="d-flex flex-wrap gap-1">
+                  <span *ngFor="let domain of selectedApiKey.security.domainRestrictions.allowedDomains" 
+                        class="badge bg-light text-dark border">
+                    {{ domain }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12" *ngIf="selectedApiKey.security?.ipRestrictions?.enabled">
+              <div class="mb-3">
+                <span class="text-body-secondary d-block mb-2">IP Restrictions</span>
+                <div class="d-flex flex-wrap gap-1">
+                  <span *ngFor="let ip of selectedApiKey.security.ipRestrictions.whitelist" 
+                        class="badge bg-light text-dark border font-monospace">
+                    {{ ip }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12" *ngIf="selectedApiKey.security?.allowedOrigins && selectedApiKey.security.allowedOrigins.length > 0">
+              <div class="mb-3">
+                <span class="text-body-secondary d-block mb-2">Allowed Origins</span>
+                <div class="d-flex flex-wrap gap-1">
+                  <span *ngFor="let origin of selectedApiKey.security.allowedOrigins" 
+                        class="badge bg-light text-dark border">
+                    {{ origin }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12" *ngIf="!selectedApiKey.security?.domainRestrictions?.enabled && !selectedApiKey.security?.ipRestrictions?.enabled && (!selectedApiKey.security?.allowedOrigins || selectedApiKey.security.allowedOrigins.length === 0)">
+              <div class="text-center py-3">
+                <i class="bi bi-shield-x text-body-secondary mb-2" style="font-size: 2rem; opacity: 0.5;"></i>
+                <p class="text-body-secondary small mb-0">No security restrictions configured</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scopes and Permissions -->
+  <div class="row mb-4" *ngIf="selectedApiKey.scopes && selectedApiKey.scopes.length > 0">
+    <div class="col-12">
+      <div class="card border-0 shadow-sm bg-body">
+        <div class="card-body p-4">
+          <h5 class="card-title fw-bold mb-4">
+            <i class="bi bi-key me-2 text-info"></i>
+            Scopes & Permissions
+          </h5>
+          <div class="d-flex flex-wrap gap-2">
+            <span *ngFor="let scope of selectedApiKey.scopes" 
+                  class="badge bg-info bg-opacity-10 text-info border border-info">
+              {{ scope }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Empty State -->
+<div *ngIf="!loading && !error && !selectedApiKey" class="container-fluid px-lg-4 px-md-3 px-2 py-4">
+  <div class="text-center py-5">
+    <i class="bi bi-key display-1 text-body-secondary mb-3" style="opacity: 0.5;"></i>
+    <h5 class="text-body-secondary">API Key Not Found</h5>
+    <p class="text-body-secondary">The requested API key could not be found or may have been deleted.</p>
+    <button class="btn btn-primary" (click)="goBack()">
+      <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
+    </button>
+  </div>
+</div>

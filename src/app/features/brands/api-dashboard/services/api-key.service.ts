@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, of } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { 
   ApiKey, 
@@ -23,6 +23,11 @@ export class ApiKeyService {
   private readonly apiUrl = `${environment.baseApiUrl}/api/v1/api-keys`;
   private apiKeysSubject = new BehaviorSubject<ApiKey[]>([]);
   public apiKeys$ = this.apiKeysSubject.asObservable();
+  
+  // Simple cache for API keys
+  private apiKeysCache: { keys: ApiKey[] } | null = null;
+  private cacheTimestamp: number = 0;
+  private readonly CACHE_DURATION = 5000; // 5 seconds only
 
   constructor(
     private http: HttpClient,
@@ -33,11 +38,28 @@ export class ApiKeyService {
    * Get all API keys for the current user
    */
   getApiKeys(): Observable<{ keys: ApiKey[] }> {
+    // Check cache first
+    const now = Date.now();
+    if (this.apiKeysCache && (now - this.cacheTimestamp) < this.CACHE_DURATION) {
+      return of(this.apiKeysCache);
+    }
+
     // For development, use mock data
     if (!environment.production) {
-      return this.mockDataService.getMockApiKeys();
+      const result$ = this.mockDataService.getMockApiKeys();
+      result$.subscribe(data => {
+        this.apiKeysCache = data;
+        this.cacheTimestamp = now;
+      });
+      return result$;
     }
-    return this.http.get<{ keys: ApiKey[] }>(this.apiUrl);
+    
+    const result$ = this.http.get<{ keys: ApiKey[] }>(this.apiUrl);
+    result$.subscribe(data => {
+      this.apiKeysCache = data;
+      this.cacheTimestamp = now;
+    });
+    return result$;
   }
 
   /**
@@ -196,6 +218,10 @@ export class ApiKeyService {
    * Get API key by ID
    */
   getApiKeyById(id: string): Observable<ApiKey> {
+    // For development, use mock data
+    if (!environment.production) {
+      return this.mockDataService.getMockApiKeyById(id);
+    }
     return this.http.get<ApiKey>(`${this.apiUrl}/${id}`);
   }
 
