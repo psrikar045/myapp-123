@@ -1,19 +1,19 @@
 <!-- Hero Section -->
-<section class="hero-section position-relative overflow-hidden" id="brands-section">
+<section class="hero-section position-relative overflow-hidden mSection1" id="brands-section">
   <div class="hero-bg-elements">
-    <img src="assets/landing/SectionBg1.png" alt="Decorative Circle" class="hero-yellow-circle position-absolute d-none d-lg-block" />
+    <img src="assets/landing/SectionBg1.webp" alt="Decorative Circle" class="hero-yellow-circle position-absolute d-none d-lg-block" />
   </div>
   <div class="container pad100">
-    <div class="row align-items-center py-4">
+    <div class="row align-items-center py-4 MrowColumnReverse Mpt-0 Mpb-0">
       <div class="col-lg-6 col-12 order-2 order-lg-1">
         <div class="hero-content">
           <div class="hero-white-circle position-absolute rounded-circle"></div>
-          <h1 class="hero-headline display-3 fw-bold mb-4 fade-in-up">
+          <h1 class="hero-headline display-3 fw-bold mb-4 fade-in-up MTextAlign">
             {{ heroHeadline.main }}<br class="d-none d-md-block"> 
             {{ heroHeadline.main1 }}<br class="d-none d-md-block"> 
             {{ heroHeadline.suffix }}<span class="hero-highlight text-gradient RIVO9Font">{{ heroHeadline.highlight }}</span>
           </h1>
-          <p class="hero-subheadline lead text-muted mb-4 fade-in-up" style="animation-delay: 0.2s;">
+          <p class="hero-subheadline lead text-muted mb-4 fade-in-up MTextAlign" style="animation-delay: 0.2s;">
             {{ heroSubheadline }}
           </p>
           <div class="hero-search-container mb-4 fade-in-up" style="animation-delay: 0.4s;">
@@ -64,9 +64,9 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-6 col-12 order-1 order-lg-2 mb-5 mb-lg-0">
+      <div class="col-lg-6 col-12 order-1 order-lg-2 mb-5 mb-lg-0 Mmb-20">
         <div class="hero-illustration text-center">
-          <img src="assets/landing/Hero_img.png" alt="RIVO9 Hero Illustration" class="img-fluid hero-main-image fade-in-up" style="animation-delay: 0.3s; max-height: 500px;" loading="lazy">
+          <img src="assets/landing/Hero_img.webp" alt="RIVO9 Hero Illustration" class="img-fluid hero-main-image fade-in-up" style="animation-delay: 0.3s; max-height: 500px;" loading="lazy">
         </div>
       </div>
     </div>
@@ -75,10 +75,10 @@
 <!-- Hero Section End -->
 
 <!-- Logos Section -->
-<section class="company-logos-section">
+<section class="company-logos-section mSection2">
   <div class="container pad100">
     <div class="row justify-content-center align-items-center g-4">
-      <div class="col-lg-2 col-md-3 col-sm-4 col-6" *ngFor="let logo of orbitLogos">
+      <div class="col-lg-2 col-md-3 col-sm-6 col-6" *ngFor="let logo of orbitLogos">
         <div class="logo-container text-center">
           <img [src]="logo.src" [alt]="logo.alt" class="img-fluid company-logo"
                (mouseenter)="onLogoHover($event, true)"
@@ -92,10 +92,10 @@
 
 
 <!-- Features Section -->
-<section class="features-section section-padding SectionProperties">
+<section class="features-section section-padding SectionProperties mSection3">
   <div class="container pad100">
-      <img src="assets/landing/SectionBg3.png" alt="RIVO9" class="SectionBgImage" />
-    <div class="row text-center mb-5">
+      <img src="assets/landing/SectionBg3.webp" alt="RIVO9" class="SectionBgImage" />
+    <div class="row text-center mb-5 Mmb-20">
       <div class="col-12">
         <h2 class="mb-3">Why Choose <span class="RIVO9Font"> RIVO9?</span></h2>
         <p class="lead rivo9-section-subtitle">Everything you need to integrate brand assets into your applications</p>
@@ -120,7 +120,7 @@
  
 <div class="dynamic-sections">
   <section *ngFor="let section of allSections; let i = index" 
-           class="section-padding"
+           class="section-padding mSection3"
            [class.bg-light]="i % 2 === 0"
            [id]="i === 1 ? 'developers-section' : null">
     <div class="container pad100">
@@ -149,7 +149,7 @@
         </div>
         <div class="col-lg-4 col-md-6 col-sm-6 col-12 m-0" [class.order-lg-1]="i === 1">
           <div class="text-center">
-            <img [src]="i === 1 ? 'assets/landing/Section_2.png' : section.image" 
+            <img [src]="i === 1 ? 'assets/landing/Section_2.webp' : section.image" 
                  alt="Section Illustration" 
                  class="img-fluid rounded-3"
                  [ngClass]="{
@@ -164,16 +164,16 @@
   </section>
 </div>
 
-<section class="Sectionbg">
+<section class="Sectionbg mSection3">
   <div class="container pad100">
-    <div class="row align-items-center g-5 mt-80">
-      <div class="col-lg-6 col-12 text-center m-0">
-        <img src="assets/landing/Illustration.svg" 
+    <div class="row align-items-center g-5 mt-80 Mmt-10">
+      <div class="col-lg-6 col-12 text-center m-0 Mmb-20">
+        <img src="assets/landing/Illustration.webp" 
              alt="Workflow Illustration" 
              class="img-fluid"
              style="max-height: 300px; filter: brightness(1.2);">
       </div>
-      <div class="col-lg-6 col-12 m-0 mb-40">
+      <div id="Mmb-0" class="col-lg-6 col-12 m-0 mb-40">
         <div class="cta-content">
           <h2 class="display-5 fw-bold mb-4">{{ superchargeHeadline }}</h2>
           <p class="lead mb-4 text-color">{{ superchargeSubheadline }}</p>
@@ -213,52 +213,19 @@
   </div>
 </section>
 
-<!-- Testimonials Section (Hidden for now) -->
-<!-- Can be enabled by removing *ngIf="false" -->
-<!-- <section class="testimonials-section py-5 bg-light" *ngIf="false">
-  <div class="container pad100">
-    <div class="row text-center mb-5">
-      <div class="col-12">
-        <h2 class="display-5 fw-bold mb-3">Reviews From Our Customers</h2>
-        <p class="lead text-muted">RIVO9 has got more than 100k positive ratings from our users around the world.</p>
-      </div>
-    </div>
-    
-    <div class="row g-4">
-      <div class="col-lg-4 col-md-6 col-12" *ngFor="let testimonial of testimonials">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4">
-            <div class="d-flex align-items-center mb-3">
-              <img [src]="testimonial.avatar" 
-                   [alt]="testimonial.name" 
-                   class="rounded-circle me-3"
-                   style="width: 50px; height: 50px; object-fit: cover;">
-              <div>
-                <h6 class="mb-0 fw-bold">{{ testimonial.name }}</h6>
-                <small class="text-muted">{{ testimonial.role }}</small>
-              </div>
-            </div>
-            <p class="card-text text-muted">{{ testimonial.text }}</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section> -->
-
 <!-- Pricing Section -->
-<section class="section-padding pricing-section bg-light" id="pricing-section">
+<section class="section-padding pricing-section bg-light mSection3" id="pricing-section">
   <div class="container pad100">
     <!-- Header -->
-    <div class="row text-center mb-5">
+    <div class="row text-center mb-5" id="Mmb-0">
       <div class="col-12">
-        <h2 class="display-5 fw-bold mb-3">Expand your options with a subscription</h2>
-        <p class="lead text-muted mb-4">
+        <h2 class="display-5 fw-bold mb-3 MTextAlign">Expand your options with a subscription</h2>
+        <p class="lead text-muted mb-4 MTextAlign">
           Choose the perfect plan for your needs with flexible pricing options.
         </p>
         
         <!-- Billing Toggle -->
-        <div class="d-flex justify-content-center align-items-center gap-3 mb-4">
+        <div class="d-flex justify-content-center align-items-center gap-3 mb-4 Mflexstart">
           <span class="fw-medium" [class.text-primary]="!isAnnual">Monthly</span>
           <div class="form-check form-switch">
             <input class="form-check-input" 
@@ -421,11 +388,11 @@
   </div>
 </section>
 
-<section class="final-cta-section py-5 bg-white" id="company-logos-section">
+<section class="final-cta-section py-5 bg-white mSection2" id="company-logos-section">
   <div class="container pad100">
     <div class="row text-center">
       <div class="col-12">
-        <object type="image/svg+xml" data="assets/landing/ThinkingTeams.svg"></object>
+        <object class="MimgControle" type="image/svg+xml" data="assets/landing/ThinkingTeams.svg"></object>
       </div>
     </div>
   </div>

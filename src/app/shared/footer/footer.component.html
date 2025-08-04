@@ -1,59 +1,34 @@
-<!-- Bootstrap Responsive Footer -->
-<footer class="footer bg-dark text-light py-5">
-  <!-- Back to Top Button -->
-  <button 
-    class="btn btn-primary back-to-top-btn position-fixed" 
-    [class.visible]="showBackToTop"
-    (click)="scrollToTop()" 
-    aria-label="Back to top"
-    title="Back to top">
+
+<footer class="footer bg-dark text-light py-5 mfoortSection">
+  <button class="btn btn-primary back-to-top-btn position-fixed" [class.visible]="showBackToTop" 
+  (click)="scrollToTop()" aria-label="Back to top" title="Back to top">
     <i class="bi bi-arrow-up"></i>
   </button>
-  
-  <div class="container">
+  <div class="container pad100">
     <div class="row g-4">
-      
-      <!-- Company Info Column -->
-      <div class="col-lg-4 col-md-6 col-12">
+      <div class="col-lg-4 col-md-6 col-12 Mmb-10">
         <div class="footer-section">
-          <!-- Logo -->
           <div class="mb-3">
-            <img src="assets/images/Footer_logo.png" 
-                 alt="Company Logo" 
-                 class="footer-logo img-fluid"
-                 style="max-height: 50px;">
+            <img src="assets/images/Footer_logo.png"  alt="Company Logo"  class="img-fluid" style="max-height: 50px;object-fit: contain;">
           </div>
-          
-          <!-- Description -->
           <p class="text-light mb-3" style="opacity: 0.8;">{{ companyDescription }}</p>
-          
-          <!-- Social Links -->
           <div class="d-flex gap-2 mb-3">
-            <a *ngFor="let social of socialLinks" 
-               [href]="social.url" 
-               target="_blank" 
-               rel="noopener"
+            <a *ngFor="let social of socialLinks" [href]="social.url"  target="_blank"  rel="noopener"
                class="btn btn-outline-light btn-sm rounded-circle d-flex align-items-center justify-content-center"
-               style="width: 40px; height: 40px;">
-              <i [class]="social.iconClass"></i>
+               style="width: 40px; height: 40px;"> <i [class]="social.iconClass"></i>
             </a>
           </div>
-          
-          <!-- Copyright -->
           <p class="text-light small mb-0" style="opacity: 0.7;">{{ copyright }}</p>
         </div>
       </div>
-
-      <!-- Brand Categories Column -->
-      <div class="col-lg-3 col-md-6 col-12">
+      <div class="col-lg-4 col-md-6 col-12 Mmb-0">
         <div class="footer-section">
           <h5 class="text-uppercase fw-bold mb-3">Top Brand Categories</h5>
           <div class="row">
             <div class="col-6">
               <ul class="list-unstyled">
                 <li *ngFor="let cat of brandCategories.slice(0,6)" class="mb-2">
-                  <a [href]="'/all-categories?category=' + cat.route" 
-                     (click)="navigateToCategory(cat, $event)" 
+                  <a [href]="'/all-categories?category=' + cat.route"  (click)="navigateToCategory(cat, $event)" 
                      class="text-light text-decoration-none footer-link" style="opacity: 0.8;">
                     {{ cat.name }}
                   </a>
@@ -74,15 +49,12 @@
           </div>
         </div>
       </div>
-
-      <!-- For Developers Column -->
-      <div class="col-lg-2 col-md-6 col-12">
+      <div class="col-lg-2 col-md-6 col-12 Mmb-10 Mmt-10">
         <div class="footer-section">
           <h5 class="text-uppercase fw-bold mb-3">For Developers</h5>
           <ul class="list-unstyled">
             <li *ngFor="let link of developerLinks" class="mb-2">
-              <a *ngIf="link.route" 
-                 [routerLink]="link.route" 
+              <a *ngIf="link.route" [routerLink]="link.route" 
                  class="text-light text-decoration-none footer-link" style="opacity: 0.8;">
                 {{ link.label }}
               </a>
@@ -90,12 +62,10 @@
           </ul>
         </div>
       </div>
-
-      <!-- Company Column -->
-      <div class="col-lg-3 col-md-6 col-12">
+      <div class="col-lg-2 col-md-6 col-12 Mmt-0">
         <div class="footer-section">
           <h5 class="text-uppercase fw-bold mb-3">Company</h5>
-          <ul class="list-unstyled">
+          <ul class="list-unstyled Mmb-0">
             <li *ngFor="let link of companyLinks" class="mb-2">
               <a *ngIf="link.route" 
                  [routerLink]="link.route" 
@@ -106,13 +76,8 @@
           </ul>
         </div>
       </div>
-      
     </div>
-    
-    <!-- Bottom Border -->
     <hr class="my-4 border-secondary">
-    
-    <!-- Bottom Row -->
     <div class="row align-items-center">
       <div class="col-md-6 col-12 text-center text-md-start">
         <p class="text-light small mb-0" style="opacity: 0.7;">

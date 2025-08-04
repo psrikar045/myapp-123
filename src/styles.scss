@@ -2230,3 +2230,38 @@ app-date-picker-popup {
     z-index: calc(var(--z-date-picker-modal) + 1) !important;
   }
 }
+
+
+// M0bile Responsive
+@media ( 200px <= width <= 768px) {
+
+  // landingpage Start
+ .MrowColumnReverse { flex-direction: column-reverse;}
+ .pad100 {padding-left: 25px !important;padding-right: 25px !important;}
+ .MTextAlign{text-align: left !important;}
+ .Mpt-0{padding-top: 0px !important;}
+ .Mmt-10{margin-top: 10px !important;}
+ #Mmb-0{margin-bottom: 0px !important;}
+ .Mpb-0{padding-bottom: 0px !important;}
+ .Mmb-20{margin-bottom: 20px !important;}
+ .company-logo {max-width: 100%;}
+ .mSection1{padding-top: 20px !important;padding-bottom: 0px !important;}
+ .mSection2{padding-top: 20px !important;padding-bottom: 20px !important;}
+ .mSection3{padding-top: 20px !important;padding-bottom: 30px !important;}
+ img.SectionBgImage {display: none;}
+ .designers-section-image {margin-top: 25px !important;}
+.developers-section-image {margin-top: 25px !important;}
+.marketers-section-image {margin-top: 25px !important;}
+.Mflexstart {justify-content: flex-start !important;}
+object.MimgControle {width: 100%;}
+// landingpage End
+
+// footer Start
+ .mfoortSection{padding-top: 30px !important;padding-bottom: 20px !important;}
+ .Mmb-10{margin-bottom: 10px !important;}
+  .Mmb-0{margin-bottom: 0px !important;}
+   .Mmt-0{margin-top: 0px !important;}
+
+// footer End
+
+}

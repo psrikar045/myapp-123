@@ -1,12 +1,7 @@
-/* ============================================================================
-   RESPONSIVE BOOTSTRAP FOOTER STYLES
-   ============================================================================ */
-
 .footer {
   margin-top: auto;
   // background: linear-gradient(135deg, #1a202c 0%, #2d3748 50%, #4a5568 100%) !important; 
   background: linear-gradient(135deg, #4265e7 0%, #212ebe 50%, #4a5568 100%) !important;
-  // Professional dark gradient
   box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
   position: relative;
   overflow: hidden;
@@ -34,12 +29,6 @@
     right: 0;
     height: 2px;
     background: linear-gradient(90deg, var(--bs-primary), #6366f1, var(--bs-primary));
-  }
-  
-  .container {
-    position: relative;
-    z-index: 1;
-    max-width: 1200px;
   }
   
   .footer-section {
@@ -356,7 +345,6 @@
       text-align: center;
       
       .col-12 {
-        margin-bottom: 2rem;
         
         &:last-child {
           margin-bottom: 0;
@@ -469,7 +457,6 @@
     }
     
     .footer-section {
-      margin-bottom: 2rem;
       
       h5 {
         font-size: 0.9rem;
@@ -488,10 +475,6 @@
       flex-wrap: wrap;
       gap: 0.5rem !important;
       
-      .btn {
-        flex: 1;
-        min-width: calc(50% - 0.25rem);
-      }
     }
   }
 }

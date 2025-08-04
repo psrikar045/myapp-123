@@ -1,10 +1,4 @@
-/* ============================================================================
-   RESPONSIVE LANDING PAGE STYLES
-   ============================================================================ */
-
-// Enhanced Hero Section
 .hero-section {
-  // background: linear-gradient(135deg, var(--theme-background) 0%, var(--theme-surface) 100%);
   background: linear-gradient(135deg, #ffd1666e 0%, var(--theme-surface) 32%);
   min-height: calc(100vh - 72px); // Account for header height
   position: relative;
@@ -24,16 +18,7 @@
       min-height: calc(100vh - 144px); // Account for header and padding
     }
   }
-  
-  // Responsive adjustments for header height
-  @media (max-width: 767.98px) {
-    min-height: calc(100vh - 60px); // Smaller header on mobile
-    
-    .container-fluid .row {
-      min-height: calc(100vh - 120px);
-    }
-  }
-  
+
   .hero-bg-elements {
     position: absolute;
     top: 0;
@@ -54,17 +39,6 @@
     background: linear-gradient(193deg, rgba(255, 255, 255, 0.29) 61.18%, rgba(255, 255, 255, 0.00) 95.07%);
     box-shadow: 0 0 45.376px 0 rgba(0, 163, 255, 0.05);
     backdrop-filter: blur(23.15101432800293px);
-    
-    // @media (max-width: 991.98px) {
-    //   width: 400px;
-    //   height: 400px;
-    //   top: -100px;
-    //   right: -100px;
-    // }
-    
-    // @media (max-width: 767.98px) {
-    //   display: none;
-    // }
   }
   
   .hero-yellow-circle {
@@ -97,7 +71,6 @@
 }
 
 .hero-headline {
-  // Font size removed - using global typography system
   line-height: 1.2;
   color: var(--theme-text);
   margin-bottom: 1.5rem;
@@ -128,7 +101,6 @@
 }
 
 .hero-subheadline {
-  // Font size removed - using global typography system
   line-height: 1.6;
   color: var(--bs-secondary);
   max-width: 600px;
@@ -227,7 +199,6 @@
 
 // Features Section - Enhanced "Why Choose RIVO9?" Cards
 .features-section {
-  // Section Title Styling
   .rivo9-section-title {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     -webkit-background-clip: text;
@@ -537,11 +508,7 @@
     .logo-container {
       height: 70px;
     }
-    
-    .company-logo {
-      max-height: 45px;
-      max-width: 90px;
-    }
+
   }
   
   @media (max-width: 576px) {
@@ -549,11 +516,6 @@
     
     .logo-container {
       height: 60px;
-    }
-    
-    .company-logo {
-      max-height: 40px;
-      max-width: 80px;
     }
   }
 }
@@ -1193,3 +1155,4 @@ img.SectionBgImage {
     }
   }
 }
+
