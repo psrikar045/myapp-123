@@ -46,7 +46,7 @@
                 <input 
                   type="text" 
                   class="form-control form-control-lg font-monospace"
-                  [value]="createdApiKey.key"
+                  [value]="createdApiKey.keyValue"
                   readonly>
                 <button 
                   class="btn btn-primary"
@@ -65,11 +65,11 @@
                 </div>
                 <div class="col-md-3">
                   <small class="text-body-secondary">Tier</small>
-                  <p class="mb-0 fw-semibold">{{ createdApiKey.tier }}</p>
+                  <p class="mb-0 fw-semibold">{{ createdApiKey.rateLimitTier }}</p>
                 </div>
                 <div class="col-md-3">
                   <small class="text-body-secondary">Status</small>
-                  <span class="badge bg-success">{{ createdApiKey.status }}</span>
+                  <span class="badge bg-success">{{ createdApiKey.isActive ? 'Active' : 'Inactive' }}</span>
                 </div>
                 <div class="col-md-3">
                   <small class="text-body-secondary">Expires</small>
@@ -223,7 +223,7 @@
               <div class="col-6">
                 <div 
                   class="tier-option p-3 border rounded-3 cursor-pointer"
-                  [class.selected]="createForm.get('tier')?.value?.tier === 'BASIC'"
+                  [class.selected]="createForm.get('tier')?.value?.tier === 'FREE_TIER'"
                   (click)="selectRateLimitTier(rateLimitTiers[0])"
                   style="border: 1px solid #e0e0e0; transition: all 0.2s;">
                   <div class="fw-medium text-dark">Free (100 requests/mon)</div>
@@ -232,7 +232,7 @@
               <div class="col-6">
                 <div 
                   class="tier-option p-3 border rounded-3 cursor-pointer"
-                  [class.selected]="createForm.get('tier')?.value?.tier === 'STANDARD'"
+                  [class.selected]="createForm.get('tier')?.value?.tier === 'PRO_TIER'"
                   (click)="selectRateLimitTier(rateLimitTiers[1])"
                   style="border: 1px solid #e0e0e0; transition: all 0.2s;">
                   <div class="fw-medium text-dark">Pro (1000 requests/mon)</div>
@@ -250,10 +250,10 @@
               <div class="col-6">
                 <div 
                   class="tier-option p-3 border rounded-3 cursor-pointer"
-                  [class.selected]="createForm.get('tier')?.value?.tier === 'ENTERPRISE'"
-                  (click)="selectRateLimitTier(rateLimitTiers[3])"
+                  [class.selected]="createForm.get('tier')?.value?.tier === 'BUSINESS_TIER'"
+                  (click)="selectRateLimitTier(rateLimitTiers[2])"
                   style="border: 1px solid #e0e0e0; transition: all 0.2s;">
-                  <div class="fw-medium text-dark">Enterprise (Unlimited requests/mon)</div>
+                  <div class="fw-medium text-dark">Business (Unlimited requests/mon)</div>
                 </div>
               </div>
             </div>

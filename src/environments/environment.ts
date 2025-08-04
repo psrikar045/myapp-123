@@ -5,6 +5,9 @@ export const environment = {
   logLevel: 'error', // Typically 'error' or 'warn' for production
   appVersion: '0.0.1',
   
+  // API Data Configuration - only for API Keys
+  useRealApiKeysData: true, // Set to false to use mock API keys, true to use real backend API
+  
   // Theme System Configuration
   theme: {
     enableAdvancedTheme: true,

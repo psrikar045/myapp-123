@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject, of } from 'rxjs';
+import { Observable, BehaviorSubject, of, catchError, tap, map } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { 
   ApiKey, 
@@ -15,6 +15,25 @@ import {
   RateLimitHeaders 
 } from '../models/rate-limit.model';
 import { MockDataService } from './mock-data.service';
+
+// Backend API response interface
+interface BackendApiKey {
+  id: string;
+  name: string;
+  description?: string | null;
+  prefix?: string | null;
+  registeredDomain?: string;
+  expiresAt?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  lastUsedAt?: string | null;
+  revokedAt?: string | null;
+  allowedIps: string[];
+  allowedDomains: string[];
+  rateLimitTier: string;
+  scopes: string[];
+  active: boolean;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -44,21 +63,69 @@ export class ApiKeyService {
       return of(this.apiKeysCache);
     }
 
-    // For development, use mock data
-    if (!environment.production) {
-      const result$ = this.mockDataService.getMockApiKeys();
-      result$.subscribe(data => {
-        this.apiKeysCache = data;
-        this.cacheTimestamp = now;
-      });
+    // Check if we should use real API data or mock data for API keys only
+    if (!environment.useRealApiKeysData) {
+      // Use mock data when useRealApiKeysData is false
+      const result$ = this.mockDataService.getMockApiKeys().pipe(
+        tap(data => {
+          this.apiKeysCache = data;
+          this.cacheTimestamp = now;
+        }),
+        catchError(error => {
+          console.error('Error loading mock API keys:', error);
+          return of({ keys: [] });
+        })
+      );
       return result$;
     }
     
-    const result$ = this.http.get<{ keys: ApiKey[] }>(this.apiUrl);
-    result$.subscribe(data => {
-      this.apiKeysCache = data;
-      this.cacheTimestamp = now;
-    });
+    // Use real backend API data
+    const result$ = this.http.get<BackendApiKey[]>(this.apiUrl).pipe(
+      map(backendApiKeys => {
+        
+        // Map backend response to frontend model
+        const mappedKeys: ApiKey[] = backendApiKeys.map(backendKey => ({
+          id: backendKey.id,
+          name: backendKey.name,
+          maskedKey: this.generateMaskedKey(backendKey.prefix, backendKey.name), // Generate masked key since backend doesn't provide keyValue
+          tier: backendKey.rateLimitTier,
+          environment: 'production' as 'development' | 'staging' | 'production' | 'testing', // Default to production since backend doesn't provide environment
+          scopes: backendKey.scopes || [],
+          usage: {
+            requestsToday: 0, // Backend doesn't provide this, set default
+            remainingToday: 10000, // Backend doesn't provide this, set default
+            lastUsed: backendKey.lastUsedAt || backendKey.createdAt, // Use lastUsedAt or createdAt as fallback
+            rateLimitStatus: 'OK' as 'OK' | 'WARNING' | 'EXCEEDED'
+          },
+          security: {
+            ipRestrictions: {
+              enabled: backendKey.allowedIps.length > 0,
+              whitelist: backendKey.allowedIps
+            },
+            domainRestrictions: {
+              enabled: backendKey.allowedDomains.length > 0 || !!backendKey.registeredDomain,
+              allowedDomains: backendKey.allowedDomains.length > 0 ? backendKey.allowedDomains : [backendKey.registeredDomain || '']
+            },
+            webhookUrls: [],
+            allowedOrigins: backendKey.allowedDomains.length > 0 ? backendKey.allowedDomains : [backendKey.registeredDomain || '']
+          },
+          expiresAt: backendKey.expiresAt || undefined,
+          createdAt: backendKey.createdAt,
+          status: backendKey.active ? 'ACTIVE' : 'SUSPENDED'
+        }));
+        
+        return { keys: mappedKeys };
+      }),
+      tap(data => {
+        this.apiKeysCache = data;
+        this.cacheTimestamp = now;
+      }),
+      catchError(error => {
+        console.error('Error fetching API keys from backend:', error);
+        // Return empty array instead of throwing error
+        return of({ keys: [] });
+      })
+    );
     return result$;
   }
 
@@ -258,5 +325,30 @@ export class ApiKeyService {
    */
   updateApiKeyExpiration(id: string, expiration: ExpirationSettings): Observable<any> {
     return this.http.patch(`${this.apiUrl}/${id}/expiration`, { expiration });
+  }
+
+  /**
+   * Generate masked key for display purposes since backend doesn't provide actual key value
+   */
+  private generateMaskedKey(prefix: string | null | undefined, name: string): string {
+    const keyPrefix = prefix || 'key';
+    const hash = this.simpleHash(name);
+    const maskedMiddle = '*'.repeat(24);
+    const suffix = hash.substring(hash.length - 4);
+    
+    return `${keyPrefix}-${maskedMiddle}${suffix}`;
+  }
+
+  /**
+   * Simple hash function for generating consistent masked key suffix
+   */
+  private simpleHash(str: string): string {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    return Math.abs(hash).toString(16).padStart(8, '0');
   }
 }

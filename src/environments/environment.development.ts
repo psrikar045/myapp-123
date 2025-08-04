@@ -4,6 +4,7 @@ export const environment = {
  //baseApiUrl: 'http://localhost:8080/myapp',//local
   logLevel: 'debug',
   appVersion: '0.0.1',
+  useRealApiKeysData: true,
   
   // Theme System Configuration
   theme: {

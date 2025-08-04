@@ -146,23 +146,47 @@
                         (click)="selectApiKey(apiKey)"
                         [class.table-active]="selectedApiKey?.id === apiKey.id">
                       <td class="py-3">
-                        <span class="fw-medium text-body-emphasis">{{ getDomainFromApiKey(apiKey) }}</span>
-                      </td>
-                      <td class="py-3">
                         <div class="d-flex align-items-center">
-                          <span class="fw-medium text-primary">{{ apiKey.name }}</span>
+                          <i class="bi bi-globe2 text-primary me-2"></i>
+                          <span class="fw-medium text-body-emphasis">{{ getDomainFromApiKey(apiKey) }}</span>
                         </div>
                       </td>
                       <td class="py-3">
-                        <span class="badge bg-light text-dark border">{{ getEnvironmentDisplayName(apiKey.environment) }}</span>
+                        <div class="d-flex align-items-center">
+                          <i class="bi bi-key text-warning me-2"></i>
+                          <div>
+                            <span class="fw-medium text-primary">{{ apiKey.name }}</span>
+                            <br>
+                            <small class="text-muted">{{ apiKey.maskedKey }}</small>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="py-3">
+                        <span class="badge" 
+                              [class.bg-success]="apiKey.environment === 'production'"
+                              [class.bg-warning]="apiKey.environment === 'staging'"
+                              [class.bg-info]="apiKey.environment === 'development'"
+                              [class.bg-secondary]="apiKey.environment === 'testing'"
+                              [class.text-dark]="apiKey.environment !== 'production'">
+                          {{ getEnvironmentDisplayName(apiKey.environment) }}
+                        </span>
                       </td>
                       <td class="py-3">
                         <span [class]="getApiKeyStatusBadgeClass(apiKey.status)">
+                          <i class="bi" 
+                             [class.bi-check-circle]="apiKey.status === 'ACTIVE'"
+                             [class.bi-pause-circle]="apiKey.status === 'SUSPENDED'"
+                             [class.bi-x-circle]="apiKey.status === 'REVOKED'"
+                             [class.bi-clock]="apiKey.status === 'EXPIRED'"
+                             class="me-1"></i>
                           {{ getStatusDisplayName(apiKey.status) }}
                         </span>
                       </td>
                       <td class="py-3">
-                        <span class="text-body-secondary">{{ formatDate(apiKey.usage.lastUsed || apiKey.createdAt) }}</span>
+                        <div class="d-flex align-items-center">
+                          <i class="bi bi-clock text-muted me-2"></i>
+                          <span class="text-body-secondary">{{ formatDate(apiKey.usage.lastUsed || apiKey.createdAt) }}</span>
+                        </div>
                       </td>
                     </tr>
                   </tbody>
@@ -195,7 +219,7 @@
                   </div>
                   <div>
                     <h6 class="mb-0 fw-bold">{{ selectedApiKey.name }}</h6>
-                    <small class="text-body-secondary">{{ selectedApiKey.tier || 'Standard' }}</small>
+                    <small class="text-body-secondary">{{ getTierDisplayName(selectedApiKey.tier) }}</small>
                   </div>
                 </div>
                 <button class="btn btn-outline-primary btn-sm squared-pill" (click)="viewApiKeyFullDetails(selectedApiKey)">
@@ -225,11 +249,19 @@
                 <div class="row g-3">
                   <div class="col-6">
                     <div class="text-body-secondary small">Tier</div>
-                    <div class="fw-semibold">{{ selectedApiKey.tier || 'Standard' }}</div>
+                    <div class="fw-semibold">{{ getTierDisplayName(selectedApiKey.tier) }}</div>
                   </div>
                   <div class="col-6">
                     <div class="text-body-secondary small">Expiry Date</div>
-                    <div class="fw-semibold">{{ selectedApiKey.expiresAt ? formatDate(selectedApiKey.expiresAt) : '2024-12-31' }}</div>
+                    <div class="fw-semibold">{{ selectedApiKey.expiresAt ? formatDate(selectedApiKey.expiresAt) : 'Never' }}</div>
+                  </div>
+                  <div class="col-12 mt-2">
+                    <div class="text-body-secondary small">Domain</div>
+                    <div class="fw-semibold">{{ getDomainFromApiKey(selectedApiKey) }}</div>
+                  </div>
+                  <div class="col-12 mt-2">
+                    <div class="text-body-secondary small">Key Name</div>
+                    <div class="fw-semibold font-monospace small">{{ selectedApiKey.maskedKey }}</div>
                   </div>
                 </div>
               </div>

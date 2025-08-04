@@ -22,33 +22,24 @@ export class ApiDashboardService {
    * Get dashboard statistics
    */
   getDashboardStats(): Observable<DashboardStats> {
-    // For development, use mock data
-    if (!environment.production) {
-      return this.mockDataService.getMockDashboardStats();
-    }
-    return this.http.get<DashboardStats>(`${this.apiUrl}/stats`);
+    // Always use mock data for dashboard stats
+    return this.mockDataService.getMockDashboardStats();
   }
 
   /**
    * Get recent projects
    */
   getRecentProjects(): Observable<{ projects: RecentProject[] }> {
-    // For development, use mock data
-    if (!environment.production) {
-      return this.mockDataService.getMockRecentProjects();
-    }
-    return this.http.get<{ projects: RecentProject[] }>(`${this.apiUrl}/projects/recent`);
+    // Always use mock data for recent projects
+    return this.mockDataService.getMockRecentProjects();
   }
 
   /**
    * Get complete API dashboard data
    */
   getApiDashboardData(): Observable<ApiDashboardData> {
-    // For development, use mock data
-    if (!environment.production) {
-      return this.mockDataService.getMockApiDashboardData();
-    }
-    return this.http.get<ApiDashboardData>(`${this.apiUrl}/dashboard`);
+    // Always use mock data for complete dashboard data
+    return this.mockDataService.getMockApiDashboardData();
   }
 
   /**

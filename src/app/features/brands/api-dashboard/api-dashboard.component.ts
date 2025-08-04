@@ -173,12 +173,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Format number with commas
-   */
-  formatNumber(num: number): string {
-    return num.toLocaleString();
-  }
+
 
   /**
    * Get quota progress bar class
@@ -224,6 +219,14 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
     if (diffDays < 7) return `${diffDays} days ago`;
     
     return date.toLocaleDateString();
+  }
+
+  /**
+   * Format number for display with commas
+   */
+  formatNumber(num: number): string {
+    if (num == null || isNaN(num)) return '0';
+    return num.toLocaleString();
   }
 
   /**
@@ -493,21 +496,33 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get domain name from API key (mock implementation)
+   * Get domain name from API key
    */
   getDomainFromApiKey(apiKey: ApiKey): string {
-    // Mock domain names based on API key name or ID
-    const domains = [
-      'example.com',
-      'another-example.com', 
-      'third-example.com',
-      'fourth-example.com',
-      'fifth-example.com'
-    ];
+    // Try to get domain from security settings first (allowedDomains)
+    if (apiKey.security?.domainRestrictions?.allowedDomains?.length > 0) {
+      const domain = apiKey.security.domainRestrictions.allowedDomains[0];
+      if (domain && domain !== '') {
+        return domain;
+      }
+    }
     
-    // Use a simple hash to consistently assign domains
-    const index = Math.abs(apiKey.id.split('').reduce((a, b) => a + b.charCodeAt(0), 0)) % domains.length;
-    return domains[index];
+    // Fallback to allowed origins (which should contain registeredDomain)
+    if (apiKey.security?.allowedOrigins?.length > 0) {
+      const origin = apiKey.security.allowedOrigins[0];
+      if (origin && origin !== '') {
+        // Extract domain from URL if it's a full URL
+        try {
+          const url = new URL(origin.startsWith('http') ? origin : `https://${origin}`);
+          return url.hostname;
+        } catch {
+          return origin;
+        }
+      }
+    }
+    
+    // Final fallback - use a default
+    return 'No domain configured';
   }
 
   /**
@@ -541,15 +556,17 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
    * Get environment display name
    */
   getEnvironmentDisplayName(environment?: string): string {
-    switch (environment) {
+    switch (environment?.toLowerCase()) {
       case 'production':
         return 'Production';
       case 'staging':
-        return 'Test';
+        return 'Staging';
       case 'development':
         return 'Development';
+      case 'testing':
+        return 'Testing';
       default:
-        return 'Production';
+        return environment || 'Unknown';
     }
   }
 
@@ -568,6 +585,28 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
         return 'Revoked';
       default:
         return 'Unknown';
+    }
+  }
+
+  /**
+   * Get tier display name
+   */
+  getTierDisplayName(tier: string): string {
+    switch (tier) {
+      case 'FREE_TIER':
+        return 'Free';
+      case 'BASIC':
+        return 'Basic';
+      case 'STANDARD':
+        return 'Standard';
+      case 'PREMIUM':
+        return 'Premium';
+      case 'ENTERPRISE':
+        return 'Enterprise';
+      case 'UNLIMITED':
+        return 'Unlimited';
+      default:
+        return tier || 'Free';
     }
   }
 
