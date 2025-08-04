@@ -182,7 +182,7 @@ export class LayoutService implements OnDestroy {
   }
 
   private updateLayoutForRoute(url: string): void {
-    console.log('LayoutService: Updating layout for route:', url);
+    // console.log('LayoutService: Updating layout for route:', url);
     
     // Define route-specific layout configurations
     const routeConfigs: { [key: string]: Partial<LayoutConfig> } = {
@@ -315,7 +315,7 @@ export class LayoutService implements OnDestroy {
     });
 
     if (matchingRoute) {
-      console.log('LayoutService: Matched route:', matchingRoute, 'Config:', routeConfigs[matchingRoute]);
+      // console.log('LayoutService: Matched route:', matchingRoute, 'Config:', routeConfigs[matchingRoute]);
       this.setLayoutConfig(routeConfigs[matchingRoute]);
     } else {
       console.log('LayoutService: No matching route, using default config');

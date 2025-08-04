@@ -73,13 +73,13 @@ export class MainLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     this.showHeader$
       .pipe(takeUntil(this.destroy$))
       .subscribe(showHeader => {
-        console.log('MainLayout: showHeader changed to:', showHeader);
+        // console.log('MainLayout: showHeader changed to:', showHeader);
       });
 
     this.showFooter$
       .pipe(takeUntil(this.destroy$))
       .subscribe(showFooter => {
-        console.log('MainLayout: showFooter changed to:', showFooter);
+        // console.log('MainLayout: showFooter changed to:', showFooter);
       });
 
     // Sidenav state is now handled directly via observables in template with async pipe

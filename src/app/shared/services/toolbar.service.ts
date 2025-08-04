@@ -70,7 +70,7 @@ export class ToolbarService {
                        this.currentRoute.includes('/signup') || 
                        this.currentRoute.includes('/reset-password');
       
-      console.log('Route changed:', this.currentRoute, 'isAuthPage:', this.isAuthPage);
+      // console.log('Route changed:', this.currentRoute, 'isAuthPage:', this.isAuthPage);
     });
   }
   setProfileHeaderOnly() {
@@ -113,7 +113,7 @@ export class ToolbarService {
   }
 
   setLoggedOutToolbar(): void {
-    console.log('Setting logged out toolbar, isAuthPage:', this.isAuthPage);
+    // console.log('Setting logged out toolbar, isAuthPage:', this.isAuthPage);
     this.logo$.next({
       src: 'assets/images/logo.svg',
       alt: 'RIVO9 Logo',

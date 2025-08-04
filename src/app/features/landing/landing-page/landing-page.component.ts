@@ -159,7 +159,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
         this.sanitizer.bypassSecurityTrustResourceUrl(icon.path)
       );
     });
-    console.log('LandingPageComponent: Registered SVG icons including menu.');
+    // console.log('LandingPageComponent: Registered SVG icons including menu.');
   }
 
   private checkScrollPosition(): void {

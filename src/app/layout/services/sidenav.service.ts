@@ -495,13 +495,13 @@ private readonly sidenavVisibleRoutes = [
    * Update active states based on current route
    */
   private updateActiveStates(currentRoute: string): void {
-    console.log('SidenavService: Updating active states for route:', currentRoute);
+    // console.log('SidenavService: Updating active states for route:', currentRoute);
     const items = this.navigationItemsSubject.value;
     const updatedItems = this.setActiveStatesRecursive(items, currentRoute);
     
     // Debug: Log active items
     const activeItems = this.findActiveItems(updatedItems);
-    console.log('SidenavService: Active items:', activeItems.map(item => ({ id: item.id, label: item.label, route: item.route })));
+    // console.log('SidenavService: Active items:', activeItems.map(item => ({ id: item.id, label: item.label, route: item.route })));
     
     this.navigationItemsSubject.next(updatedItems);
   }
