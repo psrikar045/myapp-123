@@ -226,7 +226,7 @@
                   [class.selected]="createForm.get('tier')?.value?.tier === 'BASIC'"
                   (click)="selectRateLimitTier(rateLimitTiers[0])"
                   style="border: 1px solid #e0e0e0; transition: all 0.2s;">
-                  <div class="fw-medium text-dark">Basic (1000 requests/day)</div>
+                  <div class="fw-medium text-dark">Free (100 requests/mon)</div>
                 </div>
               </div>
               <div class="col-6">
@@ -235,10 +235,10 @@
                   [class.selected]="createForm.get('tier')?.value?.tier === 'STANDARD'"
                   (click)="selectRateLimitTier(rateLimitTiers[1])"
                   style="border: 1px solid #e0e0e0; transition: all 0.2s;">
-                  <div class="fw-medium text-dark">Standard (10000 requests/day)</div>
+                  <div class="fw-medium text-dark">Pro (1000 requests/mon)</div>
                 </div>
               </div>
-              <div class="col-6">
+              <!-- <div class="col-6">
                 <div 
                   class="tier-option p-3 border rounded-3 cursor-pointer"
                   [class.selected]="createForm.get('tier')?.value?.tier === 'PREMIUM'"
@@ -246,14 +246,14 @@
                   style="border: 1px solid #e0e0e0; transition: all 0.2s;">
                   <div class="fw-medium text-dark">Premium (100000 requests/day)</div>
                 </div>
-              </div>
+              </div> -->
               <div class="col-6">
                 <div 
                   class="tier-option p-3 border rounded-3 cursor-pointer"
                   [class.selected]="createForm.get('tier')?.value?.tier === 'ENTERPRISE'"
                   (click)="selectRateLimitTier(rateLimitTiers[3])"
                   style="border: 1px solid #e0e0e0; transition: all 0.2s;">
-                  <div class="fw-medium text-dark">Enterprise (Unlimited requests/day)</div>
+                  <div class="fw-medium text-dark">Enterprise (Unlimited requests/mon)</div>
                 </div>
               </div>
             </div>
