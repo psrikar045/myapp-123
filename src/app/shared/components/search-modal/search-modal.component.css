@@ -114,7 +114,7 @@
 }
 
 .url-value {
-  // Font size removed - using global typography system
+  /*  Font size removed - using global typography system */
   font-weight: 600;
   word-break: break-all;
 }
@@ -132,12 +132,12 @@
 }
 
 .progress-label {
-  // Font size removed - using global typography system
+  /* // Font size removed - using global typography system */
   font-weight: 600;
 }
 
 .progress-percentage {
-  // Font size removed - using global typography system
+  /* // Font size removed - using global typography system */
   font-weight: 700;
 }
 
@@ -194,7 +194,7 @@
 }
 
 .step-text {
-  // Font size removed - using global typography system
+  /* // Font size removed - using global typography system */
   font-weight: 500;
   flex: 1;
 }
@@ -205,7 +205,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  // Font size removed - using global typography system
+  /* // Font size removed - using global typography system */
   font-style: italic;
   opacity: 0.8;
 }
@@ -222,7 +222,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  // Font size removed - using global typography system
+  /* // Font size removed - using global typography system */
   opacity: 0.8;
 }
 
@@ -370,7 +370,7 @@
   }
   
   .search-modal-title {
-    // Font size removed - using global typography system
+    /* // Font size removed - using global typography system */
   }
   
   .search-modal-description {
