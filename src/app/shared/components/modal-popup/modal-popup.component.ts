@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 export interface ModalButton {
@@ -32,6 +32,8 @@ export interface ModalConfig {
   styleUrls: ['./modal-popup.component.scss']
 })
 export class ModalPopupComponent implements OnInit, OnDestroy {
+  private platformId = inject(PLATFORM_ID);
+  
   @Input() isOpen = false;
   @Input() config: ModalConfig = {};
   @Input() hasData = false; // For smart button state management
@@ -79,15 +81,19 @@ export class ModalPopupComponent implements OnInit, OnDestroy {
    * Disable body scroll when modal is open
    */
   private disableBodyScroll(): void {
-    this.originalBodyOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    if (isPlatformBrowser(this.platformId)) {
+      this.originalBodyOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   /**
    * Restore body scroll when modal is closed
    */
   private restoreBodyScroll(): void {
-    document.body.style.overflow = this.originalBodyOverflow;
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = this.originalBodyOverflow;
+    }
   }
 
   /**

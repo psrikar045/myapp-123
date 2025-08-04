@@ -111,7 +111,7 @@ export class DatePickerPopupComponent implements OnInit, OnDestroy {
         window.removeEventListener('resize', this.resizeListener);
       }
     }
-    if (this.scrollListener) {
+    if (isPlatformBrowser(this.platformId) && this.scrollListener) {
       window.removeEventListener('scroll', this.scrollListener, true);
     }
   }
@@ -185,7 +185,9 @@ export class DatePickerPopupComponent implements OnInit, OnDestroy {
     };
     
     // Use simple event listener without capture to avoid conflicts
-    document.addEventListener('click', this.clickListener);
+    if (isPlatformBrowser(this.platformId)) {
+      document.addEventListener('click', this.clickListener);
+    }
   }
 
   /**
