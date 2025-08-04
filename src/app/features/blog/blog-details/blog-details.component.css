@@ -506,3 +506,7 @@ p{
   margin: 0 24px;
   align-self: stretch;
 }
+.squared-pill:hover{
+  background-color: var(--theme-primary);
+color: white !important;
+}
