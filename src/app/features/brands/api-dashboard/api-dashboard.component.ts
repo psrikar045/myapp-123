@@ -594,6 +594,26 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Get count of unique domains from filtered API keys
+   */
+  getUniqueDomainCount(): number {
+    if (!this.filteredApiKeys || this.filteredApiKeys.length === 0) {
+      return 0;
+    }
+    
+    const uniqueDomains = new Set<string>();
+    
+    this.filteredApiKeys.forEach(apiKey => {
+      const domain = this.getDomainFromApiKey(apiKey);
+      if (domain && domain !== 'No domain configured') {
+        uniqueDomains.add(domain.toLowerCase());
+      }
+    });
+    
+    return uniqueDomains.size;
+  }
+
+  /**
    * Get tier display name
    */
   getTierDisplayName(tier: string): string {
