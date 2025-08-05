@@ -90,10 +90,10 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   private scrollSubscription!: Subscription;
 
   private logoPath = 'assets/images/logo.svg'; // Ensure correct path
-  private sunIconPath = 'assets/icons/sun.svg'; // Ensure correct path
-  private cloudIconPath = 'assets/icons/cloud.svg'; // Ensure correct path
-  private arrowForwardIconPath = 'assets/icons/arrow_forward.svg'; // Ensure correct path
-  private menuIconPath = 'assets/icons/menu.svg'; // Ensure correct path for menu icon
+  private sunIconPath = 'assets/icons/sun.webp'; // Ensure correct path
+  private cloudIconPath = 'assets/icons/cloud.webp'; // Ensure correct path
+  private arrowForwardIconPath = 'assets/icons/arrow_forward.webp'; // Ensure correct path
+  private menuIconPath = 'assets/icons/menu.webp'; // Ensure correct path for menu icon
 
   private appThemeService = inject(AppThemeService);
   private iconRegistry = inject(MatIconRegistry);

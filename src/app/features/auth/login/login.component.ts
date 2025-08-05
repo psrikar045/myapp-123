@@ -234,23 +234,23 @@ public layoutService = inject(LayoutService);
     const iconPath = 'assets/icons/';
     this.matIconRegistry.addSvgIcon(
       'google',
-      this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'google.svg')
+      this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'google.webp')
     );
     this.matIconRegistry.addSvgIcon(
       'facebook',
-      this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'facebook.svg')
+      this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'facebook.webp')
     );
     this.matIconRegistry.addSvgIcon(
       'apple',
-      this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'apple.svg')
+      this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'apple.webp')
     );
     this.matIconRegistry.addSvgIcon(
       'sun',
-      this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'sun.svg')
+      this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'sun.webp')
     );
     this.matIconRegistry.addSvgIcon(
       'moon',
-      this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'moon.svg')
+      this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'moon.webp')
     );
   }
 

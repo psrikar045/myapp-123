@@ -43,7 +43,7 @@ export class ToolbarService {
 
   private actions$ = new BehaviorSubject<ToolbarAction[]>([
     { type: 'login', label: 'Login', route: '/login' },
-    { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.svg', route: '/login' }
+    { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.webp', route: '/login' }
   ]);
 
   private profileAvatar$ = new BehaviorSubject<string>('assets/images/user-small-1.png');
@@ -132,7 +132,7 @@ export class ToolbarService {
     } else {
       this.actions$.next([
         { type: 'login', label: 'Login', route: '/auth/login' },
-        { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.svg', route: '/auth/login' }
+        { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.webp', route: '/auth/login' }
       ]);
     }
   }
