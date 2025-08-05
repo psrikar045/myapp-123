@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationExtras } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -48,7 +48,7 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.loadApiKeys();
+    this.initializeApiKeys();
   }
 
   ngOnDestroy(): void {
@@ -57,11 +57,34 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load all API keys
+   * Initialize API keys - first try to get from route state, then fetch if needed
    */
-  private loadApiKeys(): void {
+  private initializeApiKeys(): void {
     this.loading = true;
     this.error = null;
+
+    // First, try to get data from route state (passed from dashboard)
+    const navigation = this.router.getCurrentNavigation();
+    const routeState = navigation?.extras?.state || history.state;
+    
+    if (routeState && routeState.apiKeys && routeState.fromDashboard) {
+      // Use data passed from dashboard via route state
+      this.apiKeys = routeState.apiKeys;
+      this.initializeFilters();
+      this.applyFilters();
+      this.loading = false;
+      console.log('Using API keys data from dashboard:', this.apiKeys.length, 'keys');
+    } else {
+      // No data available from route state, fetch from API
+      console.log('No data from dashboard, fetching from API');
+      this.loadApiKeys();
+    }
+  }
+
+  /**
+   * Load all API keys from API
+   */
+  private loadApiKeys(): void {
     this.spinnerService.show();
 
     this.apiKeyService.getApiKeys()
@@ -87,7 +110,7 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
    * Initialize filter options based on loaded data
    */
   private initializeFilters(): void {
-    // Extract unique domains
+    // Extract unique domains from API keys
     this.availableDomains = [...new Set(this.apiKeys.map(key => this.getDomainFromApiKey(key)))];
     
     // Extract unique tiers
@@ -195,9 +218,15 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Get domain name from API key (mock implementation)
+   * Get domain name from API key
    */
   getDomainFromApiKey(apiKey: ApiKey): string {
+    // First, try to get domain from security settings
+    if (apiKey.security?.domainRestrictions?.allowedDomains?.length > 0) {
+      return apiKey.security.domainRestrictions.allowedDomains[0];
+    }
+    
+    // Fallback to mock implementation for display purposes
     const domains = [
       'example.com',
       'example.org',

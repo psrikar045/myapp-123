@@ -126,10 +126,15 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Navigate to view all API keys
+   * Navigate to view all API keys with data
    */
   viewAllApiKeys(): void {
-    this.router.navigate(['/brands/api-dashboard/api-keys/list']);
+    this.router.navigate(['/brands/api-dashboard/api-keys/list'], {
+      state: { 
+        apiKeys: this.apiKeys,
+        fromDashboard: true 
+      }
+    });
   }
 
   /**
