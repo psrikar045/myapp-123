@@ -26,11 +26,12 @@ interface BackendApiKey {
   description?: string | null;
   prefix?: string | null;
   keyPreview: string; // Masked preview of the API key (for identification only)
-  isActive: boolean;
+  active: boolean; // Backend returns 'active' not 'isActive'
+  isActive?: boolean; // Keep for backward compatibility
   registeredDomain?: string | null;
   expiresAt?: string | null; // LocalDateTime
   createdAt: string; // LocalDateTime
-  updatedAt: string; // LocalDateTime
+  updatedAt?: string; // LocalDateTime
   lastUsedAt?: string | null; // LocalDateTime
   revokedAt?: string | null; // LocalDateTime
   allowedIps: string[];
@@ -99,7 +100,7 @@ export class ApiKeyService {
           keyPreview: backendKey.keyPreview,
           maskedKey: backendKey.keyPreview, // Use keyPreview as maskedKey for backward compatibility
           encryptedKeyValue: backendKey.encryptedKeyValue, // Pass encrypted key value for frontend decryption
-          isActive: backendKey.isActive,
+          isActive: backendKey.active ?? backendKey.isActive,
           registeredDomain: backendKey.registeredDomain || undefined,
           tier: backendKey.rateLimitTier,
           environment: 'production' as 'development' | 'staging' | 'production' | 'testing', // Default to production since backend doesn't provide environment
@@ -129,7 +130,7 @@ export class ApiKeyService {
           updatedAt: backendKey.updatedAt || undefined,
           lastUsedAt: backendKey.lastUsedAt || undefined,
           revokedAt: backendKey.revokedAt || undefined,
-          status: backendKey.isActive ? 'ACTIVE' : 'SUSPENDED'
+          status: this.determineApiKeyStatus(backendKey)
         }));
         
         return { keys: mappedKeys };
@@ -156,7 +157,23 @@ export class ApiKeyService {
       'Accept': 'application/json'
     });
 
-    return this.http.post<CreateApiKeyResponse>(`${this.apiUrl}/rivo-create-api`, request, { headers })
+    return this.http.post<CreateApiKeyResponse>(`${this.apiUrl}/rivo-create-api`, request, { headers }).pipe(
+      tap(response => {
+        console.log('API key created successfully:', response.id);
+        
+        // Invalidate cache to force refresh on next getApiKeys() call
+        this.apiKeysCache = null;
+        this.cacheTimestamp = 0;
+        
+        // Note: We don't add the new key to the current list here because
+        // the CreateApiKeyResponse doesn't contain all the fields needed for ApiKey interface
+        // The dashboard should refresh the API keys list after creation
+      }),
+      catchError(error => {
+        console.error('Error creating API key:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   /**
@@ -167,10 +184,10 @@ export class ApiKeyService {
   }
 
   /**
-   * Delete/Revoke an API key
+   * Revoke an API key
    */
-  revokeApiKey(id: string): Observable<{ success: boolean }> {
-    return this.http.delete<{ success: boolean }>(`${this.apiUrl}/${id}`);
+  revokeApiKey(id: string): Observable<{ success: boolean; message?: string }> {
+    return this.http.patch<{ success: boolean; message?: string }>(`${this.apiUrl}/${id}/revoke`, {});
   }
 
   /**
@@ -392,6 +409,51 @@ export class ApiKeyService {
    */
   updateApiKeyExpiration(id: string, expiration: ExpirationSettings): Observable<any> {
     return this.http.patch(`${this.apiUrl}/${id}/expiration`, { expiration });
+  }
+
+  /**
+   * Determine API key status based on backend data
+   */
+  private determineApiKeyStatus(backendKey: BackendApiKey): 'ACTIVE' | 'EXPIRED' | 'REVOKED' | 'SUSPENDED' {
+    // Check if the key is revoked
+    if (backendKey.revokedAt) {
+      console.log(`API Key ${backendKey.id} status: REVOKED (revokedAt: ${backendKey.revokedAt})`);
+      return 'REVOKED';
+    }
+    
+    // Check if the key is expired
+    if (backendKey.expiresAt) {
+      const expiryDate = new Date(backendKey.expiresAt);
+      const now = new Date();
+      if (expiryDate <= now) {
+        console.log(`API Key ${backendKey.id} status: EXPIRED (expiresAt: ${backendKey.expiresAt})`);
+        return 'EXPIRED';
+      }
+    }
+    
+    // Get the active status from either 'active' or 'isActive' field
+    const isActive = backendKey.active ?? backendKey.isActive ?? false;
+    
+    // For newly created keys (created within the last 5 minutes) that haven't been used yet,
+    // treat them as ACTIVE even if active is false, as this might be a backend timing issue
+    const createdDate = new Date(backendKey.createdAt);
+    const now = new Date();
+    const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000);
+    
+    const isNewlyCreated = createdDate >= fiveMinutesAgo;
+    const hasNeverBeenUsed = !backendKey.lastUsedAt;
+    
+    if (isNewlyCreated && hasNeverBeenUsed && !isActive) {
+      // This is likely a newly created key that hasn't been activated yet
+      // Treat it as ACTIVE for better UX
+      console.log(`API Key ${backendKey.id} status: ACTIVE (newly created override - active: ${isActive}, created: ${backendKey.createdAt})`);
+      return 'ACTIVE';
+    }
+    
+    // Default behavior: use active flag
+    const finalStatus = isActive ? 'ACTIVE' : 'SUSPENDED';
+    console.log(`API Key ${backendKey.id} status: ${finalStatus} (active: ${isActive})`);
+    return finalStatus;
   }
 
   /**

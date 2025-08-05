@@ -37,19 +37,27 @@
                   [class.btn-outline-success]="!isShowingFullKey(selectedApiKey)"
                   [class.btn-success]="isShowingFullKey(selectedApiKey)"
                   (click)="toggleShowFullKey(selectedApiKey)"
-                  [disabled]="isDecryptingKey(selectedApiKey)">
+                  [disabled]="isDecryptingKey(selectedApiKey) || selectedApiKey?.status === 'REVOKED'">
             <span *ngIf="isDecryptingKey(selectedApiKey)" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             <i *ngIf="!isDecryptingKey(selectedApiKey)" 
                [class]="isShowingFullKey(selectedApiKey) ? 'bi bi-eye-slash me-1' : 'bi bi-eye me-1'"></i>
             {{ isDecryptingKey(selectedApiKey) ? 'Decrypting...' : (isShowingFullKey(selectedApiKey) ? 'Hide Key' : 'Show Key') }}
           </button>
-          <button class="btn btn-outline-primary squared-pill" (click)="copyApiKey(selectedApiKey)">
+          <button class="btn btn-outline-primary squared-pill"
+          [disabled]="selectedApiKey?.status === 'REVOKED'" (click)="copyApiKey(selectedApiKey)">
             <i class="bi bi-clipboard me-1"></i>
             Copy Key
           </button>
+          <button class="btn btn-outline-danger squared-pill" 
+                  (click)="showRevokeConfirmationDialog()"
+                  [disabled]="revoking || selectedApiKey?.status === 'REVOKED'">
+            <span *ngIf="revoking" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            <i *ngIf="!revoking" class="bi bi-x-circle me-1"></i>
+            {{ revoking ? 'Revoking...' : 'Revoke' }}
+          </button>
           <button class="btn btn-outline-warning squared-pill" 
                   (click)="regenerateApiKey(selectedApiKey)" 
-                  [disabled]="regenerating">
+                  [disabled]="regenerating || selectedApiKey?.status === 'REVOKED'">
             <span *ngIf="regenerating" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             <i *ngIf="!regenerating" class="bi bi-arrow-clockwise me-1"></i>
             {{ regenerating ? 'Regenerating...' : 'Regenerate Key' }}
@@ -190,13 +198,14 @@
                             class="btn btn-outline-secondary btn-sm"
                             [class.btn-success]="isShowingFullKey(selectedApiKey)"
                             (click)="toggleShowFullKey(selectedApiKey)"
-                            [disabled]="isDecryptingKey(selectedApiKey)"
+                            [disabled]="isDecryptingKey(selectedApiKey) || selectedApiKey?.status === 'REVOKED'"
                             [title]="isShowingFullKey(selectedApiKey) ? 'Hide full key' : 'Show full key'">
                       <span *ngIf="isDecryptingKey(selectedApiKey)" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                       <i *ngIf="!isDecryptingKey(selectedApiKey)" 
                          [class]="isShowingFullKey(selectedApiKey) ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
                     </button>
                     <button class="btn btn-outline-primary btn-sm"
+                     [disabled]="selectedApiKey?.status === 'REVOKED'"
                             (click)="copyApiKey(selectedApiKey)"
                             title="Copy to clipboard">
                       <i class="bi bi-clipboard"></i>
@@ -423,4 +432,81 @@
       </div>
     </div>
   </div>
+</div>
+
+<!-- Revoke Confirmation Modal -->
+<div class="modal fade" 
+     [class.show]="showRevokeConfirmation" 
+     [style.display]="showRevokeConfirmation ? 'block' : 'none'"
+     tabindex="-1" 
+     role="dialog" 
+     aria-labelledby="revokeConfirmationModalLabel" 
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title fw-bold" id="revokeConfirmationModalLabel">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          Revoke API Key
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="hideRevokeConfirmationDialog()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="text-center mb-4">
+          <div class="bg-danger bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+            <i class="bi bi-shield-x text-danger" style="font-size: 2rem;"></i>
+          </div>
+          <h6 class="fw-bold mb-2">Are you sure you want to revoke this API key?</h6>
+          <p class="text-body-secondary mb-0">This action cannot be undone. The API key will be permanently disabled and all applications using it will lose access immediately.</p>
+        </div>
+
+        <div class="bg-light rounded p-3 mb-3">
+          <div class="row g-2">
+            <div class="col-4">
+              <div class="text-body-secondary small">API Key Name</div>
+              <div class="fw-semibold">{{ selectedApiKey?.name }}</div>
+            </div>
+            <div class="col-4">
+              <div class="text-body-secondary small">Environment</div>
+              <div class="fw-semibold">{{ getEnvironmentDisplayName(selectedApiKey?.environment || 'production') }}</div>
+            </div>
+            <div class="col-4">
+              <div class="text-body-secondary small">Current Status</div>
+              <span [class]="getStatusBadgeClass(selectedApiKey?.status || 'ACTIVE')">
+                {{ selectedApiKey?.status || 'ACTIVE' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-warning d-flex align-items-start" role="alert">
+          <i class="bi bi-exclamation-triangle me-2 mt-1"></i>
+          <div>
+            <strong>Warning:</strong> Once revoked, this API key cannot be restored. You will need to create a new API key if you want to restore access.
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="hideRevokeConfirmationDialog()">
+          <i class="bi bi-x-circle me-1"></i>
+          Cancel
+        </button>
+        <button type="button" 
+                class="btn btn-danger" 
+                (click)="revokeApiKey(selectedApiKey!)"
+                [disabled]="revoking">
+          <span *ngIf="revoking" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          <i *ngIf="!revoking" class="bi bi-shield-x me-1"></i>
+          {{ revoking ? 'Revoking...' : 'Revoke API Key' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Revoke Modal Backdrop -->
+<div class="modal-backdrop fade" 
+     [class.show]="showRevokeConfirmation" 
+     [style.display]="showRevokeConfirmation ? 'block' : 'none'"
+     (click)="hideRevokeConfirmationDialog()">
 </div>
