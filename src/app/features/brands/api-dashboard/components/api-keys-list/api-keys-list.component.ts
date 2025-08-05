@@ -3,6 +3,7 @@ import { Router, NavigationExtras } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 import { ApiKeyService } from '../../services/api-key.service';
 import { ErrorHandlerService } from '../../../../../shared/services/error-handler.service';
@@ -33,6 +34,7 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
   // UI state
   loading = true;
   error: string | null = null;
+  deleting = false;
 
   // Available filter options
   availableDomains: string[] = [];
@@ -193,28 +195,95 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Delete/Revoke API key
+   * Show delete confirmation dialog using SweetAlert2
+   */
+  showDeleteConfirmationDialog(apiKey: ApiKey): void {
+    if (!apiKey || this.deleting) return;
+
+    Swal.fire({
+      title: 'Delete API Key',
+      text: `Are you sure you want to delete the API key "${apiKey.name}"? This action cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#dc3545',
+      cancelButtonColor: '#6c757d',
+      confirmButtonText: 'Yes, Delete',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true,
+      customClass: {
+        popup: 'swal2-popup-custom',
+        title: 'swal2-title-custom',
+        htmlContainer: 'swal2-content-custom'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deleteApiKey(apiKey);
+      }
+    });
+  }
+
+  /**
+   * Delete API key
    */
   deleteApiKey(apiKey: ApiKey): void {
-    if (confirm(`Are you sure you want to revoke the API key "${apiKey.name}"? This action cannot be undone.`)) {
-      this.apiKeyService.revokeApiKey(apiKey.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: () => {
-            // Update the local data
-            const index = this.apiKeys.findIndex(key => key.id === apiKey.id);
-            if (index !== -1) {
-              this.apiKeys[index].status = 'REVOKED';
-            }
-            this.applyFilters();
-            this.errorHandler.showSuccess('API key revoked successfully');
-          },
-          error: (error) => {
-            console.error('Error revoking API key:', error);
-            this.errorHandler.showWarning(error.error?.message || 'Failed to revoke API key');
-          }
+    if (!apiKey || this.deleting) return;
+
+    this.deleting = true;
+
+    this.apiKeyService.deleteApiKey(apiKey.id).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (response) => {
+        console.log('API key deleted successfully:', response);
+        
+        // Check if the backend indicates success
+        if (!response.success) {
+          this.deleting = false;
+          this.errorHandler.showWarning(response.message || 'Failed to delete API key.');
+          return;
+        }
+
+        // Remove the deleted API key from the arrays
+        this.apiKeys = this.apiKeys.filter(key => key.id !== apiKey.id);
+        this.applyFilters();
+
+        this.deleting = false;
+
+        // Show success message
+        Swal.fire({
+          title: 'Deleted!',
+          text: 'API key has been deleted successfully.',
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: false
         });
-    }
+      },
+      error: (error) => {
+        console.error('Error deleting API key:', error);
+        this.deleting = false;
+        
+        let errorMessage = 'Failed to delete API key.';
+        if (error.status === 404) {
+          errorMessage = 'API key not found.';
+        } else if (error.status === 401) {
+          errorMessage = 'Unauthorized. Please check your authentication.';
+        } else if (error.status === 403) {
+          errorMessage = 'Insufficient permissions to delete API key.';
+        } else if (error.error?.message) {
+          errorMessage = error.error.message;
+        }
+
+        this.errorHandler.showWarning(errorMessage);
+
+        // Show error message using SweetAlert2
+        Swal.fire({
+          title: 'Error!',
+          text: errorMessage,
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
+    });
   }
 
   /**
@@ -268,7 +337,7 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
       case 'ACTIVE':
         return 'Active';
       case 'SUSPENDED':
-        return 'Expired';
+        return 'Suspended';
       case 'EXPIRED':
         return 'Expired';
       case 'REVOKED':

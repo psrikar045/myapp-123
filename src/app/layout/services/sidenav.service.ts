@@ -287,22 +287,15 @@ private readonly sidenavVisibleRoutes = [
             route: '/brands/api-dashboard',
             icon: 'bi-speedometer2',
           },
-          // {
-          //   id: 'api-keys',
-          //   label: 'API Keys',
-          //   route: '/brands/account-hub/api-keys/manage',
-          //   icon: 'bi-key'
-          // },
           {
-            id: 'brand-manager',
+            id: 'brands-api',
             label: 'Brand Analyzer',
-            route: '/brands/company/:domain'
-          }
-          // ,
+            route: '/brandApi'
+          },
           // {
-          //   id: 'brand-intelligence',
-          //   label: 'Developers',
-          //   route: '/brand/intelligence'
+          //   id: 'brand-manager',
+          //   label: 'Brand Analyzer',
+          //   route: '/brands/company/:domain'
           // }
         ]
       },

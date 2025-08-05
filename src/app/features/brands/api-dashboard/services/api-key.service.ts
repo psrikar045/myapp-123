@@ -195,6 +195,30 @@ export class ApiKeyService {
   }
 
   /**
+   * Delete an API key
+   */
+  deleteApiKey(id: string): Observable<{ success: boolean; message?: string }> {
+    return this.http.delete<{ success: boolean; message?: string }>(`${this.apiUrl}/${id}`).pipe(
+      tap(response => {
+        console.log('API key deleted successfully:', response);
+        
+        // Invalidate cache to force refresh on next getApiKeys() call
+        this.apiKeysCache = null;
+        this.cacheTimestamp = 0;
+        
+        // Remove the deleted key from the current API keys list
+        const currentKeys = this.getCurrentApiKeys();
+        const updatedKeys = currentKeys.filter(key => key.id !== id);
+        this.updateApiKeys(updatedKeys);
+      }),
+      catchError(error => {
+        console.error('Error deleting API key:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  /**
    * Get rate limit status for a specific API key
    */
   getRateLimitStatus(id: string): Observable<RateLimitStatus> {

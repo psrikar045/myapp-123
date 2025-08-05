@@ -176,11 +176,11 @@
                 id="prefix"
                 formControlName="prefix"
                 placeholder="mk"
-                style="border: 1px solid #e0e0e0; border-radius: 8px 0 0 8px;"
+                style="border: 1px solid #e0e0e0; border-radius:8px;"
                 [class.is-invalid]="hasFieldError('prefix')">
-              <span class="input-group-text bg-light" style="border: 1px solid #e0e0e0; border-left: none; border-radius: 0 8px 8px 0;">
+              <!-- <span class="input-group-text bg-light" style="border: 1px solid #e0e0e0; border-left: none; border-radius: 0 8px 8px 0;">
                 <i class="bi bi-pencil text-muted"></i>
-              </span>
+              </span> -->
             </div>
             <div *ngIf="hasFieldError('prefix')" class="invalid-feedback">
               {{ getFieldError('prefix') }}

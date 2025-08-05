@@ -167,7 +167,7 @@
                           <div class="d-flex align-items-center">
                             <i class="bi bi-key text-warning me-2"></i>
                             <div>
-                              <span class="fw-medium text-primary">{{ apiKey.name }}</span>
+                              <span class="fw-medium text-primary">{{ apiKey.name.length > 12 ? (apiKey.name | slice:0:12) + '...' : apiKey.name }}</span>
                               <br>
                               <small class="text-muted">{{ apiKey.maskedKey }}</small>
                             </div>
@@ -236,7 +236,7 @@
                   </div>
                 </div>
                 <button class="btn btn-outline-primary btn-sm squared-pill" (click)="viewApiKeyFullDetails(selectedApiKey)">
-                  View Details →
+                  View More
                 </button>
               </div>
 
@@ -287,8 +287,11 @@
                 <button class="btn btn-outline-secondary btn-sm" (click)="editApiKey(selectedApiKey)">
                   Edit
                 </button>
-                <button class="btn btn-outline-danger btn-sm" (click)="revokeApiKey(selectedApiKey)">
-                  Delete
+                <button class="btn btn-outline-danger btn-sm" 
+                        (click)="showDeleteConfirmationDialog(selectedApiKey)"
+                        [disabled]="deleting">
+                  <span *ngIf="deleting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  {{ deleting ? 'Deleting...' : 'Delete' }}
                 </button>
               </div>
             </div>
