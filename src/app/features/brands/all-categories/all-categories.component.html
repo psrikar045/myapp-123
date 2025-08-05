@@ -1,8 +1,8 @@
 
 <div class="categories-bg">
-  <div class="categories-content">
+  <div class=" container pad100 categories-content">
     <h1 class="categories-title">
-      <span class="highlight">Browse Categories & Discover Top Brands</span>
+      <span class="">Browse Categories & Discover Top Brands</span>
     </h1>
     <p class="categories-desc">
       Explore and filter the world's most popular digital products, platforms, and creative tools by category and subcategory—all in one place.
@@ -145,86 +145,84 @@
 
         <!-- Main Brand Cards Grid -->
         <div class="categories-main-layout-right">
-          <div class="brands-content-wrapper">
-            <ng-container *ngIf="pagedFilteredBrands.length > 0; else noData">
-              <section class="brand-cards-grid" [class.with-sidebar]="isMobile && isMobileSidebarOpen">
-              <div *ngFor="let brand of pagedFilteredBrands" class="brand-card"
-                [ngStyle]="{ 'background': getNonWhiteColorWithOpacity(brand, 0.3) }"
-                (click)="goToBrand(brand)">
-                <div class="brand-card-icon">
-                  <!-- Render asset originalUrl if available, else fallback to image or letter -->
-                  <ng-container *ngIf="brand.assets && brand.assets.length > 0 && brand.assets[0].originalUrl; else fallbackIcon">
-                    <img [src]="brand.assets[0].originalUrl" [alt]="brand.name + ' asset'" />
+          <div class="main-card-container">
+            <div class="brands-content-wrapper">
+              <ng-container *ngIf="pagedFilteredBrands.length > 0; else noData">
+                <section class="brand-cards-grid" [class.with-sidebar]="isMobile && isMobileSidebarOpen">
+                  <div *ngFor="let brand of pagedFilteredBrands" class="brand-card"
+                    [ngStyle]="{ 'background': getNonWhiteColorWithOpacity(brand, 0.3) }"
+                    (click)="goToBrand(brand)">
+                    <div class="brand-card-icon">
+                      <!-- Render asset originalUrl if available, else fallback to image or letter -->
+                      <ng-container *ngIf="brand.assets && brand.assets.length > 0 && brand.assets[0].originalUrl; else fallbackIcon">
+                        <img [src]="brand.assets[0].originalUrl" [alt]="brand.name + ' asset'" />
+                      </ng-container>
+                      <ng-template #fallbackIcon>
+                        <ng-container *ngIf="brand.images && brand.images.length > 0; else defaultLogoTemplate">
+                          <img src="{{ brand.images[0].accessUrl }}" alt="brand.name.charAt(0)" />
+                        </ng-container>
+                        <ng-template #defaultLogoTemplate>
+                          <span>{{ brand.name.charAt(0) }}</span>
+                        </ng-template>
+                      </ng-template>
+                    </div>
+                    <div class="brand-card-title">{{ brand.name }}</div>
+                    <!-- <div class="brand-card-sub">&#64;{{ brand.user }}</div> -->
+                  </div>
+                </section>
+                
+              </ng-container>
+              <ng-template #noData>
+                <div class="no-data-message">
+                  <ng-container *ngIf="searchTerm && searchTerm.trim().length > 0; else noDataDefault">
+                    <div class="no-search-results">
+                      <div class="no-results-icon">🔍</div>
+                      <h3>No brands found</h3>
+                      <p>No brands match your search "<strong>{{ searchTerm }}</strong>"</p>
+                      <button class="btn btn-primary" (click)="clearSearch()">Clear search</button>
+                    </div>
                   </ng-container>
-                  <ng-template #fallbackIcon>
-                    <ng-container *ngIf="brand.images && brand.images.length > 0; else defaultLogoTemplate">
-                      <img src="{{ brand.images[0].accessUrl }}" alt="brand.name.charAt(0)" />
-                    </ng-container>
-                    <ng-template #defaultLogoTemplate>
-                      <span>{{ brand.name.charAt(0) }}</span>
-                    </ng-template>
+                  <ng-template #noDataDefault>
+                    <div class="no-data-default">No brands available</div>
                   </ng-template>
                 </div>
-                <div class="brand-card-title">{{ brand.name }}</div>
-                <!-- <div class="brand-card-sub">&#64;{{ brand.user }}</div> -->
-              </div>
-            </section>
-            <div class="pagination-bottom-center-wrapper" *ngIf="pagedFilteredBrands.length > 0">
-              <div class="categories-pagination">
-                <button class="page nav" 
-                        [disabled]="currentPage === 1"
-                        (click)="selectPage(currentPage === 1 ? 1 : currentPage - 1)">
-                  <i class="bi bi-chevron-left"></i>
-                </button>
-                
-                <!-- Show first page -->
-                <button *ngIf="pages.length > 0" 
-                        class="page" 
-                        [class.active]="1 === currentPage" 
-                        (click)="selectPage(1)">1</button>
-                
-                <!-- Show ellipsis if there are many pages and we're not near the beginning -->
-                <span *ngIf="pages.length > 7 && currentPage > 4" class="page-ellipsis">...</span>
-                
-                <!-- Show middle pages -->
-                <button *ngFor="let page of getVisiblePages()" 
-                        class="page" 
-                        [class.active]="page === currentPage" 
-                        (click)="selectPage(page)">{{ page }}</button>
-                
-                <!-- Show ellipsis if there are many pages and we're not near the end -->
-                <span *ngIf="pages.length > 7 && currentPage < pages.length - 3" class="page-ellipsis">...</span>
-                
-                <!-- Show last page if different from first -->
-                <button *ngIf="pages.length > 1" 
-                        class="page" 
-                        [class.active]="pages.length === currentPage" 
-                        (click)="selectPage(pages.length)">{{ pages.length }}</button>
-                
-                <button class="page nav" 
-                        [disabled]="currentPage === pages.length"
-                        (click)="selectPage(currentPage === pages.length ? pages.length : currentPage + 1)">
-                  <i class="bi bi-chevron-right"></i>
-                </button>
-              </div>
+              </ng-template>
             </div>
-            </ng-container>
-            <ng-template #noData>
-              <div class="no-data-message">
-                <ng-container *ngIf="searchTerm && searchTerm.trim().length > 0; else noDataDefault">
-                  <div class="no-search-results">
-                    <div class="no-results-icon">🔍</div>
-                    <h3>No brands found</h3>
-                    <p>No brands match your search "<strong>{{ searchTerm }}</strong>"</p>
-                    <button class="btn btn-primary" (click)="clearSearch()">Clear search</button>
-                  </div>
-                </ng-container>
-                <ng-template #noDataDefault>
-                  <div class="no-data-default">No brands available</div>
-                </ng-template>
-              </div>
-            </ng-template>
+            
           </div>
+          <div class="pagination-bottom-center-wrapper" *ngIf="pagedFilteredBrands.length > 0">
+                  <div class="categories-pagination">
+                    <button class="page nav" 
+                            [disabled]="currentPage === 1"
+                            (click)="selectPage(currentPage === 1 ? 1 : currentPage - 1)">
+                      <i class="bi bi-chevron-left"></i>
+                    </button>
+                    <!-- Show first page -->
+                    <button *ngIf="pages.length > 0" 
+                            class="page" 
+                            [class.active]="1 === currentPage" 
+                            (click)="selectPage(1)">1</button>
+                    <!-- Show ellipsis if there are many pages and we're not near the beginning -->
+                    <span *ngIf="pages.length > 7 && currentPage > 4" class="page-ellipsis">...</span>
+                    <!-- Show middle pages -->
+                    <button *ngFor="let page of getVisiblePages()" 
+                            class="page" 
+                            [class.active]="page === currentPage" 
+                            (click)="selectPage(page)">{{ page }}</button>
+                    <!-- Show ellipsis if there are many pages and we're not near the end -->
+                    <span *ngIf="pages.length > 7 && currentPage < pages.length - 3" class="page-ellipsis">...</span>
+                    <!-- Show last page if different from first -->
+                    <button *ngIf="pages.length > 1" 
+                            class="page" 
+                            [class.active]="pages.length === currentPage" 
+                            (click)="selectPage(pages.length)">{{ pages.length }}</button>
+                    <button class="page nav" 
+                            [disabled]="currentPage === pages.length"
+                            (click)="selectPage(currentPage === pages.length ? pages.length : currentPage + 1)">
+                      <i class="bi bi-chevron-right"></i>
+                    </button>
+                  </div>
+                </div>
         </div>
       </div>
     </div>

@@ -92,8 +92,8 @@
 }
 
 .hero-title {
-  font-size: clamp(28px, 6vw, 52px);
-  font-weight: 750;
+  /* font-size: var(--font-size-4xl); */
+  font-weight: var(--font-weight-bold);
   color: #1f2937;
   margin-bottom: clamp(16px, 3vh, 24px);
   letter-spacing: -0.02em;
@@ -103,7 +103,7 @@
 }
 
 .hero-subtitle {
-  font-size: clamp(16px, 2.5vw, 18px);
+  font-size: var(--font-size-lg);
   color: #6b7280;
   margin-bottom: clamp(24px, 5vh, 40px);
   max-width: min(500px, 85vw);
@@ -119,7 +119,7 @@
   padding: clamp(12px, 2vh, 14px) clamp(24px, 4vw, 32px);
   border: none;
   border-radius: 8px;
-  font-size: clamp(14px, 2.2vw, 16px);
+  font-size: var(--font-size-base);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -143,16 +143,17 @@
 }
 
 .section-title {
-  font-size: clamp(24px, 5vw, 36px);
-  font-weight: 900;
+  /* font-size: var(--font-size-3xl);
+  font-weight: 900; */
   color: #1f2937;
   text-align: center;
   margin-bottom: clamp(12px, 2vh, 16px);
   line-height: 1.2;
+  font-weight: var(--font-weight-semibold);
 }
 
 .section-subtitle {
-  font-size: clamp(16px, 2.5vw, 18px);
+  font-size: var(--font-size-lg);
   color: #6b7280;
   text-align: center;
   margin-bottom: clamp(40px, 6vh, 60px);
@@ -212,7 +213,7 @@
 }
 
 .feature-title {
-  font-size: clamp(16px, 2.5vw, 18px);
+  font-size: var(--font-size-lg);
   font-weight: 600;
   color: #1f2937;
   margin-bottom: clamp(6px, 1vh, 8px);
@@ -220,7 +221,7 @@
 }
 
 .feature-description {
-  font-size: clamp(13px, 2vw, 14px);
+  font-size: var(--font-size-base);
   color: #6b7280;
   line-height: 1.6;
   margin: 0;
@@ -292,15 +293,16 @@
 }
 
 .integration-title {
-  font-size: clamp(24px, 4.5vw, 32px);
-  font-weight: 900;
+  /* font-size: var(--font-size-2xl);
+  font-weight: 900; */
   margin-bottom: clamp(16px, 3vh, 20px);
   line-height: 1.2;
   color: white;
+  font-weight: var(--font-weight-semibold);
 }
 
 .integration-subtitle {
-  font-size: clamp(14px, 2.2vw, 16px);
+  font-size: var(--font-size-base);
   margin-bottom: clamp(30px, 5vh, 40px);
   opacity: 0.9;
   line-height: 1.6;
@@ -316,7 +318,7 @@
   padding: clamp(12px, 2vh, 14px) clamp(24px, 4vw, 32px);
   border: none;
   border-radius: 8px;
-  font-size: clamp(14px, 2.2vw, 16px);
+  font-size: var(--font-size-base);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -357,10 +359,11 @@
 }
 
 .tech-stack-title {
-  font-size: clamp(20px, 3.5vw, 24px);
-  font-weight: 900;
+  /* font-size: var(--font-size-xl);
+  font-weight: 900; */
   color: #1f2937;
   margin-bottom: clamp(30px, 5vh, 40px);
+  font-weight: var(--font-weight-semibold);
 }
 
 .tech-icons-grid {
@@ -430,8 +433,8 @@
 }
 
 .ai-future-title {
-  font-size: clamp(28px, 5.5vw, 42px);
-  font-weight: 600;
+  /* font-size: var(--font-size-3xl); */
+  font-weight: var(--font-weight-semibold);
   margin-bottom: clamp(16px, 3vh, 20px);
   line-height: 1.2;
   color: white;
@@ -439,7 +442,7 @@
 }
 
 .ai-future-subtitle {
-  font-size: clamp(16px, 2.5vw, 18px);
+  font-size: var(--font-size-lg);
   margin-bottom: clamp(30px, 5vh, 40px);
   opacity: 0.9;
   line-height: 1.6;
@@ -453,7 +456,7 @@
   padding: clamp(12px, 2vh, 14px) clamp(24px, 4vw, 32px);
   border: none;
   border-radius: 8px;
-  font-size: clamp(14px, 2.2vw, 16px);
+  font-size: var(--font-size-base);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -474,16 +477,17 @@
 }
 
 .why-choose-title {
-  font-size: clamp(24px, 5vw, 36px);
-  font-weight: 900;
+  /* font-size: var(--font-size-3xl);
+  font-weight: 900; */
   color: #1f2937;
   text-align: center;
   margin-bottom: clamp(12px, 2vh, 16px);
   line-height: 1.2;
+  font-weight: var(--font-weight-semibold);
 }
 
 .why-choose-subtitle {
-  font-size: clamp(16px, 2.5vw, 18px);
+  font-size: var(--font-size-lg);
   color: #6b7280;
   text-align: center;
   margin-bottom: clamp(40px, 6vh, 60px);
@@ -531,16 +535,17 @@
 }
 
 .why-choose-card-title {
-  font-size: clamp(18px, 2.8vw, 20px);
-  font-weight: 600;
+  /* font-size: var(--font-size-lg);
+  font-weight: 600; */
   color: #1f2937;
   margin-bottom: clamp(10px, 2vh, 12px);
   text-align: left;
   flex-grow: 0;
+  font-weight: var(--font-weight-semibold);
 }
 
 .why-choose-card-description {
-  font-size: clamp(13px, 2vw, 14px);
+  font-size: var(--font-size-base);
   color: #6b7280;
   line-height: 1.6;
   text-align: left;
@@ -555,16 +560,17 @@
 }
 
 .capabilities-title {
-  font-size: clamp(24px, 5vw, 36px);
-  font-weight: 900;
+  /* font-size: var(--font-size-3xl);
+  font-weight: 900; */
   color: #1f2937;
   text-align: center;
   margin-bottom: clamp(12px, 2vh, 16px);
   line-height: 1.2;
+  font-weight: var(--font-weight-semibold);
 }
 
 .capabilities-subtitle {
-  font-size: clamp(16px, 2.5vw, 18px);
+  font-size: var(--font-size-lg);
   color: #6b7280;
   text-align: center;
   margin-bottom: clamp(40px, 6vh, 60px);
@@ -703,7 +709,7 @@
 }
 
 .capability-title {
-  font-size: clamp(18px, 2.8vw, 20px);
+  font-size: var(--font-size-lg);
   font-weight: 600;
   color: #1f2937;
   margin-bottom: clamp(10px, 2vh, 12px);
@@ -711,7 +717,7 @@
 }
 
 .capability-description {
-  font-size: clamp(13px, 2vw, 14px);
+  font-size: var(--font-size-base);
   color: #6b7280;
   line-height: 1.6;
 }
@@ -736,16 +742,17 @@
 }
 
 .advanced-features-title {
-  font-size: clamp(24px, 5vw, 36px);
-  font-weight: 900;
+  /* font-size: var(--font-size-3xl);
+  font-weight: 900; */
   color: #1f2937;
   text-align: center;
   margin-bottom: clamp(12px, 2vh, 16px);
   line-height: 1.2;
+  font-weight: var(--font-weight-semibold);
 }
 
 .advanced-features-subtitle {
-  font-size: clamp(16px, 2.5vw, 18px);
+  font-size: var(--font-size-lg);
   color: #6b7280;
   text-align: center;
   margin-bottom: clamp(40px, 6vh, 60px);
@@ -812,7 +819,7 @@
 }
 
 .advanced-feature-title {
-  font-size: clamp(18px, 2.8vw, 20px);
+  font-size: var(--font-size-lg);
   font-weight: 600;
   color: #1f2937;
   margin-bottom: clamp(10px, 2vh, 12px);
@@ -820,7 +827,7 @@
 }
 
 .advanced-feature-description {
-  font-size: clamp(13px, 2vw, 14px);
+  font-size: var(--font-size-base);
   color: #6b7280;
   line-height: 1.6;
   margin: 0;
@@ -835,15 +842,16 @@
 }
 
 .cta-title {
-  font-size: clamp(24px, 5vw, 36px);
-  font-weight: 900;
+  /* font-size: var(--font-size-3xl);
+  font-weight: 900; */
   color: #1f2937;
   margin-bottom: clamp(12px, 2vh, 16px);
   line-height: 1.2;
+  font-weight: var(--font-weight-semibold);
 }
 
 .cta-subtitle {
-  font-size: clamp(16px, 2.5vw, 18px);
+  font-size: var(--font-size-lg);
   color: #6b7280;
   margin-bottom: clamp(30px, 5vh, 40px);
   max-width: min(600px, 90vw);
@@ -858,7 +866,7 @@
   padding: clamp(12px, 2vh, 14px) clamp(24px, 4vw, 32px);
   border: none;
   border-radius: 8px;
-  font-size: clamp(14px, 2.2vw, 16px);
+  font-size: var(--font-size-base);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -882,15 +890,16 @@
 }
 
 .final-cta-title {
-  font-size: clamp(24px, 5vw, 36px);
-  font-weight: 900;
+  /* font-size: var(--font-size-3xl);
+  font-weight: 900; */
   margin-bottom: clamp(12px, 2vh, 16px);
   line-height: 1.2;
   color: white;
+  font-weight: var(--font-weight-semibold);
 }
 
 .final-cta-subtitle {
-  font-size: clamp(16px, 2.5vw, 18px);
+  font-size: var(--font-size-lg);
   margin-bottom: clamp(30px, 5vh, 40px);
   opacity: 0.9;
   max-width: min(600px, 90vw);
@@ -906,7 +915,7 @@
   padding: clamp(12px, 2vh, 14px) clamp(24px, 4vw, 32px);
   border: none;
   border-radius: 8px;
-  font-size: clamp(14px, 2.2vw, 16px);
+  font-size: var(--font-size-base);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
