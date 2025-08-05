@@ -337,7 +337,7 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
       case 'ACTIVE':
         return 'Active';
       case 'SUSPENDED':
-        return 'Expired';
+        return 'Suspended';
       case 'EXPIRED':
         return 'Expired';
       case 'REVOKED':
