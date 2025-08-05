@@ -33,7 +33,7 @@
   </div>
 
   <!-- Main Content -->
-  <div class="blog-content-section py-5">
+  <div class="blog-content-section container pad100 py-5">
     <div class="container">
       
       <!-- Search and Filter Bar -->
@@ -168,7 +168,7 @@
                                 <small class="text-muted">Marketing Expert</small>
                               </div>
                             </div>
-                            <div class="blog-actions">
+                            <div class="blog-actions d-flex gap-1">
                               <button class="btn btn-outline-secondary btn-sm" (click)="$event.stopPropagation()">
                                 <i class="bi bi-bookmark"></i>
                               </button>
@@ -263,57 +263,38 @@
 
             
             <!-- Enhanced Pagination -->
-            <div class="pagination-container mt-5" *ngIf="filteredBlogs.length > currentPageSize">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="pagination-info">
-                  <small class="text-muted">
-                    Showing {{ (currentPage - 1) * currentPageSize + 1 }} to {{ Math.min(currentPage * currentPageSize, filteredBlogs.length) }} 
-                    of {{ filteredBlogs.length }} results
-                  </small>
-                </div>
-                <div class="pagination-controls">
-                  <nav aria-label="Blog pagination">
-                    <ul class="pagination mb-0">
-                      <li class="page-item" [class.disabled]="currentPage === 1">
-                        <button class="page-link" 
-                                (click)="selectPage(1)" 
-                                [disabled]="currentPage === 1"
-                                title="First page">
-                          <i class="bi bi-chevron-double-left"></i>
-                        </button>
-                      </li>
-                      <li class="page-item" [class.disabled]="currentPage === 1">
-                        <button class="page-link" 
-                                (click)="selectPage(currentPage - 1)" 
-                                [disabled]="currentPage === 1"
-                                title="Previous page">
-                          <i class="bi bi-chevron-left"></i>
-                        </button>
-                      </li>
-                      <li class="page-item" 
-                          *ngFor="let page of getVisiblePages()" 
-                          [class.active]="page === currentPage">
-                        <button class="page-link" (click)="selectPage(page)">{{ page }}</button>
-                      </li>
-                      <li class="page-item" [class.disabled]="currentPage === totalPages">
-                        <button class="page-link" 
-                                (click)="selectPage(currentPage + 1)" 
-                                [disabled]="currentPage === totalPages"
-                                title="Next page">
-                          <i class="bi bi-chevron-right"></i>
-                        </button>
-                      </li>
-                      <li class="page-item" [class.disabled]="currentPage === totalPages">
-                        <button class="page-link" 
-                                (click)="selectPage(totalPages)" 
-                                [disabled]="currentPage === totalPages"
-                                title="Last page">
-                          <i class="bi bi-chevron-double-right"></i>
-                        </button>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
+            <div class="pagination-bottom-center-wrapper" *ngIf="filteredBlogs.length > currentPageSize">
+              <div class="categories-pagination">
+                <button class="page nav" 
+                        [disabled]="currentPage === 1"
+                        (click)="selectPage(currentPage === 1 ? 1 : currentPage - 1)">
+                  <i class="bi bi-chevron-left"></i>
+                </button>
+                <!-- Show first page -->
+                <button *ngIf="totalPages > 0" 
+                        class="page" 
+                        [class.active]="1 === currentPage" 
+                        (click)="selectPage(1)">1</button>
+                <!-- Show ellipsis if there are many pages and we're not near the beginning -->
+                <span *ngIf="totalPages > 7 && currentPage > 4" class="page-ellipsis">...</span>
+                <!-- Show middle pages (excluding first and last page) -->
+                <button *ngFor="let page of getVisiblePages()" 
+                        class="page" 
+                        [class.active]="page === currentPage" 
+                        (click)="selectPage(page)"
+                        [style.display]="(page === 1 || page === totalPages) ? 'none' : 'flex'">{{ page }}</button>
+                <!-- Show ellipsis if there are many pages and we're not near the end -->
+                <span *ngIf="totalPages > 7 && currentPage < totalPages - 3" class="page-ellipsis">...</span>
+                <!-- Show last page if different from first -->
+                <button *ngIf="totalPages > 1" 
+                        class="page" 
+                        [class.active]="totalPages === currentPage" 
+                        (click)="selectPage(totalPages)">{{ totalPages }}</button>
+                <button class="page nav" 
+                        [disabled]="currentPage === totalPages"
+                        (click)="selectPage(currentPage === totalPages ? totalPages : currentPage + 1)">
+                  <i class="bi bi-chevron-right"></i>
+                </button>
               </div>
             </div>
             
@@ -381,7 +362,7 @@
             <!-- Newsletter -->
             <div class="sidebar-section card border-0 shadow-sm">
               <div class="card-header bg-primary text-white py-3">
-                <h4 class="fw-bold mb-0">Newsletter</h4>
+                <h4 class="fw-bold mb-0 clr-white">Newsletter</h4>
               </div>
               <div class="card-body">
                 <p class="text-muted mb-3">Subscribe to get the latest posts delivered right to your inbox.</p>

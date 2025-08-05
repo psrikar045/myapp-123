@@ -89,7 +89,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   private themeSubscription!: Subscription;
   private scrollSubscription!: Subscription;
 
-  private logoPath = 'assets/images/logo.webp'; // Ensure correct path
+  private logoPath = 'assets/images/RIVO9 logo.webp'; // Ensure correct path
   private sunIconPath = 'assets/icons/sun.webp'; // Ensure correct path
   private cloudIconPath = 'assets/icons/cloud.webp'; // Ensure correct path
   private arrowForwardIconPath = 'assets/icons/arrow_forward.webp'; // Ensure correct path

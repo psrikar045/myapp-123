@@ -29,7 +29,7 @@ export class ToolbarService {
   private currentRoute: string = '';
   private isAuthPage: boolean = false;
   private logo$ = new BehaviorSubject<ToolbarLogo>({
-    src: 'assets/images/logo.webp',
+    src: 'assets/images/RIVO9 logo.webp',
     alt: 'RIVO9 Logo',
     link: '/'
   });
@@ -75,7 +75,7 @@ export class ToolbarService {
   }
   setProfileHeaderOnly() {
      this.logo$.next({
-      src: 'assets/images/logo.webp',
+      src: 'assets/images/RIVO9 logo.webp',
       alt: '',
       link: '/'
     });
@@ -95,7 +95,7 @@ export class ToolbarService {
   setLoggedInToolbar(): void {
     console.log('Setting logged in toolbar');
     this.logo$.next({
-      src: 'assets/images/logo.webp',
+      src: 'assets/images/RIVO9 logo.webp',
       alt: 'RIVO9 Logo',
       link: '/home'
     });
@@ -115,7 +115,7 @@ export class ToolbarService {
   setLoggedOutToolbar(): void {
     // console.log('Setting logged out toolbar, isAuthPage:', this.isAuthPage);
     this.logo$.next({
-      src: 'assets/images/logo.webp',
+      src: 'assets/images/RIVO9 logo.webp',
       alt: 'RIVO9 Logo',
       link: '/landing'
     });

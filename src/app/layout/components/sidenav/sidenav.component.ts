@@ -30,7 +30,7 @@ import { AuthService } from '../../../core/services/auth.service';
              *ngIf="!config?.collapsed"
              (click)="onLogoClick()">
           <div class="logo-container">
-            <img src="assets/images/logo.webp" alt="Logo" class="logo-expanded">
+            <img src="assets/images/RIVO9 logo.webp" alt="Logo" class="logo-expanded">
           </div>
         </div>
 

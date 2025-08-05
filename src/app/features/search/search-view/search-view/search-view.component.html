@@ -1,6 +1,6 @@
 <!-- Enhanced Search View Component with Dark/Light Theme Support -->
-<div class="search-view-container" [attr.data-theme]="isDarkMode ? 'dark' : 'light'">
-  <div class="container-fluid py-4">
+<div class="container pad100" [attr.data-theme]="isDarkMode ? 'dark' : 'light'">
+  <div class="container card card-bg py-4 mt-4 mb-4">
     
     <!-- Error/No Data Message -->
     <div *ngIf="!searchResult" class="row">
@@ -141,7 +141,7 @@
 
       <!-- Logos Section -->
       <section class="company-section" *ngIf="showSection('Logos')">
-        <h2>Logos</h2>
+        <h3>Logos</h3>
         <div class="company-logos">
           <ng-container *ngFor="let logoEntry of getLogoEntries(searchResult?.Logo)">
             <div class="logo-card" *ngIf="isValidImageUrl(logoEntry.value)">
@@ -167,7 +167,7 @@
 
       <!-- Color Section -->
       <section class="company-section" *ngIf="showSection('Colors')">
-        <h2>Color</h2>
+        <h3>Color</h3>
         <div class="company-section-desc">
           Color is the cornerstone of brand design. It distinguishes the brand and helps create consistent
           experiences across marketing and products. We use color in meaningful ways in all expressions of our brand.
@@ -199,7 +199,7 @@
       <!-- Font Section -->
       <section class="company-section" *ngIf="showSection('Font')">
         <div class="company-fonts-display">
-          <h2>Fonts</h2>
+          <h3>Fonts</h3>
           <ng-container *ngIf="hasDisplayableFonts(searchResult?.Fonts)">
             <div class="font-preview-card" *ngFor="let fontItem of searchResult.Fonts">
               <ng-container *ngIf="fontItem.family || fontItem.name">
@@ -228,7 +228,7 @@
 
       <!-- Images Section -->
       <section class="company-section" *ngIf="showSection('Images')">
-        <h2>Images</h2>
+        <h3>Images</h3>
         <div class="company-images-gallery">
           <ng-container *ngIf="hasDisplayableImages(searchResult?.Images)">
             <div class="image-card" *ngFor="let imageItem of searchResult.Images">

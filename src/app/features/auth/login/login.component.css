@@ -56,6 +56,11 @@
   width: 8.5rem; /* Approx 119px. Was 11.5rem (120px) */
   height: auto;
   margin-bottom: 1.5rem; /* Approx 21px. Was 1.5rem then 3rem */
+  outline: none; /* Remove focus outline */
+}
+
+.logo:focus {
+  outline: none; /* Remove focus outline */
 }
 
 .login-panel-spacer-top,

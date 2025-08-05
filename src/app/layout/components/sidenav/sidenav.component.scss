@@ -94,7 +94,7 @@
     }
     
     .sidenav-nav {
-      padding: 1.5rem 0.5rem;
+      padding: 0px;
       border-top: 1px solid rgba(79, 70, 229, 0.1);
       margin-top: 0.5rem;
       
@@ -255,6 +255,7 @@
   width: 100%;
   height: 100%;
   position: relative;
+  height: 62px;
 }
 
 // Enhanced logo container - Perfect vertical centering
@@ -264,7 +265,7 @@
   align-items: flex-start;
   justify-content: center;
   gap: 0.25rem;
-  width: 20%;
+  width: auto;
   height: 100%; // Take full height of header
 }
 
@@ -454,8 +455,8 @@
 
   // Collapsed state - larger and more prominent
   &.collapsed-toggle {
-    width: 52px;
-    height: 52px;
+    width: 40px;
+    // height: 52px;
     background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
     color: #ffffff;
     border: 2px solid rgba(255, 255, 255, 0.2);

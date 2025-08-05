@@ -597,7 +597,7 @@
 
 .brand-cards-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); // Exactly 4 cards per row
+  grid-template-columns: repeat(4, 1fr); // Exactly 4 cards per row
   // grid-template-rows: repeat(3, 1fr); // Exactly 3 rows
   gap: 1.75rem; // Better spacing between cards
   flex: 1;
@@ -635,7 +635,17 @@
     min-height: auto;
   }
 }
-
+.brand-card {
+  aspect-ratio: 1 / 1; /* Makes the card square */
+  width: 100%;
+  /* Optional: for older browsers, fallback to fixed height */
+  /* height: 0;
+  padding-bottom: 100%; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Add your existing styles here */
+}
 .brand-card {
   background: white;
   border-radius: 12px;
@@ -647,7 +657,7 @@
   border: 1px solid rgba(0, 0, 0, 0.04);
   position: relative;
   overflow: hidden;
-  min-height: 130px; // Optimized height for 3 rows
+  min-height: 180px; // Optimized height for 3 rows
   max-height: 130px; // Fixed height for consistency
   display: flex;
   flex-direction: column;

@@ -163,7 +163,7 @@ span{
 .blog-details-sidebar {
   flex: 1;
   background: none;
-  border-radius: 18px;
+  /* border-radius: 18px; */
   padding: 0;
   min-width: 280px;
   width: 100%;
