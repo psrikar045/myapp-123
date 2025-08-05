@@ -8,7 +8,7 @@
       <div class="col-lg-6 col-12 order-2 order-lg-1">
         <div class="hero-content">
           <div class="hero-white-circle position-absolute rounded-circle"></div>
-          <h1 class="hero-headline display-3 fw-bold mb-4 fade-in-up MTextAlign">
+          <h1 class="hero-headline  fw-bold mb-4 fade-in-up MTextAlign">
             {{ heroHeadline.main }}<br class="d-none d-md-block"> 
             {{ heroHeadline.main1 }}<br class="d-none d-md-block"> 
             {{ heroHeadline.suffix }}<span class="hero-highlight text-gradient RIVO9Font">{{ heroHeadline.highlight }}</span>
@@ -106,7 +106,7 @@
         <div class="card h-100 border-0 shadow-sm hover-lift rivo9-feature-card" [ngClass]="'rivo9-card-' + i">
           <div class="card-body text-center p-4">
             <div class="feature-icon mb-3">
-              <i [class]="feature.icon" class="display-4"></i>
+              <i [class]="feature.icon" class=""></i>
             </div>
             <h5 class="card-title fw-bold mb-3">{{ feature.title }}</h5>
             <p class="card-text pt-2">{{ feature.description }} </p>
@@ -128,7 +128,7 @@
         <div class="col-lg-8 col-md-6 col-sm-6 col-12 m-0" [class.order-lg-2]="i === 1">
           <div class="section-content">
             <h2 class="display-6 fw-bold mb-4" 
-                [class.text-primary]="i === 1">
+                >
               {{ section.title }}
             </h2>
             <p class="lead text-muted mb-4">{{ section.description }}</p>
@@ -175,37 +175,12 @@
       </div>
       <div id="Mmb-0" class="col-lg-6 col-12 m-0 mb-40">
         <div class="cta-content">
-          <h2 class="display-5 fw-bold mb-4">{{ superchargeHeadline }}</h2>
-          <p class="lead mb-4 text-color">{{ superchargeSubheadline }}</p>
-          <div class="supercharge-email-cta">
-            <form class="email-subscription-form" (ngSubmit)="handleEmailSubscription()" #emailForm="ngForm">
-              <div class="input-group input-group-lg email-input-group">
-                <input type="email" 
-                       class="form-control email-input" 
-                       placeholder="Enter your email address"
-                       [(ngModel)]="subscriptionEmail"
-                       name="subscriptionEmail"
-                       required
-                       email
-                       #emailInput="ngModel"
-                       aria-label="Enter your email address">
-                <button type="submit" 
-                        class="btn btn-light btn-lg email-submit-btn"
-                        [disabled]="!emailForm.valid"
-                        aria-label="Subscribe to notifications">
-                  <span class="d-none d-sm-inline">Notify Me</span>
-                  <span class="d-sm-none">Subscribe</span>
-                  <i class="bi bi-bell ms-2"></i>
-                </button>
-              </div>
-              <div class="email-validation-feedback mt-2" 
-                   *ngIf="emailInput.invalid && emailInput.touched">
-                <small class="text-light opacity-75">
-                  <i class="bi bi-exclamation-circle me-1"></i>
-                  Please enter a valid email address
-                </small>
-              </div>
-            </form>
+          <h2 class=" fw-bold mb-4">{{ superchargeHeadline }}</h2>
+          <p class="lead text-muted mb-4">{{ superchargeSubheadline }}</p>
+          <div class="supercharge-email-cta text-left">
+            <button class="btn btn-primary btn-lg" type="button">
+              {{ superchargeCta }}
+            </button>
           </div>
         </div>
       </div>

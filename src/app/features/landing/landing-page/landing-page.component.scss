@@ -1038,6 +1038,23 @@ img.SectionBgImage {
     flex-direction: column;
     box-shadow: 0 0 45.376px 0 rgb(136 140 143 / 13%);
 }
+.cardBg {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+// Ensure all cards in the row are equal height
+.dynamic-sections .row.g-3 {
+  display: flex;
+}
+.dynamic-sections .col-lg-3 {
+  display: flex;
+}
+.dynamic-sections .cardBg {
+  flex: 1 1 100%;
+}
 .Sectionbg {
     background: #ffff !important;
 }

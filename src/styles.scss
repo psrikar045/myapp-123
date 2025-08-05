@@ -524,7 +524,7 @@ h6, .h6 {
 // 1518px to 1708px - 90% screen
 @media (min-width: 1518px) and (max-width: 1707px) {
   h1, .h1 { 
-    font-size: 3.625rem; // 58px
+    font-size: 3.325rem; // 58px
   }
   
   h2, .h2 { 
@@ -586,27 +586,27 @@ h6, .h6 {
   }
   
   h1, .h1 { 
-    font-size: 4.375rem; // 70px
+    font-size: 3.375rem; // 70px
   }
   
   h2, .h2 { 
-    font-size: 3.938rem; // 63px
+    font-size: 3rem; // 63px
   }
   
   h3, .h3 { 
-    font-size: 3.5rem; // 56px
+    font-size: 2.5rem; // 56px
   }
   
   h4, .h4 { 
-    font-size: 3rem; // 48px
+    font-size: 2.125rem; // 48px
   }
   
   h5, .h5 { 
-    font-size: 2.25rem; // 36px
+    font-size: 2rem; // 36px
   }
   
   h6, .h6 { 
-    font-size: 1.875rem; // 30px
+    font-size: 1.5rem; // 30px
   }
 }
 
@@ -616,28 +616,28 @@ h6, .h6 {
     font-size: 25px; // 1.563rem
   }
   
-  h1, .h1 { 
-    font-size: 6.188rem; // 99px
+    h1, .h1 { 
+    font-size: 3.414rem;; // 70px
   }
   
   h2, .h2 { 
-    font-size: 4.5rem; // 72px
+    font-size: 3rem; // 63px
   }
   
   h3, .h3 { 
-    font-size: 3.875rem; // 62px
+    font-size: 2.5rem; // 56px
   }
   
   h4, .h4 { 
-    font-size: 3.25rem; // 52px
+    font-size: 2.125rem; // 48px
   }
   
   h5, .h5 { 
-    font-size: 2.625rem; // 42px
+    font-size: 2rem; // 36px
   }
   
   h6, .h6 { 
-    font-size: 2.25rem; // 36px
+    font-size: 1.5rem; // 30px
   }
 }
 
@@ -664,7 +664,7 @@ p {
   letter-spacing: 0.01em;
   
   &.lead {
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: var(--font-weight-normal);
     line-height: 1.6;
     color: var(--text-color);
