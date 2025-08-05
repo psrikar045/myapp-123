@@ -24,7 +24,7 @@ describe('HeaderComponent - AI Enhanced Tests', () => {
     mockToolbarService = {
       setLoggedInToolbar: jest.fn(),
       setLoggedOutToolbar: jest.fn(),
-      logo: of({ src: 'test-logo.png', alt: 'Test Logo' }),
+      logo: of({ src: 'test-logo.webp', alt: 'Test Logo' }),
       navItems: of([
         { label: 'Home', route: '/home' },
         { label: 'Blog', route: '/blog' }

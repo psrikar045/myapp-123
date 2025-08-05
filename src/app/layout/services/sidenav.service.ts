@@ -585,7 +585,7 @@ private readonly sidenavVisibleRoutes = [
    */
   private generateAvatarUrl(email?: string): string {
     // You can implement gravatar or other avatar service here
-    return '/assets/user-small.png';
+    return '/assets/user-small.webp';
   }
 
   // Public methods for controlling sidenav

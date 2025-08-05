@@ -29,7 +29,7 @@ export class ToolbarService {
   private currentRoute: string = '';
   private isAuthPage: boolean = false;
   private logo$ = new BehaviorSubject<ToolbarLogo>({
-    src: 'assets/images/logo.svg',
+    src: 'assets/images/logo.webp',
     alt: 'RIVO9 Logo',
     link: '/'
   });
@@ -46,7 +46,7 @@ export class ToolbarService {
     { type: 'get-started', label: 'Get Started', icon: 'assets/icons/arrow_forward.webp', route: '/login' }
   ]);
 
-  private profileAvatar$ = new BehaviorSubject<string>('assets/images/user-small-1.png');
+  private profileAvatar$ = new BehaviorSubject<string>('assets/images/user-small-1.webp');
   public profileAvatar = this.profileAvatar$.asObservable();
 
   setProfileAvatar(url: string) {
@@ -75,7 +75,7 @@ export class ToolbarService {
   }
   setProfileHeaderOnly() {
      this.logo$.next({
-      src: 'assets/images/logo.svg',
+      src: 'assets/images/logo.webp',
       alt: '',
       link: '/'
     });
@@ -95,7 +95,7 @@ export class ToolbarService {
   setLoggedInToolbar(): void {
     console.log('Setting logged in toolbar');
     this.logo$.next({
-      src: 'assets/images/logo.svg',
+      src: 'assets/images/logo.webp',
       alt: 'RIVO9 Logo',
       link: '/home'
     });
@@ -115,7 +115,7 @@ export class ToolbarService {
   setLoggedOutToolbar(): void {
     // console.log('Setting logged out toolbar, isAuthPage:', this.isAuthPage);
     this.logo$.next({
-      src: 'assets/images/logo.svg',
+      src: 'assets/images/logo.webp',
       alt: 'RIVO9 Logo',
       link: '/landing'
     });

@@ -89,7 +89,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   private themeSubscription!: Subscription;
   private scrollSubscription!: Subscription;
 
-  private logoPath = 'assets/images/logo.svg'; // Ensure correct path
+  private logoPath = 'assets/images/logo.webp'; // Ensure correct path
   private sunIconPath = 'assets/icons/sun.webp'; // Ensure correct path
   private cloudIconPath = 'assets/icons/cloud.webp'; // Ensure correct path
   private arrowForwardIconPath = 'assets/icons/arrow_forward.webp'; // Ensure correct path
@@ -242,7 +242,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     open = false;
 
   logo = {
-    src: 'assets/landing/logo.svg', // Replace with your logo path or use the SVG inline
+    src: 'assets/landing/logo.webp', // Replace with your logo path or use the SVG inline
     alt: 'RIVO9 Logo',
     text: 'RIVO9',
   };
@@ -434,57 +434,57 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   testimonials = [
     {
-      avatar: 'assets/landing/user.jfif',
+      avatar: 'assets/landing/user.webp',
       name: 'User',
       role: 'Customer',
-      text: 'This is a testimonial from user.jfif.'
+      text: 'This is a testimonial from user.webp.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/landing/user.jfif',
+      avatar: 'assets/landing/user.webp',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/landing/user.jfif',
+      avatar: 'assets/landing/user.webp',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/landing/user.jfif',
+      avatar: 'assets/landing/user.webp',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/landing/user.jfif',
+      avatar: 'assets/landing/user.webp',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/landing/user.jfif',
+      avatar: 'assets/landing/user.webp',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/landing/user.jfif',
+      avatar: 'assets/landing/user.webp',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/landing/user.jfif',
+      avatar: 'assets/landing/user.webp',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     },
     {
       name: 'Mila McSabbu',
       role: 'Freelance Designer',
-      avatar: 'assets/landing/user.jfif',
+      avatar: 'assets/landing/user.webp',
       text: 'We test and compare the best project management software for collaborating with a team, hitting deadlines.'
     }
   ];

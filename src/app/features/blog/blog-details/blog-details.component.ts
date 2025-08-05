@@ -31,22 +31,22 @@ export class BlogDetailsComponent implements OnInit {
 
   sidebarCategories = [
     {
-      img: 'assets/images/Image.jpg',
+      img: 'assets/images/Image.webp',
       author: 'John Smith',
       title: 'Lorem Ipsum is simply dummy text dummy text ?'
     },
     {
-      img: 'assets/images/Image (3).jpg',
+      img: 'assets/images/Image (3).webp',
       author: 'John Smith',
       title: 'Lorem Ipsum is simply dummy text dummy text ?'
     },
     {
-      img: 'assets/images/Image (2).jpg',
+      img: 'assets/images/Image (2).webp',
       author: 'John Smith',
       title: 'Lorem Ipsum is simply dummy text dummy text ?'
     },
     {
-      img: 'assets/images/Image (1).jpg',
+      img: 'assets/images/Image (1).webp',
       author: 'John Smith',
       title: 'Lorem Ipsum is simply dummy text dummy text ?'
     }
@@ -54,7 +54,7 @@ export class BlogDetailsComponent implements OnInit {
 
   advertisements = [
     {
-      img: 'assets/images/Image.jpg',
+      img: 'assets/images/Image.webp',
       author: 'John Smith',
       title: 'Lorem Ipsum is simply dummy text dummy text ?'
     }

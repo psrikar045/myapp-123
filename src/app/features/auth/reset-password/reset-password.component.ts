@@ -200,9 +200,9 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
 
   updateCarouselImage(): void {
     if (this.currentStep === 1) {
-      this.carouselImage = 'assets/images/gallery3.png'; // Ensure path is correct, from root or assets
+      this.carouselImage = 'assets/images/gallery3.webp'; // Ensure path is correct, from root or assets
     } else if (this.currentStep === 2 || this.currentStep === 3) {
-      this.carouselImage = 'assets/images/gallery3.png'; // Ensure path is correct
+      this.carouselImage = 'assets/images/gallery3.webp'; // Ensure path is correct
     }
     this.cdr.markForCheck();
   }

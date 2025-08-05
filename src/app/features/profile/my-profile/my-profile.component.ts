@@ -53,7 +53,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   isUploadingImage = false;
   
   // Default avatar URL for fallback
-  defaultAvatarUrl = 'assets/images/user-small-1.png';
+  defaultAvatarUrl = 'assets/images/user-small-1.webp';
 
   private readonly authService = inject(AuthService);
   // Removed MatSnackBar dependency
@@ -164,7 +164,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
   }
 
   profile = {
-    avatar: '/landing/user.jfif',
+    avatar: '/landing/user.webp',
     name: '',
     status: 'Your account is ready, you can now apply for advice.',
     email: '',
@@ -395,7 +395,7 @@ if (this.dobShow) {
   onAvatarError(event: any) {
     console.log('Avatar loading failed, using default image');
     // Prevent infinite error loop by checking if we're already using the default image
-    if (event.target.src !== this.defaultAvatarUrl && !event.target.src.includes('user-small-1.png')) {
+    if (event.target.src !== this.defaultAvatarUrl && !event.target.src.includes('user-small-1.webp')) {
       event.target.src = this.defaultAvatarUrl;
       // Also update the profile avatar property
       this.profile.avatar = this.defaultAvatarUrl;

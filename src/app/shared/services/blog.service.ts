@@ -9,7 +9,7 @@ export class BlogService {
   // Centralized blog data
   private readonly blogs: BlogCard[] = [
     {
-      img: 'assets/images/Image (1).jpg',
+      img: 'assets/images/Image (1).webp',
       author: 'Tracey Wilson',
       date: 'june 20, 2025',
       title: 'Introducing RIVO9: The Ultimate API to Access Brand Assets by Domain',
@@ -18,16 +18,16 @@ export class BlogService {
       authorAvatar: 'assets/author1.png'
     },
     {
-      img: 'assets/images/Image.jpg ',
+      img: 'assets/images/Image.webp ',
       author: 'John Smith',
       date: 'june 28, 2025',
       title: '5 Reasons RIVO9 Is the Perfect Alternative to Brandfetch',
       summary:' Tired of limitations or API bottlenecks with Brandfetch? Discover why RIVO9 is the next-gen brand intelligence tool your dev team will love — from API control to self-hosted flexibility.',
       category: 'Design',
-      authorAvatar: 'assets/author2.png'
+      authorAvatar: 'assets/author2.webp'
     },
     {
-      img: 'assets/images/Image (2).jpg',
+      img: 'assets/images/Image (2).webp',
       author: 'Balakrishna',
       date: 'August 15, 2022',
       title: 'How to Automatically Fetch Logos, Brand Colors & Fonts Using RIVO9 API',
@@ -36,7 +36,7 @@ export class BlogService {
       authorAvatar: 'assets/author3.png'
     },
     {
-      img: 'assets/images/Image (3).jpg',
+      img: 'assets/images/Image (3).webp',
       author: 'Mike Johnson',
       date: 'june 20, 2025',
       title: 'Building a CRM That Auto-Fills Brand Profiles Using RIVO9',
@@ -45,7 +45,7 @@ export class BlogService {
       authorAvatar: 'assets/author4.png'
     },
     {
-      img: 'assets/images/Image (1).jpg',
+      img: 'assets/images/Image (1).webp',
       author: 'John Smith',
       date: 'April 18, 2022',
       title: 'From Domain to Design: Using RIVO9 for Instant Brand Kits',
@@ -54,7 +54,7 @@ export class BlogService {
       authorAvatar: 'assets/author2.png'
     },
     {
-      img: 'assets/images/Image.jpg',
+      img: 'assets/images/Image.webp',
       author: 'Tracey Wilson',
       date: 'May 20, 2022',
       title: 'Developers, Heres How You Can Use RIVO9 in 5 Minutes or Less',
@@ -63,7 +63,7 @@ export class BlogService {
       authorAvatar: 'assets/author1.png'
     },
     {
-      img: 'assets/images/Image (1).jpg',
+      img: 'assets/images/Image (1).webp',
       author: 'John Smith',
       date: 'July 18, 2022',
       title: 'Behind the Scenes: How RIVO9 Builds a Fast, Accurate Brand Lookup Engine',
@@ -72,7 +72,7 @@ export class BlogService {
       authorAvatar: 'assets/author2.jpg'
     },
     {
-      img: 'assets/images/Image (2).jpg',
+      img: 'assets/images/Image (2).webp',
       author: 'Jane Doe',
       date: 'June 15, 2022',
       title: 'RIVO9 vs. Brandfetch: Detailed Feature-by-Feature Comparison (2025)',
@@ -81,7 +81,7 @@ export class BlogService {
       authorAvatar: 'assets/author3.png'
     },
     {
-      img: 'assets/images/Image (3).jpg',
+      img: 'assets/images/Image (3).webp',
       author: 'Mike Johnson',
       date: 'July 12, 2022',
       title: 'How Agencies Can Save Hours with RIVO9s Brand Asset Automation',
@@ -90,7 +90,7 @@ export class BlogService {
       authorAvatar: 'assets/author4.png'
     },
     {
-      img: 'assets/images/Image.jpg',
+      img: 'assets/images/Image.webp',
       author: 'John Smith',
       date: 'June 18, 2022',
       title: 'Boost Your Pitch Decks & Reports with Branded Content from RIVO9',
@@ -99,7 +99,7 @@ export class BlogService {
       authorAvatar: 'assets/author2.png'
     },
     {
-      img: 'assets/images/Image (1).jpg',
+      img: 'assets/images/Image (1).webp',
       author: 'John Smith',
       date: 'July 18, 2022',
       title: 'Behind the Scenes: How RIVO9 Builds a Fast, Accurate Brand Lookup Engine',
@@ -108,7 +108,7 @@ export class BlogService {
       authorAvatar: 'assets/author2.jpg'
     },
     {
-      img: 'assets/images/Image (3).jpg',
+      img: 'assets/images/Image (3).webp',
       author: 'John Smith',
       date: 'July 18, 2022',
       title: 'Behind the Scenes: How RIVO9 Builds a Fast, Accurate Brand Lookup Engine',

@@ -55,7 +55,7 @@ export class BlogComponent implements OnInit, OnDestroy {
   sidebarCategories = [
     {
       id: 1,
-      img: 'assets/images/Image.jpg',
+      img: 'assets/images/Image.webp',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',
@@ -63,7 +63,7 @@ export class BlogComponent implements OnInit, OnDestroy {
     },
     {
       id: 1,
-      img: 'assets/images/Image (1).jpg',
+      img: 'assets/images/Image (1).webp',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',
@@ -71,7 +71,7 @@ export class BlogComponent implements OnInit, OnDestroy {
     },
     {
       id:2,
-      img: 'assets/images/Image (2).jpg',
+      img: 'assets/images/Image (2).webp',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',
@@ -79,7 +79,7 @@ export class BlogComponent implements OnInit, OnDestroy {
     },
     {
       id:3,
-      img: 'assets/images/Image (3).jpg',
+      img: 'assets/images/Image (3).webp',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',
@@ -87,7 +87,7 @@ export class BlogComponent implements OnInit, OnDestroy {
     },
     {
       id:4,
-      img: 'assets/images/Image.jpg',
+      img: 'assets/images/Image.webp',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',
@@ -95,7 +95,7 @@ export class BlogComponent implements OnInit, OnDestroy {
     },
     {
       id:5,
-      img: 'assets/images/Image (1).jpg',
+      img: 'assets/images/Image (1).webp',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',
@@ -103,7 +103,7 @@ export class BlogComponent implements OnInit, OnDestroy {
     },
     {
       id:6,
-      img: 'assets/images/Image (2).jpg',
+      img: 'assets/images/Image (2).webp',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',
@@ -111,7 +111,7 @@ export class BlogComponent implements OnInit, OnDestroy {
     },
     {
       id:7,
-      img: 'assets/images/Image (3).jpg',
+      img: 'assets/images/Image (3).webp',
       author: 'Siva kumar',
       date: 'June 20, 2025',
       title: 'Chatbot for Marketing',

@@ -125,9 +125,9 @@ public layoutService = inject(LayoutService);
   passwordStrengthColor = '';
 
   // --- Carousel Properties ---
-  // 'assets/images/gallery1.png',
-  readonly loginCarouselImages: readonly string[] = ['assets/images/gallery2.png','assets/images/gallery3.png'];
-  readonly registerFormImage: string = 'assets/images/gallery2.png';
+  // 'assets/images/gallery1.webp',
+  readonly loginCarouselImages: readonly string[] = ['assets/images/gallery2.webp','assets/images/gallery3.webp'];
+  readonly registerFormImage: string = 'assets/images/gallery2.webp';
   currentImageIndex: number = 0; // For login carousel
   carouselImage: string = ''; // Holds the src for the currently displayed image
   private carouselIntervalId: any;

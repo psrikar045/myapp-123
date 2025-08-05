@@ -45,7 +45,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private isScrollingUp = false;
   private authSubscription: Subscription | undefined;
   private destroy$ = new Subject<void>();
-  profileAvatarUrl: string = 'assets/landing/user.jfif';
+  profileAvatarUrl: string = 'assets/landing/user.webp';
   private avatarSubscription: Subscription | undefined;
   constructor(
     private toolbarService: ToolbarService,
