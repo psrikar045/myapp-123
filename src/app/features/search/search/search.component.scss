@@ -50,7 +50,7 @@
   background: #ffffff;
   border-radius: 20px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  padding: 2.5rem;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -109,7 +109,7 @@
   flex: 1;
   border: none;
   outline: none;
-  padding: 1.25rem 1.25rem 1.25rem 0.75rem;
+  padding: 0.75rem;
   /* Font size removed - using global typography system */
   background: transparent;
   color: #1f2937;
@@ -405,78 +405,79 @@
 }
 
 /* Dark Theme Support */
-@media (prefers-color-scheme: dark) {
-  .search-page-container {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d1b69 100%);
-  }
+/* Commented the below code as it is applying dark theme based on system theme and causing UI issue*/
+// @media (prefers-color-scheme: dark) {
+//   .search-page-container {
+//     background: linear-gradient(135deg, #1a1a1a 0%, #2d1b69 100%);
+//   }
   
-  .search-card {
-    background: #2d2d2d;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-  }
+//   .search-card {
+//     background: #2d2d2d;
+//     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+//   }
   
-  .rivo9-logo {
-    filter: invert(1);
-  }
+//   .rivo9-logo {
+//     filter: invert(1);
+//   }
   
-  .search-input-wrapper {
-    background: #2d2d2d;
-    border-color: #4a5568;
-  }
+//   .search-input-wrapper {
+//     background: #2d2d2d;
+//     border-color: #4a5568;
+//   }
   
-  .search-input {
-    color: #ffffff;
-  }
+//   .search-input {
+//     color: #ffffff;
+//   }
   
-  .search-input::placeholder {
-    color: #a0aec0;
-  }
+//   .search-input::placeholder {
+//     color: #a0aec0;
+//   }
   
-  .recently-viewed-title {
-    color: #a0aec0;
-  }
+//   .recently-viewed-title {
+//     color: #a0aec0;
+//   }
   
-  .brand-name {
-    color: #ffffff;
-  }
+//   .brand-name {
+//     color: #ffffff;
+//   }
   
-  .brand-url {
-    color: #a0aec0;
-  }
+//   .brand-url {
+//     color: #a0aec0;
+//   }
   
-  .brand-placeholder {
-    background-color: #4a5568;
-    color: #ffffff;
-  }
+//   .brand-placeholder {
+//     background-color: #4a5568;
+//     color: #ffffff;
+//   }
   
-  .recently-viewed-item:hover {
-    background-color: #4a5568;
-    border-color: #718096;
-  }
+//   .recently-viewed-item:hover {
+//     background-color: #4a5568;
+//     border-color: #718096;
+//   }
   
-  .remove-btn {
-    color: #a0aec0;
-  }
+//   .remove-btn {
+//     color: #a0aec0;
+//   }
   
-  .remove-btn:hover {
-    background-color: #742a2a;
-    color: #f56565;
-  }
+//   .remove-btn:hover {
+//     background-color: #742a2a;
+//     color: #f56565;
+//   }
   
-  .error-message {
-    background-color: #2d1a1a;
-    border-color: #742a2a;
-    color: #f56565;
-  }
+//   .error-message {
+//     background-color: #2d1a1a;
+//     border-color: #742a2a;
+//     color: #f56565;
+//   }
   
-  .clear-all-btn:hover {
-    background-color: #4a5568;
-  }
+//   .clear-all-btn:hover {
+//     background-color: #4a5568;
+//   }
   
-  .back-btn:hover {
-    background-color: #4a5568;
-  }
-}
+//   .back-btn:hover {
+//     background-color: #4a5568;
+//   }
+// }
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
