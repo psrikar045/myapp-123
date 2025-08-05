@@ -32,6 +32,10 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   regeneratedApiKey: string | null = null;
   regenerating = false;
   
+  // Revoke state
+  revoking = false;
+  showRevokeConfirmation = false;
+  
   // Show key state
   showingFullKey: { [keyId: string]: boolean } = {};
   decryptedKeys: { [keyId: string]: string } = {};
@@ -424,6 +428,83 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
           errorMessage = 'Unauthorized. Please check your authentication.';
         } else if (error.status === 403) {
           errorMessage = 'Insufficient permissions to regenerate API key.';
+        } else if (error.error?.message) {
+          errorMessage = error.error.message;
+        }
+
+        this.error = errorMessage;
+        this.errorHandler.showWarning(errorMessage);
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  /**
+   * Show revoke confirmation dialog
+   */
+  showRevokeConfirmationDialog(): void {
+    this.showRevokeConfirmation = true;
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Hide revoke confirmation dialog
+   */
+  hideRevokeConfirmationDialog(): void {
+    this.showRevokeConfirmation = false;
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Revoke API key
+   */
+  revokeApiKey(apiKey: ApiKey): void {
+    if (!apiKey || this.revoking) return;
+
+    this.revoking = true;
+    this.error = null;
+    this.showRevokeConfirmation = false;
+
+    this.apiKeyService.revokeApiKey(apiKey.id).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (response) => {
+        console.log('API key revoked successfully:', response);
+        
+        // Check if the backend indicates success
+        if (!response.success) {
+          this.revoking = false;
+          this.error = response.message || 'Failed to revoke API key.';
+          this.errorHandler.showWarning(this.error);
+          this.cdr.markForCheck();
+          return;
+        }
+        
+        // Update the selected API key status to REVOKED
+        if (this.selectedApiKey && this.selectedApiKey.id === apiKey.id) {
+          this.selectedApiKey = {
+            ...this.selectedApiKey,
+            status: 'REVOKED',
+            revokedAt: new Date().toISOString()
+          };
+        }
+
+        this.revoking = false;
+        this.cdr.markForCheck();
+
+        this.errorHandler.showSuccess('API key revoked successfully!');
+      },
+      error: (error) => {
+        console.error('Error revoking API key:', error);
+        this.revoking = false;
+        
+        let errorMessage = 'Failed to revoke API key.';
+        if (error.status === 404) {
+          errorMessage = 'API key not found.';
+        } else if (error.status === 401) {
+          errorMessage = 'Unauthorized. Please check your authentication.';
+        } else if (error.status === 403) {
+          errorMessage = 'Insufficient permissions to revoke API key.';
         } else if (error.error?.message) {
           errorMessage = error.error.message;
         }

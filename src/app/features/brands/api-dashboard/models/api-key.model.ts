@@ -121,17 +121,20 @@ export interface CreateApiKeyResponse {
   prefix?: string;
   keyValue: string;
   encryptedKeyValue?: string; // Encrypted API key value for frontend decryption
+  keyPreview?: string; // Masked preview of the API key
   registeredDomain?: string;
   mainDomain?: string;
   subdomainPattern?: string;
-  environment: 'development' | 'staging' | 'production' | 'testing';
+  environment?: 'development' | 'staging' | 'production' | 'testing';
   allowedDomains?: string[] | null;
   allowedIps?: string[] | null;
-  scopes: string;
+  scopes?: string | string[];
   rateLimitTier: string;
-  isActive: boolean;
+  active: boolean; // Backend returns 'active' not 'isActive'
+  isActive?: boolean; // Keep for backward compatibility
   expiresAt?: string;
   createdAt: string;
+  lastUsedAt?: string;
 }
 
 export interface RegenerateApiKeyResponse {
