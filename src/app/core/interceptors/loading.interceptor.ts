@@ -24,13 +24,27 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
     skipLoadingUrls.some(url => req.url.includes(url)) ||
     req.method === 'GET' && req.url.includes('/api/search/suggestions'); // Skip for search suggestions
 
+  // Debug logging for API dashboard endpoints
+  if (req.url.includes('/api/v1/dashboard/api-key/')) {
+    console.log('🔄 Loading interceptor - API Key Dashboard request:', req.url);
+    console.log('🔄 Should skip loading:', shouldSkipLoading);
+    console.log('🔄 Active requests before:', activeRequests);
+  }
+
   if (shouldSkipLoading) {
     return next(req);
   }
 
   // Increment active requests and show spinner
   activeRequests++;
-  if (activeRequests === 1) {
+  
+  // Always show spinner for critical API dashboard endpoints, even if other requests are active
+  const isCriticalDashboardEndpoint = req.url.includes('/api/v1/dashboard/api-key/') || 
+                                     req.url.includes('/api/v1/dashboard/stats') ||
+                                     req.url.includes('/api/v1/dashboard/recent-projects');
+  
+  if (activeRequests === 1 || isCriticalDashboardEndpoint) {
+    console.log('🟢 Showing global spinner for:', req.url, '(activeRequests:', activeRequests, ')');
     spinnerService.show();
   }
 
@@ -38,10 +52,18 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
     finalize(() => {
       // Decrement active requests and hide spinner when no more requests
       activeRequests--;
+      
+      // Debug logging for API dashboard endpoints
+      if (req.url.includes('/api/v1/dashboard/api-key/')) {
+        console.log('🔄 Loading interceptor - API Key Dashboard request completed:', req.url);
+        console.log('🔄 Active requests after:', activeRequests);
+      }
+      
       if (activeRequests === 0) {
         // Small delay to prevent flickering for rapid requests
         setTimeout(() => {
           if (activeRequests === 0) {
+            console.log('🔴 Hiding global spinner');
             try {
               // Check if injector is still available before accessing service
               const currentSpinnerService = injector.get(SpinnerService);

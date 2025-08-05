@@ -340,10 +340,13 @@ export class GlobalSpinnerComponent implements OnInit, OnDestroy {
     // Only run in browser environment
     if (isPlatformBrowser(this.platformId)) {
       this.subscription = this.isLoading$.subscribe(loading => {
+        console.log('🎯 GlobalSpinnerComponent received loading state:', loading);
         if (loading) {
+          console.log('🟢 GlobalSpinnerComponent: SHOWING spinner');
           // Prevent body scroll when loading
           document.body.style.overflow = 'hidden';
         } else {
+          console.log('🔴 GlobalSpinnerComponent: HIDING spinner');
           // Restore body scroll
           document.body.style.overflow = '';
         }

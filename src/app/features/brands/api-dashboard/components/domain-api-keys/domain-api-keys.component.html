@@ -32,6 +32,13 @@
           </div>
         </div>
         <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary squared-pill" 
+                  (click)="refreshDashboard()"
+                  [disabled]="dashboardLoading">
+            <span *ngIf="dashboardLoading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            <i *ngIf="!dashboardLoading" class="bi bi-arrow-clockwise me-1"></i>
+            {{ dashboardLoading ? 'Refreshing...' : 'Refresh' }}
+          </button>
           <button *ngIf="canShowFullKey(selectedApiKey)" 
                   class="btn squared-pill"
                   [class.btn-outline-success]="!isShowingFullKey(selectedApiKey)"
@@ -124,19 +131,24 @@
             <div class="col-lg-3 col-md-6 col-12">
               <div class="text-center">
                 <div class="text-body-secondary small mb-1">Requests Today</div>
-                <div class="h4 fw-bold text-primary mb-0">{{ formatNumber(selectedApiKey.usage.requestsToday || 0) }}</div>
+                <div class="h4 fw-bold text-primary mb-0">{{ formatNumber(getTodaysRequests()) }}</div>
               </div>
             </div>
             <div class="col-lg-3 col-md-6 col-12">
               <div class="text-center">
                 <div class="text-body-secondary small mb-1">Remaining Today</div>
-                <div class="h4 fw-bold text-success mb-0">{{ formatNumber(selectedApiKey.usage.remainingToday || 13333) }}</div>
+                <div class="h4 fw-bold text-success mb-0">{{ formatNumber(getRemainingToday()) }}</div>
               </div>
             </div>
             <div class="col-lg-3 col-md-6 col-12">
               <div class="text-center">
-                <div class="text-body-secondary small mb-1">Usage Percentage</div>
-                <div class="h4 fw-bold text-warning mb-0">{{ getUsagePercentage(selectedApiKey) }}%</div>
+                <div class="text-body-secondary small mb-1">Daily Usage %</div>
+                <div class="h4 fw-bold mb-0"
+                     [class.text-success]="getUsagePercentage(selectedApiKey) <= 50"
+                     [class.text-warning]="getUsagePercentage(selectedApiKey) > 50 && getUsagePercentage(selectedApiKey) <= 80"
+                     [class.text-danger]="getUsagePercentage(selectedApiKey) > 80">
+                  {{ getUsagePercentage(selectedApiKey) }}%
+                </div>
               </div>
             </div>
             <div class="col-lg-3 col-md-6 col-12">
@@ -147,20 +159,27 @@
             </div>
           </div>
           
-          <!-- Usage Progress Bar -->
+          <!-- Daily Usage Progress Bar -->
           <div class="mt-4">
             <div class="d-flex justify-content-between align-items-center mb-2">
-              <span class="text-body-secondary small">Daily Usage</span>
-              <span class="text-body-secondary small">{{ getUsagePercentage(selectedApiKey) }}%</span>
+              <span class="text-body-secondary small">Today's Usage Progress</span>
+              <span class="text-body-secondary small">{{ getUsagePercentage(selectedApiKey) }}% used today</span>
             </div>
             <div class="progress" style="height: 8px;">
-              <div class="progress-bar bg-primary" 
+              <div class="progress-bar" 
+                   [class.bg-success]="getUsagePercentage(selectedApiKey) <= 50"
+                   [class.bg-warning]="getUsagePercentage(selectedApiKey) > 50 && getUsagePercentage(selectedApiKey) <= 80"
+                   [class.bg-danger]="getUsagePercentage(selectedApiKey) > 80"
                    role="progressbar" 
                    [style.width.%]="getUsagePercentage(selectedApiKey)"
                    [attr.aria-valuenow]="getUsagePercentage(selectedApiKey)"
                    aria-valuemin="0" 
                    aria-valuemax="100">
               </div>
+            </div>
+            <div class="d-flex justify-content-between mt-1">
+              <small class="text-body-secondary">{{ formatNumber(getTodaysRequests()) }} used / {{ formatNumber(getDailyLimit()) }} daily limit</small>
+              <small class="text-body-secondary">{{ formatNumber(getRemainingToday()) }} remaining today</small>
             </div>
           </div>
         </div>

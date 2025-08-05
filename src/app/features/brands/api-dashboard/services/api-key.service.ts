@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, BehaviorSubject, of, catchError, tap, map, throwError } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { 
@@ -15,6 +15,10 @@ import {
   UsageAnalytics, 
   RateLimitHeaders 
 } from '../models/rate-limit.model';
+import { 
+  SingleApiKeyDashboardResponse, 
+  TransformedApiKeyDashboard 
+} from '../models/dashboard-api.model';
 import { MockDataService } from './mock-data.service';
 import { ApiKeyEncryptionService } from './api-key-encryption.service';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -328,6 +332,50 @@ export class ApiKeyService {
   }
 
   /**
+   * Get API key dashboard data
+   */
+  getApiKeyDashboard(apiKeyId: string, refresh: boolean = false): Observable<SingleApiKeyDashboardResponse> {
+    const headers = this.getAuthHeaders();
+    const dashboardUrl = `${environment.baseApiUrl}/api/v1/dashboard/api-key/${apiKeyId}?refresh=${refresh}`;
+    
+    console.log('🌐 Making HTTP request to:', dashboardUrl);
+    console.log('🌐 Request headers:', headers);
+    
+    return this.http.get<SingleApiKeyDashboardResponse>(dashboardUrl, { headers }).pipe(
+      tap(response => console.log('🌐 HTTP response received:', response)),
+      catchError(this.handleError<SingleApiKeyDashboardResponse>('getApiKeyDashboard'))
+    );
+  }
+
+  /**
+   * Transform API key dashboard response to match current template structure
+   */
+  transformApiKeyDashboard(apiResponse: SingleApiKeyDashboardResponse): TransformedApiKeyDashboard {
+    return {
+      usage: {
+        requestsToday: apiResponse.requestsToday,
+        remainingToday: apiResponse.monthlyMetrics.remainingQuota,
+        requestsThisMonth: apiResponse.monthlyMetrics.totalCalls,
+        lastUsed: apiResponse.lastUsed,
+        rateLimitStatus: this.mapRateLimitStatus(apiResponse.rateLimitInfo.rateLimitStatus)
+      },
+      performance: {
+        averageResponseTime: apiResponse.performanceMetrics.averageResponseTime,
+        errorRate24h: apiResponse.performanceMetrics.errorRate24h,
+        uptime: apiResponse.performanceMetrics.uptime,
+        performanceStatus: apiResponse.performanceMetrics.performanceStatus,
+        lastError: apiResponse.performanceMetrics.lastError,
+        consecutiveSuccessfulCalls: apiResponse.performanceMetrics.consecutiveSuccessfulCalls
+      },
+      monthlyMetrics: apiResponse.monthlyMetrics,
+      rateLimitInfo: apiResponse.rateLimitInfo,
+      overallHealthStatus: apiResponse.overallHealthStatus,
+      todayVsYesterdayChange: apiResponse.todayVsYesterdayChange,
+      pendingRequests: apiResponse.pendingRequests
+    };
+  }
+
+  /**
    * Get API key analytics
    */
   getApiKeyAnalytics(id: string): Observable<any> {
@@ -526,5 +574,55 @@ export class ApiKeyService {
    */
   canDecryptApiKey(apiKey: ApiKey): boolean {
     return !!(apiKey.encryptedKeyValue && this.getCurrentUserId());
+  }
+
+  /**
+   * Get HTTP headers with authentication for dashboard API calls
+   */
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+  }
+
+  /**
+   * Map rate limit status from API to internal format
+   */
+  private mapRateLimitStatus(status: string): 'OK' | 'WARNING' | 'EXCEEDED' {
+    switch (status.toLowerCase()) {
+      case 'normal':
+      case 'ok':
+        return 'OK';
+      case 'warning':
+        return 'WARNING';
+      case 'exceeded':
+      case 'limit_exceeded':
+        return 'EXCEEDED';
+      default:
+        return 'OK';
+    }
+  }
+
+  /**
+   * Error handling for dashboard API calls
+   */
+  private handleError<T>(operation = 'operation') {
+    return (error: HttpErrorResponse): Observable<T> => {
+      console.error(`${operation} failed:`, error);
+      
+      // Log error details
+      if (error.error instanceof ErrorEvent) {
+        // Client-side error
+        console.error('Client-side error:', error.error.message);
+      } else {
+        // Server-side error
+        console.error(`Server returned code ${error.status}, body was:`, error.error);
+      }
+
+      // Return empty result to let the app continue
+      return throwError(() => error);
+    };
   }
 }

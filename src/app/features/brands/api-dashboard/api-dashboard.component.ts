@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { ApiDashboardService } from './services/api-dashboard.service';
 import { ApiKeyService } from './services/api-key.service';
 import { AppThemeService } from '../../../core/services/app-theme.service';
-import { SpinnerService } from '../../../core/services/spinner.service';
 import { ErrorHandlerService } from '../../../shared/services/error-handler.service';
 
 import { ErrorDisplayComponent } from './components/error-display/error-display.component';
@@ -48,7 +47,6 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
     private apiDashboardService: ApiDashboardService,
     private apiKeyService: ApiKeyService,
     private themeService: AppThemeService,
-    private spinnerService: SpinnerService,
     private errorHandler: ErrorHandlerService,
     private router: Router
   ) {}
@@ -66,16 +64,16 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   /**
    * Load all dashboard data
    */
-  private loadDashboardData(): void {
+  private loadDashboardData(refresh: boolean = false): void {
     this.loading = true;
     this.error = null;
     
-    // Use global spinner instead of local loading state
-    this.spinnerService.show();
+    // Global spinner will be automatically handled by the loading interceptor
+    // No need to manually control it here
 
     // Load dashboard stats, recent projects, and API keys in parallel
     forkJoin({
-      stats: this.apiDashboardService.getDashboardStats(),
+      stats: this.apiDashboardService.getDashboardStats(refresh),
       projects: this.apiDashboardService.getRecentProjects(),
       apiKeys: this.apiKeyService.getApiKeys()
     }).pipe(
@@ -93,13 +91,11 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
         this.initializeApiKeyFilters();
         
         this.loading = false;
-        this.spinnerService.hide();
       },
       error: (error) => {
         console.error('Error loading dashboard data:', error);
-        this.error = 'Failed to load dashboard data. Please try again.';
+        this.error = this.getErrorMessage(error);
         this.loading = false;
-        this.spinnerService.hide();
       }
     });
   }
@@ -108,7 +104,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
    * Refresh dashboard data
    */
   refreshDashboard(): void {
-    this.loadDashboardData();
+    this.loadDashboardData(true); // Force refresh from API
   }
 
   /**
@@ -666,6 +662,28 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
       default:
         return tier || 'Free';
     }
+  }
+
+  /**
+   * Get user-friendly error message
+   */
+  private getErrorMessage(error: any): string {
+    if (error?.status === 401) {
+      return 'Authentication required. Please log in again.';
+    }
+    if (error?.status === 403) {
+      return 'Access denied. You do not have permission to view this data.';
+    }
+    if (error?.status === 404) {
+      return 'Dashboard data not found.';
+    }
+    if (error?.status === 500) {
+      return 'Server error. Please try again later.';
+    }
+    if (error?.error?.message) {
+      return error.error.message;
+    }
+    return 'Failed to load dashboard data. Please try again.';
   }
 
 }

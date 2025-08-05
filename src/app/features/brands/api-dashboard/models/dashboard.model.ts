@@ -15,9 +15,9 @@ export interface DashboardStats {
     trend: 'up' | 'down' | 'neutral';
   };
   remainingQuota: {
-    current: number;
-    percentage: number;
-    total: number;
+    current: number; // Remaining quota amount
+    percentage: number; // Used quota percentage (0-100)
+    total: number; // Total quota amount
     resetDate: string;
   };
 }
