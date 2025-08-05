@@ -36,8 +36,16 @@ export class ErrorHandlerService {
     if (type === 'success' || type === 'info') {
       setTimeout(() => {
         // Check if service is still active before removing error
-        if (!this.errorsSubject.closed) {
-          this.removeError(error.id);
+        try {
+          if (!this.errorsSubject.closed) {
+            this.removeError(error.id);
+          }
+        } catch (err: unknown) {
+          // Service may have been destroyed during SSR cleanup, ignore silently
+          const errorMessage = err instanceof Error ? err.message : String(err);
+          if (errorMessage.includes('NG0205') || errorMessage.includes('Injector has already been destroyed')) {
+            return;
+          }
         }
       }, 5000);
     }

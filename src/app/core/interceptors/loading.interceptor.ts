@@ -46,9 +46,14 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
               // Check if injector is still available before accessing service
               const currentSpinnerService = injector.get(SpinnerService);
               currentSpinnerService.hide();
-            } catch (error) {
-              // Injector has been destroyed, ignore the error
-              console.debug('LoadingInterceptor: Injector destroyed, skipping spinner hide');
+            } catch (error: unknown) {
+              // Injector has been destroyed, ignore the error silently
+              // This is expected during SSR cleanup and doesn't need logging
+              const errorMessage = error instanceof Error ? error.message : String(error);
+              if (errorMessage.includes('NG0205') || errorMessage.includes('Injector has already been destroyed')) {
+                // Expected during SSR cleanup, ignore silently
+                return;
+              }
             }
           }
         }, 100);

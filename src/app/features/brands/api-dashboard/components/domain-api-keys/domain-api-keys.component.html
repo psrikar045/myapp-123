@@ -32,6 +32,17 @@
           </div>
         </div>
         <div class="d-flex gap-2">
+          <button *ngIf="canShowFullKey(selectedApiKey)" 
+                  class="btn squared-pill"
+                  [class.btn-outline-success]="!isShowingFullKey(selectedApiKey)"
+                  [class.btn-success]="isShowingFullKey(selectedApiKey)"
+                  (click)="toggleShowFullKey(selectedApiKey)"
+                  [disabled]="isDecryptingKey(selectedApiKey)">
+            <span *ngIf="isDecryptingKey(selectedApiKey)" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            <i *ngIf="!isDecryptingKey(selectedApiKey)" 
+               [class]="isShowingFullKey(selectedApiKey) ? 'bi bi-eye-slash me-1' : 'bi bi-eye me-1'"></i>
+            {{ isDecryptingKey(selectedApiKey) ? 'Decrypting...' : (isShowingFullKey(selectedApiKey) ? 'Hide Key' : 'Show Key') }}
+          </button>
           <button class="btn btn-outline-primary squared-pill" (click)="copyApiKey(selectedApiKey)">
             <i class="bi bi-clipboard me-1"></i>
             Copy Key
@@ -166,9 +177,32 @@
               </div>
             </div>
             <div class="col-12">
-              <div class="d-flex justify-content-between">
-                <span class="text-body-secondary">Masked Key</span>
-                <span class="fw-medium font-monospace">{{ selectedApiKey.maskedKey }}</span>
+              <div class="d-flex justify-content-between align-items-center">
+                <span class="text-body-secondary">API Key</span>
+                <div class="d-flex align-items-center gap-2">
+                  <span class="fw-medium font-monospace text-break" 
+                        [class.text-success]="isShowingFullKey(selectedApiKey)"
+                        style="max-width: 200px; word-break: break-all;">
+                    {{ getDisplayKey(selectedApiKey) }}
+                  </span>
+                  <div class="btn-group" role="group">
+                    <button *ngIf="canShowFullKey(selectedApiKey)" 
+                            class="btn btn-outline-secondary btn-sm"
+                            [class.btn-success]="isShowingFullKey(selectedApiKey)"
+                            (click)="toggleShowFullKey(selectedApiKey)"
+                            [disabled]="isDecryptingKey(selectedApiKey)"
+                            [title]="isShowingFullKey(selectedApiKey) ? 'Hide full key' : 'Show full key'">
+                      <span *ngIf="isDecryptingKey(selectedApiKey)" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      <i *ngIf="!isDecryptingKey(selectedApiKey)" 
+                         [class]="isShowingFullKey(selectedApiKey) ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                    </button>
+                    <button class="btn btn-outline-primary btn-sm"
+                            (click)="copyApiKey(selectedApiKey)"
+                            title="Copy to clipboard">
+                      <i class="bi bi-clipboard"></i>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="col-12">

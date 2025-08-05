@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Observable, Subscription, interval } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { SpinnerService } from '../../services/spinner.service';
 
@@ -26,14 +26,14 @@ import { SpinnerService } from '../../services/spinner.service';
             </div>
           </div>
           
-          <!-- Loading Text with Dynamic Messages -->
+          <!-- Loading Text with Static Message -->
           <div class="loading-text">
-            <span class="loading-message">{{ currentMessage }}</span>
+            <span class="loading-message">Loading...</span>
             <div class="loading-progress">
               <div class="progress-dots">
-                <span class="dot" [class.active]="dotIndex >= 0"></span>
-                <span class="dot" [class.active]="dotIndex >= 1"></span>
-                <span class="dot" [class.active]="dotIndex >= 2"></span>
+                <span class="dot animated-dot-1"></span>
+                <span class="dot animated-dot-2"></span>
+                <span class="dot animated-dot-3"></span>
               </div>
             </div>
           </div>
@@ -187,12 +187,30 @@ import { SpinnerService } from '../../services/spinner.service';
       height: 8px;
       border-radius: 50%;
       background: #d1d5db;
-      transition: all 0.3s ease;
+      animation: dotPulse 1.5s infinite ease-in-out;
     }
     
-    .dot.active {
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-      transform: scale(1.2);
+    .animated-dot-1 {
+      animation-delay: 0s;
+    }
+    
+    .animated-dot-2 {
+      animation-delay: 0.3s;
+    }
+    
+    .animated-dot-3 {
+      animation-delay: 0.6s;
+    }
+    
+    @keyframes dotPulse {
+      0%, 80%, 100% {
+        background: #d1d5db;
+        transform: scale(1);
+      }
+      40% {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        transform: scale(1.2);
+      }
     }
     
     /* Brand Text */
@@ -309,21 +327,7 @@ import { SpinnerService } from '../../services/spinner.service';
 })
 export class GlobalSpinnerComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
-  currentMessage = 'Loading';
-  dotIndex = 0;
-  
   private subscription?: Subscription;
-  private messageSubscription?: Subscription;
-  private dotSubscription?: Subscription;
-  
-  private loadingMessages = [
-    'Loading',
-    'Fetching data',
-    'Processing',
-    'Almost ready',
-    'Preparing content'
-  ];
-  private messageIndex = 0;
 
   constructor(
     private spinnerService: SpinnerService,
@@ -339,42 +343,12 @@ export class GlobalSpinnerComponent implements OnInit, OnDestroy {
         if (loading) {
           // Prevent body scroll when loading
           document.body.style.overflow = 'hidden';
-          this.startAnimations();
         } else {
           // Restore body scroll
           document.body.style.overflow = '';
-          this.stopAnimations();
         }
       });
     }
-  }
-  
-  private startAnimations(): void {
-    // Animate progress dots
-    this.dotSubscription = interval(500).subscribe(() => {
-      this.dotIndex = (this.dotIndex + 1) % 4;
-    });
-    
-    // Cycle through loading messages
-    this.messageSubscription = interval(2000).subscribe(() => {
-      this.messageIndex = (this.messageIndex + 1) % this.loadingMessages.length;
-      this.currentMessage = this.loadingMessages[this.messageIndex];
-    });
-  }
-  
-  private stopAnimations(): void {
-    if (this.dotSubscription) {
-      this.dotSubscription.unsubscribe();
-      this.dotSubscription = undefined;
-    }
-    if (this.messageSubscription) {
-      this.messageSubscription.unsubscribe();
-      this.messageSubscription = undefined;
-    }
-    // Reset to initial state
-    this.dotIndex = 0;
-    this.messageIndex = 0;
-    this.currentMessage = 'Loading';
   }
 
   ngOnDestroy(): void {
@@ -387,6 +361,5 @@ export class GlobalSpinnerComponent implements OnInit, OnDestroy {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-    this.stopAnimations();
   }
 }

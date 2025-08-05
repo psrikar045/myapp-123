@@ -1,20 +1,27 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ErrorHandlerService } from '../services/error-handler.service';
+import { environment } from '../../../environments/environment';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const errorHandler = inject(ErrorHandlerService);
+  const platformId = inject(PLATFORM_ID);
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       let errorMessage = 'An unexpected error occurred';
       let shouldRedirect = false;
 
-      if (error.error instanceof ErrorEvent) {
+      // Check if we're in browser environment and if error.error is an ErrorEvent
+      const isBrowser = isPlatformBrowser(platformId);
+      const isClientError = isBrowser && error.error && typeof ErrorEvent !== 'undefined' && error.error instanceof ErrorEvent;
+
+      if (isClientError) {
         // Client-side error
         errorMessage = `Network Error: ${error.error.message}`;
       } else {
@@ -50,13 +57,14 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         }
       }
 
-      // Log error for debugging
-      console.error('HTTP Error Interceptor:', {
-        status: error.status,
-        message: errorMessage,
-        url: req.url,
-        error: error
-      });
+      // Log error for debugging (only in development)
+      if (!environment.production) {
+        console.error('HTTP Error Interceptor:', {
+          status: error.status,
+          message: errorMessage,
+          url: req.url
+        });
+      }
 
       // Show error to user (except for 401 which will redirect)
       if (!shouldRedirect) {

@@ -13,6 +13,13 @@ export class GlobalErrorHandler implements ErrorHandler {
   }
 
   handleError(error: any): void {
+    // Skip handling NG0205 errors during SSR as they are expected during cleanup
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    if (errorMessage.includes('NG0205') || errorMessage.includes('Injector has already been destroyed')) {
+      // This is expected during SSR cleanup, log minimally and return
+      return;
+    }
+
     try {
       // Lazily inject services here with error handling
       const loggingService = this.injector.get(LoggingService);

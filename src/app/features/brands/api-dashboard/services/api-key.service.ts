@@ -16,24 +16,28 @@ import {
   RateLimitHeaders 
 } from '../models/rate-limit.model';
 import { MockDataService } from './mock-data.service';
+import { ApiKeyEncryptionService } from './api-key-encryption.service';
+import { AuthService } from '../../../../core/services/auth.service';
 
-// Backend API response interface
+// Backend API response interface matching ApiKeyResponseDTO
 interface BackendApiKey {
   id: string;
   name: string;
   description?: string | null;
   prefix?: string | null;
-  registeredDomain?: string;
-  expiresAt?: string | null;
-  createdAt: string;
-  updatedAt: string;
-  lastUsedAt?: string | null;
-  revokedAt?: string | null;
+  keyPreview: string; // Masked preview of the API key (for identification only)
+  isActive: boolean;
+  registeredDomain?: string | null;
+  expiresAt?: string | null; // LocalDateTime
+  createdAt: string; // LocalDateTime
+  updatedAt: string; // LocalDateTime
+  lastUsedAt?: string | null; // LocalDateTime
+  revokedAt?: string | null; // LocalDateTime
   allowedIps: string[];
   allowedDomains: string[];
   rateLimitTier: string;
   scopes: string[];
-  active: boolean;
+  encryptedKeyValue?: string; // Encrypted API key value for frontend decryption
 }
 
 @Injectable({
@@ -51,7 +55,9 @@ export class ApiKeyService {
 
   constructor(
     private http: HttpClient,
-    private mockDataService: MockDataService
+    private mockDataService: MockDataService,
+    private encryptionService: ApiKeyEncryptionService,
+    private authService: AuthService
   ) {}
 
   /**
@@ -88,10 +94,18 @@ export class ApiKeyService {
         const mappedKeys: ApiKey[] = backendApiKeys.map(backendKey => ({
           id: backendKey.id,
           name: backendKey.name,
-          maskedKey: this.generateMaskedKey(backendKey.prefix, backendKey.name), // Generate masked key since backend doesn't provide keyValue
+          description: backendKey.description || undefined,
+          prefix: backendKey.prefix || undefined,
+          keyPreview: backendKey.keyPreview,
+          maskedKey: backendKey.keyPreview, // Use keyPreview as maskedKey for backward compatibility
+          encryptedKeyValue: backendKey.encryptedKeyValue, // Pass encrypted key value for frontend decryption
+          isActive: backendKey.isActive,
+          registeredDomain: backendKey.registeredDomain || undefined,
           tier: backendKey.rateLimitTier,
           environment: 'production' as 'development' | 'staging' | 'production' | 'testing', // Default to production since backend doesn't provide environment
           scopes: backendKey.scopes || [],
+          allowedIps: backendKey.allowedIps || [],
+          allowedDomains: backendKey.allowedDomains || [],
           usage: {
             requestsToday: 0, // Backend doesn't provide this, set default
             remainingToday: 10000, // Backend doesn't provide this, set default
@@ -112,7 +126,10 @@ export class ApiKeyService {
           },
           expiresAt: backendKey.expiresAt || undefined,
           createdAt: backendKey.createdAt,
-          status: backendKey.active ? 'ACTIVE' : 'SUSPENDED'
+          updatedAt: backendKey.updatedAt || undefined,
+          lastUsedAt: backendKey.lastUsedAt || undefined,
+          revokedAt: backendKey.revokedAt || undefined,
+          status: backendKey.isActive ? 'ACTIVE' : 'SUSPENDED'
         }));
         
         return { keys: mappedKeys };
@@ -400,5 +417,52 @@ export class ApiKeyService {
       hash = hash & hash; // Convert to 32-bit integer
     }
     return Math.abs(hash).toString(16).padStart(8, '0');
+  }
+
+  /**
+   * Decrypt an API key using the encryption service
+   * @param encryptedKeyValue The encrypted API key value from backend
+   * @returns Promise<string | null> The decrypted API key or null if decryption fails
+   */
+  async decryptApiKey(encryptedKeyValue: string): Promise<string | null> {
+    try {
+      // Get current user details
+      const userDetails = this.authService.getCurrentUserDetails();
+      if (!userDetails || !userDetails.userId) {
+        return null;
+      }
+
+      // Use the user ID for key derivation
+      const userId = userDetails.userId;
+      
+      // Decrypt the API key
+      const result = await this.encryptionService.decryptApiKey(encryptedKeyValue, userId);
+      
+      if (result.success && result.plainText) {
+        return result.plainText;
+      } else {
+        return null;
+      }
+    } catch (error) {
+      return null;
+    }
+  }
+
+  /**
+   * Get current user ID for encryption/decryption operations
+   * @returns string | null The current user ID or null if not available
+   */
+  private getCurrentUserId(): string | null {
+    const userDetails = this.authService.getCurrentUserDetails();
+    return userDetails?.userId || null;
+  }
+
+  /**
+   * Check if an API key can be decrypted (has encrypted value and user is authenticated)
+   * @param apiKey The API key to check
+   * @returns boolean True if the API key can be decrypted
+   */
+  canDecryptApiKey(apiKey: ApiKey): boolean {
+    return !!(apiKey.encryptedKeyValue && this.getCurrentUserId());
   }
 }

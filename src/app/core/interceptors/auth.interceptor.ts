@@ -67,7 +67,7 @@ export const authInterceptor: HttpInterceptorFn = (
       if (error.status === 401) {
         // Only redirect to login for protected endpoints, not public ones
         if (!isPublicUrl) {
-          console.warn('Unauthorized request detected for protected endpoint. Attempting token refresh...');
+          // Attempting token refresh for unauthorized request
           
           // Try to refresh token if available
           const refreshToken = authService.getRefreshToken();
@@ -89,7 +89,6 @@ export const authInterceptor: HttpInterceptorFn = (
               }),
               catchError(() => {
                 // Refresh failed, redirect to login
-                console.error('Token refresh failed. Redirecting to login.');
                 authService.logout();
                 router.navigate(['/login']);
                 return throwError(() => error);

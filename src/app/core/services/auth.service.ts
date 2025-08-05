@@ -1,6 +1,6 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError, BehaviorSubject } from 'rxjs';
+import { Observable, throwError, BehaviorSubject, firstValueFrom } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
@@ -915,7 +915,7 @@ generateUsername(firstName: string, lastName: string): string {
    */
   async isBrandClaimed(brandId: number): Promise<boolean> {
     try {
-      const brand = await this.getBrandById(brandId).toPromise();
+      const brand = await firstValueFrom(this.getBrandById(brandId));
       return brand?.isBrandClaimed || false;
     } catch (error) {
       console.error('Error checking brand claim status:', error);
@@ -930,7 +930,7 @@ generateUsername(firstName: string, lastName: string): string {
    */
   async getBrandFreshnessScore(brandId: number): Promise<number> {
     try {
-      const brand = await this.getBrandById(brandId).toPromise();
+      const brand = await firstValueFrom(this.getBrandById(brandId));
       return brand?.freshnessScore || 0;
     } catch (error) {
       console.error('Error getting brand freshness score:', error);
@@ -945,7 +945,7 @@ generateUsername(firstName: string, lastName: string): string {
    */
   async doesBrandNeedUpdate(brandId: number): Promise<boolean> {
     try {
-      const brand = await this.getBrandById(brandId).toPromise();
+      const brand = await firstValueFrom(this.getBrandById(brandId));
       return brand?.needsUpdate || false;
     } catch (error) {
       console.error('Error checking brand update status:', error);
@@ -960,7 +960,7 @@ generateUsername(firstName: string, lastName: string): string {
    */
   async getBrandColors(brandId: number): Promise<any[]> {
     try {
-      const brand = await this.getBrandById(brandId).toPromise();
+      const brand = await firstValueFrom(this.getBrandById(brandId));
       return brand?.colors || [];
     } catch (error) {
       console.error('Error getting brand colors:', error);
@@ -975,7 +975,7 @@ generateUsername(firstName: string, lastName: string): string {
    */
   async getBrandFonts(brandId: number): Promise<any[]> {
     try {
-      const brand = await this.getBrandById(brandId).toPromise();
+      const brand = await firstValueFrom(this.getBrandById(brandId));
       return brand?.fonts || [];
     } catch (error) {
       console.error('Error getting brand fonts:', error);
@@ -990,7 +990,7 @@ generateUsername(firstName: string, lastName: string): string {
    */
   async getBrandSocialLinks(brandId: number): Promise<any[]> {
     try {
-      const brand = await this.getBrandById(brandId).toPromise();
+      const brand = await firstValueFrom(this.getBrandById(brandId));
       return brand?.socialLinks || [];
     } catch (error) {
       console.error('Error getting brand social links:', error);
@@ -1005,7 +1005,7 @@ generateUsername(firstName: string, lastName: string): string {
    */
   async getBrandAssets(brandId: number): Promise<any[]> {
     try {
-      const brand = await this.getBrandById(brandId).toPromise();
+      const brand = await firstValueFrom(this.getBrandById(brandId));
       return brand?.assets || [];
     } catch (error) {
       console.error('Error getting brand assets:', error);
@@ -1020,7 +1020,7 @@ generateUsername(firstName: string, lastName: string): string {
    */
   async getBrandImages(brandId: number): Promise<any[]> {
     try {
-      const brand = await this.getBrandById(brandId).toPromise();
+      const brand = await firstValueFrom(this.getBrandById(brandId));
       return brand?.images || [];
     } catch (error) {
       console.error('Error getting brand images:', error);

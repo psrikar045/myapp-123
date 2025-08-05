@@ -90,10 +90,17 @@ export class MockDataService {
       {
         id: '1',
         name: 'mk_prod_1234',
+        description: 'Production API key for main application',
+        prefix: 'mk_prod',
+        keyPreview: 'mk_prod_************************1234',
         maskedKey: 'mk_prod_************************1234',
+        isActive: true,
+        registeredDomain: 'mycompany.com',
         tier: 'PREMIUM',
         environment: 'production',
         scopes: ['READ_BRANDS', 'READ_CATEGORIES', 'BUSINESS_READ'],
+        allowedIps: ['192.168.1.0/24'],
+        allowedDomains: ['mycompany.com'],
         usage: {
           requestsToday: 1247,
           remainingToday: 8753,
@@ -114,16 +121,25 @@ export class MockDataService {
         },
         expiresAt: '2024-12-31T23:59:59Z',
         createdAt: '2024-01-01T00:00:00Z',
+        updatedAt: '2023-11-15T08:30:00Z',
+        lastUsedAt: '2023-11-15T08:30:00Z',
         status: 'ACTIVE'
       },
       // mycompany.com domain - Staging
       {
         id: '2',
         name: 'mk_test_5678',
+        description: 'Staging API key for testing',
+        prefix: 'mk_test',
+        keyPreview: 'mk_test_************************5678',
         maskedKey: 'mk_test_************************5678',
+        isActive: false,
+        registeredDomain: 'staging.mycompany.com',
         tier: 'STANDARD',
         environment: 'staging',
         scopes: ['READ_BRANDS', 'READ_CATEGORIES'],
+        allowedIps: [],
+        allowedDomains: ['staging.mycompany.com'],
         usage: {
           requestsToday: 156,
           remainingToday: 844,
@@ -144,6 +160,8 @@ export class MockDataService {
         },
         expiresAt: '2024-12-31T23:59:59Z',
         createdAt: '2024-01-01T00:00:00Z',
+        updatedAt: '2023-10-20T12:15:00Z',
+        lastUsedAt: '2023-10-20T12:15:00Z',
         status: 'SUSPENDED'
       },
       // mycompany.com domain - Development

@@ -80,15 +80,26 @@ export interface ApiKeyUsage {
 export interface ApiKey {
   id: string;
   name: string;
+  description?: string;
+  prefix?: string;
   key?: string; // Full key (only available during creation)
-  maskedKey: string;
-  tier: string;
+  keyPreview?: string; // Masked preview of the API key (for identification only)
+  maskedKey: string; // For backward compatibility
+  encryptedKeyValue?: string; // Encrypted API key value for frontend decryption
+  isActive?: boolean;
+  registeredDomain?: string;
+  tier: string; // rateLimitTier from backend
   environment?: 'development' | 'staging' | 'production' | 'testing';
   scopes: string[];
+  allowedIps?: string[];
+  allowedDomains?: string[];
   usage: ApiKeyUsage;
   security: SecuritySettings;
-  expiresAt?: string;
-  createdAt: string;
+  expiresAt?: string; // LocalDateTime from backend
+  createdAt: string; // LocalDateTime from backend
+  updatedAt?: string; // LocalDateTime from backend
+  lastUsedAt?: string; // LocalDateTime from backend
+  revokedAt?: string; // LocalDateTime from backend
   status: 'ACTIVE' | 'EXPIRED' | 'REVOKED' | 'SUSPENDED';
 }
 
@@ -109,6 +120,7 @@ export interface CreateApiKeyResponse {
   description?: string;
   prefix?: string;
   keyValue: string;
+  encryptedKeyValue?: string; // Encrypted API key value for frontend decryption
   registeredDomain?: string;
   mainDomain?: string;
   subdomainPattern?: string;
@@ -128,6 +140,7 @@ export interface RegenerateApiKeyResponse {
   description?: string;
   prefix: string;
   keyValue: string;
+  encryptedKeyValue?: string; // Encrypted API key value for frontend decryption
   keyPreview: string;
   registeredDomain?: string;
   rateLimitTier: string;

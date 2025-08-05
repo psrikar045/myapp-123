@@ -5,7 +5,7 @@ import { Subject, takeUntil, forkJoin } from 'rxjs';
 
 import { ApiKeyService } from '../../services/api-key.service';
 import { ApiKey, RegenerateApiKeyResponse } from '../../models/api-key.model';
-import { ErrorHandlerService } from '../../../../../shared/services/error-handler.service';
+import { ErrorHandlerService } from '../../../../../core/services/error-handler.service';
 
 @Component({
   selector: 'app-domain-api-keys',
@@ -32,6 +32,11 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   regeneratedApiKey: string | null = null;
   regenerating = false;
   
+  // Show key state
+  showingFullKey: { [keyId: string]: boolean } = {};
+  decryptedKeys: { [keyId: string]: string } = {};
+  decryptingKeys: { [keyId: string]: boolean } = {};
+  
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -54,6 +59,11 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    
+    // Clear sensitive data from memory
+    this.decryptedKeys = {};
+    this.showingFullKey = {};
+    this.decryptingKeys = {};
   }
 
   /**
@@ -238,17 +248,125 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Copy API key to clipboard
+   * Copy API key to clipboard (decrypted version if available)
    */
-  copyApiKey(apiKey: ApiKey): void {
-    if (apiKey.maskedKey && typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(apiKey.maskedKey).then(() => {
-        this.errorHandler.showSuccess('API key copied to clipboard');
-      }).catch(err => {
-        console.error('Failed to copy API key:', err);
-        this.errorHandler.showWarning('Failed to copy API key to clipboard');
-      });
+  async copyApiKey(apiKey: ApiKey): Promise<void> {
+    if (typeof navigator === 'undefined' || !navigator.clipboard) {
+      this.errorHandler.showWarning('Clipboard not available');
+      return;
     }
+
+    try {
+      let keyToCopy = apiKey.keyPreview || apiKey.maskedKey;
+
+      // If we can decrypt the key, use the full key
+      if (this.apiKeyService.canDecryptApiKey(apiKey) && apiKey.encryptedKeyValue) {
+        const decryptedKey = await this.apiKeyService.decryptApiKey(apiKey.encryptedKeyValue);
+        if (decryptedKey) {
+          keyToCopy = decryptedKey;
+        }
+      }
+
+      await navigator.clipboard.writeText(keyToCopy);
+      this.errorHandler.showSuccess('API key copied to clipboard');
+      
+      // Auto-clear clipboard after 30 seconds for security
+      setTimeout(() => {
+        if (typeof navigator !== 'undefined' && navigator.clipboard) {
+          navigator.clipboard.writeText('').catch(() => {
+            // Ignore errors when clearing clipboard
+          });
+        }
+      }, 30000);
+      
+    } catch (err) {
+      console.error('Failed to copy API key:', err);
+      this.errorHandler.showWarning('Failed to copy API key to clipboard');
+    }
+  }
+
+  /**
+   * Toggle showing full API key (decrypt if needed)
+   */
+  async toggleShowFullKey(apiKey: ApiKey): Promise<void> {
+    const keyId = apiKey.id;
+    
+    // If already showing, hide it
+    if (this.showingFullKey[keyId]) {
+      this.showingFullKey[keyId] = false;
+      delete this.decryptedKeys[keyId];
+      this.cdr.markForCheck();
+      return;
+    }
+
+    // Check if we can decrypt this key
+    if (!this.apiKeyService.canDecryptApiKey(apiKey) || !apiKey.encryptedKeyValue) {
+      this.errorHandler.showWarning('Cannot decrypt this API key');
+      return;
+    }
+
+    // Start decryption
+    this.decryptingKeys[keyId] = true;
+    this.cdr.markForCheck();
+
+    try {
+      const decryptedKey = await this.apiKeyService.decryptApiKey(apiKey.encryptedKeyValue);
+      
+      if (decryptedKey) {
+        this.decryptedKeys[keyId] = decryptedKey;
+        this.showingFullKey[keyId] = true;
+        this.errorHandler.showSuccess('API key decrypted successfully');
+        
+        // Auto-hide after 2 minutes for security
+        setTimeout(() => {
+          if (this.showingFullKey[keyId]) {
+            this.showingFullKey[keyId] = false;
+            delete this.decryptedKeys[keyId];
+            this.cdr.markForCheck();
+          }
+        }, 120000);
+      } else {
+        this.errorHandler.showError('Failed to decrypt API key');
+      }
+    } catch (error) {
+      console.error('Error decrypting API key:', error);
+      this.errorHandler.showError('Failed to decrypt API key');
+    } finally {
+      this.decryptingKeys[keyId] = false;
+      this.cdr.markForCheck();
+    }
+  }
+
+  /**
+   * Get the display key (masked or decrypted)
+   */
+  getDisplayKey(apiKey: ApiKey): string {
+    const keyId = apiKey.id;
+    if (this.showingFullKey[keyId] && this.decryptedKeys[keyId]) {
+      return this.decryptedKeys[keyId];
+    }
+    return apiKey.keyPreview || apiKey.maskedKey;
+  }
+
+  /**
+   * Check if we can show the full key for this API key
+   */
+  canShowFullKey(apiKey: ApiKey): boolean {
+    return this.apiKeyService.canDecryptApiKey(apiKey);
+  }
+
+  /**
+   * Check if we're currently showing the full key
+   */
+  isShowingFullKey(apiKey: ApiKey): boolean {
+    return !!this.showingFullKey[apiKey.id];
+  }
+
+  /**
+   * Check if we're currently decrypting a key
+   */
+  isDecryptingKey(apiKey: ApiKey): boolean {
+    return !!this.decryptingKeys[apiKey.id];
   }
 
   /**
