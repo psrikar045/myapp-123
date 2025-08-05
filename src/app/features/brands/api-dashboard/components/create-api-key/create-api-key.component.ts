@@ -252,7 +252,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
               if (this.success) { // Only redirect if still on success page
                 this.goBackToAccountHub();
               }
-            }, 2000);
+            }, 20000);
           },
           error: (error) => {
             console.error('Error creating API key:', error);
@@ -411,8 +411,8 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
    * Enhanced copy API key with visual feedback
    */
   copyApiKey(): void {
-    if (this.createdApiKey?.key && typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(this.createdApiKey.key).then(() => {
+    if (this.createdApiKey && typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(this.createdApiKey).then(() => {
         this.copyButtonText = 'Copied!';
         this.errorHandler.showInfo('API key copied to clipboard');
         setTimeout(() => {
@@ -421,7 +421,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
       }).catch(err => {
         console.error('Failed to copy API key:', err);
         // Fallback for older browsers
-        this.fallbackCopyTextToClipboard(this.createdApiKey.key);
+        this.fallbackCopyTextToClipboard(this.createdApiKey);
       });
     }
   }

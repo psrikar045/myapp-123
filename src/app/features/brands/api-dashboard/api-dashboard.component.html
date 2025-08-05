@@ -131,7 +131,7 @@
               <!-- API Keys Table -->
               <div class="table-responsive">
                 <table class="table table-hover mb-0">
-                  <thead class="table-light">
+                  <thead class="table-light sticky-top">
                     <tr>
                       <th class="border-0 fw-semibold text-body-secondary">Domain Name</th>
                       <th class="border-0 fw-semibold text-body-secondary">Key Name</th>
@@ -140,57 +140,62 @@
                       <th class="border-0 fw-semibold text-body-secondary">Last Used</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr *ngFor="let apiKey of filteredApiKeys; trackBy: trackByApiKeyId" 
-                        class="cursor-pointer"
-                        (click)="selectApiKey(apiKey)"
-                        [class.table-active]="selectedApiKey?.id === apiKey.id">
-                      <td class="py-3">
-                        <div class="d-flex align-items-center">
-                          <i class="bi bi-globe2 text-primary me-2"></i>
-                          <span class="fw-medium text-body-emphasis">{{ getDomainFromApiKey(apiKey) }}</span>
-                        </div>
-                      </td>
-                      <td class="py-3">
-                        <div class="d-flex align-items-center">
-                          <i class="bi bi-key text-warning me-2"></i>
-                          <div>
-                            <span class="fw-medium text-primary">{{ apiKey.name }}</span>
-                            <br>
-                            <small class="text-muted">{{ apiKey.maskedKey }}</small>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="py-3">
-                        <span class="badge" 
-                              [class.bg-success]="apiKey.environment === 'production'"
-                              [class.bg-warning]="apiKey.environment === 'staging'"
-                              [class.bg-info]="apiKey.environment === 'development'"
-                              [class.bg-secondary]="apiKey.environment === 'testing'"
-                              [class.text-dark]="apiKey.environment !== 'production'">
-                          {{ getEnvironmentDisplayName(apiKey.environment) }}
-                        </span>
-                      </td>
-                      <td class="py-3">
-                        <span [class]="getApiKeyStatusBadgeClass(apiKey.status)">
-                          <i class="bi" 
-                             [class.bi-check-circle]="apiKey.status === 'ACTIVE'"
-                             [class.bi-pause-circle]="apiKey.status === 'SUSPENDED'"
-                             [class.bi-x-circle]="apiKey.status === 'REVOKED'"
-                             [class.bi-clock]="apiKey.status === 'EXPIRED'"
-                             class="me-1"></i>
-                          {{ getStatusDisplayName(apiKey.status) }}
-                        </span>
-                      </td>
-                      <td class="py-3">
-                        <div class="d-flex align-items-center">
-                          <i class="bi bi-clock text-muted me-2"></i>
-                          <span class="text-body-secondary">{{ formatDate(apiKey.usage.lastUsed || apiKey.createdAt) }}</span>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
                 </table>
+                <div class="api-keys-tbody-container" 
+                     [class.scrollable]="filteredApiKeys.length > 5">
+                  <table class="table table-hover mb-0">
+                    <tbody>
+                      <tr *ngFor="let apiKey of filteredApiKeys; trackBy: trackByApiKeyId" 
+                          class="cursor-pointer"
+                          (click)="selectApiKey(apiKey)"
+                          [class.table-active]="selectedApiKey?.id === apiKey.id">
+                        <td class="py-3">
+                          <div class="d-flex align-items-center">
+                            <i class="bi bi-globe2 text-primary me-2"></i>
+                            <span class="fw-medium text-body-emphasis">{{ getDomainFromApiKey(apiKey) }}</span>
+                          </div>
+                        </td>
+                        <td class="py-3">
+                          <div class="d-flex align-items-center">
+                            <i class="bi bi-key text-warning me-2"></i>
+                            <div>
+                              <span class="fw-medium text-primary">{{ apiKey.name }}</span>
+                              <br>
+                              <small class="text-muted">{{ apiKey.maskedKey }}</small>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="py-3">
+                          <span class="badge" 
+                                [class.bg-success]="apiKey.environment === 'production'"
+                                [class.bg-warning]="apiKey.environment === 'staging'"
+                                [class.bg-info]="apiKey.environment === 'development'"
+                                [class.bg-secondary]="apiKey.environment === 'testing'"
+                                [class.text-dark]="apiKey.environment !== 'production'">
+                            {{ getEnvironmentDisplayName(apiKey.environment) }}
+                          </span>
+                        </td>
+                        <td class="py-3">
+                          <span [class]="getApiKeyStatusBadgeClass(apiKey.status)">
+                            <i class="bi" 
+                               [class.bi-check-circle]="apiKey.status === 'ACTIVE'"
+                               [class.bi-pause-circle]="apiKey.status === 'SUSPENDED'"
+                               [class.bi-x-circle]="apiKey.status === 'REVOKED'"
+                               [class.bi-clock]="apiKey.status === 'EXPIRED'"
+                               class="me-1"></i>
+                            {{ getStatusDisplayName(apiKey.status) }}
+                          </span>
+                        </td>
+                        <td class="py-3">
+                          <div class="d-flex align-items-center">
+                            <i class="bi bi-clock text-muted me-2"></i>
+                            <span class="text-body-secondary">{{ formatDate(apiKey.usage.lastUsed || apiKey.createdAt) }}</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
               
               <!-- Empty State -->

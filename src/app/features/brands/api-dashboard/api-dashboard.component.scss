@@ -1,105 +1,96 @@
 // API Dashboard Styles - Using Existing Theme System
 
-// Enhanced API Keys List Scrolling
-.api-keys-list {
-  overflow-y: auto !important;
-  height: 430px !important;
-  max-height: 430px !important;
-  padding-right: 4px !important;
-  
-  // Enhanced Custom Scrollbar for Webkit browsers (Chrome, Safari, Edge)
-  &::-webkit-scrollbar {
-    width: 8px;
-  }
-  
-  &::-webkit-scrollbar-track {
-    background: rgba(var(--bs-secondary-rgb), 0.1);
-    border-radius: 10px;
-    margin: 4px 0;
-  }
-  
-  &::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, var(--bs-primary), rgba(var(--bs-primary-rgb), 0.8));
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s ease;
+// Enhanced API Keys Table Body Scrolling
+.api-keys-tbody-container {
+  // Default state - no scrolling
+  &.scrollable {
+    max-height: 387px; // Height for approximately 5 rows
+    overflow-y: auto;
+    border-top: 1px solid rgba(var(--bs-border-color-rgb), 0.2);
     
-    &:hover {
-      background: linear-gradient(180deg, rgba(var(--bs-primary-rgb), 0.9), var(--bs-primary));
-      transform: scaleX(1.2);
-    }
-    
-    &:active {
-      background: var(--bs-primary);
-    }
-  }
-  
-  &::-webkit-scrollbar-corner {
-    background: transparent;
-  }
-  
-  // Enhanced Firefox scrollbar
-  scrollbar-width: thin;
-  scrollbar-color: var(--bs-primary) rgba(var(--bs-secondary-rgb), 0.1);
-  
-  // Smooth scrolling behavior
-  scroll-behavior: smooth;
-  
-  // Add subtle fade effect at top and bottom
-  &::before,
-  &::after {
-    content: '';
-    position: sticky;
-    display: block;
-    height: 8px;
-    background: linear-gradient(to bottom, var(--theme-surface), transparent);
-    z-index: 1;
-    pointer-events: none;
-  }
-  
-  &::before {
-    top: 0;
-    margin-bottom: -8px;
-  }
-  
-  &::after {
-    bottom: 0;
-    margin-top: -8px;
-    background: linear-gradient(to top, var(--theme-surface), transparent);
-  }
-  
-  // Add scroll indicators
-  &.scrollable-top::before {
-    box-shadow: inset 0 10px 8px -8px rgba(var(--bs-primary-rgb), 0.15);
-  }
-  
-  &.scrollable-bottom::after {
-    box-shadow: inset 0 -10px 8px -8px rgba(var(--bs-primary-rgb), 0.15);
-  }
-  
-  // Enhanced mobile scrolling
-  @media (max-width: 768px) {
-    // Increase touch target area
-    padding-right: 8px !important;
-    
-    // Better mobile scrollbar
+    // Enhanced Custom Scrollbar for Webkit browsers (Chrome, Safari, Edge)
     &::-webkit-scrollbar {
-      width: 12px;
+      width: 8px;
+    }
+    
+    &::-webkit-scrollbar-track {
+      background: rgba(var(--bs-secondary-rgb), 0.1);
+      border-radius: 10px;
+      margin: 4px 0;
     }
     
     &::-webkit-scrollbar-thumb {
-      border: 2px solid rgba(255, 255, 255, 0.3);
+      background: linear-gradient(180deg, var(--bs-primary), rgba(var(--bs-primary-rgb), 0.8));
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background: linear-gradient(180deg, rgba(var(--bs-primary-rgb), 0.9), var(--bs-primary));
+        transform: scaleX(1.2);
+      }
+      
+      &:active {
+        background: var(--bs-primary);
+      }
+    }
+    
+    &::-webkit-scrollbar-corner {
+      background: transparent;
+    }
+    
+    // Enhanced Firefox scrollbar
+    scrollbar-width: thin;
+    scrollbar-color: var(--bs-primary) rgba(var(--bs-secondary-rgb), 0.1);
+    
+    // Smooth scrolling behavior
+    scroll-behavior: smooth;
+    
+    // Enhanced mobile scrolling
+    @media (max-width: 768px) {
+      max-height: 300px; // Slightly smaller on mobile
+      
+      // Better mobile scrollbar
+      &::-webkit-scrollbar {
+        width: 12px;
+      }
+      
+      &::-webkit-scrollbar-thumb {
+        border: 2px solid rgba(255, 255, 255, 0.3);
+      }
+    }
+    
+    // Momentum scrolling for iOS
+    -webkit-overflow-scrolling: touch;
+    
+    // Better focus management
+    &:focus-within {
+      outline: 2px solid rgba(var(--bs-primary-rgb), 0.5);
+      outline-offset: 2px;
+    }
+    
+    // Ensure table columns align with header
+    table {
+      table-layout: fixed;
+      width: 100%;
+      
+      // Match column widths with header table
+      td:nth-child(1) { width: 20%; }
+      td:nth-child(2) { width: 25%; }
+      td:nth-child(3) { width: 15%; }
+      td:nth-child(4) { width: 15%; }
+      td:nth-child(5) { width: 25%; }
     }
   }
-  
-  // Momentum scrolling for iOS
-  -webkit-overflow-scrolling: touch;
-  
-  // Better focus management
-  &:focus-within {
-    outline: 2px solid rgba(var(--bs-primary-rgb), 0.5);
-    outline-offset: 2px;
-  }
+}
+
+// Ensure header table has matching column widths
+.table-responsive > table:first-child {
+  thead th:nth-child(1) { width: 20%; }
+  thead th:nth-child(2) { width: 25%; }
+  thead th:nth-child(3) { width: 15%; }
+  thead th:nth-child(4) { width: 15%; }
+  thead th:nth-child(5) { width: 25%; }
 }
 
 .api-dashboard {
