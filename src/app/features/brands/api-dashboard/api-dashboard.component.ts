@@ -614,6 +614,39 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Get count of unique domains created in the current month
+   */
+  getDomainsAddedThisMonth(): number {
+    if (!this.apiKeys || this.apiKeys.length === 0) {
+      return 0;
+    }
+    
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    
+    const uniqueDomainsThisMonth = new Set<string>();
+    
+    this.apiKeys.forEach(apiKey => {
+      if (apiKey.createdAt) {
+        const createdDate = new Date(apiKey.createdAt);
+        const createdMonth = createdDate.getMonth();
+        const createdYear = createdDate.getFullYear();
+        
+        // Check if the API key was created in the current month and year
+        if (createdMonth === currentMonth && createdYear === currentYear) {
+          const domain = this.getDomainFromApiKey(apiKey);
+          if (domain && domain !== 'No domain configured') {
+            uniqueDomainsThisMonth.add(domain.toLowerCase());
+          }
+        }
+      }
+    });
+    
+    return uniqueDomainsThisMonth.size;
+  }
+
+  /**
    * Get tier display name
    */
   getTierDisplayName(tier: string): string {
