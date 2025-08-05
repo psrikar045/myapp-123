@@ -279,8 +279,11 @@
                 <button class="btn btn-outline-secondary btn-sm" (click)="editApiKey(selectedApiKey)">
                   Edit
                 </button>
-                <button class="btn btn-outline-danger btn-sm" (click)="revokeApiKey(selectedApiKey)">
-                  Delete
+                <button class="btn btn-outline-danger btn-sm" 
+                        (click)="showDeleteConfirmationDialog(selectedApiKey)"
+                        [disabled]="deleting">
+                  <span *ngIf="deleting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  {{ deleting ? 'Deleting...' : 'Delete' }}
                 </button>
               </div>
             </div>
