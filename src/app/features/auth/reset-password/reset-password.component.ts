@@ -189,12 +189,12 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
 
   private registerSvgIcons(): void {
     const iconPath = '/icons/'; // Adjust if your icon path is different
-    this.matIconRegistry.addSvgIcon('sun', this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'sun.svg'));
-    this.matIconRegistry.addSvgIcon('moon', this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'moon.svg'));
+    this.matIconRegistry.addSvgIcon('sun', this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'sun.webp'));
+    this.matIconRegistry.addSvgIcon('moon', this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'moon.webp'));
     // Add other SVGs if needed (e.g. social icons if they are part of this component's layout)
-    this.matIconRegistry.addSvgIcon('google', this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'google.svg'));
-    this.matIconRegistry.addSvgIcon('facebook', this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'facebook.svg'));
-    this.matIconRegistry.addSvgIcon('apple', this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'apple.svg'));
+    this.matIconRegistry.addSvgIcon('google', this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'google.webp'));
+    this.matIconRegistry.addSvgIcon('facebook', this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'facebook.webp'));
+    this.matIconRegistry.addSvgIcon('apple', this.domSanitizer.bypassSecurityTrustResourceUrl(iconPath + 'apple.webp'));
   }
 
 
