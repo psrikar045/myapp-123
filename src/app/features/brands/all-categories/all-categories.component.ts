@@ -83,6 +83,10 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
 
   searchTerm = '';
   filteredCategories:any = this.categories;
+  
+  // Enhanced search functionality
+  private searchResults: any[] = [];
+  private isSearchActive = false;
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -331,6 +335,44 @@ getAllCategories() {
     return filtered;
   }
 
+  // Enhanced filtered brands with priority-based search
+  get filteredBrands() {
+    const baseBrands = this.brands;
+    
+    if (!this.searchTerm || this.searchTerm.trim().length === 0) {
+      return baseBrands;
+    }
+
+    const searchTermLower = this.searchTerm.trim().toLowerCase();
+    
+    // Priority-based filtering
+    const exactMatches: any[] = [];
+    const partialMatches: any[] = [];
+    const descriptionMatches: any[] = [];
+    
+    baseBrands.forEach((brand: any) => {
+      const brandName = (brand.name || '').toLowerCase();
+      const brandDescription = (brand.description || '').toLowerCase();
+      const brandWebsite = (brand.website || '').toLowerCase();
+      
+      // Priority 1: Exact name match
+      if (brandName === searchTermLower) {
+        exactMatches.push(brand);
+      }
+      // Priority 2: Partial name match (contains search term)
+      else if (brandName.includes(searchTermLower)) {
+        partialMatches.push(brand);
+      }
+      // Priority 3: Description or website match (fallback)
+      else if (brandDescription.includes(searchTermLower) || brandWebsite.includes(searchTermLower)) {
+        descriptionMatches.push(brand);
+      }
+    });
+    
+    // Return results in priority order
+    return [...exactMatches, ...partialMatches, ...descriptionMatches];
+  }
+
   currentPage = 1;
   pageSize = 10;
 
@@ -339,8 +381,14 @@ getAllCategories() {
     return this.brands.slice(start, start + this.pageSize);
   }
 
+  // New getter for paginated filtered brands
+  get pagedFilteredBrands() {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.filteredBrands.slice(start, start + this.pageSize);
+  }
+
   get totalPages() {
-    return Math.ceil(this.brands.length / this.pageSize) || 1;
+    return Math.ceil(this.filteredBrands.length / this.pageSize) || 1;
   }
 
   get pages() {
@@ -389,6 +437,29 @@ getAllCategories() {
     return pages;
   }
 
+  // Enhanced real-time search functionality
+  onSearchInputChange() {
+    // Reset to first page when search changes
+    this.currentPage = 1;
+    
+    // Update search state
+   this.isSearchActive = !!(this.searchTerm && this.searchTerm.trim().length > 0);
+    
+    // The filtering is handled by the filteredBrands getter automatically
+    // No need to manually filter here as it's reactive
+  }
+
+  // Clear search functionality
+  clearSearch() {
+    this.searchTerm = '';
+    this.isSearchActive = false;
+    this.currentPage = 1;
+    
+    // Reset any search-specific states
+    this.searchResults = [];
+  }
+
+  // Legacy search method - now used for category filtering only
   onSearch() {
     const term = this.searchTerm.trim().toLowerCase();
     if (!term) {
@@ -410,8 +481,8 @@ getAllCategories() {
     this.expandedCategory = category; // Expand the selected category in side nav
     this.currentPage = 1;
     this.selectedSubCategory = '';
-    // Reset search and filtered categories to show all
-    this.searchTerm = '';
+    // Keep search term but reset page to show filtered results for new category
+    // this.searchTerm = ''; // Commented out to maintain search across categories
     this.filteredCategories = this.categories;
 
     // Update URL with the selected category
@@ -474,15 +545,16 @@ getAllCategories() {
       return;
     }
     this.selectedSubCategory = sub;
-    this.currentPage = 1;
+    this.currentPage = 1; // Reset to first page when changing subcategory
   }
 
-  // Accordion logic for sidebar
+  // Enhanced toggle category accordion with search preservation
   toggleCategoryAccordion(category: string) {
     if (category === 'All') {
       this.expandedCategory = this.expandedCategory === 'All' ? '' : 'All';
       this.selectedCategory = 'All';
       this.selectedSubCategory = '';
+      this.currentPage = 1;
       // Remove category from URL
       this.router.navigate([], {
         relativeTo: this.route,
@@ -493,6 +565,7 @@ getAllCategories() {
       this.expandedCategory = this.expandedCategory === category ? '' : category;
       this.selectedCategory = category;
       this.selectedSubCategory = '';
+      this.currentPage = 1;
       // Update URL with selected category
       const routeCategory = category.toLowerCase().replace(/\s+/g, '-');
       this.router.navigate([], {

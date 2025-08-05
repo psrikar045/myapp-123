@@ -2,8 +2,8 @@
 
 // Sidenav variables
 :root {
-  --sidenav-width-expanded: 280px;
-  --sidenav-width-collapsed: 70px;
+  --sidenav-width-expanded: 280px !important ;
+  --sidenav-width-collapsed: 70px !important;
   --sidenav-bg: #ffffff;
   --sidenav-bg-secondary: #f8f9fa;
   --sidenav-border: #e9ecef;
@@ -16,6 +16,38 @@
   --sidenav-footer-height: 80px;
   --sidenav-z-index: 1040;
 }
+.sidenav
+{
+  width: 280px !important;
+}
+// Responsive sidenav width adjustments for better UX
+// @media (max-width: 1400px) {
+//   :root {
+//     --sidenav-width-expanded: 260px !important;
+//     --sidenav-width-collapsed: 65px !important;
+//   }
+// }
+
+// @media (max-width: 1200px) {
+//   :root {
+//     --sidenav-width-expanded: 240px !important;
+//     --sidenav-width-collapsed: 60px !important;
+//   }
+// }
+
+// @media (max-width: 992px) {
+//   :root {
+//     --sidenav-width-expanded: 220px !important;
+//     --sidenav-width-collapsed: 55px !important;
+//   }
+// }
+
+// @media (max-width: 768px) {
+//   :root {
+//     --sidenav-width-expanded: 200px !important;
+//     --sidenav-width-collapsed: 50px !important;
+//   }
+// }
 
 // Dark theme variables
 [data-bs-theme="dark"] {
@@ -29,11 +61,13 @@
 
 // Enhanced sidenav container
 .sidenav {
-  position: fixed;
+  position: fixed !important;
   top: 0;
   left: 0;
   height: 100vh;
-  width: var(--sidenav-width-expanded);
+  // width: var(--sidenav-width-expanded) !important;
+  // min-width: var(--sidenav-width-expanded) !important;
+  // max-width: var(--sidenav-width-expanded) !important;
   background: var(--sidenav-bg);
   border-right: 1px solid var(--sidenav-border);
   box-shadow: var(--sidenav-shadow);
@@ -46,7 +80,9 @@
   box-sizing: border-box;
 
   &.collapsed {
-    width: var(--sidenav-width-collapsed);
+    width: var(--sidenav-width-collapsed) !important;
+    min-width: var(--sidenav-width-collapsed) !important;
+    max-width: var(--sidenav-width-collapsed) !important;
     
     .sidenav-header {
       padding: 0 0.5rem;
@@ -228,7 +264,7 @@
   align-items: flex-start;
   justify-content: center;
   gap: 0.25rem;
-  width: 100%;
+  width: 20%;
   height: 100%; // Take full height of header
 }
 
@@ -913,17 +949,17 @@
     left: 0 !important;
     z-index: var(--sidenav-z-index) !important;
     
-    &.collapsed {
-      width: var(--sidenav-width-collapsed) !important;
-      min-width: var(--sidenav-width-collapsed) !important;
-      max-width: var(--sidenav-width-collapsed) !important;
-    }
+    // &.collapsed {
+    //   width: var(--sidenav-width-collapsed) !important;
+    //   min-width: var(--sidenav-width-collapsed) !important;
+    //   max-width: var(--sidenav-width-collapsed) !important;
+    // }
     
-    &:not(.collapsed) {
-      width: var(--sidenav-width-expanded) !important;
-      min-width: var(--sidenav-width-expanded) !important;
-      max-width: var(--sidenav-width-expanded) !important;
-    }
+    // &:not(.collapsed) {
+    //   width: var(--sidenav-width-expanded) !important;
+    //   min-width: var(--sidenav-width-expanded) !important;
+    //   max-width: var(--sidenav-width-expanded) !important;
+    // }
   }
 }
 
@@ -937,17 +973,17 @@
     z-index: var(--sidenav-z-index) !important;
     box-sizing: border-box !important;
     
-    &.collapsed {
-      width: var(--sidenav-width-collapsed) !important;
-      min-width: var(--sidenav-width-collapsed) !important;
-      max-width: var(--sidenav-width-collapsed) !important;
-    }
+    // &.collapsed {
+    //   width: var(--sidenav-width-collapsed) !important;
+    //   min-width: var(--sidenav-width-collapsed) !important;
+    //   max-width: var(--sidenav-width-collapsed) !important;
+    // }
     
-    &:not(.collapsed) {
-      width: var(--sidenav-width-expanded) !important;
-      min-width: var(--sidenav-width-expanded) !important;
-      max-width: var(--sidenav-width-expanded) !important;
-    }
+    // &:not(.collapsed) {
+    //   width: var(--sidenav-width-expanded) !important;
+    //   min-width: var(--sidenav-width-expanded) !important;
+    //   max-width: var(--sidenav-width-expanded) !important;
+    // }
     
     // Ensure content doesn't overflow
     .sidenav-nav-content {
@@ -974,17 +1010,17 @@
     left: 0 !important;
     z-index: var(--sidenav-z-index) !important;
     
-    &.collapsed {
-      width: var(--sidenav-width-collapsed) !important;
-      min-width: var(--sidenav-width-collapsed) !important;
-      max-width: var(--sidenav-width-collapsed) !important;
-    }
+    // &.collapsed {
+    //   width: var(--sidenav-width-collapsed) !important;
+    //   min-width: var(--sidenav-width-collapsed) !important;
+    //   max-width: var(--sidenav-width-collapsed) !important;
+    // }
     
-    &:not(.collapsed) {
-      width: var(--sidenav-width-expanded) !important;
-      min-width: var(--sidenav-width-expanded) !important;
-      max-width: var(--sidenav-width-expanded) !important;
-    }
+    // &:not(.collapsed) {
+    //   width: var(--sidenav-width-expanded) !important;
+    //   min-width: var(--sidenav-width-expanded) !important;
+    //   max-width: var(--sidenav-width-expanded) !important;
+    // }
   }
 }
 
@@ -996,16 +1032,16 @@
     left: 0 !important;
     z-index: var(--sidenav-z-index) !important;
     
-    &.collapsed {
-      width: var(--sidenav-width-collapsed) !important;
-      min-width: var(--sidenav-width-collapsed) !important;
-      max-width: var(--sidenav-width-collapsed) !important;
-    }
+    // &.collapsed {
+    //   width: var(--sidenav-width-collapsed) !important;
+    //   min-width: var(--sidenav-width-collapsed) !important;
+    //   max-width: var(--sidenav-width-collapsed) !important;
+    // }
     
-    &:not(.collapsed) {
-      width: var(--sidenav-width-expanded) !important;
-      min-width: var(--sidenav-width-expanded) !important;
-      max-width: var(--sidenav-width-expanded) !important;
-    }
+    // &:not(.collapsed) {
+    //   width: var(--sidenav-width-expanded) !important;
+    //   min-width: var(--sidenav-width-expanded) !important;
+    //   max-width: var(--sidenav-width-expanded) !important;
+    // }
   }
 }

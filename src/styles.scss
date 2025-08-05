@@ -2265,3 +2265,145 @@ object.MimgControle {width: 100%;}
 // footer End
 
 }
+
+// ============================================================================
+// ZOOM LEVEL FIXES FOR CONTENT WRAPPER AND SIDENAV OVERLAP
+// ============================================================================
+
+// Global fix for content wrapper at all zoom levels
+.content-wrapper {
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  position: relative !important;
+  
+  // Ensure proper spacing from sidenav at all zoom levels
+  &.with-sidenav {
+    @media (min-width: 992px) {
+      &.sidenav-expanded {
+        margin-left: 280px !important;
+        width: calc(100% - 280px) !important;
+        max-width: calc(100vw - 280px) !important;
+      }
+      
+      &.sidenav-collapsed {
+        margin-left: 70px !important;
+        width: calc(100% - 70px) !important;
+        max-width: calc(100vw - 70px) !important;
+      }
+    }
+  }
+  
+  // Mobile/tablet - no sidenav overlap
+  @media (max-width: 991.98px) {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+// Zoom level specific fixes for content wrapper
+@media screen and (min-resolution: 120dpi) and (max-resolution: 143dpi) {
+  // 125% zoom
+  .content-wrapper {
+    &.with-sidenav {
+      @media (min-width: 992px) {
+        &.sidenav-expanded {
+          margin-left: 280px !important;
+          width: calc(100% - 280px) !important;
+          max-width: calc(100vw - 280px) !important;
+        }
+        
+        &.sidenav-collapsed {
+          margin-left: 70px !important;
+          width: calc(100% - 70px) !important;
+          max-width: calc(100vw - 70px) !important;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-resolution: 144dpi) and (max-resolution: 191dpi) {
+  // 150% zoom - Critical fix
+  .content-wrapper {
+    &.with-sidenav {
+      @media (min-width: 992px) {
+        &.sidenav-expanded {
+          margin-left: 280px !important;
+          width: calc(100% - 280px) !important;
+          max-width: calc(100vw - 280px) !important;
+        }
+        
+        &.sidenav-collapsed {
+          margin-left: 70px !important;
+          width: calc(100% - 70px) !important;
+          max-width: calc(100vw - 70px) !important;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-resolution: 192dpi) and (max-resolution: 239dpi) {
+  // 175% zoom
+  .content-wrapper {
+    &.with-sidenav {
+      @media (min-width: 992px) {
+        &.sidenav-expanded {
+          margin-left: 280px !important;
+          width: calc(100% - 280px) !important;
+          max-width: calc(100vw - 280px) !important;
+        }
+        
+        &.sidenav-collapsed {
+          margin-left: 70px !important;
+          width: calc(100% - 70px) !important;
+          max-width: calc(100vw - 70px) !important;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-resolution: 240dpi) {
+  // 200%+ zoom
+  .content-wrapper {
+    &.with-sidenav {
+      @media (min-width: 992px) {
+        &.sidenav-expanded {
+          margin-left: 280px !important;
+          width: calc(100% - 280px) !important;
+          max-width: calc(100vw - 280px) !important;
+        }
+        
+        &.sidenav-collapsed {
+          margin-left: 70px !important;
+          width: calc(100% - 70px) !important;
+          max-width: calc(100vw - 70px) !important;
+        }
+      }
+    }
+  }
+}
+
+// Ensure sidenav stays fixed and doesn't interfere with content
+.sidenav {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  height: 100vh !important;
+  z-index: var(--sidenav-z-index) !important;
+  box-sizing: border-box !important;
+  
+  &.collapsed {
+    width: var(--sidenav-width-collapsed) !important;
+    min-width: var(--sidenav-width-collapsed) !important;
+    max-width: var(--sidenav-width-collapsed) !important;
+  }
+  
+  &:not(.collapsed) {
+    width: var(--sidenav-width-expanded) !important;
+    min-width: var(--sidenav-width-expanded) !important;
+    max-width: var(--sidenav-width-expanded) !important;
+  }
+}
