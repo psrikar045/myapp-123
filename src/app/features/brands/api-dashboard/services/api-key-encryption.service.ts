@@ -46,8 +46,10 @@ export class ApiKeyEncryptionService {
   private readonly CACHE_DURATION = 300000; // 5 minutes in milliseconds
 
   constructor() {
-    // Clear cache periodically to prevent memory leaks
-    setInterval(() => this.clearExpiredCache(), 60000); // Check every minute
+    // Clear cache periodically to prevent memory leaks (browser only)
+    if (typeof window !== 'undefined') {
+      setInterval(() => this.clearExpiredCache(), 60000); // Check every minute
+    }
   }
 
   /**
@@ -213,10 +215,17 @@ export class ApiKeyEncryptionService {
     authTagBase64: string
   ): Promise<string | null> {
     try {
+      // Check if we're in browser environment
+      if (typeof window === 'undefined' || !crypto || !crypto.subtle) {
+        return null;
+      }
       // Convert hex key to ArrayBuffer
       const keyBuffer = new Uint8Array(keyHex.match(/.{1,2}/g)!.map(byte => parseInt(byte, 16)));
       
       // Convert base64 to ArrayBuffer
+      if (typeof atob === 'undefined') {
+        return null;
+      }
       const iv = Uint8Array.from(atob(ivBase64), c => c.charCodeAt(0));
       const cipherText = Uint8Array.from(atob(cipherTextBase64), c => c.charCodeAt(0));
       const authTag = Uint8Array.from(atob(authTagBase64), c => c.charCodeAt(0));

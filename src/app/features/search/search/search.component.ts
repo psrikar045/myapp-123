@@ -111,7 +111,7 @@ export class SearchComponent {
   private setError(message: string): void {
     this.errorMessage = message;
     this.isLoading = false;
-    this.searchModalService.hideModal();
+    this.searchModalService.forceHideModal();
   }
 
   // Method to toggle animation type
@@ -140,11 +140,11 @@ export class SearchComponent {
   getAnalysisTypeDescription(): string {
     switch (this.selectedAnalysisType) {
       case 'quick':
-        return 'Quick Analysis (~30 seconds)';
+        return 'Quick Analysis (≤15 seconds)';
       case 'standard':
-        return 'Standard Analysis (~3-5 minutes)';
+        return 'Standard Analysis (≤30 seconds)';
       case 'deep':
-        return 'Deep Analysis (~5-8 minutes)';
+        return 'Deep Analysis (≤30 seconds)';
       default:
         return 'Standard Analysis';
     }
@@ -154,13 +154,13 @@ export class SearchComponent {
   private getEstimatedTimeForAnalysisType(): string {
     switch (this.selectedAnalysisType) {
       case 'quick':
-        return 'This quick process typically takes 30-60 seconds...';
+        return 'Quick analysis - Maximum processing time: 15 seconds';
       case 'standard':
-        return 'This process typically takes 3-5 minutes...';
+        return 'Standard analysis - Maximum processing time: 30 seconds';
       case 'deep':
-        return 'This comprehensive process typically takes 5-8 minutes...';
+        return 'Deep analysis - Maximum processing time: 30 seconds';
       default:
-        return 'This process typically takes 3-5 minutes...';
+        return 'Maximum processing time: 30 seconds';
     }
   }
 
@@ -274,12 +274,31 @@ onSearchBlur(): void {
       // Call the API
       this.authService.publicForward(finalUrl).subscribe({
         next: (data: any) => {
-          console.log(data);
+          console.log('API Response received:', data);
+          
+          // Complete the analysis immediately when API responds
           this.searchModalService.completeBrandAnalysis();
           
-          setTimeout(() => {
+          // Process the response after modal completion
+          if (typeof window !== 'undefined') {
+            setTimeout(() => {
+              this.isLoading = false;
+              
+              if (data && data?.Company && data?.Company?.Name) {
+                const brandName = this.extractBrandName(data?.Company?.Name);
+                console.log('Extracted brand name:', brandName);
+                
+                // Add to search history
+                this.addToSearchHistory(brandName, finalUrl, data);
+                this.utilService.searchResult = data; // Store result in UtilService for later use
+                this.goToResults(brandName);
+              } else {
+                this.setError('No brand information found for this website');
+              }
+            }, 600); // Slightly longer than modal hide delay for smooth transition
+          } else {
+            // Fallback for SSR - process immediately
             this.isLoading = false;
-            
             if (data && data?.Company && data?.Company?.Name) {
               const brandName = this.extractBrandName(data?.Company?.Name);
               console.log('Extracted brand name:', brandName);
@@ -291,12 +310,10 @@ onSearchBlur(): void {
             } else {
               this.setError('No brand information found for this website');
             }
-          }, 1000);
+          }
         },
         error: (error) => {
           console.error('API Error:', error);
-          this.isLoading = false;
-          this.searchModalService.hideModal();
           this.utilService.searchResult = null; // Clear previous search result
           this.setError('Failed to fetch brand information. Please try again.');
         }

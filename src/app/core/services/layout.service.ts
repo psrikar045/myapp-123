@@ -318,7 +318,7 @@ export class LayoutService implements OnDestroy {
       // console.log('LayoutService: Matched route:', matchingRoute, 'Config:', routeConfigs[matchingRoute]);
       this.setLayoutConfig(routeConfigs[matchingRoute]);
     } else {
-      console.log('LayoutService: No matching route, using default config');
+      // console.log('LayoutService: No matching route, using default config');
       // Default configuration
       this.setLayoutConfig({
         showHeader: true,

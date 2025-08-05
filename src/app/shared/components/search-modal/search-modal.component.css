@@ -21,8 +21,9 @@
   padding: 48px;
   width: 100%;
   max-width: 520px;
-  max-height: 98vh;
-  overflow: hidden;
+  max-height: 95vh;
+  overflow-y: auto;
+  overflow-x: hidden;
   box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
   text-align: center;
   transition: all 0.3s ease;
@@ -346,15 +347,54 @@
   color: #60a5fa;
 }
 
-/* Custom Scrollbar Styling (fallback for extreme cases) */
+/* Hide Scrollbars while keeping scroll functionality */
 .search-modal::-webkit-scrollbar {
   width: 0;
+  height: 0;
   background: transparent;
+  display: none;
 }
 
 .search-modal-content::-webkit-scrollbar {
   width: 0;
+  height: 0;
   background: transparent;
+  display: none;
+}
+
+.card-modal-content::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent;
+  display: none;
+}
+
+.progress-steps-container::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent;
+  display: none;
+}
+
+/* For Firefox */
+.search-modal {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.search-modal-content {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.card-modal-content {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.progress-steps-container {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 /* Responsive Design */
@@ -411,7 +451,13 @@
 .card-modal-content {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: 20px;
+  height: auto;
+  max-height: calc(100vh - 200px);
 }
 
 .card-modal-description {
@@ -426,6 +472,10 @@
   flex-direction: column;
   gap: 16px;
   position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  max-height: none;
 }
 
 .progress-step-card {
@@ -963,6 +1013,38 @@
   .minimalist-time-estimation {
     font-size: 0.85rem;
   }
+  
+  /* Card-based responsive styles */
+  .card-modal-content {
+    gap: 20px;
+    padding-bottom: 16px;
+  }
+  
+  .card-modal-description {
+    font-size: 1rem;
+  }
+  
+  .progress-step-card {
+    padding: 16px;
+  }
+  
+  .step-card-title {
+    font-size: 1rem;
+  }
+  
+  .step-card-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .step-emoji {
+    font-size: 1.3rem;
+  }
+  
+  .status-badge {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+  }
 }
 
 @media (max-height: 600px) {
@@ -987,5 +1069,29 @@
   
   .progress-number {
     font-size: 1.4rem;
+  }
+  
+  /* Card-based height adjustments for small screens */
+  .search-modal {
+    max-height: 95vh;
+    overflow-y: auto;
+  }
+  
+  .card-modal-content {
+    gap: 16px;
+    max-height: none;
+    overflow-y: visible;
+    flex: 1;
+  }
+  
+  .progress-steps-container {
+    max-height: none;
+    overflow-y: visible;
+    flex: 1;
+  }
+  
+  .progress-step-card {
+    padding: 12px;
+    margin-bottom: 8px;
   }
 }

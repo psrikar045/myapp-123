@@ -79,7 +79,7 @@ export class CompanyDataComponent implements OnInit, OnDestroy {
 
   // Method to handle modal cancellation
   onModalCancel(): void {
-    this.searchModalService.hideModal();
+    this.searchModalService.forceHideModal();
     this.isLoading = false;
     this.appThemeService.isDarkMode$.subscribe(isDark => this.isDarkMode = isDark);
   }
@@ -106,35 +106,51 @@ searchResult: any = null;
 
       const finalUrl = validationResult.finalUrl!;
 
-      // Use startBrandAnalysis instead of showModal for better code reuse
+      // Use startBrandAnalysis with optimized settings
       this.searchModalService.startBrandAnalysis({
         url: finalUrl,
         title: '🎯 Brand Analysis in Progress',
         description: `We're performing comprehensive brand analysis on ${finalUrl}`,
-        estimatedTime: 'This process typically takes 3-5 minutes...',
+        estimatedTime: 'Maximum processing time: 30 seconds',
         isDarkMode: this.isDarkMode,
         animationType: this.selectedAnimationType, // Flexible animation selection
         analysisType: 'standard' // Default analysis type
       });
-   this.authService.privateForward(finalUrl).subscribe({
+
+      // Call API with improved error handling
+      this.authService.privateForward(finalUrl).subscribe({
         next: (data: any) => {
-          // console.log(data);
+          console.log('API Response received:', data);
+          
+          // Complete the analysis immediately when API responds
           this.searchModalService.completeBrandAnalysis();
           
-          setTimeout(() => {
+          // Process the response after modal completion
+          if (typeof window !== 'undefined') {
+            setTimeout(() => {
+              this.isLoading = false;
+              this.showBrandDetails = true;
+              
+              if (data && data?.Company && data?.Company?.Name) {
+                this.searchResult = data;
+              } else {
+                this.setError('No brand information found for this website');
+              }
+            }, 600); // Slightly longer than modal hide delay for smooth transition
+          } else {
+            // Fallback for SSR - process immediately
             this.isLoading = false;
             this.showBrandDetails = true;
+            
             if (data && data?.Company && data?.Company?.Name) {
-            this.searchResult = data;
+              this.searchResult = data;
             } else {
               this.setError('No brand information found for this website');
             }
-          }, 500);
+          }
         },
-        error: (error:any) => {
+        error: (error: any) => {
           console.error('API Error:', error);
-          this.isLoading = false;
-          this.searchModalService.hideModal();
           this.setError('Failed to fetch brand information. Please try again.');
         }
       });
@@ -149,16 +165,14 @@ searchResult: any = null;
       // }, 10000); // 10 seconds for demo
 
     } catch (error) {
-      this.errorMessage = 'An unexpected error occurred. Please try again.';
-      this.isLoading = false;
-      this.searchModalService.hideModal();
+      this.setError('An unexpected error occurred. Please try again.');
     }
   }
 
   private setError(message: string): void {
     this.errorMessage = message;
     this.isLoading = false;
-    this.searchModalService.hideModal();
+    this.searchModalService.forceHideModal();
   }
   getLogoEntries(logoObject: any): { key: string; value: any }[] {
   if (!logoObject) {

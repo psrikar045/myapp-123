@@ -3,9 +3,10 @@
   class="search-modal-overlay" 
   [class]="getThemeClass()"
   *ngIf="modalState.isVisible" 
-  [@fadeInOut]>
+  [@fadeInOut]
+  (click)="onOverlayClick($event)">
   
-  <div class="search-modal" [@slideInOut]>
+  <div class="search-modal" [@slideInOut] (click)="onModalClick($event)">
     <!-- Theme Toggle Button -->
     <!-- <button 
       class="theme-toggle-btn" 
@@ -81,7 +82,7 @@
           <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
           <path d="M8 4v4l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span>{{ modalState.config?.estimatedTime || 'This usually takes 3-5 minutes...' }}</span>
+        <span>{{ modalState.config?.estimatedTime || 'Maximum processing time: 30 seconds' }}</span>
       </div>
       
       <!-- Additional Info -->
@@ -91,7 +92,7 @@
             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14z" stroke="currentColor" stroke-width="1.5"/>
             <path d="M8 9v4M8 5h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <span>Please keep this window open during the search</span>
+          <span>Please keep this window open during analysis (max 30 seconds)</span>
         </div>
         <div class="info-item">
           <svg width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -160,7 +161,7 @@
           <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5"/>
           <path d="M8 4v4l2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        <span>{{ modalState.config?.estimatedTime || 'Estimated time: 3-5 minutes' }}</span>
+        <span>{{ modalState.config?.estimatedTime || 'Maximum processing time: 30 seconds' }}</span>
       </div>
     </div>
 
@@ -214,7 +215,7 @@
       <!-- Time Estimation -->
       <div class="minimalist-time-estimation">
         <div class="time-icon">⏱️</div>
-        <span>{{ modalState.config?.estimatedTime || 'Usually takes 3-5 minutes' }}</span>
+        <span>{{ modalState.config?.estimatedTime || 'Maximum processing time: 30 seconds' }}</span>
       </div>
     </div>
   </div>

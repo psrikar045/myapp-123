@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, NgZone } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -38,6 +38,10 @@ export interface SearchModalState {
 })
 export class SearchModalService implements OnDestroy {
   private destroy$ = new Subject<void>();
+  private progressTimeouts: number[] = []; // Store timeout IDs for cancellation
+  private isApiCompleted = false; // Track API completion status
+  private analysisStartTime = 0; // Track when analysis started
+  
   private readonly defaultProgressSteps: ProgressStep[] = [
     { id: 'url-analysis', title: 'URL Analysis & Validation', icon: '🔍', status: 'pending' },
     { id: 'website-check', title: 'Website Scanning & Data Extraction', icon: '🌐', status: 'pending' },
@@ -55,25 +59,27 @@ export class SearchModalService implements OnDestroy {
 
   public modalState$: Observable<SearchModalState> = this.modalStateSubject.asObservable();
 
-  constructor() {}
+  constructor(private ngZone: NgZone) {}
 
   /**
    * Show the search modal with configuration
    */
   showModal(config: SearchModalConfig): void {
-    this.modalStateSubject.next({
-      isVisible: true,
-      progress: 0,
-      currentStep: 'Initializing search...',
-      progressSteps: [...this.defaultProgressSteps],
-      config: {
-        title: this.getAnimationTitle(config.animationType, config.url),
-        description: this.getAnimationDescription(config.animationType, config.url),
-        estimatedTime: 'This usually takes 3-5 minutes...',
-        isDarkMode: false,
-        animationType: 'default',
-        ...config
-      }
+    this.ngZone.run(() => {
+      this.modalStateSubject.next({
+        isVisible: true,
+        progress: 0,
+        currentStep: 'Initializing search...',
+        progressSteps: [...this.defaultProgressSteps],
+        config: {
+          title: this.getAnimationTitle(config.animationType, config.url),
+          description: this.getAnimationDescription(config.animationType, config.url),
+          estimatedTime: this.getAnimationEstimatedTime(config.animationType),
+          isDarkMode: false,
+          animationType: 'default',
+          ...config
+        }
+      });
     });
   }
 
@@ -81,18 +87,20 @@ export class SearchModalService implements OnDestroy {
    * Update the progress and step
    */
   updateProgress(step: string, progress: number): void {
-    const currentState = this.modalStateSubject.value;
-    if (currentState.isVisible) {
-      // Update progress steps for card-based animation
-      const updatedSteps = this.updateProgressSteps(currentState.progressSteps, progress);
-      
-      this.modalStateSubject.next({
-        ...currentState,
-        progress: Math.min(100, Math.max(0, progress)),
-        currentStep: step,
-        progressSteps: updatedSteps
-      });
-    }
+    this.ngZone.run(() => {
+      const currentState = this.modalStateSubject.value;
+      if (currentState.isVisible) {
+        // Update progress steps for card-based animation
+        const updatedSteps = this.updateProgressSteps(currentState.progressSteps, progress);
+        
+        this.modalStateSubject.next({
+          ...currentState,
+          progress: Math.min(100, Math.max(0, progress)),
+          currentStep: step,
+          progressSteps: updatedSteps
+        });
+      }
+    });
   }
 
   /**
@@ -101,11 +109,11 @@ export class SearchModalService implements OnDestroy {
   private getAnimationTitle(animationType?: AnimationType, url?: string): string {
     switch (animationType) {
       case 'card-based':
-        return '🎯 Brand Detective';
+        return '🎯 Brand Detective - Fast Analysis';
       case 'minimalist':
-        return '✨ Processing';
+        return '✨ Processing - Quick Results';
       default:
-        return '🔍 Searching...';
+        return '🔍 Brand Analysis in Progress';
     }
   }
 
@@ -115,11 +123,25 @@ export class SearchModalService implements OnDestroy {
   private getAnimationDescription(animationType?: AnimationType, url?: string): string {
     switch (animationType) {
       case 'card-based':
-        return `We're investigating ${url} for you!`;
+        return `We're investigating ${url} for you! This process typically completes within 30 seconds.`;
       case 'minimalist':
-        return 'Analyzing your request with precision...';
+        return 'Analyzing your request with precision and efficiency...';
       default:
         return `We're analyzing your request to find brand information for you`;
+    }
+  }
+
+  /**
+   * Get animation-specific estimated time
+   */
+  private getAnimationEstimatedTime(animationType?: AnimationType): string {
+    switch (animationType) {
+      case 'card-based':
+        return 'Step-by-step analysis - Maximum 30 seconds';
+      case 'minimalist':
+        return 'Streamlined processing - Maximum 30 seconds';
+      default:
+        return 'Maximum processing time: 30 seconds';
     }
   }
 
@@ -144,13 +166,32 @@ export class SearchModalService implements OnDestroy {
    * Hide the modal
    */
   hideModal(): void {
-    this.modalStateSubject.next({
-      isVisible: false,
-      progress: 0,
-      currentStep: '',
-      config: null,
-      progressSteps: [...this.defaultProgressSteps]
+    this.ngZone.run(() => {
+      // Cancel all pending progress timeouts
+      this.clearProgressTimeouts();
+      
+      // Reset state flags
+      this.isApiCompleted = false;
+      this.analysisStartTime = 0;
+      
+      this.modalStateSubject.next({
+        isVisible: false,
+        progress: 0,
+        currentStep: '',
+        config: null,
+        progressSteps: [...this.defaultProgressSteps]
+      });
     });
+  }
+
+  /**
+   * Clear all pending progress timeouts
+   */
+  private clearProgressTimeouts(): void {
+    if (typeof window !== 'undefined') {
+      this.progressTimeouts.forEach(timeoutId => clearTimeout(timeoutId));
+    }
+    this.progressTimeouts = [];
   }
 
   /**
@@ -204,83 +245,147 @@ export class SearchModalService implements OnDestroy {
    * This method handles the entire modal flow with realistic timing
    */
   startBrandAnalysis(config: BrandAnalysisConfig): void {
+    // Reset state for new analysis
+    this.clearProgressTimeouts();
+    this.isApiCompleted = false;
+    this.analysisStartTime = Date.now();
+
     // Show modal with initial configuration
     this.showModal({
       url: config.url,
-      title: config.title || '🔍 Brand Analysis in Progress',
-      description: config.description || `We're performing deep analysis on your website to extract comprehensive brand information`,
-      estimatedTime: config.estimatedTime || 'This process typically takes 3-5 minutes...',
+      title: config.title || this.getAnimationTitle(config.animationType, config.url),
+      description: config.description || this.getAnimationDescription(config.animationType, config.url),
+      estimatedTime: config.estimatedTime || this.getAnimationEstimatedTime(config.animationType),
       isDarkMode: config.isDarkMode || false,
       animationType: config.animationType || 'default'
     });
 
-    // Use custom progress steps if provided, otherwise use default
-    const progressSteps = config.customProgressSteps || this.getDefaultProgressSteps(config.analysisType);
+    // Use custom progress steps if provided, otherwise use default optimized steps
+    const progressSteps = config.customProgressSteps || this.getOptimizedProgressSteps(config.analysisType);
     
-    // Execute progress steps
+    // Execute progress steps with cancellation support
     progressSteps.forEach(({step, progress, delay}) => {
-      setTimeout(() => {
-        // Check if service is still active before updating progress
-        if (!this.destroy$.closed) {
-          this.updateProgress(step, progress);
-        }
-      }, delay);
+      // Check if we're in browser environment before using setTimeout
+      if (typeof window !== 'undefined') {
+        const timeoutId = window.setTimeout(() => {
+          // Only update progress if API hasn't completed and service is active
+          if (!this.isApiCompleted && !this.destroy$.closed && this.modalStateSubject.value.isVisible) {
+            this.ngZone.run(() => {
+              this.updateProgress(step, progress);
+            });
+          }
+        }, delay);
+        
+        this.progressTimeouts.push(timeoutId);
+      }
     });
   }
 
   /**
-   * Get default progress steps based on analysis type
+   * Get optimized progress steps based on analysis type (max 30 seconds)
    */
-  private getDefaultProgressSteps(analysisType: 'standard' | 'deep' | 'quick' = 'standard'): Array<{step: string, progress: number, delay: number}> {
+  private getOptimizedProgressSteps(analysisType: 'standard' | 'deep' | 'quick' = 'standard'): Array<{step: string, progress: number, delay: number}> {
     switch (analysisType) {
       case 'quick':
         return [
-          {step: 'Initializing quick analysis...', progress: 5, delay: 0},
-          {step: 'Extracting basic information...', progress: 35, delay: 1000},
-          {step: 'Processing results...', progress: 75, delay: 3000},
-          {step: 'Finalizing...', progress: 85, delay: 5000}
+          {step: 'Initializing quick analysis...', progress: 15, delay: 0},
+          {step: 'Connecting to website...', progress: 35, delay: 1500},
+          {step: 'Extracting brand information...', progress: 65, delay: 4000},
+          {step: 'Processing results...', progress: 85, delay: 8000},
+          {step: 'Finalizing analysis...', progress: 95, delay: 12000}
         ];
       
       case 'deep':
         return [
-          {step: 'Initializing deep analysis engine...', progress: 5, delay: 0},
-          {step: 'Connecting to website and analyzing structure...', progress: 10, delay: 2000},
-          {step: 'Extracting metadata and content...', progress: 20, delay: 8000},
-          {step: 'Running AI brand detection algorithms...', progress: 35, delay: 20000},
-          {step: 'Cross-referencing brand databases...', progress: 50, delay: 45000},
-          {step: 'Analyzing company information and patterns...', progress: 65, delay: 80000},
-          {step: 'Performing social media analysis...', progress: 75, delay: 120000},
-          {step: 'Finalizing comprehensive report...', progress: 85, delay: 180000}
+          {step: 'Initializing comprehensive analysis...', progress: 10, delay: 0},
+          {step: 'Connecting to website and analyzing structure...', progress: 20, delay: 2000},
+          {step: 'Extracting metadata and content...', progress: 35, delay: 5000},
+          {step: 'Running AI brand detection algorithms...', progress: 50, delay: 10000},
+          {step: 'Cross-referencing brand databases...', progress: 65, delay: 15000},
+          {step: 'Analyzing company information...', progress: 80, delay: 20000},
+          {step: 'Performing final validation...', progress: 90, delay: 25000},
+          {step: 'Generating comprehensive report...', progress: 95, delay: 28000}
         ];
       
       default: // standard
         return [
-          {step: 'Initializing brand analysis engine...', progress: 5, delay: 0},
-          {step: 'Connecting to website and analyzing structure...', progress: 15, delay: 2000},
-          {step: 'Extracting metadata and content...', progress: 25, delay: 8000},
-          {step: 'Running AI brand detection algorithms...', progress: 40, delay: 20000},
-          {step: 'Cross-referencing brand databases...', progress: 55, delay: 45000},
-          {step: 'Analyzing company information and patterns...', progress: 70, delay: 80000},
-          {step: 'Finalizing brand data extraction...', progress: 85, delay: 120000}
+          {step: 'Initializing brand analysis...', progress: 15, delay: 0},
+          {step: 'Connecting to website...', progress: 30, delay: 2000},
+          {step: 'Extracting brand data...', progress: 50, delay: 6000},
+          {step: 'Processing brand information...', progress: 70, delay: 12000},
+          {step: 'Validating results...', progress: 85, delay: 18000},
+          {step: 'Finalizing analysis...', progress: 95, delay: 25000}
         ];
     }
   }
 
   /**
-   * Complete brand analysis with final progress update
+   * Complete brand analysis with immediate modal closure
    */
   completeBrandAnalysis(): void {
-    this.updateProgress('Processing and validating results...', 95);
-    
-    setTimeout(() => {
-      // Check if service is still active before hiding modal
-      if (!this.destroy$.closed) {
-        this.hideModal();
+    this.ngZone.run(() => {
+      // Mark API as completed to stop further progress updates
+      this.isApiCompleted = true;
+      
+      // Clear any pending progress timeouts
+      this.clearProgressTimeouts();
+      
+      // Calculate actual processing time for user feedback
+      const processingTime = this.analysisStartTime > 0 ? 
+        Math.round((Date.now() - this.analysisStartTime) / 1000) : 0;
+      
+      // Show completion message with actual time
+      const completionMessage = processingTime > 0 ? 
+        `Analysis completed in ${processingTime} seconds` : 
+        'Analysis completed successfully';
+      
+      // Update to 100% progress with completion message
+      this.updateProgress(completionMessage, 100);
+      
+      // Hide modal immediately after brief completion display
+      if (typeof window !== 'undefined') {
+        setTimeout(() => {
+          if (!this.destroy$.closed && this.modalStateSubject.value.isVisible) {
+            this.hideModal();
+          }
+        }, 500); // Reduced to 500ms for better performance
       }
-    }, 1000);
+    });
+  }
+
+  /**
+   * Force hide modal immediately (for error cases)
+   */
+  forceHideModal(): void {
+    this.ngZone.run(() => {
+      this.isApiCompleted = true;
+      this.clearProgressTimeouts();
+      this.hideModal();
+    });
+  }
+
+  /**
+   * Handle API timeout scenario
+   */
+  handleApiTimeout(): void {
+    this.ngZone.run(() => {
+      this.isApiCompleted = true;
+      this.clearProgressTimeouts();
+      this.updateProgress('Request timeout - Please try again', 100);
+      
+      if (typeof window !== 'undefined') {
+        setTimeout(() => {
+          if (!this.destroy$.closed && this.modalStateSubject.value.isVisible) {
+            this.hideModal();
+          }
+        }, 1500);
+      }
+    });
   }
 
   ngOnDestroy(): void {
+    // Clear all pending timeouts before destroying
+    this.clearProgressTimeouts();
     this.destroy$.next();
     this.destroy$.complete();
   }

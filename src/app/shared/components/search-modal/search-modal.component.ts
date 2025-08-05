@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
 import { trigger, transition, style, animate } from '@angular/animations';
@@ -44,13 +44,21 @@ export class SearchModalComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  constructor(public searchModalService: SearchModalService) {}
+  constructor(
+    public searchModalService: SearchModalService,
+    private cdr: ChangeDetectorRef,
+    private ngZone: NgZone
+  ) {}
 
   ngOnInit(): void {
     this.searchModalService.modalState$
       .pipe(takeUntil(this.destroy$))
       .subscribe(state => {
-        this.modalState = state;
+        this.ngZone.run(() => {
+          this.modalState = state;
+          // Force change detection to ensure UI updates immediately
+          this.cdr.detectChanges();
+        });
       });
   }
 
@@ -66,6 +74,25 @@ export class SearchModalComponent implements OnInit, OnDestroy {
   onCloseModal(): void {
     // Optionally allow manual close (you can disable this for mandatory operations)
     // this.searchModalService.hideModal();
+  }
+
+  onOverlayClick(event: Event): void {
+    // Prevent modal from closing when clicking on overlay during API processing
+    // This ensures the modal stays open until API completes
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  onModalClick(event: Event): void {
+    // Prevent event bubbling when clicking inside the modal content
+    event.stopPropagation();
+  }
+
+  // Method to manually trigger change detection if needed
+  forceUpdate(): void {
+    this.ngZone.run(() => {
+      this.cdr.detectChanges();
+    });
   }
 
   getThemeClass(): string {

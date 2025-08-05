@@ -40,7 +40,9 @@
                 "silenceDeprecations": ["mixed-decls", "color-functions", "global-builtin", "import"]
               }
             },
-            
+            "allowedCommonJsDependencies": [
+              "crypto-js"
+            ],
             "server": "src/main.server.ts",
             "prerender": false,
             "ssr": {
