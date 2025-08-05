@@ -20,10 +20,10 @@ export class HomePageComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
   companyIcons = [
-    { src: 'assets/company/Item-1.svg', alt: 'Company 1' },
-    { src: 'assets/company/Item-2.svg', alt: 'Company 2' },
-    { src: 'assets/company/Item-3.svg', alt: 'Company 3' },
-    { src: 'assets/company/Item-4.svg', alt: 'Company 4' }
+    { src: 'assets/company/Item-1.webp', alt: 'Company 1' },
+    { src: 'assets/company/Item-2.webp', alt: 'Company 2' },
+    { src: 'assets/company/Item-3.webp', alt: 'Company 3' },
+    { src: 'assets/company/Item-4.webp', alt: 'Company 4' }
   ];
   constructor(private toolbarService: ToolbarService) {
     // Initialize any necessary services or state here

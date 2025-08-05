@@ -291,19 +291,19 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   orbitHeadline = 'Trusted by Forward – Thinking Teams';
   orbitSubheadline = 'Polygon absolutely works great with tools in your other existing platform.';
   orbitLogos = [
-    { src: 'assets/company/Animalbiome.svg', alt: 'Company 1' },
-    { src: 'assets/company/nutanix.svg', alt: 'Company 2' },
-    { src: 'assets/company/paloalto.svg', alt: 'Company 3' },
-    { src: 'assets/company/xAmplify.svg', alt: 'Company 4' },
-    { src: 'assets/company/people.png', alt: 'Company 5' }
+    { src: 'assets/company/Animalbiome.webp', alt: 'Company 1' },
+    { src: 'assets/company/nutanix.webp', alt: 'Company 2' },
+    { src: 'assets/company/paloalto.webp', alt: 'Company 3' },
+    { src: 'assets/company/xAmplify.webp', alt: 'Company 4' },
+    { src: 'assets/company/people.webp', alt: 'Company 5' }
   ];
   // Company logos row section logic (after hero)
   companyLogos = [
-    { src: 'assets/company/Item-1.svg', alt: 'Company 1' },
-    { src: 'assets/company/Item-2.svg', alt: 'Company 2' },
-    { src: 'assets/company/Item-3.svg', alt: 'Company 3' },
-    { src: 'assets/company/Item-4.svg', alt: 'Company 4' },
-    { src: 'assets/company/Item.svg', alt: 'Company 5' }
+    { src: 'assets/company/Item-1.webp', alt: 'Company 1' },
+    { src: 'assets/company/Item-2.webp', alt: 'Company 2' },
+    { src: 'assets/company/Item-3.webp', alt: 'Company 3' },
+    { src: 'assets/company/Item-4.webp', alt: 'Company 4' },
+    { src: 'assets/company/Item.webp', alt: 'Company 5' }
   ];
   // Core capabilities section logic
   coreHeadline = "Discover RIVO9’s Core Capabilities";
