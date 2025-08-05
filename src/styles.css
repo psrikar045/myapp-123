@@ -166,7 +166,7 @@ body.dark-theme a:hover {
 }
 
 /* Logo handling for dark theme */
-body.dark-theme img[src*="logo.svg"],
+body.dark-theme img[src*="logo.webp"],
 .dark-theme-logo {
   filter: brightness(0) invert(1); /* Convert black to white */
 }
