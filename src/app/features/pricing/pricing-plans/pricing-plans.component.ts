@@ -26,56 +26,60 @@ export class PricingPlansComponent implements OnInit {
   isAnnual = false;
 
   hero = {
-    title: 'Flexible pricing for every team',
-    subtitle: 'Choose a plan that fits your workflow. Instantly access logos, brand colors, fonts, and social links for any company. Upgrade for advanced integrations, asset libraries, and team features.'
+    title: 'Flexible pricing for every stage of growth',
+    subtitle: 'Start free. Scale with confidence. No hidden fees. Cancel anytime.'
   };
 
   plans = [
     {
-      name: 'Base',
+      name: 'Free',
       price: () => '$0',
-      period: () => this.isAnnual ? 'Yearly' : 'Monthly',
-      description: () => 'Free start for your project on our platform.',
+      period: () => '/month',
+      description: () => '',
       features: [
-        'Access to editing all blocks',
-        'Editing blocks together',
-        'Access to all premium icons',
-        'A dedicated domain',
-        'Ability to integrate with CMS',
+        '1 claimed domain',
+        '1 API key',
+        '100 API calls /mo',
+        'Domain health & overview',
+        'Basic analytics',
+        'Community support'
       ],
-      button: 'Get started free',
-      highlight: false
+      button: 'Get Started',
+      highlight: false,
+      mostPopular: false
     },
     {
-      name: 'Standard',
-      price: () => this.isAnnual ? '$299' : '$30',
-      period: () => this.isAnnual ? 'Yearly' : 'Monthly',
-      description: () => 'For a small company that wants to show what it\'s worth.',
+      name: 'Pro',
+      price: () => '$25',
+      period: () => '/month',
+      description: () => '',
       features: [
-        'Access to editing all blocks',
-        'Editing blocks together',
-        'Access to all premium icons',
-        'A dedicated domain',
-        'Ability to integrate with CMS',
+        '5 claimed domains',
+        '5 API keys',
+        '1,000 API calls /mo',
+        'Domain insights & summaries',
+        'Priority support'
       ],
-      button: 'Start Standard',
+      button: 'Start Scaling',
       highlight: true,
       mostPopular: true
     },
     {
-      name: 'Premium',
-      price: () => this.isAnnual ? '$599' : '$60',
-      period: () => this.isAnnual ? 'Yearly' : 'Monthly',
-      description: () => 'For a large company that wants to achieve maximum returns',
+      name: 'Business',
+      price: () => 'Contact us',
+      period: () => '',
+      description: () => '',
       features: [
-        'Access to editing all blocks',
-        'Editing blocks together',
-        'Access to all premium icons',
-        'A dedicated domain',
-        'Ability to integrate with CMS',
+        'Unlimited domains',
+        'Unlimited API keys',
+        'Unlimited API calls',
+        'AI brand summaries',
+        'Custom usage & SLA',
+        'Dedicated account manager'
       ],
-      button: 'Start Premium',
-      highlight: false
+      button: 'Talk to Sales',
+      highlight: false,
+      mostPopular: false
     }
   ];
 
@@ -85,17 +89,14 @@ export class PricingPlansComponent implements OnInit {
     button: 'Start free trial'
   };
 
-  faqsCol1 = [
-    { q: 'What is RIVO9?', a: 'RIVO9 is a platform that lets you instantly access logos, brand colors, fonts, and social links by simply entering a domain name.', open: false },
-    { q: 'How can designers benefit from RIVO9?', a: 'Designers can streamline their workflow by instantly accessing brand assets, color palettes, and typography, ensuring brand consistency and saving hours on manual asset collection.', open: false },
-    { q: 'How does RIVO9 help developers?', a: 'Developers can integrate real-time brand data into apps and websites using our robust API and SDKs, automating branding, onboarding, and more.', open: false },
-    { q: 'Can I use RIVO9 for brand monitoring?', a: 'Yes, RIVO9 helps marketers maintain consistency and credibility by providing the latest brand assets and monitoring changes across all channels.', open: false },
-  ];
-  faqsCol2 = [
-    { q: 'What kind of brand data can I fetch?', a: 'You can fetch logos, brand colors, fonts, social links, and other official brand assets for thousands of companies.', open: false },
-    { q: 'Is there an API for developers?', a: 'Yes, RIVO9 offers a REST API and SDKs for quick integration, allowing you to fetch brand assets programmatically.', open: false },
-    { q: 'How do I get started with RIVO9?', a: 'Simply enter a domain name to access brand data, or sign up for advanced features like asset libraries and campaign-ready downloads.', open: false },
-    { q: 'Is RIVO9 suitable for teams?', a: 'Absolutely! RIVO9 is trusted by forward-thinking teams and is designed for designers, developers, and marketers alike.', open: false },
+  allFaqs = [
+    { q: 'What is an API call?', a: 'An API call is a request made to our service to retrieve brand data for a specific domain. Each successful request counts as one API call towards your monthly limit.', open: false },
+    { q: 'Can I change my plan later?', a: 'Yes, you can upgrade or downgrade your plan at any time. Changes will be reflected in your next billing cycle.', open: false },
+    { q: 'What happens if I exceed my quota?', a: 'If you exceed your monthly API call limit, additional calls will be throttled. You can upgrade your plan or wait for the next billing cycle to reset your quota.', open: false },
+    { q: 'Can I invite team members?', a: 'Team collaboration features are available on Pro and Business plans. You can invite team members and manage their access to your claimed domains and API keys.', open: false },
+    { q: 'Do you offer custom integrations?', a: 'Yes, our Business plan includes custom integrations and dedicated support to help you integrate our API with your existing systems.', open: false },
+    { q: 'Is there a free trial?', a: 'Yes, you can start with our Free plan which includes 1 claimed domain and 100 API calls per month. No credit card required.', open: false },
+    { q: 'What payment methods do you support?', a: 'We accept all major credit cards, PayPal, and can arrange invoicing for Business plan customers.', open: false }
   ];
 
   constructor(private toolbar: ToolbarService) {}
@@ -103,12 +104,8 @@ export class PricingPlansComponent implements OnInit {
     // Don't force toolbar state - let header component handle it based on auth status
   }
 
-  toggleFaq(col: number, idx: number) {
-    if (col === 0) {
-      this.faqsCol1[idx].open = !this.faqsCol1[idx].open;
-    } else {
-      this.faqsCol2[idx].open = !this.faqsCol2[idx].open;
-    }
+  toggleFaq(idx: number) {
+    this.allFaqs[idx].open = !this.allFaqs[idx].open;
   }
 
   // Add a getter to return the plans with evaluated values for template use

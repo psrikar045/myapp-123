@@ -2,37 +2,26 @@
 
 <!-- RIVO9 Pricing Page -->
 <div class="pricing-page-container">
-  
-  <!-- Hero Section -->
-  <div class="pricing-hero-section">
+  <div class="pricing-main-card">
+    
+    <!-- Hero Section -->
+    <div class="pricing-hero-section">
     <div class="container">
       <div class="hero-content">
-        <h1 class="hero-title">Flexible pricing for every team</h1>
-        <p class="hero-subtitle">Choose a plan that fits your workflow. Instantly access logos, brand colors, fonts, and social links for any company. Upgrade for advanced integrations, asset libraries, and team features.</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Billing Toggle Section -->
-  <div class="billing-toggle-section">
-    <div class="container">
-      <div class="billing-toggle-wrapper">
-        <div class="billing-toggle">
-          <span class="billing-option" 
-                [class.active]="!isAnnual"
-                (click)="isAnnual = false">
-            Bill Monthly
-          </span>
-          
-          <div class="toggle-switch" (click)="isAnnual = !isAnnual">
-            <div class="toggle-slider" [class.active]="isAnnual"></div>
+        <h1 class="hero-title">{{ hero.title }}</h1>
+        <p class="hero-subtitle">{{ hero.subtitle }}</p>
+        
+        <!-- CTA Banner -->
+        <div class="cta-banner">
+          <div class="cta-banner-content">
+            <div class="cta-banner-text">
+              <i class="bi bi-check-circle-fill"></i>
+              <span>Claim your first domain for free. No credit card required.</span>
+            </div>
+            <button class="cta-banner-button">
+              Get Started →
+            </button>
           </div>
-          
-          <span class="billing-option" 
-                [class.active]="isAnnual"
-                (click)="isAnnual = true">
-            Bill Annually
-          </span>
         </div>
       </div>
     </div>
@@ -48,7 +37,7 @@
           
           <!-- Most Popular Badge -->
           <div class="most-popular-badge" *ngIf="plan.mostPopular">
-            <span>+ Most popular +</span>
+            <span>Most Popular</span>
           </div>
           
           <!-- Plan Header -->
@@ -61,7 +50,7 @@
           <div class="plan-pricing">
             <div class="price-display">
               <span class="plan-price">{{ plan.price }}</span>
-              <span class="plan-period">/{{ plan.period }}</span>
+              <span class="plan-period">{{ plan.period }}</span>
             </div>
           </div>
           
@@ -96,54 +85,56 @@
         <p class="faq-subtitle">Everything you need to know about RIVO9 pricing, plans, and features.</p>
       </div>
       
-      <div class="faq-grid">
-        <!-- FAQ Column 1 -->
-        <div class="faq-column">
-          <div class="faq-item" 
-               *ngFor="let faq of faqsCol1; let i = index"
-               [class.open]="faq.open"
-               (click)="toggleFaq(0, i)">
-            <div class="faq-question">
-              <span>{{ faq.q }}</span>
-              <i class="bi bi-chevron-down"></i>
-            </div>
-            <div class="faq-answer" *ngIf="faq.open" [@slideDown]>
-              <p>{{ faq.a }}</p>
-            </div>
+      <div class="faq-list">
+        <div class="faq-item" 
+             *ngFor="let faq of allFaqs; let i = index"
+             [class.open]="faq.open"
+             (click)="toggleFaq(i)">
+          <div class="faq-question">
+            <span>{{ faq.q }}</span>
+            <i class="bi bi-chevron-down"></i>
           </div>
-        </div>
-        
-        <!-- FAQ Column 2 -->
-        <div class="faq-column">
-          <div class="faq-item" 
-               *ngFor="let faq of faqsCol2; let i = index"
-               [class.open]="faq.open"
-               (click)="toggleFaq(1, i)">
-            <div class="faq-question">
-              <span>{{ faq.q }}</span>
-              <i class="bi bi-chevron-down"></i>
-            </div>
-            <div class="faq-answer" *ngIf="faq.open" [@slideDown]>
-              <p>{{ faq.a }}</p>
-            </div>
+          <div class="faq-answer" *ngIf="faq.open" [@slideDown]>
+            <p>{{ faq.a }}</p>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- CTA Section -->
-  <div class="cta-section">
+  <!-- Trust Badges Section -->
+  <div class="trust-badges-section">
     <div class="container">
-      <div class="cta-content">
-        <h2 class="cta-title">Unlock the power of brand data</h2>
-        <p class="cta-subtitle">Start your free trial today and see how RIVO9 can streamline your workflow, boost your team's productivity, and keep your brand assets always up to date.</p>
-        <button class="cta-button">
-          Start free trial
-        </button>
+      <div class="trust-badges-grid">
+        <div class="trust-badge">
+          <div class="trust-badge-icon">
+            <i class="bi bi-shield-check"></i>
+          </div>
+          <div class="trust-badge-content">
+            <h6>PCI Compliant Payments</h6>
+          </div>
+        </div>
+        
+        <div class="trust-badge">
+          <div class="trust-badge-icon">
+            <i class="bi bi-check-circle"></i>
+          </div>
+          <div class="trust-badge-content">
+            <h6>99.9% uptime SLA on Business</h6>
+          </div>
+        </div>
+        
+        <div class="trust-badge">
+          <div class="trust-badge-icon">
+            <i class="bi bi-cloud-check"></i>
+          </div>
+          <div class="trust-badge-content">
+            <h6>Backed by secure AWS Infrastructure</h6>
+          </div>
+        </div>
       </div>
     </div>
+    
   </div>
-  
 </div>
 
