@@ -374,32 +374,32 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   /**
    * Regenerate API key
    */
-  regenerateApiKey(apiKey: ApiKey): void {
-    if (confirm('Are you sure you want to regenerate this API key? The old key will stop working immediately.')) {
-      this.apiKeyService.regenerateApiKey(apiKey.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe({
-          next: (response) => {
-            // Update the API key with new data from the response
-            apiKey.id = response.id;
-            apiKey.name = response.name;
-            apiKey.key = response.keyValue;
-            apiKey.maskedKey = response.keyValue.substring(0, 8) + '...' + response.keyValue.substring(response.keyValue.length - 4);
-            apiKey.environment = response.environment;
-            apiKey.tier = response.rateLimitTier;
-            apiKey.scopes = response.scopes ? response.scopes.split(',') : [];
-            apiKey.status = response.isActive ? 'ACTIVE' : 'SUSPENDED';
-            apiKey.expiresAt = response.expiresAt;
-            apiKey.createdAt = response.createdAt;
-            this.errorHandler.showSuccess('API key regenerated successfully! Make sure to update your applications with the new key.');
-          },
-          error: (error) => {
-            console.error('Error regenerating API key:', error);
-            this.errorHandler.showWarning(error.error?.message || 'Failed to regenerate API key');
-          }
-        });
-    }
-  }
+  // regenerateApiKey(apiKey: ApiKey): void {
+  //   if (confirm('Are you sure you want to regenerate this API key? The old key will stop working immediately.')) {
+  //     this.apiKeyService.regenerateApiKey(apiKey.id)
+  //       .pipe(takeUntil(this.destroy$))
+  //       .subscribe({
+  //         next: (response) => {
+  //           // Update the API key with new data from the response
+  //           apiKey.id = response.id;
+  //           apiKey.name = response.name;
+  //           apiKey.key = response.keyValue;
+  //           apiKey.maskedKey = response.keyValue.substring(0, 8) + '...' + response.keyValue.substring(response.keyValue.length - 4);
+  //           apiKey.environment = response.environment;
+  //           apiKey.tier = response.rateLimitTier;
+  //           apiKey.scopes = response.scopes ? response.scopes.split(',') : [];
+  //           apiKey.status = response.isActive ? 'ACTIVE' : 'SUSPENDED';
+  //           apiKey.expiresAt = response.expiresAt;
+  //           apiKey.createdAt = response.createdAt;
+  //           this.errorHandler.showSuccess('API key regenerated successfully! Make sure to update your applications with the new key.');
+  //         },
+  //         error: (error) => {
+  //           console.error('Error regenerating API key:', error);
+  //           this.errorHandler.showWarning(error.error?.message || 'Failed to regenerate API key');
+  //         }
+  //       });
+  //   }
+  // }
 
   // ==================== MASTER-DETAIL FUNCTIONALITY ====================
 
@@ -472,7 +472,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   }
 
   onApiKeyDetailsRegenerate(apiKey: ApiKey): void {
-    this.regenerateApiKey(apiKey);
+    // this.regenerateApiKey(apiKey);
   }
 
   onApiKeyDetailsCopy(maskedKey: string): void {

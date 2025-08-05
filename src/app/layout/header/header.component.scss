@@ -13,7 +13,7 @@
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  z-index: 1030;
+  z-index: 1 !important;
   position: fixed;
   top: 0;
   left: 0;
@@ -812,7 +812,7 @@
   .navbar {
     position: fixed !important;
     top: 0 !important;
-    z-index: 1030 !important;
+    z-index: 1 !important;
     box-sizing: border-box !important;
     height: 72px !important;
     min-height: 72px !important;

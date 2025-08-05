@@ -155,3 +155,74 @@
 .squared-pill:hover{
 color: white !important;
 }
+
+// Modal styles for regenerate popup
+.modal {
+  z-index: 1050;
+  
+  .modal-content {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .modal-header {
+    border-bottom: none;
+    padding: 1.5rem;
+    
+    .modal-title {
+      font-weight: 600;
+      font-size: 1.25rem;
+    }
+  }
+  
+  .modal-body {
+    .alert {
+      border-radius: 8px;
+      
+      .alert-heading {
+        font-size: 1rem;
+        font-weight: 600;
+      }
+    }
+    
+    .form-control {
+      border-radius: 8px;
+      border: 1px solid #dee2e6;
+      
+      &:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+      }
+    }
+    
+    .input-group {
+      .btn {
+        border-radius: 0 8px 8px 0;
+      }
+    }
+    
+    .card {
+      border-radius: 8px;
+      
+      .card-body {
+        border-radius: 8px;
+      }
+    }
+  }
+  
+  .modal-footer {
+    border-top: 1px solid #dee2e6;
+    padding: 1rem 1.5rem;
+    
+    .btn {
+      border-radius: 8px;
+      font-weight: 500;
+    }
+  }
+}
+
+// Loading spinner for regenerate button
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}

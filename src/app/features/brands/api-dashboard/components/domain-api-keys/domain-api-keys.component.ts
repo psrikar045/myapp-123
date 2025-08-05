@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { Subject, takeUntil, forkJoin } from 'rxjs';
 
 import { ApiKeyService } from '../../services/api-key.service';
-import { ApiKey } from '../../models/api-key.model';
+import { ApiKey, RegenerateApiKeyResponse } from '../../models/api-key.model';
 import { ErrorHandlerService } from '../../../../../shared/services/error-handler.service';
 
 @Component({
@@ -26,6 +26,11 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   // UI state
   loading = true;
   error: string | null = null;
+  
+  // Regenerate popup state
+  showRegeneratePopup = false;
+  regeneratedApiKey: string | null = null;
+  regenerating = false;
   
   constructor(
     private route: ActivatedRoute,
@@ -226,6 +231,13 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Get current date formatted
+   */
+  getCurrentDate(): string {
+    return new Date().toLocaleDateString();
+  }
+
+  /**
    * Copy API key to clipboard
    */
   copyApiKey(apiKey: ApiKey): void {
@@ -239,6 +251,103 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Regenerate API key
+   */
+  regenerateApiKey(apiKey: ApiKey): void {
+    if (!apiKey || this.regenerating) return;
+
+    this.regenerating = true;
+    this.error = null;
+
+    this.apiKeyService.regenerateApiKey(apiKey.id).pipe(
+      takeUntil(this.destroy$)
+    ).subscribe({
+      next: (response) => {
+        console.log('API key regenerated successfully:', response);
+        
+        // Check if the backend indicates success
+        if (!response.success) {
+          this.regenerating = false;
+          this.error = response.message || 'Failed to regenerate API key.';
+          this.errorHandler.showWarning(this.error);
+          this.cdr.markForCheck();
+          return;
+        }
+        
+        // Update the selected API key with new information
+        if (this.selectedApiKey && this.selectedApiKey.id === apiKey.id) {
+          this.selectedApiKey = {
+            ...this.selectedApiKey,
+            maskedKey: response.keyPreview,
+            name: response.name,
+            tier: response.rateLimitTier,
+            scopes: response.scopes || this.selectedApiKey.scopes,
+            status: response.success ? 'ACTIVE' : 'SUSPENDED'
+          };
+        }
+
+        // Show the new API key in popup
+        this.regeneratedApiKey = response.keyValue;
+        this.showRegeneratePopup = true;
+        this.regenerating = false;
+        this.cdr.markForCheck();
+
+        this.errorHandler.showSuccess('API key regenerated successfully!');
+      },
+      error: (error) => {
+        console.error('Error regenerating API key:', error);
+        this.regenerating = false;
+        
+        let errorMessage = 'Failed to regenerate API key.';
+        if (error.status === 404) {
+          errorMessage = 'API key not found.';
+        } else if (error.status === 401) {
+          errorMessage = 'Unauthorized. Please check your authentication.';
+        } else if (error.status === 403) {
+          errorMessage = 'Insufficient permissions to regenerate API key.';
+        } else if (error.error?.message) {
+          errorMessage = error.error.message;
+        }
+
+        this.error = errorMessage;
+        this.errorHandler.showWarning(errorMessage);
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  /**
+   * Generate masked key for display (helper method)
+   */
+  private generateMaskedKey(prefix?: string, name?: string): string {
+    const prefixPart = prefix || 'rivo';
+    const namePart = name ? name.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 4) : 'key';
+    return `${prefixPart}_${namePart}_${'*'.repeat(24)}`;
+  }
+
+  /**
+   * Close regenerate popup
+   */
+  closeRegeneratePopup(): void {
+    this.showRegeneratePopup = false;
+    this.regeneratedApiKey = null;
+    this.cdr.markForCheck();
+  }
+
+  /**
+   * Copy regenerated API key to clipboard
+   */
+  copyRegeneratedApiKey(): void {
+    if (this.regeneratedApiKey && typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(this.regeneratedApiKey).then(() => {
+        this.errorHandler.showSuccess('New API key copied to clipboard');
+      }).catch(err => {
+        console.error('Failed to copy regenerated API key:', err);
+        this.errorHandler.showWarning('Failed to copy API key to clipboard');
+      });
+    }
+  }
   /**
    * Navigate back to dashboard
    */

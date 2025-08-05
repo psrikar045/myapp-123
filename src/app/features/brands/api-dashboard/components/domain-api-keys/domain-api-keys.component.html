@@ -36,7 +36,23 @@
             <i class="bi bi-clipboard me-1"></i>
             Copy Key
           </button>
+          <button class="btn btn-outline-warning squared-pill" 
+                  (click)="regenerateApiKey(selectedApiKey)" 
+                  [disabled]="regenerating">
+            <span *ngIf="regenerating" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            <i *ngIf="!regenerating" class="bi bi-arrow-clockwise me-1"></i>
+            {{ regenerating ? 'Regenerating...' : 'Regenerate Key' }}
+          </button>
         </div>
+         <!-- <div class="d-flex gap-2">
+          <button class="btn btn-outline-warning squared-pill" 
+                  (click)="regenerateApiKey(selectedApiKey)" 
+                  [disabled]="regenerating">
+            <span *ngIf="regenerating" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            <i *ngIf="!regenerating" class="bi bi-arrow-clockwise me-1"></i>
+            {{ regenerating ? 'Regenerating...' : 'Regenerate Key' }}
+          </button>
+        </div> -->
       </div>
       <p class="text-body-secondary mb-0">Detailed information about your API key and its configuration.</p>
     </div>
@@ -266,5 +282,111 @@
     <button class="btn btn-primary" (click)="goBack()">
       <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
     </button>
+  </div>
+</div>
+
+<!-- Regenerate API Key Popup Modal -->
+<div *ngIf="showRegeneratePopup" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header bg-success text-white">
+        <h5 class="modal-title">
+          <i class="bi bi-check-circle me-2"></i>
+          API Key Regenerated Successfully
+        </h5>
+        <button type="button" class="btn-close btn-close-white" (click)="closeRegeneratePopup()"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="alert alert-warning border-0 mb-4">
+          <div class="d-flex align-items-start">
+            <i class="bi bi-exclamation-triangle-fill text-warning me-3 mt-1"></i>
+            <div>
+              <h6 class="alert-heading mb-2">⚠️ Important Security Notice</h6>
+              <p class="mb-0">
+                <strong>This is the only time you'll see the complete API key.</strong> 
+                Make sure to copy and store it securely before closing this dialog. 
+                The old API key has been immediately invalidated.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold text-body-emphasis">
+            <i class="bi bi-key me-2 text-primary"></i>
+            Your New API Key
+          </label>
+          <div class="input-group">
+            <input type="text" 
+                   class="form-control font-monospace bg-light" 
+                   [value]="regeneratedApiKey" 
+                   readonly
+                   style="font-size: 0.9rem; letter-spacing: 0.5px;">
+            <button class="btn btn-outline-primary" 
+                    type="button" 
+                    (click)="copyRegeneratedApiKey()"
+                    title="Copy to clipboard">
+              <i class="bi bi-clipboard"></i>
+            </button>
+          </div>
+          <div class="form-text">
+            <i class="bi bi-info-circle me-1"></i>
+            Click the copy button to copy the API key to your clipboard
+          </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <div class="card bg-light border-0">
+              <div class="card-body p-3">
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-shield-check text-success me-2"></i>
+                  <div>
+                    <div class="fw-semibold small">Status</div>
+                    <div class="text-success small">Active & Ready</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="card bg-light border-0">
+              <div class="card-body p-3">
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-clock text-info me-2"></i>
+                  <div>
+                    <div class="fw-semibold small">Generated</div>
+                    <div class="text-body-secondary small">{{ getCurrentDate() }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-light rounded p-3 mb-3">
+          <h6 class="fw-semibold mb-2">
+            <i class="bi bi-list-check me-2 text-primary"></i>
+            Next Steps
+          </h6>
+          <ul class="mb-0 small">
+            <li>Copy the API key above and store it in a secure location</li>
+            <li>Update your applications to use the new API key</li>
+            <li>Test your integration to ensure everything works correctly</li>
+            <li>The old API key is now invalid and cannot be used</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="closeRegeneratePopup()">
+          <i class="bi bi-x-circle me-1"></i>
+          Close
+        </button>
+        <button type="button" class="btn btn-primary" (click)="copyRegeneratedApiKey()">
+          <i class="bi bi-clipboard me-1"></i>
+          Copy API Key
+        </button>
+      </div>
+    </div>
   </div>
 </div>

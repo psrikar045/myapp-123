@@ -121,3 +121,19 @@ export interface CreateApiKeyResponse {
   expiresAt?: string;
   createdAt: string;
 }
+
+export interface RegenerateApiKeyResponse {
+  id: string;
+  name: string;
+  description?: string;
+  prefix: string;
+  keyValue: string;
+  keyPreview: string;
+  registeredDomain?: string;
+  rateLimitTier: string;
+  scopes: string[];
+  success: boolean;
+  message: string;
+  createdAt: string;
+  updatedAt: string;
+}

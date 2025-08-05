@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject, of, catchError, tap, map } from 'rxjs';
+import { Observable, BehaviorSubject, of, catchError, tap, map, throwError } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
 import { 
   ApiKey, 
   CreateApiKeyRequest, 
   CreateApiKeyResponse,
+  RegenerateApiKeyResponse,
   SecuritySettings,
   ExpirationSettings
 } from '../models/api-key.model';
@@ -309,8 +310,57 @@ export class ApiKeyService {
   /**
    * Regenerate API key
    */
-  regenerateApiKey(id: string): Observable<CreateApiKeyResponse> {
-    return this.http.post<CreateApiKeyResponse>(`${this.apiUrl}/${id}/regenerate`, {});
+  regenerateApiKey(id: string): Observable<RegenerateApiKeyResponse> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    return this.http.post<RegenerateApiKeyResponse>(`${this.apiUrl}/${id}/regenerate`, {}, { headers }).pipe(
+      tap(response => {
+        console.log('API key regenerated successfully:', response.id);
+        
+        // Invalidate cache to force refresh on next getApiKeys() call
+        this.apiKeysCache = null;
+        this.cacheTimestamp = 0;
+        
+        // Update the current API keys list with the regenerated key
+        const currentKeys = this.getCurrentApiKeys();
+        const updatedKeys = currentKeys.map(key => {
+          if (key.id === id) {
+            // Update the existing key with new masked key (since we don't store the actual key)
+            return {
+              ...key,
+              maskedKey: response.keyPreview,
+              // Update other fields that might have changed
+              name: response.name,
+              tier: response.rateLimitTier,
+              scopes: response.scopes || key.scopes,
+              status: response.success ? 'ACTIVE' as const : 'SUSPENDED' as const
+            };
+          }
+          return key;
+        });
+        
+        // Update the BehaviorSubject with the updated keys
+        this.updateApiKeys(updatedKeys);
+      }),
+      catchError(error => {
+        console.error('Error regenerating API key:', error);
+        
+        // Provide more specific error messages based on status code
+        if (error.status === 404) {
+          console.error('API key not found:', id);
+        } else if (error.status === 401) {
+          console.error('Unauthorized: Please check your authentication');
+        } else if (error.status === 403) {
+          console.error('Forbidden: Insufficient permissions to regenerate API key');
+        }
+        
+        // Re-throw the error so components can handle it
+        return throwError(() => error);
+      })
+    );
   }
 
   /**

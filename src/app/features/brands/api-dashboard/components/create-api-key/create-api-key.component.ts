@@ -252,7 +252,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
               if (this.success) { // Only redirect if still on success page
                 this.goBackToAccountHub();
               }
-            }, 20000);
+            }, 30000);
           },
           error: (error) => {
             console.error('Error creating API key:', error);
