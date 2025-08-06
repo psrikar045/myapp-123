@@ -374,48 +374,140 @@ export class LandingPageComponent implements OnInit, OnDestroy {
   subscriptionEmail: string = '';
   // Pricing section logic
   pricingHeadline = 'Expand your options with a subscription';
-  pricingSubheadline = 'Graphs displaying your performance for metrics like follower evolution, average rate per post and reach and impressions to give you the insights.';
-  pricingPlans = [
+  pricingSubheadline = 'Choose the perfect plan for your needs with flexible pricing options.';
+  
+  // Monthly pricing plans
+  monthlyPricingPlans = [
     {
-      name: 'Base',
-      price: '$0',
+      name: 'Free',
+      price: () => '$0',
+      period: () => '/month',
+      description: () => 'Perfect for getting started',
       features: [
-        'Access to editing all blocks',
-        'Editing blocks together',
-        'Access to all premium icons',
-        'A dedicated domain',
-        'Ability to integrate with CMS'
+        '1 claimed domain',
+        '1 API key',
+        '100 API calls /mo',
+        'Domain health & overview',
+        'Basic analytics',
+        'Community support'
       ],
-      cta: 'Try for Free',
-      highlight: false
+      cta: 'Get Started',
+      highlight: false,
+      mostPopular: false
     },
     {
-      name: 'Standard',
-      price: '$300',
+      name: 'Pro',
+      price: () => '$25',
+      period: () => '/month',
+      description: () => 'Best for growing businesses',
       features: [
-        'Access to editing all blocks',
-        'Editing blocks together',
-        'Access to all premium icons',
-        'A dedicated domain',
-        'Ability to integrate with CMS'
+        '5 claimed domains',
+        '3 API keys',
+        '1,000 API calls/mo',
+        'Domain insights & summaries',
+        'Priority support',
+        'Advanced analytics',
+        'Custom branding',
+        'Team collaboration'
       ],
-      cta: 'Start 14 Days Free Trial',
-      highlight: true
+      cta: 'Start Scaling',
+      highlight: true,
+      mostPopular: true
     },
     {
-      name: 'Unlimited',
-      price: '$600',
+      name: 'Business',
+      price: () => 'Contact us',
+      period: () => '',
+      description: () => 'For enterprise needs',
       features: [
-        'Access to editing all blocks',
-        'Editing blocks together',
-        'Access to all premium icons',
-        'A dedicated domain',
-        'Ability to integrate with CMS'
+        'Unlimited domains',
+        'Unlimited API keys',
+        'Unlimited API calls',
+        'AI brand summaries',
+        'Custom usage & SLA',
+        'Dedicated account manager',
+        'Custom integrations',
+        '24/7 premium support',
+        'Advanced security features'
       ],
-      cta: 'Start 14 Days Free Trial',
-      highlight: false
+      cta: 'Talk to Sales',
+      highlight: false,
+      mostPopular: false
     }
   ];
+
+  // Yearly pricing plans
+  yearlyPricingPlans = [
+    {
+      name: 'Free',
+      price: () => '$0',
+      period: () => '/month',
+      description: () => 'Perfect for getting started',
+      features: [
+        '1 claimed domain',
+        '1 API key',
+        '100 API calls /mo',
+        'Domain health & overview',
+        'Basic analytics',
+        'Community support'
+      ],
+      cta: 'Get Started',
+      highlight: false,
+      mostPopular: false
+    },
+    {
+      name: 'Pro',
+      price: () => '$20',
+      period: () => '/mo',
+      billingDetails: () => 'Billed yearly at $240',
+      description: () => 'Best for growing businesses',
+      features: [
+        '5 claimed domains',
+        '3 API keys',
+        '1,000 API calls/mo',
+        'Domain insights & summaries',
+        'Priority support',
+        'Advanced analytics',
+        'Custom branding',
+        'Team collaboration'
+      ],
+      cta: 'Start Scaling',
+      highlight: true,
+      mostPopular: true
+    },
+    {
+      name: 'Business',
+      price: () => 'Contact us',
+      period: () => '',
+      description: () => 'For enterprise needs',
+      features: [
+        'Unlimited domains',
+        'Unlimited API keys',
+        'Unlimited API calls',
+        'AI brand summaries',
+        'Custom usage & SLA',
+        'Dedicated account manager',
+        'Custom integrations',
+        '24/7 premium support',
+        'Advanced security features'
+      ],
+      cta: 'Talk to Sales',
+      highlight: false,
+      mostPopular: false
+    }
+  ];
+
+  // Get current pricing plans based on billing toggle
+  get pricingPlans() {
+    const currentPlans = this.isAnnual ? this.yearlyPricingPlans : this.monthlyPricingPlans;
+    return currentPlans.map(plan => ({
+      ...plan,
+      price: plan.price(),
+      period: plan.period(),
+      description: plan.description(),
+      billingDetails: (plan as any).billingDetails ? (plan as any).billingDetails() : undefined
+    }));
+  }
   // All merged logic from dashboard components will go here
   isDarkTheme = false;
 

@@ -194,25 +194,24 @@
     <!-- Header -->
     <div class="row text-center mb-5" id="Mmb-0">
       <div class="col-12">
-        <h2 class="display-5 fw-bold mb-3 MTextAlign">Expand your options with a subscription</h2>
+        <h2 class="display-5 fw-bold mb-3 MTextAlign">{{ pricingHeadline }}</h2>
         <p class="lead text-muted mb-4 MTextAlign">
-          Choose the perfect plan for your needs with flexible pricing options.
+          {{ pricingSubheadline }}
         </p>
         
         <!-- Billing Toggle -->
-        <div class="d-flex justify-content-center align-items-center gap-3 mb-4 Mflexstart">
-          <span class="fw-medium" [class.text-primary]="!isAnnual">Monthly</span>
-          <div class="form-check form-switch">
-            <input class="form-check-input" 
-                   type="checkbox" 
-                   id="billingToggle" 
-                   [(ngModel)]="isAnnual">
-            <label class="form-check-label" for="billingToggle"></label>
+        <div class="billing-toggle-container">
+          <div class="billing-toggle">
+            <span class="toggle-label" [class.active]="!isAnnual">Monthly</span>
+            <div class="toggle-switch">
+              <input type="checkbox" id="billingToggle" [(ngModel)]="isAnnual">
+              <label for="billingToggle"></label>
+            </div>
+            <span class="toggle-label" [class.active]="isAnnual">
+              Yearly
+              <span class="save-badge" *ngIf="isAnnual">Save 20%</span>
+            </span>
           </div>
-          <span class="fw-medium" [class.text-primary]="isAnnual">
-            Annual 
-            <span class="badge bg-success ms-1">Save 20%</span>
-          </span>
         </div>
       </div>
     </div>
@@ -220,138 +219,46 @@
     <!-- Pricing Cards -->
     <div class="row g-4 justify-content-center">
       
-      <!-- Free Plan -->
-      <div class="col-lg-4 col-md-6 col-12">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4 text-center">
-            <h3 class="card-title fw-bold mb-2">Base</h3>
-            <p class="text-muted mb-4">Free start for your project on our platform</p>
-            
-            <div class="pricing-amount mb-4">
-              <span class="display-4 fw-bold">$0</span>
-              <span class="text-muted">/month</span>
-            </div>
-            
-            <ul class="list-unstyled text-start mb-4">
-              <li class="mb-2">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                Access to basic brand data
-              </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                1,000 API calls/month
-              </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                Community support
-              </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                Basic documentation
-              </li>
-            </ul>
-            
-            <button class="btn btn-outline-primary w-100 pricing-btn" (click)="navigateToSignup()">
-              Get Started Free
-              <i class="bi bi-arrow-right ms-2"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Standard Plan -->
-      <div class="col-lg-4 col-md-6 col-12">
-        <div class="card h-100 border-primary shadow-lg position-relative">
-          <div class="position-absolute top-0 start-50 translate-middle">
+      <!-- Dynamic Pricing Plans -->
+      <div class="col-lg-4 col-md-6 col-12" *ngFor="let plan of pricingPlans">
+        <div class="card h-100" 
+             [class.border-primary]="plan.highlight"
+             [class.border-0]="!plan.highlight"
+             [class.shadow-lg]="plan.highlight"
+             [class.shadow-sm]="!plan.highlight"
+             [class.position-relative]="plan.mostPopular">
+          
+          <!-- Most Popular Badge -->
+          <div class="position-absolute top-0 start-50 translate-middle" *ngIf="plan.mostPopular">
             <span class="badge bg-primary px-3 py-2">Most Popular</span>
           </div>
+          
           <div class="card-body p-4 text-center">
-            <h3 class="card-title fw-bold mb-2 text-primary">Standard</h3>
-            <p class="text-muted mb-4">For small companies that want to show what they're worth</p>
+            <h3 class="card-title fw-bold mb-2" [class.text-primary]="plan.highlight">{{ plan.name }}</h3>
+            <p class="text-muted mb-4"></p>
             
             <div class="pricing-amount mb-4">
-              <span class="display-4 fw-bold">
-                ${{ isAnnual ? '24' : '30' }}
-              </span>
-              <span class="text-muted">/month</span>
-              <div *ngIf="isAnnual" class="small text-success">
-                Billed annually ($299/year)
-              </div>
+              <span class="display-4 price-size fw-bold">{{ plan.price }}</span>
+              <span class="text-muted" *ngIf="plan.period">{{ plan.period }}</span>
+            </div>
+            
+            <div class="billing-details" *ngIf="plan.billingDetails">
+              <span class="billing-text">{{ plan.billingDetails }}</span>
             </div>
             
             <ul class="list-unstyled text-start mb-4">
-              <li class="mb-2">
+              <li class="mb-3" *ngFor="let feature of plan.features">
                 <i class="bi bi-check-circle-fill text-success me-2"></i>
-                Everything in Base
-              </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                50,000 API calls/month
-              </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                Priority support
-              </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                Advanced analytics
-              </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                Custom integrations
+                {{ feature }}
               </li>
             </ul>
             
-            <button class="btn btn-primary w-100 pricing-btn pricing-btn-featured" (click)="navigateToSignup()">
-              Start Standard
-              <i class="bi bi-arrow-right ms-2"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Premium Plan -->
-      <div class="col-lg-4 col-md-6 col-12">
-        <div class="card h-100 border-0 shadow-sm">
-          <div class="card-body p-4 text-center">
-            <h3 class="card-title fw-bold mb-2">Unlimited</h3>
-            <p class="text-muted mb-4">For large companies that want maximum returns</p>
-            
-            <div class="pricing-amount mb-4">
-              <span class="display-4 fw-bold">
-                ${{ isAnnual ? '48' : '60' }}
-              </span>
-              <span class="text-muted">/month</span>
-              <div *ngIf="isAnnual" class="small text-success">
-                Billed annually ($599/year)
-              </div>
-            </div>
-            
-            <ul class="list-unstyled text-start mb-4">
-              <li class="mb-2">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                Everything in Standard
-              </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                Unlimited API calls
-              </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                24/7 dedicated support
-              </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                White-label solutions
-              </li>
-              <li class="mb-2">
-                <i class="bi bi-check-circle-fill text-success me-2"></i>
-                SLA guarantee
-              </li>
-            </ul>
-            
-            <button class="btn btn-outline-primary w-100 pricing-btn" (click)="navigateToSignup()">
-              Start Premium
+            <button class="btn w-100 pricing-btn" 
+                    [class.btn-primary]="plan.highlight"
+                    [class.btn-outline-primary]="!plan.highlight"
+                    [class.pricing-btn-featured]="plan.highlight"
+                    (click)="navigateToSignup()">
+              {{ plan.cta }}
               <i class="bi bi-arrow-right ms-2"></i>
             </button>
           </div>

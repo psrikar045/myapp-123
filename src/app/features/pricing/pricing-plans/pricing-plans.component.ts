@@ -30,12 +30,13 @@ export class PricingPlansComponent implements OnInit {
     subtitle: 'Start free. Scale with confidence. No hidden fees. Cancel anytime.'
   };
 
-  plans = [
+  // Monthly pricing plans
+  monthlyPlans = [
     {
       name: 'Free',
       price: () => '$0',
       period: () => '/month',
-      description: () => '',
+      description: () => 'Perfect for getting started',
       features: [
         '1 claimed domain',
         '1 API key',
@@ -52,13 +53,16 @@ export class PricingPlansComponent implements OnInit {
       name: 'Pro',
       price: () => '$25',
       period: () => '/month',
-      description: () => '',
+      description: () => 'Best for growing businesses',
       features: [
         '5 claimed domains',
-        '5 API keys',
-        '1,000 API calls /mo',
+        '3 API keys',
+        '1,000 API calls/mo',
         'Domain insights & summaries',
-        'Priority support'
+        'Priority support',
+        'Advanced analytics',
+        'Custom branding',
+        'Team collaboration'
       ],
       button: 'Start Scaling',
       highlight: true,
@@ -68,14 +72,78 @@ export class PricingPlansComponent implements OnInit {
       name: 'Business',
       price: () => 'Contact us',
       period: () => '',
-      description: () => '',
+      description: () => 'For enterprise needs',
       features: [
         'Unlimited domains',
         'Unlimited API keys',
         'Unlimited API calls',
         'AI brand summaries',
         'Custom usage & SLA',
-        'Dedicated account manager'
+        'Dedicated account manager',
+        'Custom integrations',
+        '24/7 premium support',
+        'Advanced security features'
+      ],
+      button: 'Talk to Sales',
+      highlight: false,
+      mostPopular: false
+    }
+  ];
+
+  // Yearly pricing plans
+  yearlyPlans = [
+    {
+      name: 'Free',
+      price: () => '$0',
+      period: () => '/month',
+      description: () => 'Perfect for getting started',
+      features: [
+        '1 claimed domain',
+        '1 API key',
+        '100 API calls /mo',
+        'Domain health & overview',
+        'Basic analytics',
+        'Community support'
+      ],
+      button: 'Get Started',
+      highlight: false,
+      mostPopular: false
+    },
+    {
+      name: 'Pro',
+      price: () => '$20',
+      period: () => '/mo',
+      billingDetails: () => 'Billed yearly at $240',
+      description: () => 'Best for growing businesses',
+      features: [
+        '5 claimed domains',
+        '3 API keys',
+        '1,000 API calls/mo',
+        'Domain insights & summaries',
+        'Priority support',
+        'Advanced analytics',
+        'Custom branding',
+        'Team collaboration'
+      ],
+      button: 'Start Scaling',
+      highlight: true,
+      mostPopular: true
+    },
+    {
+      name: 'Business',
+      price: () => 'Contact us',
+      period: () => '',
+      description: () => 'For enterprise needs',
+      features: [
+        'Unlimited domains',
+        'Unlimited API keys',
+        'Unlimited API calls',
+        'AI brand summaries',
+        'Custom usage & SLA',
+        'Dedicated account manager',
+        'Custom integrations',
+        '24/7 premium support',
+        'Advanced security features'
       ],
       button: 'Talk to Sales',
       highlight: false,
@@ -110,11 +178,13 @@ export class PricingPlansComponent implements OnInit {
 
   // Add a getter to return the plans with evaluated values for template use
   get displayPlans() {
-    return this.plans.map(plan => ({
+    const currentPlans = this.isAnnual ? this.yearlyPlans : this.monthlyPlans;
+    return currentPlans.map(plan => ({
       ...plan,
       price: plan.price(),
       period: plan.period(),
-      description: plan.description()
+      description: plan.description(),
+      billingDetails: (plan as any).billingDetails ? (plan as any).billingDetails() : undefined
     }));
   }
 }

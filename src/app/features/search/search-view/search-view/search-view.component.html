@@ -144,7 +144,9 @@
         <h3>Logos</h3>
         <div class="company-logos">
           <ng-container *ngFor="let logoEntry of getLogoEntries(searchResult?.Logo)">
-            <div class="logo-card" *ngIf="isValidImageUrl(logoEntry.value)">
+            <div class="logo-card" 
+                 *ngIf="isValidImageUrl(logoEntry.value)"
+                 [ngClass]="{'banner-logo': logoEntry.key.toLowerCase() === 'banner'}">
               <img [src]="logoEntry.value" 
                    [alt]="generateAltText(searchResult?.Company?.Name, logoEntry.key)"
                    (error)="onImageError($event)">
@@ -176,11 +178,12 @@
           <ng-container *ngIf="hasDisplayableColors(searchResult?.Colors)">
             <div class="color-swatch" 
                  *ngFor="let colorItem of searchResult.Colors" 
-                 [style.background]="colorItem.hex"
-                 [style.color]="colorItem.hex && (colorItem.hex.toLowerCase() === '#ffffff' || colorItem.hex.toLowerCase() === '#fff') ? '#222' : '#fff'">
+                 [ngClass]="{'banner-color': (colorItem.usageContext && colorItem.usageContext.toLowerCase().includes('banner')) || (colorItem.usageContext && colorItem.usageContext.toLowerCase().includes('logo'))}"
+                 [style.background]="(colorItem.usageContext && colorItem.usageContext.toLowerCase().includes('banner')) || (colorItem.usageContext && colorItem.usageContext.toLowerCase().includes('logo')) ? '#ffffff' : colorItem.hex"
+                 [style.color]="(colorItem.usageContext && colorItem.usageContext.toLowerCase().includes('banner')) || (colorItem.usageContext && colorItem.usageContext.toLowerCase().includes('logo')) ? '#000000' : (colorItem.hex && (colorItem.hex.toLowerCase() === '#ffffff' || colorItem.hex.toLowerCase() === '#fff') ? '#222' : '#fff')">
               <span *ngIf="colorItem.hex">{{ colorItem.hex }}</span>
               <span *ngIf="colorItem.name && colorItem.name !== ''"
-                    [style.color]="colorItem.brightness > 186 ? '#000' : '#fff'">
+                    [style.color]="(colorItem.usageContext && colorItem.usageContext.toLowerCase().includes('banner')) || (colorItem.usageContext && colorItem.usageContext.toLowerCase().includes('logo')) ? '#000000' : (colorItem.brightness > 186 ? '#000' : '#fff')">
                 {{ colorItem.name }}
               </span>
             </div>

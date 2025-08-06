@@ -125,7 +125,7 @@ export class SearchViewComponent implements OnInit, OnDestroy {
           ...(logoUrl ? { Logo: logoUrl } : {}),
           ...(bannerUrl ? { Banner: bannerUrl } : {})
         },
-        Colors: rawResult.colors ? rawResult.colors.map((c: any) => ({ hex: c.hexCode, name: c.colorName, brightness: c.brightness })) : [],
+        Colors: rawResult.colors ? rawResult.colors.map((c: any) => ({ hex: c.hexCode, name: c.colorName, brightness: c.brightness, usageContext: c.usageContext })) : [],
         Fonts: fonts,
         Images: images,
         SocialLinks: socialLinks,
@@ -138,8 +138,28 @@ export class SearchViewComponent implements OnInit, OnDestroy {
         }
         return acc;
       }, {});
+      
+      // Process colors if they exist and need mapping
+      let processedColors = rawResult.Colors;
+      if (rawResult.Colors && Array.isArray(rawResult.Colors)) {
+        processedColors = rawResult.Colors.map((c: any) => {
+          // If color already has hex property, use it as is
+          if (c.hex) {
+            return c;
+          }
+          // Otherwise, map from API structure
+          return {
+            hex: c.hexCode || c.hex,
+            name: c.colorName || c.name,
+            brightness: c.brightness,
+            usageContext: c.usageContext
+          };
+        });
+      }
+      
       this.searchResult = {
         ...rawResult,
+        Colors: processedColors,
         SocialLinks: socialLinksObj,
       };
     } else {
@@ -148,6 +168,7 @@ export class SearchViewComponent implements OnInit, OnDestroy {
     
     // Debug logging for mapped result
     console.log('SearchViewComponent: Mapped search result:', this.searchResult);
+    console.log('SearchViewComponent: Colors data:', this.searchResult?.Colors);
     
     // Ensure minimum required data structure
     if (this.searchResult && !this.searchResult.Company) {

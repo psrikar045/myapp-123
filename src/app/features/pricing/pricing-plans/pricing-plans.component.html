@@ -30,6 +30,21 @@
   <!-- Pricing Cards Section -->
   <div class="pricing-cards-section">
     <div class="container">
+      <!-- Billing Toggle -->
+      <div class="billing-toggle-container">
+        <div class="billing-toggle">
+          <span class="toggle-label" [class.active]="!isAnnual">Monthly</span>
+          <div class="toggle-switch">
+            <input type="checkbox" id="billingToggle" [(ngModel)]="isAnnual">
+            <label for="billingToggle"></label>
+          </div>
+          <span class="toggle-label" [class.active]="isAnnual">
+            Yearly
+            <span class="save-badge" *ngIf="isAnnual">Save 20%</span>
+          </span>
+        </div>
+      </div>
+      
       <div class="pricing-cards-grid">
         <div class="pricing-card" 
              *ngFor="let plan of displayPlans; let i = index"
@@ -51,6 +66,9 @@
             <div class="price-display">
               <span class="plan-price">{{ plan.price }}</span>
               <span class="plan-period">{{ plan.period }}</span>
+            </div>
+            <div class="billing-details" *ngIf="plan.billingDetails">
+              <span class="billing-text">{{ plan.billingDetails }}</span>
             </div>
           </div>
           
