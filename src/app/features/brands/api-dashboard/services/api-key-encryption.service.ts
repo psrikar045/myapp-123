@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as CryptoJS from 'crypto-js';
+import * as forge from 'node-forge';
 
 /**
  * Interface for encryption components parsed from backend
@@ -161,10 +162,10 @@ export class ApiKeyEncryptionService {
         );
       }
 
-      // If Web Crypto API failed, try CryptoJS fallback (for HTTP environments)
+      // If Web Crypto API failed, try node-forge GCM fallback (for HTTP environments)
       if (!decrypted) {
-        console.log('Web Crypto API failed, trying CryptoJS fallback...');
-        decrypted = this.decryptWithCryptoJS(
+        console.log('Web Crypto API failed, trying node-forge GCM fallback...');
+        decrypted = this.decryptWithForgeGCM(
           derivedKey1,
           iv,
           cipherText,
@@ -172,12 +173,12 @@ export class ApiKeyEncryptionService {
         );
         
         if (!decrypted) {
-          // Try approach 2 with CryptoJS
+          // Try approach 2 with node-forge
           const saltBase64 = salt.toString(CryptoJS.enc.Base64);
           const keyMaterial2 = userId + this.APPLICATION_PEPPER + saltBase64;
           const derivedKey2 = CryptoJS.SHA256(keyMaterial2);
           
-          decrypted = this.decryptWithCryptoJS(
+          decrypted = this.decryptWithForgeGCM(
             derivedKey2,
             iv,
             cipherText,
@@ -186,12 +187,12 @@ export class ApiKeyEncryptionService {
         }
         
         if (!decrypted) {
-          // Try approach 3 with CryptoJS
+          // Try approach 3 with node-forge
           const saltHex = salt.toString(CryptoJS.enc.Hex);
           const keyMaterial3 = userId + this.APPLICATION_PEPPER + saltHex;
           const derivedKey3 = CryptoJS.SHA256(keyMaterial3);
           
-          decrypted = this.decryptWithCryptoJS(
+          decrypted = this.decryptWithForgeGCM(
             derivedKey3,
             iv,
             cipherText,
@@ -315,52 +316,49 @@ export class ApiKeyEncryptionService {
   }
 
   /**
-   * Fallback decryption using CryptoJS (for HTTP environments where Web Crypto API is not available)
+   * Proper AES-GCM decryption using node-forge (for HTTP environments where Web Crypto API is not available)
    */
-  private decryptWithCryptoJS(
+  private decryptWithForgeGCM(
     derivedKey: CryptoJS.lib.WordArray,
     iv: CryptoJS.lib.WordArray,
     cipherText: CryptoJS.lib.WordArray,
     authTag: CryptoJS.lib.WordArray
   ): string | null {
     try {
-      // CryptoJS doesn't have native AES-GCM support, but we can try AES-CTR as a fallback
-      // Note: This is a simplified approach and may not work for all cases
-      // The proper solution would be to implement GCM mode or use a different library
+      console.log('Attempting node-forge GCM decryption...');
       
-      // For now, let's try a basic AES decryption approach
-      // This might not work perfectly but provides a fallback
-      console.log('Attempting CryptoJS fallback decryption...');
+      // Convert CryptoJS WordArrays to node-forge format
+      const keyBytes = forge.util.hexToBytes(derivedKey.toString(CryptoJS.enc.Hex));
+      const ivBytes = forge.util.hexToBytes(iv.toString(CryptoJS.enc.Hex));
+      const cipherBytes = forge.util.hexToBytes(cipherText.toString(CryptoJS.enc.Hex));
+      const tagBytes = forge.util.hexToBytes(authTag.toString(CryptoJS.enc.Hex));
       
-      // Try AES-CTR mode as it's closest to GCM
-      const decrypted = CryptoJS.AES.decrypt(
-        {
-          ciphertext: cipherText,
-          key: derivedKey,
-          iv: iv,
-          algorithm: CryptoJS.algo.AES,
-          mode: CryptoJS.mode.CTR,
-          padding: CryptoJS.pad.NoPadding
-        } as any,
-        derivedKey,
-        {
-          iv: iv,
-          mode: CryptoJS.mode.CTR,
-          padding: CryptoJS.pad.NoPadding
-        }
-      );
+      // Create AES-GCM decipher
+      const decipher = forge.cipher.createDecipher('AES-GCM', keyBytes);
       
-      const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+      // Initialize decipher with IV and tag
+      decipher.start({
+        iv: ivBytes,
+        tag: forge.util.createBuffer(tagBytes)
+      });
       
-      if (decryptedText && decryptedText.length > 0) {
-        console.log('CryptoJS fallback decryption successful');
+      // Update with cipher text
+      decipher.update(forge.util.createBuffer(cipherBytes));
+      
+      // Finalize decryption
+      const success = decipher.finish();
+      
+      if (success) {
+        const decryptedText = decipher.output.toString();
+        console.log('node-forge GCM decryption successful');
         return decryptedText;
+      } else {
+        console.warn('node-forge GCM decryption failed: authentication failed');
+        return null;
       }
       
-      return null;
-      
     } catch (error) {
-      console.warn('CryptoJS fallback decryption failed:', error);
+      console.warn('node-forge GCM decryption failed:', error);
       return null;
     }
   }
@@ -429,7 +427,7 @@ export class ApiKeyEncryptionService {
   }
 
   /**
-   * Check if the current environment supports decryption (with fallback support)
+   * Check if the current environment supports decryption (with node-forge fallback support)
    */
   private checkEnvironmentCompatibility(): { compatible: boolean; reason?: string } {
     // Check if we're in browser environment
@@ -442,17 +440,21 @@ export class ApiKeyEncryptionService {
       return { compatible: false, reason: 'Base64 decoding not available' };
     }
 
-    // CryptoJS should always be available since it's bundled
-    if (typeof CryptoJS === 'undefined') {
-      return { compatible: false, reason: 'CryptoJS library not available' };
-    }
-
-    // We can work with either Web Crypto API OR CryptoJS fallback
+    // Check for Web Crypto API (preferred method for HTTPS)
     const hasWebCrypto = crypto && crypto.subtle && window.isSecureContext;
+    
+    // Check for node-forge (fallback method for HTTP)
+    const hasNodeForge = typeof forge !== 'undefined' && !!forge.cipher;
+    
+    // Check for CryptoJS (required for key derivation)
     const hasCryptoJS = typeof CryptoJS !== 'undefined';
     
-    if (!hasWebCrypto && !hasCryptoJS) {
-      return { compatible: false, reason: 'No encryption libraries available' };
+    if (!hasCryptoJS) {
+      return { compatible: false, reason: 'CryptoJS library not available' };
+    }
+    
+    if (!hasWebCrypto && !hasNodeForge) {
+      return { compatible: false, reason: 'No AES-GCM decryption libraries available (need Web Crypto API or node-forge)' };
     }
 
     return { compatible: true };
@@ -525,12 +527,21 @@ export class ApiKeyEncryptionService {
       hasAtob: boolean;
       hasTextDecoder: boolean;
       hasCryptoJS: boolean;
-      preferredMethod: string;
+      hasNodeForge: boolean;
+      decryptionMethod: string;
     }
   } {
     const envCheck = this.checkEnvironmentCompatibility();
     const hasWebCrypto = typeof window !== 'undefined' && crypto && crypto.subtle && window.isSecureContext;
+    const hasNodeForge = typeof forge !== 'undefined' && !!forge.cipher;
     const hasCryptoJS = typeof CryptoJS !== 'undefined';
+    
+    let decryptionMethod = 'None Available';
+    if (hasWebCrypto) {
+      decryptionMethod = 'Web Crypto API (AES-GCM)';
+    } else if (hasNodeForge) {
+      decryptionMethod = 'node-forge (AES-GCM fallback)';
+    }
     
     return {
       ...envCheck,
@@ -542,7 +553,8 @@ export class ApiKeyEncryptionService {
         hasAtob: typeof atob !== 'undefined',
         hasTextDecoder: typeof TextDecoder !== 'undefined',
         hasCryptoJS: hasCryptoJS,
-        preferredMethod: hasWebCrypto ? 'Web Crypto API' : hasCryptoJS ? 'CryptoJS Fallback' : 'None Available'
+        hasNodeForge: hasNodeForge,
+        decryptionMethod: decryptionMethod
       }
     };
   }
