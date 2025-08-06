@@ -381,7 +381,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
 
     Swal.fire({
       title: 'Delete API Key',
-      text: 'Are you sure you want to delete this API key? This action cannot be undone.',
+      text: 'Are you sure you want to delete this API key?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#dc3545',
