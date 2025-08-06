@@ -213,15 +213,13 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   /**
    * Format date for display
    */
-  formatDate(dateString: string): string {
+   formatDate(dateString: string | null | undefined): string {
+    if (!dateString) return 'Never';
+    
     const date = new Date(dateString);
-    const now = new Date();
-    const diffTime = Math.abs(now.getTime() - date.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
+    
+    // Check if date is invalid
+    if (isNaN(date.getTime())) return 'Invalid date';
     
     return date.toLocaleDateString();
   }

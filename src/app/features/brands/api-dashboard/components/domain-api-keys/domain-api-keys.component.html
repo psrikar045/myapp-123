@@ -147,7 +147,7 @@
                      [class.text-success]="getUsagePercentage(selectedApiKey) <= 50"
                      [class.text-warning]="getUsagePercentage(selectedApiKey) > 50 && getUsagePercentage(selectedApiKey) <= 80"
                      [class.text-danger]="getUsagePercentage(selectedApiKey) > 80">
-                  {{ getUsagePercentage(selectedApiKey) }}%
+                  {{ getUsagePercentage(selectedApiKey) ? getUsagePercentage(selectedApiKey) : 0}}%
                 </div>
               </div>
             </div>
@@ -163,7 +163,7 @@
           <div class="mt-4">
             <div class="d-flex justify-content-between align-items-center mb-2">
               <span class="text-body-secondary small">Today's Usage Progress</span>
-              <span class="text-body-secondary small">{{ getUsagePercentage(selectedApiKey) }}% used today</span>
+              <span class="text-body-secondary small">{{ getUsagePercentage(selectedApiKey) ? getUsagePercentage(selectedApiKey) : 0}}% used today</span>
             </div>
             <div class="progress" style="height: 8px;">
               <div class="progress-bar" 
