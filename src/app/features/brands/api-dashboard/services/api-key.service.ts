@@ -592,12 +592,24 @@ export class ApiKeyService {
   }
 
   /**
-   * Check if an API key can be decrypted (has encrypted value and user is authenticated)
+   * Check if an API key can be decrypted (has encrypted value, user is authenticated, and environment supports it)
    * @param apiKey The API key to check
    * @returns boolean True if the API key can be decrypted
    */
   canDecryptApiKey(apiKey: ApiKey): boolean {
-    return !!(apiKey.encryptedKeyValue && this.getCurrentUserId());
+    return !!(
+      apiKey.encryptedKeyValue && 
+      this.getCurrentUserId() && 
+      this.encryptionService.isDecryptionAvailable()
+    );
+  }
+
+  /**
+   * Get environment information for decryption debugging
+   * @returns Environment compatibility information
+   */
+  getDecryptionEnvironmentInfo(): any {
+    return this.encryptionService.getEnvironmentInfo();
   }
 
   /**

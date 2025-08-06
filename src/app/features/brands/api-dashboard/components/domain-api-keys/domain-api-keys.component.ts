@@ -397,26 +397,40 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
     return new Date().toLocaleDateString();
   }
 
-  /**
-   * Copy API key to clipboard (decrypted version if available)
-   */
   async copyApiKey(apiKey: ApiKey): Promise<void> {
     try {
-      let keyToCopy = apiKey.keyPreview || apiKey.maskedKey;
+      let keyToCopy: string;
+      let isDecryptedKey = false;
 
-      // If we can decrypt the key, use the full key
+      // PRIORITY 1: Try to get the full decrypted key
       if (this.apiKeyService.canDecryptApiKey(apiKey) && apiKey.encryptedKeyValue) {
-        const decryptedKey = await this.apiKeyService.decryptApiKey(apiKey.encryptedKeyValue);
-        if (decryptedKey) {
-          keyToCopy = decryptedKey;
+        try {
+          const decryptedKey = await this.apiKeyService.decryptApiKey(apiKey.encryptedKeyValue);
+          if (decryptedKey && decryptedKey.trim()) {
+            keyToCopy = decryptedKey;
+            isDecryptedKey = true;
+          } else {
+            throw new Error('Decryption returned empty result');
+          }
+        } catch (decryptError) {
+          console.warn('Failed to decrypt key for copy:', decryptError);
+          keyToCopy = apiKey.keyPreview || apiKey.maskedKey || 'API key not available';
         }
+      } else {
+        // FALLBACK: Use masked/preview key
+        keyToCopy = apiKey.keyPreview || apiKey.maskedKey || 'API key not available';
       }
 
-      const success = await this.clipboardService.copyToClipboard( keyToCopy, 'API key copied to clipboard');
-      // Auto-clear clipboard after 30 seconds for security (only if copy was successful)
-      if (success) {
+      // Copy to clipboard using our improved service
+      const success = await this.clipboardService.copyToClipboard(
+        keyToCopy, 
+        isDecryptedKey ? 'Full API key copied to clipboard' : 'API key copied to clipboard'
+      );
+      
+      // Auto-clear clipboard after 30 seconds for security (only for decrypted keys)
+      if (success && isDecryptedKey) {
         setTimeout(() => {
-          if (typeof navigator !== 'undefined' && navigator.clipboard) {
+          if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard.writeText('').catch(() => {
               // Ignore errors when clearing clipboard
             });
@@ -431,7 +445,7 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Toggle showing full API key (decrypt if needed)
+   * Toggle showing full API key (decrypt if needed) - ALWAYS show decrypted version
    */
   async toggleShowFullKey(apiKey: ApiKey): Promise<void> {
     const keyId = apiKey.id;
@@ -445,8 +459,27 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
     }
 
     // Check if we can decrypt this key
-    if (!this.apiKeyService.canDecryptApiKey(apiKey) || !apiKey.encryptedKeyValue) {
-      this.errorHandler.showWarning('Unable to show full API key. Please contact support if you need access.');
+    if (!this.apiKeyService.canDecryptApiKey(apiKey)) {
+      // Get detailed environment information for better error messages
+      const envInfo = this.apiKeyService.getDecryptionEnvironmentInfo();
+      let errorMessage = 'Unable to show full API key.';
+      
+      if (!envInfo.compatible) {
+        errorMessage += ` ${envInfo.reason}`;
+        console.log('Decryption environment check failed:', envInfo);
+        console.log('Environment details:', envInfo.details);
+      } else if (!apiKey.encryptedKeyValue) {
+        errorMessage = 'Full API key is not available for this key.';
+      } else {
+        errorMessage += ' Please ensure you are logged in.';
+      }
+      
+      this.errorHandler.showWarning(errorMessage);
+      return;
+    }
+
+    if (!apiKey.encryptedKeyValue) {
+      this.errorHandler.showWarning('Full API key is not available for this key.');
       return;
     }
 
@@ -457,7 +490,7 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
     try {
       const decryptedKey = await this.apiKeyService.decryptApiKey(apiKey.encryptedKeyValue);
       
-      if (decryptedKey) {
+      if (decryptedKey && decryptedKey.trim()) {
         this.decryptedKeys[keyId] = decryptedKey;
         this.showingFullKey[keyId] = true;
         this.errorHandler.showSuccess('Full API key is now visible');
@@ -471,11 +504,11 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
           }
         }, 120000);
       } else {
-        this.errorHandler.showError('Failed to decrypt API key');
+        this.errorHandler.showError('Unable to decrypt API key. The key may be corrupted or you may not have permission.');
       }
     } catch (error) {
-      console.error('Error decrypting API key:', error);
-      this.errorHandler.showError('Failed to decrypt API key');
+      console.error('Error during decryption for key:', keyId, error);
+      this.errorHandler.showError('Failed to decrypt API key. Please try again or contact support.');
     } finally {
       this.decryptingKeys[keyId] = false;
       this.cdr.markForCheck();

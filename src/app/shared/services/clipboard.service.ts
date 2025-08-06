@@ -18,23 +18,22 @@ export class ClipboardService {
     const defaultSuccessMessage = 'Copied to clipboard';
     const defaultErrorMessage = 'Failed to copy to clipboard';
 
-    try {
-      // Try modern Clipboard API first
-      if (this.isClipboardApiAvailable()) {
+    // Modern API approach (similar to reference code)
+    if (navigator.clipboard && window.isSecureContext) {
+      try {
         await navigator.clipboard.writeText(text);
         if (successMessage !== null) {
           this.showMessage(successMessage || defaultSuccessMessage, 'success');
         }
         return true;
-      } else {
-        // Use fallback method
-        return this.fallbackCopyToClipboard(text, successMessage, errorMessage);
+      } catch (error) {
+        console.error('Modern clipboard API failed:', error);
+        // Fall through to legacy method
       }
-    } catch (error) {
-      console.error('Clipboard API failed:', error);
-      // Try fallback method
-      return this.fallbackCopyToClipboard(text, successMessage, errorMessage);
     }
+
+    // Fallback for HTTP or unsupported browsers (matching reference pattern)
+    return this.fallbackCopyToClipboard(text, successMessage, errorMessage);
   }
 
   /**
@@ -68,38 +67,23 @@ export class ClipboardService {
   }
 
   /**
-   * Fallback method using the legacy document.execCommand approach
+   * Fallback method using the legacy document.execCommand approach (matching reference pattern)
    */
   private fallbackCopyToClipboard(text: string, successMessage?: string, errorMessage?: string): boolean {
     try {
-      // Create a temporary textarea element
-      const textArea = document.createElement('textarea');
-      textArea.value = text;
-      
-      // Make it invisible but still functional
-      textArea.style.position = 'fixed';
-      textArea.style.left = '-999999px';
-      textArea.style.top = '-999999px';
-      textArea.style.opacity = '0';
-      textArea.style.pointerEvents = 'none';
-      textArea.style.zIndex = '-1';
-      textArea.setAttribute('readonly', '');
-      textArea.setAttribute('aria-hidden', 'true');
-      textArea.setAttribute('tabindex', '-1');
-      
-      // Add to DOM, select, copy, and remove
-      document.body.appendChild(textArea);
-      
-      // Focus and select the text
-      textArea.focus();
-      textArea.select();
-      textArea.setSelectionRange(0, text.length);
+      // Create a temporary textarea element (matching reference pattern)
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed'; // Prevent scrolling to bottom
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
       
       // Try to copy using execCommand
       const successful = document.execCommand('copy');
       
       // Clean up
-      document.body.removeChild(textArea);
+      document.body.removeChild(textarea);
       
       if (successful) {
         if (successMessage !== null) {

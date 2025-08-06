@@ -293,30 +293,6 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Debug clipboard support (for development/troubleshooting)
-   */
-  debugClipboardSupport(): void {
-    const supportInfo = this.clipboardService.getClipboardSupportInfo();
-    console.log('Clipboard Support Information:', supportInfo);
-    
-    Swal.fire({
-      title: 'Clipboard Support Debug',
-      html: `
-        <div class="text-start">
-          <p><strong>Clipboard API Available:</strong> ${supportInfo.clipboardApiAvailable ? '✅ Yes' : '❌ No'}</p>
-          <p><strong>ExecCommand Available:</strong> ${supportInfo.execCommandAvailable ? '✅ Yes' : '❌ No'}</p>
-          <p><strong>Secure Context:</strong> ${supportInfo.secureContext ? '✅ Yes' : '❌ No'}</p>
-          <p><strong>Current URL:</strong> ${window.location.href}</p>
-          <p><strong>Protocol:</strong> ${window.location.protocol}</p>
-          <p><strong>User Agent:</strong> ${supportInfo.userAgent}</p>
-        </div>
-      `,
-      icon: 'info',
-      confirmButtonText: 'Close'
-    });
-  }
-
-  /**
    * Edit API key
    */
   editApiKey(apiKey: ApiKey): void {

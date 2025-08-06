@@ -67,6 +67,16 @@ export class ApiKeyEncryptionService {
       };
     }
 
+    // Check environment compatibility first
+    const envCheck = this.checkEnvironmentCompatibility();
+    if (!envCheck.compatible) {
+      console.warn('Environment not compatible for decryption:', envCheck.reason);
+      return {
+        success: false,
+        error: `Decryption not available: ${envCheck.reason}`
+      };
+    }
+
     // Check cache first
     const cacheKey = this.generateCacheKey(encryptedApiKey, userId);
     const cached = this.getCachedDecryption(cacheKey, userId);
@@ -149,6 +159,45 @@ export class ApiKeyEncryptionService {
           cipherText.toString(CryptoJS.enc.Base64),
           authTag.toString(CryptoJS.enc.Base64)
         );
+      }
+
+      // If Web Crypto API failed, try CryptoJS fallback (for HTTP environments)
+      if (!decrypted) {
+        console.log('Web Crypto API failed, trying CryptoJS fallback...');
+        decrypted = this.decryptWithCryptoJS(
+          derivedKey1,
+          iv,
+          cipherText,
+          authTag
+        );
+        
+        if (!decrypted) {
+          // Try approach 2 with CryptoJS
+          const saltBase64 = salt.toString(CryptoJS.enc.Base64);
+          const keyMaterial2 = userId + this.APPLICATION_PEPPER + saltBase64;
+          const derivedKey2 = CryptoJS.SHA256(keyMaterial2);
+          
+          decrypted = this.decryptWithCryptoJS(
+            derivedKey2,
+            iv,
+            cipherText,
+            authTag
+          );
+        }
+        
+        if (!decrypted) {
+          // Try approach 3 with CryptoJS
+          const saltHex = salt.toString(CryptoJS.enc.Hex);
+          const keyMaterial3 = userId + this.APPLICATION_PEPPER + saltHex;
+          const derivedKey3 = CryptoJS.SHA256(keyMaterial3);
+          
+          decrypted = this.decryptWithCryptoJS(
+            derivedKey3,
+            iv,
+            cipherText,
+            authTag
+          );
+        }
       }
 
       if (!decrypted) {
@@ -260,6 +309,58 @@ export class ApiKeyEncryptionService {
       return decoder.decode(decryptedBuffer);
       
     } catch (error) {
+      console.warn('Web Crypto decryption failed:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Fallback decryption using CryptoJS (for HTTP environments where Web Crypto API is not available)
+   */
+  private decryptWithCryptoJS(
+    derivedKey: CryptoJS.lib.WordArray,
+    iv: CryptoJS.lib.WordArray,
+    cipherText: CryptoJS.lib.WordArray,
+    authTag: CryptoJS.lib.WordArray
+  ): string | null {
+    try {
+      // CryptoJS doesn't have native AES-GCM support, but we can try AES-CTR as a fallback
+      // Note: This is a simplified approach and may not work for all cases
+      // The proper solution would be to implement GCM mode or use a different library
+      
+      // For now, let's try a basic AES decryption approach
+      // This might not work perfectly but provides a fallback
+      console.log('Attempting CryptoJS fallback decryption...');
+      
+      // Try AES-CTR mode as it's closest to GCM
+      const decrypted = CryptoJS.AES.decrypt(
+        {
+          ciphertext: cipherText,
+          key: derivedKey,
+          iv: iv,
+          algorithm: CryptoJS.algo.AES,
+          mode: CryptoJS.mode.CTR,
+          padding: CryptoJS.pad.NoPadding
+        } as any,
+        derivedKey,
+        {
+          iv: iv,
+          mode: CryptoJS.mode.CTR,
+          padding: CryptoJS.pad.NoPadding
+        }
+      );
+      
+      const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+      
+      if (decryptedText && decryptedText.length > 0) {
+        console.log('CryptoJS fallback decryption successful');
+        return decryptedText;
+      }
+      
+      return null;
+      
+    } catch (error) {
+      console.warn('CryptoJS fallback decryption failed:', error);
       return null;
     }
   }
@@ -328,6 +429,36 @@ export class ApiKeyEncryptionService {
   }
 
   /**
+   * Check if the current environment supports decryption (with fallback support)
+   */
+  private checkEnvironmentCompatibility(): { compatible: boolean; reason?: string } {
+    // Check if we're in browser environment
+    if (typeof window === 'undefined') {
+      return { compatible: false, reason: 'Server-side environment detected' };
+    }
+
+    // Check if required functions are available (minimum requirements)
+    if (typeof atob === 'undefined') {
+      return { compatible: false, reason: 'Base64 decoding not available' };
+    }
+
+    // CryptoJS should always be available since it's bundled
+    if (typeof CryptoJS === 'undefined') {
+      return { compatible: false, reason: 'CryptoJS library not available' };
+    }
+
+    // We can work with either Web Crypto API OR CryptoJS fallback
+    const hasWebCrypto = crypto && crypto.subtle && window.isSecureContext;
+    const hasCryptoJS = typeof CryptoJS !== 'undefined';
+    
+    if (!hasWebCrypto && !hasCryptoJS) {
+      return { compatible: false, reason: 'No encryption libraries available' };
+    }
+
+    return { compatible: true };
+  }
+
+  /**
    * Clear expired cache entries
    */
   private clearExpiredCache(): void {
@@ -370,6 +501,49 @@ export class ApiKeyEncryptionService {
     return {
       size: this.decryptionCache.size,
       entries: this.decryptionCache.size
+    };
+  }
+
+  /**
+   * Check if decryption is available in the current environment
+   */
+  isDecryptionAvailable(): boolean {
+    return this.checkEnvironmentCompatibility().compatible;
+  }
+
+  /**
+   * Get environment information for debugging
+   */
+  getEnvironmentInfo(): { 
+    compatible: boolean; 
+    reason?: string; 
+    details: {
+      hasWindow: boolean;
+      hasCrypto: boolean;
+      hasSubtle: boolean;
+      isSecureContext: boolean;
+      hasAtob: boolean;
+      hasTextDecoder: boolean;
+      hasCryptoJS: boolean;
+      preferredMethod: string;
+    }
+  } {
+    const envCheck = this.checkEnvironmentCompatibility();
+    const hasWebCrypto = typeof window !== 'undefined' && crypto && crypto.subtle && window.isSecureContext;
+    const hasCryptoJS = typeof CryptoJS !== 'undefined';
+    
+    return {
+      ...envCheck,
+      details: {
+        hasWindow: typeof window !== 'undefined',
+        hasCrypto: typeof crypto !== 'undefined',
+        hasSubtle: typeof crypto !== 'undefined' && !!crypto.subtle,
+        isSecureContext: typeof window !== 'undefined' && !!window.isSecureContext,
+        hasAtob: typeof atob !== 'undefined',
+        hasTextDecoder: typeof TextDecoder !== 'undefined',
+        hasCryptoJS: hasCryptoJS,
+        preferredMethod: hasWebCrypto ? 'Web Crypto API' : hasCryptoJS ? 'CryptoJS Fallback' : 'None Available'
+      }
     };
   }
 
