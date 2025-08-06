@@ -44,7 +44,7 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
                                      req.url.includes('/api/v1/dashboard/recent-projects');
   
   if (activeRequests === 1 || isCriticalDashboardEndpoint) {
-    console.log('🟢 Showing global spinner for:', req.url, '(activeRequests:', activeRequests, ')');
+    // console.log('🟢 Showing global spinner for:', req.url, '(activeRequests:', activeRequests, ')');
     spinnerService.show();
   }
 
@@ -63,7 +63,7 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
         // Small delay to prevent flickering for rapid requests
         setTimeout(() => {
           if (activeRequests === 0) {
-            console.log('🔴 Hiding global spinner');
+            // console.log('🔴 Hiding global spinner');
             try {
               // Check if injector is still available before accessing service
               const currentSpinnerService = injector.get(SpinnerService);

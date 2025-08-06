@@ -127,7 +127,7 @@ export class ApiDashboardService {
       map(apiResponse => this.transformToDashboardStats(apiResponse)),
       catchError(() => {
         // Fallback to mock data if API fails
-        console.warn('API failed, falling back to mock data');
+        // console.warn('API failed, falling back to mock data');
         return this.mockDataService.getMockDashboardStats();
       })
     );
@@ -157,7 +157,7 @@ export class ApiDashboardService {
       })),
       catchError(() => {
         // Fallback to mock data if API fails
-        console.warn('API failed, falling back to mock data');
+        // console.warn('API failed, falling back to mock data');
         return this.mockDataService.getMockApiDashboardData();
       })
     );
