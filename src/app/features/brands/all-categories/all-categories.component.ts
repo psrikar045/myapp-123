@@ -28,6 +28,9 @@ interface SubCategory {
 export class AllCategoriesComponent implements OnInit, OnDestroy {
   private platformId = inject(PLATFORM_ID);
   
+  // Make Math available in template
+  Math = Math;
+  
   categories:any = [];
   selectedCategory = 'All';
   
@@ -41,6 +44,14 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
   brandStatistics: any = {};
   isLoadingBrands = false;
   brandSearchFilters: BrandSearchFilters = {};
+  
+  // Pagination properties
+  currentPage = 1;
+  pageSize = 12; // Changed from 10 to 12 as requested
+  totalElements = 0;
+  totalPages = 0;
+  isLastPage = false;
+  isFirstPage = true;
 
   // Mobile sidebar functionality
   isMobileSidebarOpen = false;
@@ -98,9 +109,12 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
     // Initialize with default categories immediately
     this.setDefaultCategories();
     
+    // Restore previous state if returning from search-view
+    this.restorePreviousState();
+    
     // Then try to load from API
     try {
-      this.loadBrandData();
+      this.loadBrandData(this.currentPage - 1); // Convert to 0-based for API
       this.getAllCategories();
     } catch (error) {
       console.error('Error in AllCategoriesComponent constructor:', error);
@@ -162,6 +176,18 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Clear stored navigation state
+   */
+  clearStoredState() {
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.removeItem('brandsCurrentPage');
+      sessionStorage.removeItem('brandsSelectedCategory');
+      sessionStorage.removeItem('brandsSelectedSubCategory');
+      sessionStorage.removeItem('brandsSearchTerm');
+    }
+  }
+
   // Mobile sidebar methods
   checkScreenSize() {
     if (isPlatformBrowser(this.platformId)) {
@@ -178,6 +204,40 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
 
   closeMobileSidebar() {
     this.isMobileSidebarOpen = false;
+  }
+
+  /**
+   * Restore previous state when returning from search-view
+   */
+  restorePreviousState() {
+    if (isPlatformBrowser(this.platformId)) {
+      const savedPage = sessionStorage.getItem('brandsCurrentPage');
+      const savedCategory = sessionStorage.getItem('brandsSelectedCategory');
+      const savedSubCategory = sessionStorage.getItem('brandsSelectedSubCategory');
+      const savedSearchTerm = sessionStorage.getItem('brandsSearchTerm');
+      
+      if (savedPage) {
+        this.currentPage = parseInt(savedPage, 10);
+        console.log('Restored page:', this.currentPage);
+      }
+      
+      if (savedCategory) {
+        this.selectedCategory = savedCategory;
+        this.expandedCategory = savedCategory;
+        console.log('Restored category:', this.selectedCategory);
+      }
+      
+      if (savedSubCategory) {
+        this.selectedSubCategory = savedSubCategory;
+        console.log('Restored subcategory:', this.selectedSubCategory);
+      }
+      
+      if (savedSearchTerm) {
+        this.searchTerm = savedSearchTerm;
+        this.isSearchActive = !!(savedSearchTerm && savedSearchTerm.trim().length > 0);
+        console.log('Restored search term:', this.searchTerm);
+      }
+    }
   }
 
 setDefaultCategories() {
@@ -373,22 +433,20 @@ getAllCategories() {
     return [...exactMatches, ...partialMatches, ...descriptionMatches];
   }
 
-  currentPage = 1;
-  pageSize = 10;
+  // Removed duplicate pagination properties - now defined above
 
+  // Server-side pagination - brands are already paginated from API
   get pagedBrands() {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.brands.slice(start, start + this.pageSize);
+    return this.allBrands; // allBrands now contains only current page data
   }
 
-  // New getter for paginated filtered brands
+  // For filtered brands, we'll use the same data since filtering will be done server-side
   get pagedFilteredBrands() {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredBrands.slice(start, start + this.pageSize);
-  }
-
-  get totalPages() {
-    return Math.ceil(this.filteredBrands.length / this.pageSize) || 1;
+    if (this.searchTerm && this.searchTerm.trim().length > 0) {
+      // If searching, use client-side filtering on current page data
+      return this.filteredBrands;
+    }
+    return this.allBrands; // Server-side paginated data
   }
 
   get pages() {
@@ -443,7 +501,13 @@ getAllCategories() {
     this.currentPage = 1;
     
     // Update search state
-   this.isSearchActive = !!(this.searchTerm && this.searchTerm.trim().length > 0);
+    this.isSearchActive = !!(this.searchTerm && this.searchTerm.trim().length > 0);
+    
+    // If search is active, we'll use client-side filtering on current page
+    // If search is cleared, reload data from API
+    if (!this.isSearchActive) {
+      this.loadBrandData(0);
+    }
     
     // The filtering is handled by the filteredBrands getter automatically
     // No need to manually filter here as it's reactive
@@ -457,6 +521,9 @@ getAllCategories() {
     
     // Reset any search-specific states
     this.searchResults = [];
+    
+    // Reload data from API when search is cleared
+    this.loadBrandData(0);
   }
 
   // Legacy search method - now used for category filtering only
@@ -485,6 +552,9 @@ getAllCategories() {
     // this.searchTerm = ''; // Commented out to maintain search across categories
     this.filteredCategories = this.categories;
 
+    // Load first page of data for new category
+    this.loadBrandData(0);
+
     // Update URL with the selected category
     if (category !== 'All') {
       const routeCategory = category.toLowerCase().replace(/\s+/g, '-');
@@ -504,7 +574,18 @@ getAllCategories() {
   }
 
   selectPage(page: number) {
-    this.currentPage = page;
+    if (page !== this.currentPage && page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      // Load data for the new page (convert to 0-based for API)
+      this.loadBrandData(page - 1);
+      
+      // Store current page in session storage for navigation memory
+      if (isPlatformBrowser(this.platformId)) {
+        sessionStorage.setItem('brandsCurrentPage', page.toString());
+        sessionStorage.setItem('brandsSelectedCategory', this.selectedCategory);
+        sessionStorage.setItem('brandsSelectedSubCategory', this.selectedSubCategory);
+      }
+    }
   }
 
   subCategoryColors: { [key: string]: string } = {
@@ -546,6 +627,7 @@ getAllCategories() {
     }
     this.selectedSubCategory = sub;
     this.currentPage = 1; // Reset to first page when changing subcategory
+    this.loadBrandData(0); // Load first page of data for new subcategory
   }
 
   // Enhanced toggle category accordion with search preservation
@@ -555,6 +637,7 @@ getAllCategories() {
       this.selectedCategory = 'All';
       this.selectedSubCategory = '';
       this.currentPage = 1;
+      this.loadBrandData(0); // Load first page of all brands
       // Remove category from URL
       this.router.navigate([], {
         relativeTo: this.route,
@@ -566,6 +649,7 @@ getAllCategories() {
       this.selectedCategory = category;
       this.selectedSubCategory = '';
       this.currentPage = 1;
+      this.loadBrandData(0); // Load first page of category brands
       // Update URL with selected category
       const routeCategory = category.toLowerCase().replace(/\s+/g, '-');
       this.router.navigate([], {
@@ -582,9 +666,17 @@ getAllCategories() {
   }
 
   goToBrand(brand: any) {
+    // Store current state before navigation
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.setItem('brandsCurrentPage', this.currentPage.toString());
+      sessionStorage.setItem('brandsSelectedCategory', this.selectedCategory);
+      sessionStorage.setItem('brandsSelectedSubCategory', this.selectedSubCategory);
+      sessionStorage.setItem('brandsSearchTerm', this.searchTerm);
+    }
+    
     this.utilService.searchResult = brand; // Set the selected brand for search-view
     const brandName = encodeURIComponent(brand.name);
-     this.router.navigate(['/search/view', brandName], { 
+    this.router.navigate(['/search/view', brandName], { 
       queryParams: { from: 'brands' },
       state: { brandData: brand }
     });
@@ -636,33 +728,43 @@ getAllCategories() {
   // ==================== NEW BRAND DATA API METHODS ====================
 
   /**
-   * Load brand data from API
+   * Load brand data from API with pagination
    */
-  loadBrandData(): void {
+  loadBrandData(page: number = 0): void {
     // Skip API calls during SSR/prerendering
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
     
     this.isLoadingBrands = true;
-    this.authService.getAllBrands(0, 20).subscribe({
+    this.authService.getAllBrands(page, this.pageSize).subscribe({
       next: (response: any) => {
-        this.brandData = response.data || [];
-        // Filter out brands with error messages
+        console.log('API Response:', response);
         
-        // const errorMessages = [
-        //   'Oops...too many requests !',
-        //   'Error Page',
-        //   'Access Denied'
-        // ];
-        this.allBrands = this.brandData;
-        // (this.brandData as any[]).filter((brand: any) => {
-        //   const name = (brand.name || '').toLowerCase();
-        //   return !errorMessages.some(msg => name.includes(msg.toLowerCase()));
-        // });
+        // Handle paginated response structure
+        if (response.content) {
+          // Spring Boot paginated response
+          this.brandData = response.content || [];
+          this.totalElements = response.totalElements || 0;
+          this.totalPages = response.totalPages || 1;
+          this.isLastPage = response.last || false;
+          this.isFirstPage = response.first || true;
+          this.currentPage = (response.number || 0) + 1; // Spring Boot uses 0-based indexing
+        } else if (response.data) {
+          // Custom response structure
+          this.brandData = response.data || [];
+          this.totalElements = response.totalElements || response.data.length;
+          this.totalPages = Math.ceil(this.totalElements / this.pageSize);
+        } else {
+          // Direct array response (fallback)
+          this.brandData = Array.isArray(response) ? response : [];
+          this.totalElements = this.brandData.length;
+          this.totalPages = Math.ceil(this.totalElements / this.pageSize);
+        }
+        
         // Remove duplicate brands by name (case-insensitive)
         const seenNames = new Set<string>();
-        this.allBrands = this.allBrands.filter((brand: any) => {
+        this.allBrands = this.brandData.filter((brand: any) => {
           const name = (brand.name || '').toLowerCase();
           if (seenNames.has(name)) {
             return false;
@@ -672,13 +774,20 @@ getAllCategories() {
         });
         
         this.isLoadingBrands = false;
-        // console.log('Brand data loaded from API:', this.brandData);
+        console.log('Brand data loaded from API:', {
+          page: this.currentPage,
+          totalPages: this.totalPages,
+          totalElements: this.totalElements,
+          brandsCount: this.allBrands.length
+        });
       },
       error: (error) => {
         console.error('Error loading brand data:', error);
         this.isLoadingBrands = false;
         console.log('Using static brand data due to API error');
-        // The component already has static brand data from the allBrands array
+        // Keep static brand data as fallback
+        this.totalElements = this.allBrands.length;
+        this.totalPages = Math.ceil(this.totalElements / this.pageSize);
       }
     });
   }

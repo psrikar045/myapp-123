@@ -57,6 +57,13 @@
       <div class="search-results-info" *ngIf="searchTerm && searchTerm.trim().length > 0">
         <span class="results-count">{{ filteredBrands.length }} result{{ filteredBrands.length !== 1 ? 's' : '' }}</span>
       </div>
+      
+      <!-- Pagination info -->
+      <div class="pagination-info" *ngIf="!isLoadingBrands && totalElements > 0 && !searchTerm">
+        <span class="pagination-details">
+          Showing {{ ((currentPage - 1) * pageSize) + 1 }} - {{ Math.min(currentPage * pageSize, totalElements) }} of {{ totalElements }} brands
+        </span>
+      </div>
     </div>
     
     <!-- Mobile Categories Button -->
@@ -190,7 +197,7 @@
             </div>
             
           </div>
-          <div class="pagination-bottom-center-wrapper" *ngIf="pagedFilteredBrands.length > 0">
+          <div class="pagination-bottom-center-wrapper" *ngIf="pagedFilteredBrands.length > 0 && !isLoadingBrands">
                   <div class="categories-pagination">
                     <button class="page nav" 
                             [disabled]="currentPage === 1"
@@ -198,27 +205,27 @@
                       <i class="bi bi-chevron-left"></i>
                     </button>
                     <!-- Show first page -->
-                    <button *ngIf="pages.length > 0" 
+                    <button *ngIf="totalPages > 0" 
                             class="page" 
                             [class.active]="1 === currentPage" 
                             (click)="selectPage(1)">1</button>
                     <!-- Show ellipsis if there are many pages and we're not near the beginning -->
-                    <span *ngIf="pages.length > 7 && currentPage > 4" class="page-ellipsis">...</span>
+                    <span *ngIf="totalPages > 7 && currentPage > 4" class="page-ellipsis">...</span>
                     <!-- Show middle pages -->
                     <button *ngFor="let page of getVisiblePages()" 
                             class="page" 
                             [class.active]="page === currentPage" 
                             (click)="selectPage(page)">{{ page }}</button>
                     <!-- Show ellipsis if there are many pages and we're not near the end -->
-                    <span *ngIf="pages.length > 7 && currentPage < pages.length - 3" class="page-ellipsis">...</span>
+                    <span *ngIf="totalPages > 7 && currentPage < totalPages - 3" class="page-ellipsis">...</span>
                     <!-- Show last page if different from first -->
-                    <button *ngIf="pages.length > 1" 
+                    <button *ngIf="totalPages > 1" 
                             class="page" 
-                            [class.active]="pages.length === currentPage" 
-                            (click)="selectPage(pages.length)">{{ pages.length }}</button>
+                            [class.active]="totalPages === currentPage" 
+                            (click)="selectPage(totalPages)">{{ totalPages }}</button>
                     <button class="page nav" 
-                            [disabled]="currentPage === pages.length"
-                            (click)="selectPage(currentPage === pages.length ? pages.length : currentPage + 1)">
+                            [disabled]="currentPage === totalPages"
+                            (click)="selectPage(currentPage === totalPages ? totalPages : currentPage + 1)">
                       <i class="bi bi-chevron-right"></i>
                     </button>
                   </div>
