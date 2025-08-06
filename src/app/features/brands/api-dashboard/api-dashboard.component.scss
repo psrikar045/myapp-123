@@ -1,5 +1,33 @@
 // API Dashboard Styles - Using Existing Theme System
 
+// Clipboard feedback styles
+.clipboard-feedback {
+  .btn {
+    transition: all 0.3s ease;
+    
+    &.copying {
+      transform: scale(0.95);
+      opacity: 0.8;
+    }
+    
+    &.copied {
+      background-color: var(--bs-success) !important;
+      border-color: var(--bs-success) !important;
+      color: white !important;
+      
+      &::after {
+        content: " ✓";
+        animation: fadeIn 0.3s ease;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 // Enhanced API Keys Table Body Scrolling
 .api-keys-tbody-container {
   // Default state - no scrolling

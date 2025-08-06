@@ -7,6 +7,7 @@ import { ApiKeyService } from '../../services/api-key.service';
 import { ApiKey, RegenerateApiKeyResponse } from '../../models/api-key.model';
 import { SingleApiKeyDashboardResponse, TransformedApiKeyDashboard } from '../../models/dashboard-api.model';
 import { ErrorHandlerService } from '../../../../../core/services/error-handler.service';
+import { ClipboardService } from '../../../../../shared/services/clipboard.service';
 
 @Component({
   selector: 'app-domain-api-keys',
@@ -52,6 +53,7 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
     private router: Router,
     private apiKeyService: ApiKeyService,
     private errorHandler: ErrorHandlerService,
+    private clipboardService: ClipboardService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -371,11 +373,6 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
    * Copy API key to clipboard (decrypted version if available)
    */
   async copyApiKey(apiKey: ApiKey): Promise<void> {
-    if (typeof navigator === 'undefined' || !navigator.clipboard) {
-      this.errorHandler.showWarning('Clipboard not available');
-      return;
-    }
-
     try {
       let keyToCopy = apiKey.keyPreview || apiKey.maskedKey;
 
@@ -387,17 +384,17 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
         }
       }
 
-      await navigator.clipboard.writeText(keyToCopy);
-      this.errorHandler.showSuccess('API key copied to clipboard');
-      
-      // Auto-clear clipboard after 30 seconds for security
-      setTimeout(() => {
-        if (typeof navigator !== 'undefined' && navigator.clipboard) {
-          navigator.clipboard.writeText('').catch(() => {
-            // Ignore errors when clearing clipboard
-          });
-        }
-      }, 30000);
+      const success = await this.clipboardService.copyToClipboard( keyToCopy, 'API key copied to clipboard');
+      // Auto-clear clipboard after 30 seconds for security (only if copy was successful)
+      if (success) {
+        setTimeout(() => {
+          if (typeof navigator !== 'undefined' && navigator.clipboard) {
+            navigator.clipboard.writeText('').catch(() => {
+              // Ignore errors when clearing clipboard
+            });
+          }
+        }, 30000);
+      }
       
     } catch (err) {
       console.error('Failed to copy API key:', err);
@@ -421,7 +418,7 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
 
     // Check if we can decrypt this key
     if (!this.apiKeyService.canDecryptApiKey(apiKey) || !apiKey.encryptedKeyValue) {
-      this.errorHandler.showWarning('Cannot decrypt this API key');
+      this.errorHandler.showWarning('Unable to show full API key. Please contact support if you need access.');
       return;
     }
 
@@ -435,7 +432,7 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
       if (decryptedKey) {
         this.decryptedKeys[keyId] = decryptedKey;
         this.showingFullKey[keyId] = true;
-        this.errorHandler.showSuccess('API key decrypted successfully');
+        this.errorHandler.showSuccess('Full API key is now visible');
         
         // Auto-hide after 2 minutes for security
         setTimeout(() => {
@@ -653,15 +650,16 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   /**
    * Copy regenerated API key to clipboard
    */
-  copyRegeneratedApiKey(): void {
-    if (this.regeneratedApiKey && typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(this.regeneratedApiKey).then(() => {
-        this.errorHandler.showSuccess('New API key copied to clipboard');
-      }).catch(err => {
-        console.error('Failed to copy regenerated API key:', err);
-        this.errorHandler.showWarning('Failed to copy API key to clipboard');
-      });
+  async copyRegeneratedApiKey(): Promise<void> {
+    if (!this.regeneratedApiKey) {
+      this.errorHandler.showWarning('No API key to copy');
+      return;
     }
+
+    await this.clipboardService.copyToClipboard(
+      this.regeneratedApiKey, 
+      'New API key copied to clipboard'
+    );
   }
   /**
    * Navigate back to dashboard

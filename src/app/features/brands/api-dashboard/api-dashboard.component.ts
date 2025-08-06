@@ -7,6 +7,7 @@ import { ApiDashboardService } from './services/api-dashboard.service';
 import { ApiKeyService } from './services/api-key.service';
 import { AppThemeService } from '../../../core/services/app-theme.service';
 import { ErrorHandlerService } from '../../../shared/services/error-handler.service';
+import { ClipboardService } from '../../../shared/services/clipboard.service';
 
 import { ErrorDisplayComponent } from './components/error-display/error-display.component';
 import { ApiDashboardData, DashboardStats, RecentProject } from './models/dashboard.model';
@@ -50,6 +51,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
     private apiKeyService: ApiKeyService,
     private themeService: AppThemeService,
     private errorHandler: ErrorHandlerService,
+    private clipboardService: ClipboardService,
     private router: Router
   ) {}
 
@@ -279,17 +281,39 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Copy API key to clipboard
+   * Copy API key to clipboard using the clipboard service
    */
   copyApiKey(maskedKey: string): void {
-    if (maskedKey && typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(maskedKey).then(() => {
-        this.errorHandler.showInfo('API key copied to clipboard');
-      }).catch(err => {
-        console.error('Failed to copy API key:', err);
-        this.errorHandler.showWarning('Failed to copy API key to clipboard');
-      });
+    if (!maskedKey) {
+      this.errorHandler.showWarning('No API key to copy');
+      return;
     }
+
+    this.clipboardService.copyToClipboard(maskedKey, 'API key copied to clipboard');
+  }
+
+  /**
+   * Debug clipboard support (for development/troubleshooting)
+   */
+  debugClipboardSupport(): void {
+    const supportInfo = this.clipboardService.getClipboardSupportInfo();
+    console.log('Clipboard Support Information:', supportInfo);
+    
+    Swal.fire({
+      title: 'Clipboard Support Debug',
+      html: `
+        <div class="text-start">
+          <p><strong>Clipboard API Available:</strong> ${supportInfo.clipboardApiAvailable ? '✅ Yes' : '❌ No'}</p>
+          <p><strong>ExecCommand Available:</strong> ${supportInfo.execCommandAvailable ? '✅ Yes' : '❌ No'}</p>
+          <p><strong>Secure Context:</strong> ${supportInfo.secureContext ? '✅ Yes' : '❌ No'}</p>
+          <p><strong>Current URL:</strong> ${window.location.href}</p>
+          <p><strong>Protocol:</strong> ${window.location.protocol}</p>
+          <p><strong>User Agent:</strong> ${supportInfo.userAgent}</p>
+        </div>
+      `,
+      icon: 'info',
+      confirmButtonText: 'Close'
+    });
   }
 
   /**

@@ -9,6 +9,7 @@ import { addDays } from 'date-fns';
 import { ApiKeyService } from '../../services/api-key.service';
 import { AppThemeService } from '../../../../../core/services/app-theme.service';
 import { ErrorHandlerService } from '../../../../../shared/services/error-handler.service';
+import { ClipboardService } from '../../../../../shared/services/clipboard.service';
 import { SCOPE_GROUPS, ScopeGroup, ScopeDefinition } from '../../models/scope.model';
 import { ApiKey, RateLimitTier } from '../../models/api-key.model';
 import { DatePickerPopupComponent, DatePickerConfig } from '../../../../../shared/components/date-picker-popup/date-picker-popup.component';
@@ -155,6 +156,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
     private apiKeyService: ApiKeyService,
     private themeService: AppThemeService,
     private errorHandler: ErrorHandlerService,
+    private clipboardService: ClipboardService,
     private router: Router
   ) {
     this.createForm = this.initializeForm();
@@ -419,57 +421,21 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
    * Copy API key to clipboard
    */
   /**
-   * Enhanced copy API key with visual feedback
+   * Enhanced copy API key with visual feedback using ClipboardService
    */
-  copyApiKey(): void {
-    if (this.createdApiKey && typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(this.createdApiKey).then(() => {
-        this.copyButtonText = 'Copied!';
-        this.errorHandler.showInfo('API key copied to clipboard');
-        setTimeout(() => {
-          this.copyButtonText = 'Copy';
-        }, 2000);
-      }).catch(err => {
-        console.error('Failed to copy API key:', err);
-        // Fallback for older browsers
-        this.fallbackCopyTextToClipboard(this.createdApiKey);
-      });
+  async copyApiKey(): Promise<void> {
+    if (!this.createdApiKey) {
+      this.errorHandler.showWarning('No API key to copy');
+      return;
     }
-  }
 
-  /**
-   * Fallback copy method for older browsers
-   */
-  private fallbackCopyTextToClipboard(text: string): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const textArea = document.createElement('textarea');
-      textArea.value = text;
-      textArea.style.top = '0';
-      textArea.style.left = '0';
-      textArea.style.position = 'fixed';
-      textArea.style.opacity = '0';
+    const success = await this.clipboardService.copyToClipboard( this.createdApiKey, 'API key copied to clipboard' );
 
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-
-      try {
-        const successful = document.execCommand('copy');
-        if (successful) {
-          this.copyButtonText = 'Copied!';
-          this.errorHandler.showInfo('API key copied to clipboard');
-          setTimeout(() => {
-            this.copyButtonText = 'Copy';
-          }, 2000);
-        } else {
-          this.errorHandler.showWarning('Failed to copy API key to clipboard');
-        }
-      } catch (err) {
-        console.error('Fallback: Oops, unable to copy', err);
-        this.errorHandler.showWarning('Failed to copy API key to clipboard');
-      }
-
-      document.body.removeChild(textArea);
+    if (success) {
+      this.copyButtonText = 'Copied!';
+      setTimeout(() => {
+        this.copyButtonText = 'Copy';
+      }, 2000);
     }
   }
 
