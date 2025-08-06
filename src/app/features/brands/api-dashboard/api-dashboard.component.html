@@ -241,7 +241,7 @@
               </div>
 
               <!-- Usage Stats -->
-              <div class="mb-4">
+              <!-- <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <span class="text-body-secondary">Usage</span>
                   <span class="fw-semibold">{{ formatNumber(selectedApiKey.usage.requestsToday || 0) }} / {{ formatNumber(13333) }}</span>
@@ -255,11 +255,19 @@
                        aria-valuemax="100">
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <!-- Details -->
               <div class="mb-4">
                 <div class="row g-3">
+                   <div class="col-6 mt-2">
+                    <div class="text-body-secondary small">Domain</div>
+                    <div class="fw-semibold">{{ getDomainFromApiKey(selectedApiKey) }}</div>
+                  </div>
+                  <div class="col-6 mt-2">
+                    <div class="text-body-secondary small">Key Name</div>
+                    <div class="fw-semibold font-monospace small">{{ selectedApiKey.maskedKey }}</div>
+                  </div>
                   <div class="col-6">
                     <div class="text-body-secondary small">Tier</div>
                     <div class="fw-semibold">{{ getTierDisplayName(selectedApiKey.tier) }}</div>
@@ -267,15 +275,7 @@
                   <div class="col-6">
                     <div class="text-body-secondary small">Expiry Date</div>
                     <div class="fw-semibold">{{ selectedApiKey.expiresAt ? formatDate(selectedApiKey.expiresAt) : 'Never' }}</div>
-                  </div>
-                  <div class="col-12 mt-2">
-                    <div class="text-body-secondary small">Domain</div>
-                    <div class="fw-semibold">{{ getDomainFromApiKey(selectedApiKey) }}</div>
-                  </div>
-                  <div class="col-12 mt-2">
-                    <div class="text-body-secondary small">Key Name</div>
-                    <div class="fw-semibold font-monospace small">{{ selectedApiKey.maskedKey }}</div>
-                  </div>
+                  </div>                
                 </div>
               </div>
 
