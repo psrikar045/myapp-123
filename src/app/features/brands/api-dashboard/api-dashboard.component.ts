@@ -751,7 +751,11 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   getTierDisplayName(tier: string): string {
     switch (tier) {
       case 'FREE_TIER':
-        return 'Free';
+        return 'FREE';
+      case 'PRO_TIER':
+        return 'PRO';
+      case 'BUSINESS_TIER':
+        return 'BUSINESS';
       case 'BASIC':
         return 'Basic';
       case 'STANDARD':
@@ -763,7 +767,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
       case 'UNLIMITED':
         return 'Unlimited';
       default:
-        return tier || 'Free';
+        return tier || 'FREE';
     }
   }
 

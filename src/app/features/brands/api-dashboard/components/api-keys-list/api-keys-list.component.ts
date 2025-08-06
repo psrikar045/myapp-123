@@ -369,17 +369,27 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
    * Get tier display name
    */
   getTierDisplayName(tier: string): string {
-    switch (tier?.toLowerCase()) {
+    switch (tier) {
+      case 'FREE_TIER':
+        return 'FREE';
+      case 'PRO_TIER':
+        return 'PRO';
+      case 'BUSINESS_TIER':
+        return 'BUSINESS';
+      case 'BASIC':
       case 'basic':
         return 'Basic';
+      case 'STANDARD':
       case 'standard':
         return 'Standard';
+      case 'PREMIUM':
       case 'premium':
         return 'Premium';
+      case 'ENTERPRISE':
       case 'enterprise':
         return 'Enterprise';
       default:
-        return tier || 'Standard';
+        return tier || 'FREE';
     }
   }
 
@@ -396,13 +406,23 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
    * Get total requests limit based on tier
    */
   private getTotalRequestsLimit(tier: string): number {
-    switch (tier?.toLowerCase()) {
+    switch (tier) {
+      case 'FREE_TIER':
+        return 100;
+      case 'PRO_TIER':
+        return 10000;
+      case 'BUSINESS_TIER':
+        return 1000000;
+      case 'BASIC':
       case 'basic':
         return 1000;
+      case 'STANDARD':
       case 'standard':
         return 10000;
+      case 'PREMIUM':
       case 'premium':
         return 100000;
+      case 'ENTERPRISE':
       case 'enterprise':
         return 1000000;
       default:

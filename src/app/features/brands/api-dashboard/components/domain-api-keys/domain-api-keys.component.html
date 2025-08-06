@@ -97,7 +97,7 @@
                 </div>
                 <div>
                   <h3 class="fw-bold mb-1 text-body-emphasis">{{ selectedApiKey.name }}</h3>
-                  <p class="text-body-secondary mb-0">{{ selectedApiKey.tier || 'Standard' }} Tier • Domain: {{ domain }}</p>
+                  <p class="text-body-secondary mb-0">{{ getTierDisplayName(selectedApiKey.tier) }}  • Domain: {{ domain }}</p>
                 </div>
               </div>
               <div class="d-flex flex-wrap gap-3">
@@ -236,7 +236,7 @@
             <div class="col-12">
               <div class="d-flex justify-content-between">
                 <span class="text-body-secondary">Tier</span>
-                <span class="fw-medium">{{ selectedApiKey.tier || 'Standard' }}</span>
+                <span class="fw-medium">{{ getTierDisplayName(selectedApiKey.tier) }}</span>
               </div>
             </div>
             <div class="col-12">

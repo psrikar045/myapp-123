@@ -297,6 +297,34 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Get tier display name
+   */
+  getTierDisplayName(tier: string): string {
+    switch (tier) {
+      case 'FREE_TIER':
+        return 'FREE';
+      case 'PRO_TIER':
+        return 'PRO';
+      case 'BUSINESS_TIER':
+        return 'BUSINESS';
+      case 'BASIC':
+      case 'basic':
+        return 'Basic';
+      case 'STANDARD':
+      case 'standard':
+        return 'Standard';
+      case 'PREMIUM':
+      case 'premium':
+        return 'Premium';
+      case 'ENTERPRISE':
+      case 'enterprise':
+        return 'Enterprise';
+      default:
+        return tier || 'FREE';
+    }
+  }
+
+  /**
    * Get daily usage percentage (today only)
    */
   getUsagePercentage(apiKey: ApiKey): number {

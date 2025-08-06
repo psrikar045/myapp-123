@@ -701,4 +701,32 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
   onExpirationDateChange(date: Date | null): void {
     this.createForm.patchValue({ expirationDate: date });
   }
+
+  /**
+   * Get tier display name
+   */
+  getTierDisplayName(tier: string): string {
+    switch (tier) {
+      case 'FREE_TIER':
+        return 'FREE';
+      case 'PRO_TIER':
+        return 'PRO';
+      case 'BUSINESS_TIER':
+        return 'BUSINESS';
+      case 'BASIC':
+      case 'basic':
+        return 'Basic';
+      case 'STANDARD':
+      case 'standard':
+        return 'Standard';
+      case 'PREMIUM':
+      case 'premium':
+        return 'Premium';
+      case 'ENTERPRISE':
+      case 'enterprise':
+        return 'Enterprise';
+      default:
+        return tier || 'FREE';
+    }
+  }
 }

@@ -58,14 +58,14 @@
               </div>
 
               <!-- Key Details -->
-              <div class="row g-3">
+              <!-- <div class="row g-3">
                 <div class="col-md-3">
                   <small class="text-body-secondary">Name</small>
                   <p class="mb-0 fw-semibold">{{ createdApiKey.name }}</p>
                 </div>
                 <div class="col-md-3">
                   <small class="text-body-secondary">Tier</small>
-                  <p class="mb-0 fw-semibold">{{ createdApiKey.rateLimitTier }}</p>
+                  <p class="mb-0 fw-semibold">{{ getTierDisplayName(createdApiKey.rateLimitTier) }}</p>
                 </div>
                 <div class="col-md-3">
                   <small class="text-body-secondary">Status</small>
@@ -75,7 +75,7 @@
                   <small class="text-body-secondary">Expires</small>
                   <p class="mb-0 fw-semibold">{{ createdApiKey.expiresAt ? (createdApiKey.expiresAt | date:'mediumDate') : 'Never' }}</p>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
 
@@ -226,7 +226,7 @@
                   [class.selected]="createForm.get('tier')?.value?.tier === 'FREE_TIER'"
                   (click)="selectRateLimitTier(rateLimitTiers[0])"
                   style="border: 1px solid #e0e0e0; transition: all 0.2s;">
-                  <div class="fw-medium text-dark">Free (100 requests/mon)</div>
+                  <div class="fw-medium text-dark">FREE (100 requests/mon)</div>
                 </div>
               </div>
               <div class="col-6">
@@ -235,7 +235,7 @@
                   [class.selected]="createForm.get('tier')?.value?.tier === 'PRO_TIER'"
                   (click)="selectRateLimitTier(rateLimitTiers[1])"
                   style="border: 1px solid #e0e0e0; transition: all 0.2s;">
-                  <div class="fw-medium text-dark">Pro (1000 requests/mon)</div>
+                  <div class="fw-medium text-dark">PRO (1000 requests/mon)</div>
                 </div>
               </div>
               <!-- <div class="col-6">
@@ -253,7 +253,7 @@
                   [class.selected]="createForm.get('tier')?.value?.tier === 'BUSINESS_TIER'"
                   (click)="selectRateLimitTier(rateLimitTiers[2])"
                   style="border: 1px solid #e0e0e0; transition: all 0.2s;">
-                  <div class="fw-medium text-dark">Business (Unlimited requests/mon)</div>
+                  <div class="fw-medium text-dark">BUSINESS (Unlimited requests/mon)</div>
                 </div>
               </div>
             </div>
