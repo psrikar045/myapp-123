@@ -58,12 +58,7 @@
         <span class="results-count">{{ filteredBrands.length }} result{{ filteredBrands.length !== 1 ? 's' : '' }}</span>
       </div>
       
-      <!-- Pagination info -->
-      <div class="pagination-info" *ngIf="!isLoadingBrands && totalElements > 0 && !searchTerm">
-        <span class="pagination-details">
-          Showing {{ ((currentPage - 1) * pageSize) + 1 }} - {{ Math.min(currentPage * pageSize, totalElements) }} of {{ totalElements }} brands
-        </span>
-      </div>
+
     </div>
     
     <!-- Mobile Categories Button -->
@@ -198,6 +193,13 @@
             
           </div>
           <div class="pagination-bottom-center-wrapper" *ngIf="pagedFilteredBrands.length > 0 && !isLoadingBrands">
+                  <!-- Pagination info on the left -->
+                  <div class="pagination-info" *ngIf="!isLoadingBrands && totalElements > 0 && !searchTerm">
+                    <span class="pagination-details">
+                      Showing {{ ((currentPage - 1) * pageSize) + 1 }} - {{ Math.min(currentPage * pageSize, totalElements) }} of {{ totalElements }} brands
+                    </span>
+                  </div>
+                  
                   <div class="categories-pagination">
                     <button class="page nav" 
                             [disabled]="currentPage === 1"
