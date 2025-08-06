@@ -400,3 +400,56 @@ color: white !important;
 .bi-eye :hover{
 color: white !important;
 }
+// Cursor pointer utility
+  .cursor-pointer {
+    cursor: pointer;
+  }
+
+  // Hover back div effect (like OpenAI)
+  .hover-back-div {
+    // transition: all 0.2s ease-in-out;
+    padding: 0.5rem;
+    border-radius: 8px;
+    
+    &:hover {
+      // background-color: rgba(var(--bs-primary-rgb), 0.05);
+      // transform: translateX(-2px);
+    }
+    
+    h1 {
+      position: relative;
+      
+      .default-text,
+      .hover-text {
+        // transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+        display: inline-block;
+      }
+      
+      .hover-text {
+        opacity: 0;
+        position: absolute;
+        left: 0;
+        top: 0;
+        // transform: translateY(2px);
+      }
+      
+      .default-text {
+        opacity: 1;
+        // transform: translateY(0);
+      }
+    }
+    
+    &:hover {
+      h1 {
+        .default-text {
+          opacity: 0;
+          // transform: translateY(-2px);
+        }
+        
+        .hover-text {
+          opacity: 1;
+          // transform: translateY(0);
+        }
+      }
+    }
+  }
