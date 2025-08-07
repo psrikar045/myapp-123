@@ -490,28 +490,49 @@ export class ApiKeyService {
   /**
    * Transform API key dashboard response to match current template structure
    */
+  
+  /**
+   * Transform API key dashboard response to match current template structure
+   */
   transformApiKeyDashboard(apiResponse: SingleApiKeyDashboardResponse): TransformedApiKeyDashboard {
     return {
       usage: {
-        requestsToday: apiResponse.requestsToday,
-        remainingToday: apiResponse.monthlyMetrics.remainingQuota,
-        requestsThisMonth: apiResponse.monthlyMetrics.totalCalls,
-        lastUsed: apiResponse.lastUsed,
-        rateLimitStatus: this.mapRateLimitStatus(apiResponse.rateLimitInfo.rateLimitStatus)
+        requestsToday: apiResponse.requestsToday || 0,
+        remainingToday: apiResponse.monthlyMetrics?.remainingQuota || 0,
+        requestsThisMonth: apiResponse.monthlyMetrics?.totalCalls || 0,
+        lastUsed: apiResponse.lastUsed || 'Never',
+        rateLimitStatus: this.mapRateLimitStatus(apiResponse.rateLimitInfo?.rateLimitStatus || 'ok')
       },
       performance: {
-        averageResponseTime: apiResponse.performanceMetrics.averageResponseTime,
-        errorRate24h: apiResponse.performanceMetrics.errorRate24h,
-        uptime: apiResponse.performanceMetrics.uptime,
-        performanceStatus: apiResponse.performanceMetrics.performanceStatus,
-        lastError: apiResponse.performanceMetrics.lastError,
-        consecutiveSuccessfulCalls: apiResponse.performanceMetrics.consecutiveSuccessfulCalls
+        averageResponseTime: apiResponse.performanceMetrics?.averageResponseTime || 0,
+        errorRate24h: apiResponse.performanceMetrics?.errorRate24h || 0,
+        uptime: apiResponse.performanceMetrics?.uptime || 100,
+        performanceStatus: apiResponse.performanceMetrics?.performanceStatus || 'OK',
+        lastError: apiResponse.performanceMetrics?.lastError || null,
+        consecutiveSuccessfulCalls: apiResponse.performanceMetrics?.consecutiveSuccessfulCalls || 0
       },
-      monthlyMetrics: apiResponse.monthlyMetrics,
-      rateLimitInfo: apiResponse.rateLimitInfo,
-      overallHealthStatus: apiResponse.overallHealthStatus,
-      todayVsYesterdayChange: apiResponse.todayVsYesterdayChange,
-      pendingRequests: apiResponse.pendingRequests
+      monthlyMetrics: apiResponse.monthlyMetrics || {
+        usagePercentage: 0,
+        totalCalls: 0,
+        successfulCalls: 0,
+        failedCalls: 0,
+        quotaLimit: 1000,
+        remainingQuota: 1000,
+        successRate: 100,
+        estimatedDaysToQuotaExhaustion: 30,
+        quotaStatus: 'OK'
+      },
+      rateLimitInfo: apiResponse.rateLimitInfo || {
+        tier: 'FREE',
+        currentWindowRequests: 0,
+        windowLimit: 1000,
+        windowResetTime: new Date().toISOString(),
+        rateLimitStatus: 'OK',
+        rateLimitUtilization: 0
+      },
+      overallHealthStatus: apiResponse.overallHealthStatus || 'OK',
+      todayVsYesterdayChange: apiResponse.todayVsYesterdayChange || 0,
+      pendingRequests: apiResponse.pendingRequests || 0
     };
   }
 

@@ -41,7 +41,8 @@
               }
             },
             "allowedCommonJsDependencies": [
-              "crypto-js"
+              "crypto-js",
+              "node-forge"
             ],
             "server": "src/main.server.ts",
             "prerender": false,

@@ -50,16 +50,16 @@
       <div class="navbar-nav m-0">
         
         <!-- Theme & Settings Button (Combined) -->
-        <button class="btn btn-link theme-settings-btn me-2" 
+        <!-- <button class="btn btn-link theme-settings-btn me-2" 
                 type="button"
                 (click)="openThemePanel()"
                 aria-label="Open theme & settings panel"
                 [title]="isAdvancedThemeAvailable ? 'Theme & Settings (Premium Available)' : 'Theme & Settings'">
-          <i class="bi-palette-fill" aria-hidden="true"></i>
+          <i class="bi-palette-fill" aria-hidden="true"></i> -->
           <!-- <span class="theme-indicator" *ngIf="isAdvancedThemeAvailable">
             <i class="bi-star-fill"></i>
           </span> -->
-        </button>
+        <!-- </button> -->
 
         <ng-container *ngFor="let action of actions$ | async">
           

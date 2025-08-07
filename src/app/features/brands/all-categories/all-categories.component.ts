@@ -104,7 +104,6 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private utilService: UtilService // Inject UtilService
   ) {
-    console.log('AllCategoriesComponent constructor called');
     
     // Initialize with default categories immediately
     this.setDefaultCategories();
