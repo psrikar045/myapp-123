@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subject, takeUntil, forkJoin, Observable } from 'rxjs';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { Subject, takeUntil, forkJoin, Observable, filter } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { ApiDashboardService } from './services/api-dashboard.service';
@@ -57,7 +57,8 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
     private themeService: AppThemeService,
     private errorHandler: ErrorHandlerService,
     private clipboardService: ClipboardService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -69,6 +70,33 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
     ).subscribe(apiKeys => {
       this.apiKeys = apiKeys;
       this.initializeApiKeyFilters();
+    });
+    
+    // Listen for navigation end events to detect when returning to dashboard
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      filter((event: NavigationEnd) => {
+        // Check if we're navigating TO the dashboard
+        const isDashboard = event.url === '/brands/api-dashboard' || 
+                          event.url.endsWith('/brands/api-dashboard') || 
+                          event.url.includes('/brands/api-dashboard?') ||
+                          event.url.includes('/brands/api-dashboard#');
+        return isDashboard;
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      console.log('Dashboard navigation detected, refreshing API keys...');
+      // Small delay to ensure component is fully loaded
+      setTimeout(() => {
+        this.apiKeyService.ensureApiKeysLoaded(true).subscribe({
+          next: (data) => {
+            console.log('API keys refreshed on dashboard navigation, count:', data.keys.length);
+          },
+          error: (error) => {
+            console.error('Error refreshing API keys on navigation:', error);
+          }
+        });
+      }, 100);
     });
     
     this.loadDashboardData();

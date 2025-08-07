@@ -182,13 +182,12 @@ export class ApiKeyService {
       tap(response => {
         console.log('API key created successfully:', response.id);
         
-        // Invalidate cache to force refresh on next getApiKeys() call
+        // Invalidate cache and clear BehaviorSubject to force fresh API call
         this.apiKeysCache = null;
         this.cacheTimestamp = 0;
         
-        // Note: We don't add the new key to the current list here because
-        // the CreateApiKeyResponse doesn't contain all the fields needed for ApiKey interface
-        // The dashboard should refresh the API keys list after creation
+        // Force refresh by making a direct API call and updating all subscribers
+        this.forceRefreshApiKeys();
       }),
       catchError(error => {
         console.error('Error creating API key:', error);
@@ -196,7 +195,91 @@ export class ApiKeyService {
       })
     );
   }
-
+private forceRefreshApiKeys(): void {
+    // Clear cache and force fresh API call
+    this.apiKeysCache = null;
+    this.cacheTimestamp = 0;
+    
+    const now = Date.now();
+    
+    // Check if we should use real API data or mock data
+    if (!environment.useRealApiKeysData) {
+      // Use mock data
+      this.mockDataService.getMockApiKeys().pipe(
+        tap(data => {
+          this.apiKeysCache = data;
+          this.cacheTimestamp = now;
+          // Update the BehaviorSubject with fresh data
+          this.apiKeysSubject.next(data.keys);
+          console.log('Mock API keys force refreshed, new count:', data.keys.length);
+        }),
+        catchError(error => {
+          console.error('Error force refreshing mock API keys:', error);
+          return of({ keys: [] });
+        })
+      ).subscribe();
+    } else {
+      // Use real backend API data
+      this.http.get<BackendApiKey[]>(this.apiUrl).pipe(
+        map(backendApiKeys => {
+          // Map backend response to frontend model (same logic as in getApiKeys)
+          const mappedKeys: ApiKey[] = backendApiKeys.map(backendKey => ({
+            id: backendKey.id,
+            name: backendKey.name,
+            description: backendKey.description || undefined,
+            prefix: backendKey.prefix || undefined,
+            keyPreview: backendKey.keyPreview,
+            maskedKey: backendKey.keyPreview,
+            encryptedKeyValue: backendKey.encryptedKeyValue,
+            isActive: backendKey.active ?? backendKey.isActive,
+            registeredDomain: backendKey.registeredDomain || undefined,
+            tier: backendKey.rateLimitTier,
+            environment: 'production' as 'development' | 'staging' | 'production' | 'testing',
+            scopes: backendKey.scopes || [],
+            allowedIps: backendKey.allowedIps || [],
+            allowedDomains: backendKey.allowedDomains || [],
+            usage: {
+              requestsToday: 0,
+              remainingToday: 10000,
+              lastUsed: backendKey.lastUsedAt || backendKey.createdAt,
+              rateLimitStatus: 'OK' as 'OK' | 'WARNING' | 'EXCEEDED'
+            },
+            security: {
+              ipRestrictions: {
+                enabled: backendKey.allowedIps.length > 0,
+                whitelist: backendKey.allowedIps
+              },
+              domainRestrictions: {
+                enabled: backendKey.allowedDomains.length > 0 || !!backendKey.registeredDomain,
+                allowedDomains: backendKey.allowedDomains.length > 0 ? backendKey.allowedDomains : [backendKey.registeredDomain || '']
+              },
+              webhookUrls: [],
+              allowedOrigins: backendKey.allowedDomains.length > 0 ? backendKey.allowedDomains : [backendKey.registeredDomain || '']
+            },
+            expiresAt: backendKey.expiresAt || undefined,
+            createdAt: backendKey.createdAt,
+            updatedAt: backendKey.updatedAt || undefined,
+            lastUsedAt: backendKey.lastUsedAt || undefined,
+            revokedAt: backendKey.revokedAt || undefined,
+            status: this.determineApiKeyStatus(backendKey)
+          }));
+          
+          return { keys: mappedKeys };
+        }),
+        tap(data => {
+          this.apiKeysCache = data;
+          this.cacheTimestamp = now;
+          // Update the BehaviorSubject with fresh data
+          this.apiKeysSubject.next(data.keys);
+          console.log('Real API keys force refreshed, new count:', data.keys.length);
+        }),
+        catchError(error => {
+          console.error('Error force refreshing API keys from backend:', error);
+          return of({ keys: [] });
+        })
+      ).subscribe();
+    }
+  }
   /**
    * Update an existing API key
    */

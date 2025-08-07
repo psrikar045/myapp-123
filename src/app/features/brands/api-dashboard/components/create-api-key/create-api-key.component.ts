@@ -250,15 +250,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
             // Show success message
             this.errorHandler.showSuccess('API key created successfully! Make sure to copy and save it securely.');
             
-            // Refresh API keys cache to ensure the new key appears with correct status
-            this.apiKeyService.refreshApiKeys().subscribe({
-              next: (refreshedData) => {
-                console.log('API keys refreshed after creation:', refreshedData);
-              },
-              error: (refreshError) => {
-                console.warn('Failed to refresh API keys after creation:', refreshError);
-              }
-            });
+            // Note: API key refresh is now handled automatically by the service
             
             // Auto-redirect to account hub after 30 seconds, or user can click "Back to Account Hub"
             setTimeout(() => {
