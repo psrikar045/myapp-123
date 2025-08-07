@@ -53,17 +53,51 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
     if (this.apiKey) {
       this.populateForm();
     }
+    
+    // Test date formatting with various formats
+    this.testDateFormatting();
+  }
+  
+  /**
+   * Test date formatting with various input formats
+   */
+  private testDateFormatting(): void {
+    const testDates = [
+      '2024-12-25T14:30:00Z',
+      '2024-12-25T14:30:00.000Z',
+      '2024-12-25T14:30:00',
+      '2024-12-25 14:30:00',
+      '2024-12-25'
+    ];
+    
+    console.log('Testing date formatting for date input:');
+    testDates.forEach(dateStr => {
+      const formatted = this.formatDateForInput(dateStr);
+      console.log(`${dateStr} -> ${formatted}`);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     // Repopulate form when apiKey input changes
-    if (changes['apiKey'] && changes['apiKey'].currentValue) {
-      this.populateForm();
+    if (changes['apiKey']) {
+      if (changes['apiKey'].currentValue) {
+        // Use setTimeout to ensure the form is ready
+        setTimeout(() => {
+          this.populateForm();
+        }, 0);
+      }
     }
     
     // Reset form when modal is closed
     if (changes['isVisible'] && !changes['isVisible'].currentValue && changes['isVisible'].previousValue) {
       this.resetForm();
+    }
+    
+    // Repopulate form when modal is opened with existing data
+    if (changes['isVisible'] && changes['isVisible'].currentValue && !changes['isVisible'].previousValue && this.apiKey) {
+      setTimeout(() => {
+        this.populateForm();
+      }, 0);
     }
   }
 
@@ -81,11 +115,33 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
       description: ['', [Validators.maxLength(1000)]],
       registeredDomain: [''],
       isActive: [true],
-      expiresAt: [''],
+      expiresAt: ['', [this.futureDateValidator]],
       allowedIps: [''],
       allowedDomains: [''],
       rateLimitTier: ['', Validators.required]
     });
+  }
+
+  /**
+   * Custom validator to ensure expiration date is in the future
+   */
+  private futureDateValidator(control: any) {
+    if (!control.value) {
+      return null; // Allow empty values (no expiration)
+    }
+    
+    const selectedDate = new Date(control.value);
+    const now = new Date();
+    
+    if (isNaN(selectedDate.getTime())) {
+      return { invalidDate: true };
+    }
+    
+    if (selectedDate <= now) {
+      return { pastDate: true };
+    }
+    
+    return null;
   }
 
   /**
@@ -99,11 +155,7 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
     // Format expiration date for input field
     let expirationDate = '';
     if (this.apiKey.expiresAt) {
-      const date = new Date(this.apiKey.expiresAt);
-      if (!isNaN(date.getTime())) {
-        // Format as YYYY-MM-DDTHH:mm for datetime-local input
-        expirationDate = date.toISOString().slice(0, 16);
-      }
+      expirationDate = this.formatDateForInput(this.apiKey.expiresAt);
     }
 
     const formData = {
@@ -117,7 +169,15 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
       rateLimitTier: this.apiKey.tier || 'FREE_TIER'
     };
 
+    console.log('Populating form with data:', formData);
+    
     this.editForm.patchValue(formData);
+    
+    // Force change detection for the expiration date field
+    this.editForm.get('expiresAt')?.updateValueAndValidity();
+    
+    // Log the final form value to verify
+    console.log('Form populated, expiresAt value:', this.editForm.get('expiresAt')?.value);
   }
 
   /**
@@ -157,14 +217,56 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
       }
 
       // Handle expiration date
-      if (formValue.expiresAt) {
-        const expirationDate = new Date(formValue.expiresAt);
-        if (!isNaN(expirationDate.getTime())) {
-          updateRequest.expiresAt = expirationDate.toISOString();
+      const currentExpiresAt = this.apiKey.expiresAt || '';
+      const newExpiresAt = formValue.expiresAt || '';
+      
+      // Compare dates properly by converting both to ISO strings
+      let currentDateISO = '';
+      let newDateISO = '';
+      
+      if (currentExpiresAt) {
+        try {
+          const currentDate = new Date(currentExpiresAt);
+          if (!isNaN(currentDate.getTime())) {
+            // For comparison, we'll use just the date part
+            const year = currentDate.getFullYear();
+            const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+            const day = String(currentDate.getDate()).padStart(2, '0');
+            currentDateISO = `${year}-${month}-${day}`;
+          }
+        } catch (error) {
+          console.warn('Error parsing current expiration date:', currentExpiresAt);
         }
-      } else if (this.apiKey.expiresAt) {
-        // If expiration was cleared, set to null
-        updateRequest.expiresAt = undefined;
+      }
+      
+      if (newExpiresAt) {
+        try {
+          // The date input gives us a date string in YYYY-MM-DD format
+          // For comparison, we'll use the date part only
+          newDateISO = newExpiresAt;
+          console.log('Processing new expiration date:', {
+            input: newExpiresAt,
+            forComparison: newDateISO
+          });
+        } catch (error) {
+          console.warn('Error parsing new expiration date:', newExpiresAt);
+        }
+      }
+      
+      if (newDateISO !== currentDateISO) {
+        if (newDateISO) {
+          // Convert the date to end of day for the backend
+          const expirationDate = new Date(newDateISO + 'T23:59:59');
+          updateRequest.expiresAt = expirationDate.toISOString();
+          console.log('Setting expiration date for backend:', {
+            dateInput: newDateISO,
+            endOfDay: newDateISO + 'T23:59:59',
+            iso: updateRequest.expiresAt
+          });
+        } else {
+          // If expiration was cleared, set to undefined
+          updateRequest.expiresAt = undefined;
+        }
       }
 
       // Handle allowed IPs
@@ -278,6 +380,8 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
       if (field.errors['required']) return `${this.getFieldDisplayName(fieldName)} is required`;
       if (field.errors['minlength']) return `${this.getFieldDisplayName(fieldName)} must be at least ${field.errors['minlength'].requiredLength} characters`;
       if (field.errors['maxlength']) return `${this.getFieldDisplayName(fieldName)} must be no more than ${field.errors['maxlength'].requiredLength} characters`;
+      if (field.errors['invalidDate']) return `Please enter a valid date and time`;
+      if (field.errors['pastDate']) return `Expiration date must be in the future`;
     }
     return '';
   }
@@ -305,5 +409,119 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
   getTierDisplayName(tier: string): string {
     const tierObj = this.rateLimitTiers.find(t => t.value === tier);
     return tierObj ? tierObj.label : tier;
+  }
+
+  /**
+   * Format expiration date for display
+   */
+  formatExpirationDate(dateValue: string): string {
+    if (!dateValue) return '';
+    
+    try {
+      // For date input, we get YYYY-MM-DD format
+      // Convert to a more readable format
+      const date = new Date(dateValue + 'T00:00:00');
+      if (isNaN(date.getTime())) return '';
+      
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch (error) {
+      console.warn('Error formatting expiration date:', dateValue, error);
+      return '';
+    }
+  }
+
+  /**
+   * Clear the expiration date
+   */
+  clearExpirationDate(): void {
+    this.editForm.get('expiresAt')?.setValue('');
+    this.editForm.get('expiresAt')?.markAsTouched();
+  }
+
+  /**
+   * Set default expiration date (30 days from now)
+   */
+  setDefaultExpirationDate(): void {
+    const defaultDate = new Date();
+    defaultDate.setDate(defaultDate.getDate() + 30);
+    
+    // Format as YYYY-MM-DD for date input
+    const year = defaultDate.getFullYear();
+    const month = String(defaultDate.getMonth() + 1).padStart(2, '0');
+    const day = String(defaultDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    
+    this.editForm.get('expiresAt')?.setValue(formattedDate);
+    this.editForm.get('expiresAt')?.markAsTouched();
+  }
+
+  /**
+   * Format date string for date input (YYYY-MM-DD format)
+   * Extracts only the date part, ignoring time
+   */
+  private formatDateForInput(dateString: string): string {
+    if (!dateString) return '';
+    
+    try {
+      let formatted = '';
+      
+      // Check if this is an ISO string with timezone info
+      if (dateString.includes('T') && (dateString.endsWith('Z') || dateString.includes('+') || dateString.includes('-'))) {
+        // This is an ISO string with timezone info (likely from backend)
+        // For date input, we only need the date part (YYYY-MM-DD)
+        
+        // Extract the date part manually to avoid timezone conversion
+        const isoMatch = dateString.match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (isoMatch) {
+          const [, year, month, day] = isoMatch;
+          formatted = `${year}-${month}-${day}`;
+          
+          console.log('Manual ISO date parsing:', {
+            original: dateString,
+            extracted: { year, month, day },
+            formatted
+          });
+        } else {
+          // Fallback to Date parsing
+          const date = new Date(dateString);
+          if (!isNaN(date.getTime())) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            formatted = `${year}-${month}-${day}`;
+            
+            console.log('Fallback Date parsing for date input:', {
+              original: dateString,
+              parsed: date,
+              formatted
+            });
+          }
+        }
+      } else {
+        // This might be a local datetime string without timezone info
+        const date = new Date(dateString);
+        if (!isNaN(date.getTime())) {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, '0');
+          const day = String(date.getDate()).padStart(2, '0');
+          formatted = `${year}-${month}-${day}`;
+          
+          console.log('Local date parsing:', {
+            original: dateString,
+            parsed: date,
+            formatted
+          });
+        }
+      }
+      
+      return formatted;
+    } catch (error) {
+      console.warn('Error formatting date for input:', dateString, error);
+      return '';
+    }
   }
 }

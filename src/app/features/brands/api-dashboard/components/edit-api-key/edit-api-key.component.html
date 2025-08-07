@@ -123,16 +123,46 @@
 
               <!-- Expiration Date -->
               <div class="col-md-6">
-                <label for="expiresAt" class="form-label fw-medium">Expiration Date</label>
-                <input 
-                  type="datetime-local" 
-                  class="form-control" 
-                  id="expiresAt" 
-                  formControlName="expiresAt"
-                  [class.is-invalid]="hasFieldError('expiresAt')">
-                <small class="form-text text-body-secondary">Leave empty for no expiration</small>
+                <label for="expiresAt" class="form-label fw-medium">
+                  <i class="bi bi-calendar-event me-1"></i>Expiration Date
+                </label>
+                <div class="input-group">
+                  <input 
+                    type="date" 
+                    class="form-control" 
+                    id="expiresAt" 
+                    formControlName="expiresAt"
+                    [class.is-invalid]="hasFieldError('expiresAt')"
+                    placeholder="Select expiration date"
+                    style="cursor: pointer;">
+                  <button 
+                    *ngIf="editForm.get('expiresAt')?.value" 
+                    type="button" 
+                    class="btn btn-outline-secondary" 
+                    (click)="clearExpirationDate()"
+                    title="Clear expiration date">
+                    <i class="bi bi-x-lg"></i>
+                  </button>
+                </div>
+                <small class="form-text text-body-secondary">
+                  <i class="bi bi-info-circle me-1"></i>Leave empty for no expiration. API key will expire at end of selected day.
+                  <button 
+                    *ngIf="!editForm.get('expiresAt')?.value" 
+                    type="button" 
+                    class="btn btn-link btn-sm p-0 ms-2" 
+                    (click)="setDefaultExpirationDate()"
+                    title="Set to 30 days from now">
+                    <i class="bi bi-calendar-plus me-1"></i>Set 30 days
+                  </button>
+                </small>
                 <div *ngIf="hasFieldError('expiresAt')" class="invalid-feedback">
-                  {{ getFieldError('expiresAt') }}
+                  <i class="bi bi-exclamation-circle me-1"></i>{{ getFieldError('expiresAt') }}
+                </div>
+                <div *ngIf="editForm.get('expiresAt')?.value" class="mt-1">
+                  <small class="text-success">
+                    <i class="bi bi-check-circle me-1"></i>
+                    Expires: {{ formatExpirationDate(editForm.get('expiresAt')?.value) }}
+                  </small>
                 </div>
               </div>
             </div>

@@ -75,6 +75,57 @@ h6 {
   }
 }
 
+// Date input specific styles
+input[type="date"] {
+  position: relative;
+  
+  &::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='%23212529' d='M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z'/%3e%3c/svg%3e");
+    background-size: 16px 16px;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 20px;
+    height: 20px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+    
+    &:hover {
+      opacity: 1;
+    }
+  }
+  
+  // Ensure the input is clickable
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  
+  // Firefox specific
+  &[type="date"] {
+    -moz-appearance: textfield;
+  }
+}
+
+// Input group for expiration date with clear button
+.input-group {
+  .btn-outline-secondary {
+    border-color: var(--bs-border-color);
+    color: var(--bs-secondary);
+    
+    &:hover {
+      background-color: var(--bs-secondary);
+      border-color: var(--bs-secondary);
+      color: white;
+    }
+    
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(var(--bs-secondary-rgb), 0.25);
+    }
+  }
+}
+
 // Form Switch
 .form-check-input {
   &:checked {
