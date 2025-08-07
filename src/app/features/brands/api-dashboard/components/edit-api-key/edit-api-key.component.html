@@ -145,7 +145,13 @@
                   </button>
                 </div>
                 <small class="form-text text-body-secondary">
-                  <i class="bi bi-info-circle me-1"></i>Leave empty for no expiration. API key will expire at end of selected day.
+                  <div *ngIf="editForm.get('expiresAt')?.value" class="mt-1">
+                  <small class="text-success">
+                    <i class="bi bi-check-circle me-1"></i>
+                    Expires: {{ formatExpirationDate(editForm.get('expiresAt')?.value) }}
+                  </small>
+                </div>
+                  <i class="bi bi-info-circle me-1"></i>API key will expire at end of selected day.
                   <button 
                     *ngIf="!editForm.get('expiresAt')?.value" 
                     type="button" 
@@ -157,13 +163,7 @@
                 </small>
                 <div *ngIf="hasFieldError('expiresAt')" class="invalid-feedback">
                   <i class="bi bi-exclamation-circle me-1"></i>{{ getFieldError('expiresAt') }}
-                </div>
-                <div *ngIf="editForm.get('expiresAt')?.value" class="mt-1">
-                  <small class="text-success">
-                    <i class="bi bi-check-circle me-1"></i>
-                    Expires: {{ formatExpirationDate(editForm.get('expiresAt')?.value) }}
-                  </small>
-                </div>
+                </div> 
               </div>
             </div>
           </div>
