@@ -10,13 +10,14 @@ import { ErrorHandlerService } from '../../../shared/services/error-handler.serv
 import { ClipboardService } from '../../../shared/services/clipboard.service';
 
 import { ErrorDisplayComponent } from './components/error-display/error-display.component';
+import { EditApiKeyComponent } from './components/edit-api-key/edit-api-key.component';
 import { ApiDashboardData, DashboardStats, RecentProject } from './models/dashboard.model';
 import { ApiKey } from './models/api-key.model';
 
 @Component({
   selector: 'app-api-dashboard',
   standalone: true,
-  imports: [CommonModule, ErrorDisplayComponent],
+  imports: [CommonModule, ErrorDisplayComponent, EditApiKeyComponent],
   templateUrl: './api-dashboard.component.html',
   styleUrls: ['./api-dashboard.component.scss']
 })
@@ -40,6 +41,10 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   error: string | null = null;
   deleting = false;
   
+  // Edit modal state
+  showEditModal = false;
+  editingApiKey: ApiKey | null = null;
+  
   // Theme state
   isDarkMode$: any;
   
@@ -57,6 +62,15 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isDarkMode$ = this.themeService.isDarkMode$;
+    
+    // Subscribe to API keys updates from the service
+    this.apiKeyService.apiKeys$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(apiKeys => {
+      this.apiKeys = apiKeys;
+      this.initializeApiKeyFilters();
+    });
+    
     this.loadDashboardData();
   }
 
@@ -79,7 +93,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
     forkJoin({
       stats: this.apiDashboardService.getDashboardStats(refresh),
       projects: this.apiDashboardService.getRecentProjects(),
-      apiKeys: this.apiKeyService.getApiKeys()
+      apiKeys: this.apiKeyService.ensureApiKeysLoaded(refresh)
     }).pipe(
       takeUntil(this.destroy$)
     ).subscribe({
@@ -88,8 +102,8 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
         this.recentProjects = data.projects.projects;
         this.apiKeys = data.apiKeys.keys;
         
-        // Update services with loaded data
-        this.apiKeyService.updateApiKeys(this.apiKeys);
+        // Don't call updateApiKeys here - getApiKeys() already updates the BehaviorSubject
+        // this.apiKeyService.updateApiKeys(this.apiKeys);
         
         // Initialize API key filters and selection
         this.initializeApiKeyFilters();
@@ -294,7 +308,40 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
    * Edit API key
    */
   editApiKey(apiKey: ApiKey): void {
-    // this.router.navigate(['/brands/api-dashboard/api-keys', apiKey.id, 'edit']);
+    this.editingApiKey = apiKey;
+    this.showEditModal = true;
+  }
+
+  /**
+   * Handle edit modal close
+   */
+  onEditModalClose(): void {
+    this.showEditModal = false;
+    this.editingApiKey = null;
+  }
+
+  /**
+   * Handle edit modal save
+   */
+  onEditModalSave(updatedApiKey: ApiKey): void {
+    // Update the API key in the local arrays
+    const index = this.apiKeys.findIndex(key => key.id === updatedApiKey.id);
+    if (index !== -1) {
+      this.apiKeys[index] = updatedApiKey;
+    }
+
+    const filteredIndex = this.filteredApiKeys.findIndex(key => key.id === updatedApiKey.id);
+    if (filteredIndex !== -1) {
+      this.filteredApiKeys[filteredIndex] = updatedApiKey;
+    }
+
+    // Update selected API key if it's the one being edited
+    if (this.selectedApiKey && this.selectedApiKey.id === updatedApiKey.id) {
+      this.selectedApiKey = updatedApiKey;
+    }
+
+    // Note: The service already handles updating the API keys list in updateApiKey method
+    // No need to call updateApiKeys here to avoid conflicts
   }
 
   /**
@@ -332,13 +379,16 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
    * Toggle API key status
    */
   toggleApiKeyStatus(apiKey: ApiKey): void {
-    const newStatus = apiKey.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE';
+    const newStatus = apiKey.status === 'ACTIVE' ? 'REVOKED' : 'ACTIVE';
     this.apiKeyService.updateApiKeyStatus(apiKey.id, newStatus)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          apiKey.status = newStatus;
-          this.errorHandler.showSuccess(`API key ${newStatus.toLowerCase()} successfully`);
+          // Don't update the local apiKey.status directly here
+          // The service's updateApiKeyStatus method already handles updating the BehaviorSubject
+          // which will automatically update all subscribed components
+          const statusText = newStatus === 'REVOKED' ? 'revoked' : 'activated';
+          this.errorHandler.showSuccess(`API key ${statusText} successfully`);
         },
         error: (error) => {
           console.error('Error updating API key status:', error);
@@ -396,13 +446,16 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
           return;
         }
 
-        // Remove the deleted API key from the arrays
-        this.apiKeys = this.apiKeys.filter(key => key.id !== apiKey.id);
-        this.filteredApiKeys = this.filteredApiKeys.filter(key => key.id !== apiKey.id);
+        // Don't update local arrays directly here
+        // The service's deleteApiKey method already handles updating the BehaviorSubject
+        // which will automatically update all subscribed components
         
         // Clear selection if the deleted key was selected
         if (this.selectedApiKey && this.selectedApiKey.id === apiKey.id) {
-          this.selectedApiKey = this.filteredApiKeys.length > 0 ? this.filteredApiKeys[0] : null;
+          // Wait for the subscription to update the arrays, then select a new key
+          setTimeout(() => {
+            this.selectedApiKey = this.filteredApiKeys.length > 0 ? this.filteredApiKeys[0] : null;
+          }, 0);
         }
 
         this.deleting = false;
@@ -611,7 +664,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
       case 'ACTIVE':
         return 'badge bg-success';
       case 'SUSPENDED':
-        return 'badge bg-secondary';
+        return 'badge bg-danger'; // Treat suspended as revoked (danger)
       case 'EXPIRED':
         return 'badge bg-warning';
       case 'REVOKED':
@@ -656,7 +709,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
       case 'ACTIVE':
         return 'Active';
       case 'SUSPENDED':
-        return 'Inactive';
+        return 'Revoked'; // Treat suspended as revoked
       case 'EXPIRED':
         return 'Expired';
       case 'REVOKED':
@@ -765,6 +818,13 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
       return error.error.message;
     }
     return 'Failed to load dashboard data. Please try again.';
+  }
+
+  /**
+   * Check if API key is effectively revoked (either REVOKED or SUSPENDED)
+   */
+  isApiKeyRevoked(apiKey: ApiKey): boolean {
+    return apiKey.status === 'REVOKED' || apiKey.status === 'SUSPENDED';
   }
 
 }

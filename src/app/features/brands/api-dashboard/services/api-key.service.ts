@@ -7,6 +7,7 @@ import {
   CreateApiKeyRequest, 
   CreateApiKeyResponse,
   RegenerateApiKeyResponse,
+  ApiKeyUpdateRequest,
   SecuritySettings,
   ExpirationSettings
 } from '../models/api-key.model';
@@ -69,9 +70,21 @@ export class ApiKeyService {
    * Get all API keys for the current user
    */
   getApiKeys(): Observable<{ keys: ApiKey[] }> {
-    // Check cache first
+    // Check if we have current data in the BehaviorSubject first
+    const currentKeys = this.apiKeysSubject.value;
+    if (currentKeys && currentKeys.length > 0) {
+      // Update cache with current data and return it
+      const result = { keys: currentKeys };
+      this.apiKeysCache = result;
+      this.cacheTimestamp = Date.now();
+      return of(result);
+    }
+    
+    // Check cache if no current data in BehaviorSubject
     const now = Date.now();
     if (this.apiKeysCache && (now - this.cacheTimestamp) < this.CACHE_DURATION) {
+      // Update BehaviorSubject with cached data
+      this.apiKeysSubject.next(this.apiKeysCache.keys);
       return of(this.apiKeysCache);
     }
 
@@ -82,6 +95,8 @@ export class ApiKeyService {
         tap(data => {
           this.apiKeysCache = data;
           this.cacheTimestamp = now;
+          // Also update the BehaviorSubject with fresh data
+          this.apiKeysSubject.next(data.keys);
         }),
         catchError(error => {
           console.error('Error loading mock API keys:', error);
@@ -142,6 +157,8 @@ export class ApiKeyService {
       tap(data => {
         this.apiKeysCache = data;
         this.cacheTimestamp = now;
+        // Also update the BehaviorSubject with fresh data
+        this.apiKeysSubject.next(data.keys);
       }),
       catchError(error => {
         console.error('Error fetching API keys from backend:', error);
@@ -183,15 +200,88 @@ export class ApiKeyService {
   /**
    * Update an existing API key
    */
-  updateApiKey(id: string, updates: Partial<CreateApiKeyRequest>): Observable<ApiKey> {
-    return this.http.put<ApiKey>(`${this.apiUrl}/${id}`, updates);
+  updateApiKey(id: string, updates: ApiKeyUpdateRequest): Observable<BackendApiKey> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    return this.http.put<BackendApiKey>(`${this.apiUrl}/${id}`, updates, { headers }).pipe(
+      tap(response => {
+        console.log('API key updated successfully:', response.id);
+        
+        // Update the specific API key in the current list
+        const currentKeys = this.getCurrentApiKeys();
+        const updatedKeys = currentKeys.map(key => {
+          if (key.id === id) {
+            // Transform backend response to frontend ApiKey format
+            return {
+              ...key,
+              name: response.name,
+              description: response.description || undefined,
+              registeredDomain: response.registeredDomain || undefined,
+              tier: response.rateLimitTier,
+              allowedIps: response.allowedIps,
+              allowedDomains: response.allowedDomains,
+              expiresAt: response.expiresAt || undefined,
+              status: this.determineApiKeyStatus(response),
+              updatedAt: response.updatedAt || new Date().toISOString()
+            };
+          }
+          return key;
+        });
+        
+        // Update the API keys list with the specific change
+        this.updateApiKeys(updatedKeys);
+        
+        // Invalidate cache to force refresh on next getApiKeys() call
+        this.apiKeysCache = null;
+        this.cacheTimestamp = 0;
+      }),
+      catchError(error => {
+        console.error('Error updating API key:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   /**
    * Revoke an API key
    */
   revokeApiKey(id: string): Observable<{ success: boolean; message?: string }> {
-    return this.http.patch<{ success: boolean; message?: string }>(`${this.apiUrl}/${id}/revoke`, {});
+    return this.http.patch<{ success: boolean; message?: string }>(`${this.apiUrl}/${id}/revoke`, {}).pipe(
+      tap(response => {
+        console.log('API key revoked successfully:', id, response);
+        
+        if (response.success) {
+          // Update the specific API key status in the current list
+          const currentKeys = this.getCurrentApiKeys();
+          const updatedKeys = currentKeys.map(key => {
+            if (key.id === id) {
+              return {
+                ...key,
+                status: 'REVOKED' as 'ACTIVE' | 'REVOKED' | 'SUSPENDED' | 'EXPIRED',
+                isActive: false,
+                revokedAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+              };
+            }
+            return key;
+          });
+          
+          // Update the API keys list with the specific change
+          this.updateApiKeys(updatedKeys);
+          
+          // Invalidate cache to force refresh on next getApiKeys() call
+          this.apiKeysCache = null;
+          this.cacheTimestamp = 0;
+        }
+      }),
+      catchError(error => {
+        console.error('Error revoking API key:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   /**
@@ -256,6 +346,9 @@ export class ApiKeyService {
    */
   updateApiKeys(keys: ApiKey[]): void {
     this.apiKeysSubject.next(keys);
+    // Also update the cache to keep it in sync
+    this.apiKeysCache = { keys };
+    this.cacheTimestamp = Date.now();
   }
 
   /**
@@ -263,6 +356,29 @@ export class ApiKeyService {
    */
   getCurrentApiKeys(): ApiKey[] {
     return this.apiKeysSubject.value;
+  }
+
+  /**
+   * Ensure API keys are loaded and return the current data
+   * This method prioritizes BehaviorSubject data over cache/API calls
+   */
+  ensureApiKeysLoaded(forceRefresh: boolean = false): Observable<{ keys: ApiKey[] }> {
+    const currentKeys = this.apiKeysSubject.value;
+    
+    // If forcing refresh, clear cache and fetch from API
+    if (forceRefresh) {
+      this.apiKeysCache = null;
+      this.cacheTimestamp = 0;
+      return this.getApiKeys();
+    }
+    
+    // If we have current data in BehaviorSubject, return it immediately
+    if (currentKeys && currentKeys.length > 0) {
+      return of({ keys: currentKeys });
+    }
+    
+    // If no current data, fetch from API and update BehaviorSubject
+    return this.getApiKeys();
   }
 
   /**
@@ -410,7 +526,38 @@ export class ApiKeyService {
    * Update API key status
    */
   updateApiKeyStatus(id: string, status: string): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/${id}/status`, { status });
+    return this.http.patch<BackendApiKey>(`${this.apiUrl}/${id}/status`, { status }).pipe(
+      tap(response => {
+        console.log('API key status updated successfully:', id, status, 'Backend response:', response);
+        
+        // Update the specific API key status in the current list
+        const currentKeys = this.getCurrentApiKeys();
+        const updatedKeys = currentKeys.map(key => {
+          if (key.id === id) {
+            return {
+              ...key,
+              // Use the backend response to determine the actual status
+              status: response ? this.determineApiKeyStatus(response) : status as 'ACTIVE' | 'REVOKED' | 'SUSPENDED' | 'EXPIRED',
+              isActive: response ? (response.active ?? response.isActive) : (status === 'ACTIVE'),
+              revokedAt: response?.revokedAt || (status === 'REVOKED' ? new Date().toISOString() : undefined),
+              updatedAt: response?.updatedAt || new Date().toISOString()
+            };
+          }
+          return key;
+        });
+        
+        // Update the API keys list with the specific change
+        this.updateApiKeys(updatedKeys);
+        
+        // Invalidate cache to force refresh on next getApiKeys() call
+        this.apiKeysCache = null;
+        this.cacheTimestamp = 0;
+      }),
+      catchError(error => {
+        console.error('Error updating API key status:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   /**

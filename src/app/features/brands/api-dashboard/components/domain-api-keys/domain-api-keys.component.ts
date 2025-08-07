@@ -58,6 +58,26 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // Subscribe to API keys updates from the service
+    this.apiKeyService.apiKeys$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(apiKeys => {
+      // Update domain API keys if we have a domain filter
+      if (this.domain) {
+        this.domainApiKeys = apiKeys.filter(key => 
+          key.registeredDomain?.toLowerCase() === this.domain.toLowerCase()
+        );
+      }
+      
+      // Update selected API key if it exists in the updated list
+      if (this.selectedApiKey) {
+        const updatedSelectedKey = apiKeys.find(key => key.id === this.selectedApiKey!.id);
+        if (updatedSelectedKey) {
+          this.selectedApiKey = updatedSelectedKey;
+        }
+      }
+    });
+
     this.route.params.pipe(
       takeUntil(this.destroy$)
     ).subscribe(params => {
@@ -89,7 +109,7 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
     // No need to manually control it here
 
     // Load all keys first, then load dashboard data in sequence
-    this.apiKeyService.getApiKeys().pipe(
+    this.apiKeyService.ensureApiKeysLoaded().pipe(
       takeUntil(this.destroy$),
       switchMap((allKeys) => {
         // Find the selected API key
@@ -780,5 +800,12 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
     }
 
     return this._cachedGroupedKeys;
+  }
+
+  /**
+   * Check if API key is effectively revoked (either REVOKED or SUSPENDED)
+   */
+  isApiKeyRevoked(apiKey: ApiKey): boolean {
+    return apiKey.status === 'REVOKED' || apiKey.status === 'SUSPENDED';
   }
 }

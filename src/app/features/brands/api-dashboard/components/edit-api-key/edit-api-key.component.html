@@ -1,0 +1,237 @@
+<!-- Edit API Key Modal -->
+<div class="modal fade" [class.show]="isVisible" [style.display]="isVisible ? 'block' : 'none'" 
+     tabindex="-1" role="dialog" aria-labelledby="editApiKeyModalLabel" aria-hidden="true"
+     [class.modal-backdrop-show]="isVisible">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content border-0 shadow-lg">
+      
+      <!-- Modal Header -->
+      <div class="modal-header border-0 pb-0">
+        <div class="d-flex align-items-center">
+          <div class="bg-primary bg-opacity-10 rounded-3 p-2 me-3">
+            <i class="bi bi-pencil-square text-primary fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bold mb-0" id="editApiKeyModalLabel">Edit API Key</h5>
+            <small class="text-body-secondary">{{ apiKey?.name }}</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close" (click)="close()" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body pt-3">
+        
+        <!-- Error Display -->
+        <div *ngIf="error" class="alert alert-danger border-0 rounded-3 mb-4">
+          <div class="d-flex align-items-start">
+            <i class="bi bi-exclamation-triangle-fill me-2 text-danger"></i>
+            <div>
+              <strong>Error:</strong> {{ error }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Edit Form -->
+        <form [formGroup]="editForm" (ngSubmit)="onSubmit()" *ngIf="apiKey">
+          
+          <!-- Basic Information Section -->
+          <div class="mb-4">
+            <h6 class="fw-semibold text-body-emphasis mb-3">
+              <i class="bi bi-info-circle me-2"></i>Basic Information
+            </h6>
+            
+            <div class="row g-3">
+              <!-- Name Field -->
+              <div class="col-12">
+                <label for="name" class="form-label fw-medium">
+                  Name <span class="text-danger">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="name" 
+                  formControlName="name"
+                  [class.is-invalid]="hasFieldError('name')"
+                  placeholder="Enter API key name">
+                <div *ngIf="hasFieldError('name')" class="invalid-feedback">
+                  {{ getFieldError('name') }}
+                </div>
+              </div>
+
+              <!-- Description Field -->
+              <div class="col-12">
+                <label for="description" class="form-label fw-medium">Description</label>
+                <textarea 
+                  class="form-control" 
+                  id="description" 
+                  formControlName="description"
+                  rows="3"
+                  [class.is-invalid]="hasFieldError('description')"
+                  placeholder="Optional description for this API key"></textarea>
+                <div *ngIf="hasFieldError('description')" class="invalid-feedback">
+                  {{ getFieldError('description') }}
+                </div>
+              </div>
+
+              <!-- Registered Domain Field -->
+              <div class="col-12">
+                <label for="registeredDomain" class="form-label fw-medium">Registered Domain</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="registeredDomain" 
+                  formControlName="registeredDomain"
+                  [class.is-invalid]="hasFieldError('registeredDomain')"
+                  placeholder="e.g., example.com">
+                <small class="form-text text-body-secondary">
+                  The primary domain this API key is registered for
+                </small>
+                <div *ngIf="hasFieldError('registeredDomain')" class="invalid-feedback">
+                  {{ getFieldError('registeredDomain') }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Status and Expiration Section -->
+          <div class="mb-4">
+            <h6 class="fw-semibold text-body-emphasis mb-3">
+              <i class="bi bi-gear me-2"></i>Status & Expiration
+            </h6>
+            
+            <div class="row g-3">
+              <!-- Status Toggle -->
+              <div class="col-md-6">
+                <label class="form-label fw-medium">Status</label>
+                <div class="form-check form-switch">
+                  <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    id="isActive" 
+                    formControlName="isActive">
+                  <label class="form-check-label" for="isActive">
+                    <span *ngIf="editForm.get('isActive')?.value" class="text-success">
+                      <i class="bi bi-check-circle me-1"></i>Active
+                    </span>
+                    <span *ngIf="!editForm.get('isActive')?.value" class="text-danger">
+                      <i class="bi bi-x-circle me-1"></i>Revoked
+                    </span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Expiration Date -->
+              <div class="col-md-6">
+                <label for="expiresAt" class="form-label fw-medium">Expiration Date</label>
+                <input 
+                  type="datetime-local" 
+                  class="form-control" 
+                  id="expiresAt" 
+                  formControlName="expiresAt"
+                  [class.is-invalid]="hasFieldError('expiresAt')">
+                <small class="form-text text-body-secondary">Leave empty for no expiration</small>
+                <div *ngIf="hasFieldError('expiresAt')" class="invalid-feedback">
+                  {{ getFieldError('expiresAt') }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rate Limit Tier Section -->
+          <div class="mb-4">
+            <h6 class="fw-semibold text-body-emphasis mb-3">
+              <i class="bi bi-speedometer2 me-2"></i>Rate Limit Tier
+            </h6>
+            
+            <div class="row g-2">
+              <div class="col-12">
+                <label for="rateLimitTier" class="form-label fw-medium">
+                  Tier <span class="text-danger">*</span>
+                </label>
+                <select 
+                  class="form-select" 
+                  id="rateLimitTier" 
+                  formControlName="rateLimitTier"
+                  [class.is-invalid]="hasFieldError('rateLimitTier')">
+                  <option value="">Select a tier</option>
+                  <option *ngFor="let tier of rateLimitTiers" [value]="tier.value">
+                    {{ tier.label }} - {{ tier.description }}
+                  </option>
+                </select>
+                <div *ngIf="hasFieldError('rateLimitTier')" class="invalid-feedback">
+                  {{ getFieldError('rateLimitTier') }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Security Restrictions Section -->
+          <div class="mb-4">
+            <h6 class="fw-semibold text-body-emphasis mb-3">
+              <i class="bi bi-shield-lock me-2"></i>Security Restrictions
+            </h6>
+            
+            <div class="row g-3">
+              <!-- Allowed IPs -->
+              <div class="col-12">
+                <label for="allowedIps" class="form-label fw-medium">Allowed IP Addresses</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="allowedIps" 
+                  formControlName="allowedIps"
+                  [class.is-invalid]="hasFieldError('allowedIps')"
+                  placeholder="e.g., 192.168.1.1, 10.0.0.0/24">
+                <small class="form-text text-body-secondary">
+                  Comma-separated list of IP addresses or CIDR blocks. Leave empty to allow all IPs.
+                </small>
+                <div *ngIf="hasFieldError('allowedIps')" class="invalid-feedback">
+                  {{ getFieldError('allowedIps') }}
+                </div>
+              </div>
+
+              <!-- Allowed Domains -->
+              <div class="col-12">
+                <label for="allowedDomains" class="form-label fw-medium">Allowed Domains</label>
+                <input 
+                  type="text" 
+                  class="form-control" 
+                  id="allowedDomains" 
+                  formControlName="allowedDomains"
+                  [class.is-invalid]="hasFieldError('allowedDomains')"
+                  placeholder="e.g., example.com, api.mysite.com">
+                <small class="form-text text-body-secondary">
+                  Comma-separated list of allowed domains. Leave empty to allow all domains.
+                </small>
+                <div *ngIf="hasFieldError('allowedDomains')" class="invalid-feedback">
+                  {{ getFieldError('allowedDomains') }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer border-0 pt-0">
+        <button type="button" class="btn btn-outline-secondary" (click)="close()" [disabled]="loading">
+          Cancel
+        </button>
+        <button 
+          type="button" 
+          class="btn btn-primary" 
+          (click)="onSubmit()" 
+          [disabled]="loading || editForm.invalid">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          {{ loading ? 'Updating...' : 'Update API Key' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div *ngIf="isVisible" class="modal-backdrop fade show" (click)="close()"></div>

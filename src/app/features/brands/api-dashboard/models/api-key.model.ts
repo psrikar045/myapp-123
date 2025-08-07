@@ -153,3 +153,14 @@ export interface RegenerateApiKeyResponse {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ApiKeyUpdateRequest {
+  name?: string;
+  description?: string;
+  registeredDomain?: string;
+  isActive?: boolean;
+  expiresAt?: string; // LocalDateTime format
+  allowedIps?: string[];
+  allowedDomains?: string[];
+  rateLimitTier?: string;
+}

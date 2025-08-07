@@ -9,12 +9,13 @@ import { ApiKeyService } from '../../services/api-key.service';
 import { ErrorHandlerService } from '../../../../../shared/services/error-handler.service';
 import { SpinnerService } from '../../../../../core/services/spinner.service';
 import { ErrorDisplayComponent } from '../error-display/error-display.component';
+import { EditApiKeyComponent } from '../edit-api-key/edit-api-key.component';
 import { ApiKey } from '../../models/api-key.model';
 
 @Component({
   selector: 'app-api-keys-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, ErrorDisplayComponent],
+  imports: [CommonModule, FormsModule, ErrorDisplayComponent, EditApiKeyComponent],
   templateUrl: './api-keys-list.component.html',
   styleUrls: ['./api-keys-list.component.scss']
 })
@@ -35,6 +36,10 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
   loading = true;
   error: string | null = null;
   deleting = false;
+  
+  // Edit modal state
+  showEditModal = false;
+  editingApiKey: ApiKey | null = null;
 
   // Available filter options
   availableDomains: string[] = [];
@@ -50,6 +55,15 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    // Subscribe to API keys updates from the service
+    this.apiKeyService.apiKeys$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(apiKeys => {
+      this.apiKeys = apiKeys;
+      this.initializeFilters();
+      this.applyFilters();
+    });
+    
     this.initializeApiKeys();
   }
 
@@ -89,7 +103,7 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
   private loadApiKeys(): void {
     this.spinnerService.show();
 
-    this.apiKeyService.getApiKeys()
+    this.apiKeyService.ensureApiKeysLoaded()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response) => {
@@ -162,7 +176,25 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
    * Refresh the API keys list
    */
   refreshApiKeys(): void {
-    this.loadApiKeys();
+    this.spinnerService.show();
+
+    this.apiKeyService.ensureApiKeysLoaded(true) // Force refresh
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.apiKeys = response.keys;
+          this.initializeFilters();
+          this.applyFilters();
+          this.loading = false;
+          this.spinnerService.hide();
+        },
+        error: (error) => {
+          console.error('Error refreshing API keys:', error);
+          this.error = 'Failed to refresh API keys. Please try again.';
+          this.loading = false;
+          this.spinnerService.hide();
+        }
+      });
   }
 
   /**
@@ -190,8 +222,32 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
    * Edit API key
    */
   editApiKey(apiKey: ApiKey): void {
-    // Navigate to edit page when implemented
-    this.errorHandler.showInfo('Edit functionality coming soon');
+    this.editingApiKey = apiKey;
+    this.showEditModal = true;
+  }
+
+  /**
+   * Handle edit modal close
+   */
+  onEditModalClose(): void {
+    this.showEditModal = false;
+    this.editingApiKey = null;
+  }
+
+  /**
+   * Handle edit modal save
+   */
+  onEditModalSave(updatedApiKey: ApiKey): void {
+    // Don't update local arrays directly here
+    // The service's updateApiKey method already handles updating the BehaviorSubject
+    // which will automatically update all subscribed components through the apiKeys$ subscription
+    
+    // Refresh filter options in case tier or domain changed
+    // Use setTimeout to ensure the subscription has processed the update first
+    setTimeout(() => {
+      this.initializeFilters();
+      this.applyFilters();
+    }, 0);
   }
 
   /**
@@ -243,9 +299,9 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
           return;
         }
 
-        // Remove the deleted API key from the arrays
-        this.apiKeys = this.apiKeys.filter(key => key.id !== apiKey.id);
-        this.applyFilters();
+        // Don't update local arrays directly here
+        // The service's deleteApiKey method already handles updating the BehaviorSubject
+        // which will automatically update all subscribed components through the apiKeys$ subscription
 
         this.deleting = false;
 
@@ -337,7 +393,7 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
       case 'ACTIVE':
         return 'Active';
       case 'SUSPENDED':
-        return 'Suspended';
+        return 'Revoked'; // Treat suspended as revoked
       case 'EXPIRED':
         return 'Expired';
       case 'REVOKED':
@@ -355,7 +411,7 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
       case 'ACTIVE':
         return 'badge bg-success';
       case 'SUSPENDED':
-        return 'badge bg-secondary';
+        return 'badge bg-danger'; // Treat suspended as revoked (danger)
       case 'EXPIRED':
         return 'badge bg-warning';
       case 'REVOKED':
@@ -454,5 +510,12 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
    */
   trackByApiKeyId(index: number, apiKey: ApiKey): string {
     return apiKey.id;
+  }
+
+  /**
+   * Check if API key is effectively revoked (either REVOKED or SUSPENDED)
+   */
+  isApiKeyRevoked(apiKey: ApiKey): boolean {
+    return apiKey.status === 'REVOKED' || apiKey.status === 'SUSPENDED';
   }
 }

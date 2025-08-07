@@ -52,27 +52,27 @@
                   [class.btn-outline-success]="!isShowingFullKey(selectedApiKey)"
                   [class.btn-success]="isShowingFullKey(selectedApiKey)"
                   (click)="toggleShowFullKey(selectedApiKey)"
-                  [disabled]="isDecryptingKey(selectedApiKey) || selectedApiKey.status === 'REVOKED'">
+                  [disabled]="isDecryptingKey(selectedApiKey) || isApiKeyRevoked(selectedApiKey)">
             <span *ngIf="isDecryptingKey(selectedApiKey)" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             <i *ngIf="!isDecryptingKey(selectedApiKey)" 
                [class]="isShowingFullKey(selectedApiKey) ? 'bi bi-eye-slash me-1' : 'bi bi-eye me-1'"></i>
             {{ isDecryptingKey(selectedApiKey) ? 'Decrypting...' : (isShowingFullKey(selectedApiKey) ? 'Hide Key' : 'Show Key') }}
           </button>
           <button class="btn btn-outline-primary squared-pill"
-          [disabled]="selectedApiKey.status === 'REVOKED'" (click)="copyApiKey(selectedApiKey)">
+          [disabled]="isApiKeyRevoked(selectedApiKey)" (click)="copyApiKey(selectedApiKey)">
             <i class="bi bi-clipboard me-1"></i>
             Copy Key
           </button>
           <button class="btn btn-outline-danger squared-pill" 
                   (click)="showRevokeConfirmationDialog()"
-                  [disabled]="revoking || selectedApiKey.status === 'REVOKED'">
+                  [disabled]="revoking || isApiKeyRevoked(selectedApiKey)">
             <span *ngIf="revoking" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             <i *ngIf="!revoking" class="bi bi-x-circle me-1"></i>
             {{ revoking ? 'Revoking...' : 'Revoke' }}
           </button>
           <button class="btn btn-outline-warning squared-pill" 
                   (click)="regenerateApiKey(selectedApiKey)" 
-                  [disabled]="regenerating || selectedApiKey.status === 'REVOKED'">
+                  [disabled]="regenerating || isApiKeyRevoked(selectedApiKey)">
             <span *ngIf="regenerating" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             <i *ngIf="!regenerating" class="bi bi-arrow-clockwise me-1"></i>
             {{ regenerating ? 'Regenerating...' : 'Regenerate Key' }}
@@ -225,14 +225,14 @@
                             class="btn btn-outline-secondary btn-sm"
                             [class.btn-success]="isShowingFullKey(selectedApiKey)"
                             (click)="toggleShowFullKey(selectedApiKey)"
-                            [disabled]="isDecryptingKey(selectedApiKey) || selectedApiKey.status === 'REVOKED'"
+                            [disabled]="isDecryptingKey(selectedApiKey) || isApiKeyRevoked(selectedApiKey)"
                             [title]="isShowingFullKey(selectedApiKey) ? 'Hide full key' : 'Show full key'">
                       <span *ngIf="isDecryptingKey(selectedApiKey)" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                       <i *ngIf="!isDecryptingKey(selectedApiKey)" 
                          [class]="isShowingFullKey(selectedApiKey) ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
                     </button>
                     <button class="btn btn-outline-primary btn-sm"
-                     [disabled]="selectedApiKey.status === 'REVOKED'"
+                     [disabled]="isApiKeyRevoked(selectedApiKey)"
                             (click)="copyApiKey(selectedApiKey)"
                             title="Copy to clipboard">
                       <i class="bi bi-clipboard"></i>

@@ -255,3 +255,11 @@
 
   </div>
 </div>
+
+<!-- Edit API Key Modal -->
+<app-edit-api-key
+  [apiKey]="editingApiKey"
+  [isVisible]="showEditModal"
+  (onClose)="onEditModalClose()"
+  (onSave)="onEditModalSave($event)">
+</app-edit-api-key>
