@@ -134,7 +134,7 @@
               class="form-control form-control-lg"
               id="domain"
               formControlName="domain"
-              placeholder="Enter domain or select from dropdown"
+              placeholder="Enter domain"
               style="border: 1px solid #e0e0e0; border-radius: 8px;"
               [class.is-invalid]="hasFieldError('domain')">
             <div *ngIf="hasFieldError('domain')" class="invalid-feedback">
@@ -226,7 +226,7 @@
           </div>
 
           <!-- Rate Limit Tier Section -->
-          <div class="mb-4">
+          <!-- <div class="mb-4">
             <h5 class="fw-bold text-dark mb-3">Rate Limit Tier</h5>
             <div class="row g-3">
               <div class="col-6">
@@ -247,7 +247,7 @@
                   <div class="fw-medium text-dark">PRO (1000 requests/mon)</div>
                 </div>
               </div>
-              <!-- <div class="col-6">
+              <div class="col-6">
                 <div 
                   class="tier-option p-3 border rounded-3 cursor-pointer"
                   [class.selected]="createForm.get('tier')?.value?.tier === 'PREMIUM'"
@@ -255,7 +255,7 @@
                   style="border: 1px solid #e0e0e0; transition: all 0.2s;">
                   <div class="fw-medium text-dark">Premium (100000 requests/day)</div>
                 </div>
-              </div> -->
+              </div>
               <div class="col-6">
                 <div 
                   class="tier-option p-3 border rounded-3 cursor-pointer"
@@ -266,7 +266,7 @@
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
 
           <!-- Permissions Section -->
           <div class="mb-4">

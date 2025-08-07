@@ -634,11 +634,8 @@ export class ApiKeyService {
    * Determine API key status based on backend data
    */
   private determineApiKeyStatus(backendKey: BackendApiKey): 'ACTIVE' | 'EXPIRED' | 'REVOKED' | 'SUSPENDED' {
-    // Check if the key is revoked
-    if (backendKey.revokedAt) {
-      console.log(`API Key ${backendKey.id} status: REVOKED (revokedAt: ${backendKey.revokedAt})`);
-      return 'REVOKED';
-    }
+    // Get the active status from either 'active' or 'isActive' field first
+    const isActive = backendKey.active ?? backendKey.isActive ?? false;
     
     // Check if the key is expired
     if (backendKey.expiresAt) {
@@ -650,8 +647,12 @@ export class ApiKeyService {
       }
     }
     
-    // Get the active status from either 'active' or 'isActive' field
-    const isActive = backendKey.active ?? backendKey.isActive ?? false;
+    // Check if the key is revoked - but only if active is false
+    // If active is true, the key should be considered active regardless of revokedAt timestamp
+    if (backendKey.revokedAt && !isActive) {
+      console.log(`API Key ${backendKey.id} status: REVOKED (revokedAt: ${backendKey.revokedAt}, active: ${isActive})`);
+      return 'REVOKED';
+    }
     
     // For newly created keys (created within the last 5 minutes) that haven't been used yet,
     // treat them as ACTIVE even if active is false, as this might be a backend timing issue
@@ -671,7 +672,7 @@ export class ApiKeyService {
     
     // Default behavior: use active flag
     const finalStatus = isActive ? 'ACTIVE' : 'SUSPENDED';
-    console.log(`API Key ${backendKey.id} status: ${finalStatus} (active: ${isActive})`);
+    console.log(`API Key ${backendKey.id} status: ${finalStatus} (active: ${isActive}, revokedAt: ${backendKey.revokedAt || 'null'})`);
     return finalStatus;
   }
 
