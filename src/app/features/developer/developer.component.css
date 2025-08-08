@@ -8,12 +8,15 @@
 .container {
   max-width: 1200px !important;
   margin: 0 auto;
-  padding: 0 20px;
+  /* padding: 0 20px; */
 }
 
 /* Hero Section */
 .hero-section {
-  background: linear-gradient(135deg, #f6debc 0%, #e1daef 100%);
+  background-image: url('/assets/developer-img/heroSection.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   padding: clamp(60px, 12vh, 120px) clamp(16px, 4vw, 40px);
   text-align: center;
   position: relative;
@@ -22,6 +25,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 45px;
 }
 
 .hero-content {
@@ -94,23 +98,25 @@
 .hero-title {
   /* font-size: var(--font-size-4xl); */
   font-weight: var(--font-weight-bold);
-  color: #1f2937;
+  color: #ffffff;
   margin-bottom: clamp(16px, 3vh, 24px);
   letter-spacing: -0.02em;
   line-height: 1.1;
   word-wrap: break-word;
   hyphens: auto;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .hero-subtitle {
   font-size: var(--font-size-lg);
-  color: #6b7280;
+  color: #e5e7eb;
   margin-bottom: clamp(24px, 5vh, 40px);
   max-width: min(500px, 85vw);
   margin-left: auto;
   margin-right: auto;
   line-height: 1.6;
   font-weight: 400;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .hero-btn {
@@ -138,7 +144,7 @@
 
 /* Why Use RIVO9 Section */
 .why-section {
-  padding: clamp(40px, 8vh, 80px) clamp(16px, 4vw, 40px);
+  padding: 10px;
   background: white;
 }
 
@@ -179,7 +185,7 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   border: 1px solid #e5e6e8;
-  height: 100%;
+  height: 86%;
   display: flex;
   flex-direction: column;
 }
@@ -201,8 +207,8 @@
 }
 
 .feature-image {
-  width: clamp(50px, 8vw, 60px);
-  height: clamp(50px, 8vw, 60px);
+  width: clamp(50px, 8vw, 210px);
+  height: clamp(50px, 8vw, 170px);
   object-fit: contain;
   border-radius: 12px;
   flex-shrink: 0;
@@ -277,19 +283,24 @@
 }
 
 .integration-card {
-  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
-  border-radius: 20px;
+  /* background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); */
+  background: url('/assets/developer-img/integrateSection.svg');
+  border-radius: 40px;
   padding: clamp(40px, 8vw, 60px) clamp(20px, 6vw, 40px);
   text-align: center;
   color: white;
-  /* max-width: 1200px; */
+  max-width: 1200px;
   margin: 0 auto;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  height: 460px;
+  /* box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12); */
 }
 
 .integration-content {
-  max-width: min(700px, 90vw);
-  margin: 0 auto;
+  /* max-width: min(700px, 90vw);
+  margin: 0 auto; */
+  text-align: left;
+    width: 532px;
+    margin-top: 12px;
 }
 
 .integration-title {
@@ -306,8 +317,8 @@
   margin-bottom: clamp(30px, 5vh, 40px);
   opacity: 0.9;
   line-height: 1.6;
-  padding-left: clamp(0px, 6vw, 45px);
-  padding-right: clamp(0px, 4vw, 25px);
+  /* padding-left: clamp(0px, 6vw, 45px);
+  padding-right: clamp(0px, 4vw, 25px); */
   text-align: left;
   color: white;
 }
@@ -412,7 +423,7 @@
   padding-top: clamp(30px, 6vh, 50px);
 }
 .ai-future-section {
-  background-image: url('/assets/developer-img/Secbg1.webp');
+  background-image: url('/assets/developer-img/aiFuture.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -421,21 +432,23 @@
   position: relative;
   overflow: hidden;
   /* max-width: 1200px; */
-  border-radius: 16px;
+  border-radius: 40px;
   margin: 0 auto;
+  height: 450px;
 }
 
 .ai-future-content {
-  max-width: min(800px, 90vw);
-  margin: 0 auto;
+  max-width: min(684px, 90vw);
+  margin: 0 45px;
   position: relative;
+  margin-top: 12px;
   z-index: 2;
 }
 
 .ai-future-title {
   /* font-size: var(--font-size-3xl); */
   font-weight: var(--font-weight-semibold);
-  margin-bottom: clamp(16px, 3vh, 20px);
+  margin-bottom: 10px;
   line-height: 1.2;
   color: white;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
