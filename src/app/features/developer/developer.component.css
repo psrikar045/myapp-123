@@ -26,6 +26,7 @@
   align-items: center;
   justify-content: center;
   margin: 45px;
+  border-radius: 40px;
 }
 
 .hero-content {
@@ -517,7 +518,7 @@
 }
 
 .why-choose-card {
-  background: white;
+  /* background: white; */
   border-radius: 16px;
   padding: clamp(30px, 5vw, 40px) clamp(20px, 4vw, 30px);
   text-align: center;
@@ -552,6 +553,7 @@
   font-weight: 600; */
   color: #1f2937;
   margin-bottom: clamp(10px, 2vh, 12px);
+  padding-top: 20px;
   text-align: left;
   flex-grow: 0;
   font-weight: var(--font-weight-semibold);
