@@ -1,15 +1,15 @@
 /* Base Modal Styles */
 .search-modal-overlay {
   position: fixed;
-  top: 0;
+  top: 72px; /* start below header */
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 72px); /* exclude header height */
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 9999;
+  z-index: 99999;
   padding: 20px;
   box-sizing: border-box;
   overflow: hidden;

@@ -117,16 +117,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.currentTheme = isDark ? 'dark' : 'light';
       });
 
-    // Subscribe to sidenav config changes to handle collapse/expand transitions
+    // Subscribe to sidenav config changes - no positioning adjustments needed since header is now full width
     this.sidenavService.config$
       .pipe(takeUntil(this.destroy$))
       .subscribe(config => {
-        // Force header layout adjustment when sidenav state changes
-        if (isPlatformBrowser(this.platformId)) {
-          setTimeout(() => {
-            this.adjustHeaderForSidenavState(config.collapsed);
-          }, 0);
-        }
+        // Header remains full width regardless of sidenav state
       });
 
     // Initialize responsive behavior
@@ -182,38 +177,22 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const navbar = document.querySelector('.navbar') as HTMLElement;
     if (!navbar) return;
 
-    // Force recalculation of layout
+    // Force recalculation of layout - header now always stays full width
     requestAnimationFrame(() => {
       // Ensure proper positioning
       navbar.style.position = 'fixed';
       navbar.style.top = '0';
-      navbar.style.zIndex = '1030';
-      
-      // Check if sidenav is present and adjust accordingly
-      const sidenav = document.querySelector('.sidenav') as HTMLElement;
-      if (sidenav) {
-        const sidenavWidth = sidenav.offsetWidth;
-        const isCollapsed = sidenav.classList.contains('collapsed');
-        
-        if (typeof window !== 'undefined' && window.innerWidth >= 992) { // Desktop
-          navbar.style.left = `${sidenavWidth}px`;
-          navbar.style.width = `calc(100vw - ${sidenavWidth}px)`;
-          navbar.style.maxWidth = `calc(100vw - ${sidenavWidth}px)`;
-        } else { // Mobile
-          navbar.style.left = '0';
-          navbar.style.width = '100vw';
-          navbar.style.maxWidth = '100vw';
-        }
-      } else {
-        navbar.style.left = '0';
-        navbar.style.width = '100vw';
-        navbar.style.maxWidth = '100vw';
-      }
+      navbar.style.left = '0';
+      navbar.style.right = '0';
+      navbar.style.width = '100%';
+      navbar.style.maxWidth = '100%';
+      navbar.style.zIndex = '1100';
     });
   }
 
   /**
    * Adjust header positioning based on sidenav collapsed state
+   * Header now always stays full width regardless of sidenav state
    */
   private adjustHeaderForSidenavState(isCollapsed: boolean): void {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -221,29 +200,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const navbar = document.querySelector('.navbar') as HTMLElement;
     if (!navbar) return;
 
-    // Check if user is authenticated and sidenav should be visible
-    const isAuthenticated = this.authService.isAuthenticated();
-    const shouldShowSidenav = isAuthenticated && this.sidenavService.shouldShowSidenavForRoute(this.currentRoute, isAuthenticated);
-
-    if (shouldShowSidenav && typeof window !== 'undefined' && window.innerWidth >= 992) {
-      // Desktop with sidenav visible
-      if (isCollapsed) {
-        // Collapsed sidenav - 70px width
-        navbar.style.left = '70px';
-        navbar.style.width = 'calc(100% - 70px)';
-        navbar.style.maxWidth = 'calc(100% - 70px)';
-      } else {
-        // Expanded sidenav - 280px width  
-        navbar.style.left = '280px';
-        navbar.style.width = 'calc(100% - 280px)';
-        navbar.style.maxWidth = 'calc(100% - 280px)';
-      }
-    } else {
-      // Mobile or no sidenav - full width
-      navbar.style.left = '0px';
-      navbar.style.width = '100%';
-      navbar.style.maxWidth = '100%';
-    }
+    // Header always maintains full width - sidenav positioning is handled separately
+    navbar.style.left = '0';
+    navbar.style.width = '100%';
+    navbar.style.maxWidth = '100%';
   }
 login() {
 this.authService.checkAuthStatusAndNavigate();
@@ -295,15 +255,13 @@ this.authService.checkAuthStatusAndNavigate();
     // Force immediate toolbar update
     this.toolbarService.setLoggedOutToolbar();
     
-    // Force immediate header layout adjustment to remove left offset
+    // Header is already full width, no positioning adjustment needed
     if (isPlatformBrowser(this.platformId)) {
       setTimeout(() => {
         const navbar = document.querySelector('.navbar') as HTMLElement;
         if (navbar) {
-          // Remove any sidenav-related classes immediately
-          navbar.classList.remove('with-sidenav-expanded', 'with-sidenav-collapsed');
-          // Force reset header position
-          navbar.style.left = '0px';
+          // Header maintains full width regardless of authentication state
+          navbar.style.left = '0';
           navbar.style.width = '100%';
           navbar.style.maxWidth = '100%';
         }
@@ -382,13 +340,7 @@ this.authService.checkAuthStatusAndNavigate();
   toggleSidenav() {
     this.sidenavService.toggleCollapsed();
     
-    // Force immediate header adjustment after toggle
-    if (isPlatformBrowser(this.platformId)) {
-      setTimeout(() => {
-        const currentConfig = this.sidenavService.getCurrentConfig();
-        this.adjustHeaderForSidenavState(currentConfig.collapsed);
-      }, 0);
-    }
+    // Header remains full width - no adjustment needed
   }
 
   toggleTheme() {

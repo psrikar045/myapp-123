@@ -2,7 +2,7 @@
 
 // Main layout styles with proper space segregation
 .main-layout {
-  position: absolute;
+  position: relative;
   min-height: 100vh;
   background-color: var(--bs-body-bg);
   color: var(--bs-body-color);
@@ -23,16 +23,46 @@
   }
 }
 
-// Content wrapper that adjusts based on sidenav state
+// Header fixed at top
+.main-header {
+  width: 100%;
+  height: 72px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1100;
+}
+
+// New flex row for body below header
+.layout-body {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  min-height: calc(100vh - 72px); // header height
+}
+
+// Sidenav fixed below header
+app-sidenav, .sidenav {
+  position: fixed !important;
+  top: 72px !important;
+  left: 0;
+  height: calc(100vh - 72px) !important;
+  width: 280px !important;
+  z-index: 1040;
+}
+
+// Content wrapper fills remaining space
 .content-wrapper {
+  margin-left: 280px;
+  padding-top: 72px;
+  width: calc(100% - 280px);
+  min-height: calc(100vh - 72px);
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  transition: margin-left 0.3s ease;
-  overflow-x: hidden;
   box-sizing: border-box;
   position: relative;
-  z-index: 1; // Ensure proper layering
+  z-index: 1;
+  transition: margin-left 0.3s ease, width 0.3s ease;
   
   // Default state - no sidenav, full width
   margin-left: 0;
@@ -90,11 +120,14 @@
   }
 }
 
+// Remove header from content-wrapper
 .main-header {
-  // Header is now fixed positioned, no need for relative positioning
-  flex-shrink: 0;
   width: 100%;
-  height: 0; // Don't take up layout space since header is fixed
+  height: 72px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1100;
 }
 
 .main-content {
@@ -106,15 +139,14 @@
   overflow-x: hidden;
   box-sizing: border-box;
   position: relative;
-  z-index: 1; // Ensure proper layering
-  
+  z-index: 1;
+  padding-top: 0;
   &.with-header {
-    padding-top: 72px; /* Account for fixed header height */
-    min-height: calc(100vh - 72px);
+    padding-top: 0;
+    min-height: 100%;
   }
-  
   &.with-footer {
-    padding-bottom: 0; /* Footer handles its own spacing */
+    padding-bottom: 0;
   }
   
   // Ensure proper layering during zoom
@@ -136,9 +168,22 @@
 
 // Responsive and zoom support
 @media (max-width: 991.98px) {
-  .content-wrapper.with-sidenav {
+  .layout-body {
+    flex-direction: column;
+  }
+  app-sidenav, .sidenav {
+    position: fixed !important;
+    top: 72px !important;
+    left: 0;
+    width: 80vw !important;
+    max-width: 320px;
+    height: calc(100vh - 72px) !important;
+    z-index: calc(var(--sidenav-z-index) + 10);
+  }
+  .content-wrapper {
     margin-left: 0;
     width: 100%;
+    padding-top: 72px;
   }
   
   .navbar.with-sidenav-expanded,
@@ -155,9 +200,10 @@
     &.with-sidenav {
       @include media-breakpoint-up(lg) {
         &.sidenav-expanded {
-          margin-left: 280px;
-          width: calc(100% - 280px);
-          max-width: calc(100vw - 280px); // Prevent overflow
+          // margin-left: 280px;
+          // width: calc(100% - 280px);
+          // max-width: calc(100vw - 280px); // Prevent overflow
+          width: 100%;
         }
         
         &.sidenav-collapsed {
@@ -233,8 +279,8 @@
 @include media-breakpoint-down(md) {
   .main-content {
     &.with-header {
-      padding-top: 60px; /* Smaller header on mobile */
-      min-height: calc(100vh - 60px);
+      padding-top: 0; /* Smaller header on mobile */
+      min-height: calc(100vh - 72px);
     }
   }
 }
@@ -257,5 +303,16 @@
   .content-wrapper {
     margin-left: 0 !important;
     width: 100% !important;
+  }
+}
+
+// Lower sidenav stacking only when a popup/modal is present in main content
+// Covers our custom modal, search modal, and Bootstrap modals
+.main-layout:has(.modal-popup-container),
+.main-layout:has(.search-modal-overlay),
+.main-layout:has(.modal.show) {
+  app-sidenav,
+  .sidenav {
+    z-index: -1040 !important;
   }
 }

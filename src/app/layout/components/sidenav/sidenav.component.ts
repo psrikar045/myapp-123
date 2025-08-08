@@ -23,40 +23,7 @@ import { AuthService } from '../../../core/services/auth.service';
            [attr.data-bs-theme]="isDarkMode ? 'dark' : 'light'"
            [style.width]="getSidenavWidth()">
       
-      <!-- Sidenav Header Section -->
-      <div class="sidenav-header">
-        <!-- Logo Section - Show when expanded -->
-        <div class="sidenav-logo" 
-             *ngIf="!config?.collapsed"
-             (click)="onLogoClick()">
-          <div class="logo-container">
-            <img src="assets/images/RIVO9 logo.webp" alt="Logo" class="logo-expanded">
-          </div>
-        </div>
-
-        <!-- Toggle Button - Show when expanded (right side) -->
-        <button class="sidenav-toggle-btn" 
-                *ngIf="!config?.collapsed"
-                type="button"
-                (click)="toggleSidenav()"
-                [attr.aria-label]="'Collapse sidebar'"
-                [attr.aria-expanded]="true">
-          <i class="bi-chevron-left"></i>
-        </button>
-
-        <!-- Collapsed State - Show only toggle button centered -->
-        <div class="collapsed-header" *ngIf="config?.collapsed">
-          <button class="sidenav-toggle-btn collapsed-toggle" 
-                  type="button"
-                  (click)="toggleSidenav()"
-                  [attr.aria-label]="'Expand sidebar'"
-                  [attr.aria-expanded]="false">
-            <i class="bi-chevron-right"></i>
-          </button>
-        </div>
-      </div>
-
-
+      
 
 
       <!-- Navigation Section -->
@@ -250,7 +217,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   // Utility methods
   getSidenavWidth(): string {
-    if (!this.config) return '280px';
+    if (!this.config) return '0px';
     return this.config.collapsed ? this.config.width.collapsed : this.config.width.expanded;
   }
 

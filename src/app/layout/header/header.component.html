@@ -2,22 +2,42 @@
 <nav class="navbar navbar-expand-lg" 
      [class.navbar-scrolled]="isScrolled"
      [class.navbar-hidden]="!isVisible"
-     [class.with-sidenav-expanded]="authService.isAuthenticated() && (sidenavService.isVisible$ | async) && !(sidenavService.config$ | async)?.collapsed"
-     [class.with-sidenav-collapsed]="authService.isAuthenticated() && (sidenavService.isVisible$ | async) && (sidenavService.config$ | async)?.collapsed"
+    
      [class.navbar-dark]="currentTheme === 'dark'"
      [attr.data-header-type]="headerType"
      [attr.data-bs-theme]="currentTheme" id="HeaderStyle">
   <div class="container-fluid px-lg-5 px-md-4 px-3">
-    <!-- Sidenav Toggle Button (for authenticated users) -->
-    <button class="btn btn-link sidenav-toggle-btn mobile-menu-toggle d-lg-none me-2" type="button" (click)="toggleSidenav()" *ngIf="authService.isAuthenticated()" aria-label="Toggle sidebar navigation">
-      <i class="bi-list" style="font-size: 1.5rem;"></i>
-    </button>
+    <!-- Left Section: Logo and Sidenav Toggle -->
+    <div class="header-left d-flex align-items-center">
+            <!-- Brand/Logo - Always visible -->
+      <a class="navbar-brand" (click)="onLogoClick()" style="cursor: pointer;">
+        <img [src]="(logo$ | async)?.src" [alt]="(logo$ | async)?.alt" class="logo-img" loading="lazy">
+      </a>
+      
+      <!-- Sidenav Toggle Button for Desktop (authenticated users only) -->
+      <button class="btn btn-link sidenav-toggle-btn desktop-toggle me-3 d-none d-lg-block" 
+              type="button" 
+              (click)="toggleSidenav()" 
+              *ngIf="authService.isAuthenticated() && (sidenavService.isVisible$ | async)"
+              [attr.aria-label]="(sidenavService.config$ | async)?.collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+              [title]="(sidenavService.config$ | async)?.collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+        <i class="bi-list" 
+           [class.bi-list]="(sidenavService.config$ | async)?.collapsed"
+           [class.bi-x-lg]="!(sidenavService.config$ | async)?.collapsed"
+           style="font-size: 1.25rem;"></i>
+      </button>
+      
+      <!-- Sidenav Toggle Button for Mobile (authenticated users only) -->
+      <button class="btn btn-link sidenav-toggle-btn mobile-menu-toggle d-lg-none me-2" 
+              type="button" 
+              (click)="toggleSidenav()" 
+              *ngIf="authService.isAuthenticated()" 
+              aria-label="Toggle sidebar navigation">
+        <i class="bi-list" style="font-size: 1.5rem;"></i>
+      </button>
 
-    <!-- Brand/Logo - Show only when sidenav is collapsed or not visible -->
-    <a class="navbar-brand" (click)="onLogoClick()" style="cursor: pointer;"
-       *ngIf="!(sidenavService.isVisible$ | async) || (sidenavService.config$ | async)?.collapsed">
-      <img [src]="(logo$ | async)?.src" [alt]="(logo$ | async)?.alt" class="logo-img" loading="lazy">
-    </a>
+
+    </div>
 
     <!-- Mobile Menu Toggle Button -->
     <button class="navbar-toggler" 

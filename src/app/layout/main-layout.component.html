@@ -3,38 +3,41 @@
 
 <!-- Main Layout Container -->
 <div class="main-layout" [attr.data-bs-theme]="currentTheme">
-  <!-- Sidenav - Fixed Left Side -->
-  <app-sidenav *ngIf="sidenavService.isVisible$ | async"></app-sidenav>
-  
-  <!-- Main Content Wrapper - Adjusts based on sidenav state -->
-  <div class="content-wrapper"
-       [class.with-sidenav]="(sidenavService.isVisible$ | async) && !(sidenavService.isOverlayMode$ | async)"
-       [class.sidenav-collapsed]="(sidenavService.isVisible$ | async) && !(sidenavService.isOverlayMode$ | async) && (sidenavService.config$ | async)?.collapsed"
-       [class.sidenav-expanded]="(sidenavService.isVisible$ | async) && !(sidenavService.isOverlayMode$ | async) && !(sidenavService.config$ | async)?.collapsed"
-       [class.sidenav-overlay-active]="(sidenavService.isVisible$ | async) && (sidenavService.isOverlayMode$ | async)"
-       (click)="onContentWrapperClick($event)">
+  <!-- Header - Fixed Top, Full Width -->
+  <app-header 
+    *ngIf="showHeader$ | async"
+    class="main-header">
+  </app-header>
+
+  <!-- Body below header (Sidenav + Content) -->
+  <div class="layout-body">
+    <!-- Sidenav - Fixed Left Side -->
+    <app-sidenav *ngIf="sidenavService.isVisible$ | async"></app-sidenav>
     
-    <!-- Header -->
-    <app-header 
-      *ngIf="showHeader$ | async"
-      class="main-header">
-    </app-header>
-    
-    <!-- Main Content Area -->
-    <main 
-      class="main-content"
-      [class.with-header]="showHeader$ | async"
-      [class.with-footer]="showFooter$ | async"
-      role="main">
-      <router-outlet></router-outlet>
-    </main>
-    
-    <!-- Footer -->
-    <app-footer 
-      *ngIf="showFooter$ | async"
-      class="main-footer">
-    </app-footer>
-    
+    <!-- Main Content Wrapper - Adjusts based on sidenav state -->
+    <div class="content-wrapper"
+         [class.with-sidenav]="(sidenavService.isVisible$ | async) && !(sidenavService.isOverlayMode$ | async)"
+         [class.sidenav-collapsed]="(sidenavService.isVisible$ | async) && !(sidenavService.isOverlayMode$ | async) && (sidenavService.config$ | async)?.collapsed"
+         [class.sidenav-expanded]="(sidenavService.isVisible$ | async) && !(sidenavService.isOverlayMode$ | async) && !(sidenavService.config$ | async)?.collapsed"
+         [class.sidenav-overlay-active]="(sidenavService.isVisible$ | async) && (sidenavService.isOverlayMode$ | async)"
+         (click)="onContentWrapperClick($event)">
+      
+      <!-- Main Content Area -->
+      <main 
+        class="main-content"
+        [class.with-header]="showHeader$ | async"
+        [class.with-footer]="showFooter$ | async"
+        role="main">
+        <router-outlet></router-outlet>
+      </main>
+      
+      <!-- Footer -->
+      <app-footer 
+        *ngIf="showFooter$ | async"
+        class="main-footer">
+      </app-footer>
+      
+    </div>
   </div>
 </div>
 

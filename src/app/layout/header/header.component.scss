@@ -25,17 +25,17 @@
   // Adjust header position based on sidenav state
   &.with-sidenav-expanded {
     @include media-breakpoint-up(lg) {
-      left: 280px !important;
-      width: calc(100% - 280px) !important;
-      max-width: calc(100% - 280px) !important;
+      left: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
     }
   }
   
   &.with-sidenav-collapsed {
     @include media-breakpoint-up(lg) {
-      left: 70px !important;
-      width: calc(100% - 70px) !important;
-      max-width: calc(100% - 70px) !important;
+      left: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
     }
   }
   
@@ -57,9 +57,9 @@
     // 150% zoom and above
     &.with-sidenav-expanded {
       @include media-breakpoint-up(lg) {
-        left: 280px !important;
-        width: calc(100vw - 280px) !important;
-        max-width: calc(100vw - 280px) !important;
+        // left: 280px !important;
+        // width: calc(100vw - 280px) !important;
+        // max-width: calc(100vw - 280px) !important;
       }
     }
     
@@ -791,9 +791,9 @@
   .navbar {
     &.with-sidenav-expanded {
       @include media-breakpoint-up(lg) {
-        left: 280px !important;
-        width: calc(100vw - 280px) !important;
-        max-width: calc(100vw - 280px) !important;
+        // left: 280px !important;
+        // width: calc(100vw - 280px) !important;
+        // max-width: calc(100vw - 280px) !important;
       }
     }
     
@@ -819,17 +819,17 @@
     
     &.with-sidenav-expanded {
       @include media-breakpoint-up(lg) {
-        left: 280px !important;
-        width: calc(100vw - 280px) !important;
-        max-width: calc(100vw - 280px) !important;
+        left: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
       }
     }
     
     &.with-sidenav-collapsed {
       @include media-breakpoint-up(lg) {
-        left: 70px !important;
-        width: calc(100vw - 70px) !important;
-        max-width: calc(100vw - 70px) !important;
+        left: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
       }
     }
     
@@ -856,17 +856,17 @@
   .navbar {
     &.with-sidenav-expanded {
       @include media-breakpoint-up(lg) {
-        left: 280px !important;
-        width: calc(100vw - 280px) !important;
-        max-width: calc(100vw - 280px) !important;
+        left: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
       }
     }
     
     &.with-sidenav-collapsed {
       @include media-breakpoint-up(lg) {
-        left: 70px !important;
-        width: calc(100vw - 70px) !important;
-        max-width: calc(100vw - 70px) !important;
+        left: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
       }
     }
   }
@@ -877,17 +877,17 @@
   .navbar {
     &.with-sidenav-expanded {
       @include media-breakpoint-up(lg) {
-        left: 280px !important;
-        width: calc(100vw - 280px) !important;
-        max-width: calc(100vw - 280px) !important;
+        left: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
       }
     }
     
     &.with-sidenav-collapsed {
       @include media-breakpoint-up(lg) {
-        left: 70px !important;
-        width: calc(100vw - 70px) !important;
-        max-width: calc(100vw - 70px) !important;
+        left: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
       }
     }
   }

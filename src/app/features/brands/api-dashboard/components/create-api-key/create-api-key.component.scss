@@ -453,3 +453,20 @@ color: white !important;
       }
     }
   }
+
+// When a popup/modal opens within this component, push action buttons behind backdrop
+.create-api-key-container:has(.modal-popup-container),
+.create-api-key-container:has(.search-modal-overlay),
+.create-api-key-container:has(.modal.show) {
+  // Form action buttons (Cancel / Create Key)
+  form > .d-flex.gap-3.justify-content-end {
+    position: relative !important;
+    z-index: -1 !important;
+  }
+  
+  // Success state action buttons (Back to Dashboard / Create Another)
+  .success-container > .d-flex.gap-3.justify-content-center {
+    position: relative !important;
+    z-index: -1 !important;
+  }
+}

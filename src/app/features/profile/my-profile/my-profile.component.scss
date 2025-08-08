@@ -1287,7 +1287,7 @@
    ============================================================================ */
 
 .modal {
-  z-index: 1055;
+  z-index: 99999; /* Updated to match modal popup */
   
   &.show {
     animation: fadeIn 0.3s ease-out;
@@ -1358,7 +1358,7 @@
 }
 
 .modal-backdrop {
-  z-index: 1050;
+  z-index: 99998; /* Just below modal */
   background-color: rgba(0, 0, 0, 0.6);
   
   &.show {

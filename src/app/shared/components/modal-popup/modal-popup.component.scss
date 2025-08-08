@@ -1,11 +1,11 @@
 // Modal Container
 .modal-popup-container {
   position: fixed;
-  top: 0;
+  top: 72px; // start below header
   left: 0;
   right: 0;
-  bottom: 0;
-  z-index: 10000; // Increased z-index to ensure it's above all other elements
+  bottom: 0; // fill to bottom
+  z-index: 99999; // Highest z-index to ensure it's above content/sidenav
   display: flex;
   align-items: flex-start;
   justify-content: center;
@@ -18,30 +18,32 @@
     align-items: center;
   }
   
-  // Backdrop
+  // Backdrop - covers entire main area (excluding header)
   .modal-backdrop {
     position: fixed;
-    top: 0;
+    top: 72px; // align with container top
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(2px);
-    z-index: -1;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 99998; // Just below modal container
   }
 }
 
-// Modal
+// Modal content - above backdrop
 .modal-popup {
   background: var(--bs-body-bg);
   border-radius: 1rem;
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
   width: 100%;
-  max-height: 90vh;
+  max-height: calc(90vh - 72px);
   overflow: hidden;
   animation: modalSlideIn 0.3s ease-out;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 99999; // Above backdrop
   
   // Size variants
   &.modal-sm {
@@ -295,4 +297,8 @@
       transform: none;
     }
   }
+}
+/* In modal-popup.component.scss */
+.cancel-button, .save-button {
+  z-index: 1;
 }
