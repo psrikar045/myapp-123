@@ -588,7 +588,7 @@
   font-size: var(--font-size-lg);
   color: #6b7280;
   text-align: center;
-  margin-bottom: clamp(40px, 6vh, 60px);
+  margin-bottom: 20px;
   max-width: min(800px, 90vw);
   margin-left: auto;
   margin-right: auto;
@@ -610,21 +610,22 @@
 }
 
 .capability-card {
-  background: #fef7ed;
+  /* background: #fef7ed; */
   border-radius: 20px;
-  padding: clamp(30px, 5vw, 40px) clamp(15px, 3vw, 20px);
-  margin-bottom: clamp(16px, 3vh, 20px);
-  position: relative;
-  overflow: hidden;
+  /* padding: clamp(30px, 5vw, 40px) clamp(15px, 3vw, 20px); */
+  margin-bottom: 30px;
+  /* position: relative;
+  overflow: hidden; */
   height: clamp(160px, 25vh, 200px);
-  transition: all 0.3s ease;
-  flex-shrink: 0;
+  width: 85%;
+  /* transition: all 0.3s ease;
+  flex-shrink: 0; */
 }
 
-.capability-card:hover {
+/* .capability-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-}
+} */
 
 .capability-shapes {
   position: relative;
@@ -808,19 +809,22 @@
 }
 
 .advanced-feature-color-div.blue-gradient {
-  background: linear-gradient(90deg, rgba(85, 194, 237, 1) 0%, rgba(107, 242, 222, 1) 65%, rgb(93 168 236) 100%);
+  /* background: linear-gradient(90deg, rgba(85, 194, 237, 1) 0%, rgba(107, 242, 222, 1) 65%, rgb(93 168 236) 100%); */
+  background: url('/assets/images/advanced1.png');
   margin: clamp(12px, 2vw, 15px);
   border-radius: 16px;
 }
 
 .advanced-feature-color-div.pink-gradient {
-  background: linear-gradient(90deg, rgba(217, 104, 183, 1) 31%, rgb(224 158 214) 65%, rgba(245, 88, 164, 1) 93%);
+  /* background: linear-gradient(90deg, rgba(217, 104, 183, 1) 31%, rgb(224 158 214) 65%, rgba(245, 88, 164, 1) 93%); */
+  background: url('/assets/images/advanced2.png');
   margin: clamp(12px, 2vw, 15px);
   border-radius: 16px;
 }
 
 .advanced-feature-color-div.orange-gradient {
-  background: linear-gradient(90deg, rgb(236 96 96) 31%, rgb(214 160 160) 65%, rgb(214 65 97) 93%);
+  /* background: linear-gradient(90deg, rgb(236 96 96) 31%, rgb(214 160 160) 65%, rgb(214 65 97) 93%); */
+  background: url('/assets/developer-img/card-2.webp');
   margin: clamp(12px, 2vw, 15px);
   border-radius: 16px;
 }
