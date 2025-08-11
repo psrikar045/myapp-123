@@ -59,8 +59,7 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
       if (req.url.includes('/api/v1/dashboard/v2/api-key/') || 
           req.url.includes('/api/v1/dashboard/v2/user/cards') || 
           req.url.includes('/api/v1/api-keys')) {
-        console.log('🔄 Loading interceptor - API Dashboard request completed:', req.url);
-        console.log('🔄 Active requests after:', activeRequests);
+      
       }
       
       if (activeRequests === 0) {

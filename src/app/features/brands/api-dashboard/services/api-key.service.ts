@@ -501,8 +501,6 @@ private forceRefreshApiKeys(): void {
     const headers = this.getAuthHeaders();
     const dashboardUrl = `${environment.baseApiUrl}/api/v1/dashboard/v2/api-key/${apiKeyId}?refresh=${refresh}`;
     
-    console.log('🌐 Making HTTP request to:', dashboardUrl);
-    console.log('🌐 Request headers:', headers);
     
     return this.http.get<ApiResponseWrapper<SingleApiKeyDashboardResponse>>(dashboardUrl, { headers }).pipe(
       map(response => response.data), // Extract data from wrapper
