@@ -319,55 +319,6 @@ input, textarea, select, button {
   padding-right: 15px;
 }
 
-// 1092px to 1242px - 125% screen
-@media (min-width: 1092px) and (max-width: 1241px) {
-  .container {
-    max-width: 1500px;
-  }
-}
-
-// 1242px to 1366px - 110% screen
-@media (min-width: 1242px) and (max-width: 1365px) {
-  .container {
-    max-width: 1500px;
-  }
-}
-
-// 1366px to 1518px - 100% screen
-@media (min-width: 1366px) and (max-width: 1517px) {
-  .container {
-    max-width: 1500px;
-  }
-}
-
-// 1518px to 1708px - 90% screen
-@media (min-width: 1518px) and (max-width: 1707px) {
-  .container {
-    max-width: 1600px;
-  }
-}
-
-// 1708px to 1822px - 80% screen
-@media (min-width: 1708px) and (max-width: 1821px) {
-  .container {
-    max-width: 1700px;
-  }
-}
-
-// 1822px to 2049px - 75% screen
-@media (min-width: 1822px) and (max-width: 2048px) {
-  .container {
-    max-width: 1850px;
-  }
-}
-
-// 2049px to 2732px - 67% screen
-@media (min-width: 2049px) and (max-width: 2732px) {
-  .container {
-    max-width: 2500px;
-  }
-}
-
 // Mobile (default) - Up to 768px
 h1, .h1 { 
   font-size: 1.875rem; // 30px
@@ -1283,7 +1234,6 @@ body {
   }
   
   .container,
-  .container-fluid,
   .container-custom {
     max-width: 1500px !important;
     overflow-x: hidden !important;
@@ -1893,20 +1843,20 @@ html, body {
 }
 
 // Improved container behavior at all zoom levels
-.container,
-.container-fluid,
-.container-sm,
-.container-md,
-.container-lg,
-.container-xl,
-.container-xxl {
-  width: 100%;
-  max-width: 1500px;
-  padding-left: clamp(0.5rem, 2vw, 1.5rem);
-  padding-right: clamp(0.5rem, 2vw, 1.5rem);
-  margin-left: auto;
-  margin-right: auto;
-}
+// .container,
+// .container-fluid,
+// .container-sm,
+// .container-md,
+// .container-lg,
+// .container-xl,
+// .container-xxl {
+//   width: 100%;
+//   max-width: 1500px;
+//   padding-left: clamp(0.5rem, 2vw, 1.5rem);
+//   padding-right: clamp(0.5rem, 2vw, 1.5rem);
+//   margin-left: auto;
+//   margin-right: auto;
+// }
 
 // Flexible grid system for zoom support
 .row {
@@ -2406,4 +2356,85 @@ object.MimgControle {width: 100%;}
     min-width: var(--sidenav-width-expanded) !important;
     max-width: var(--sidenav-width-expanded) !important;
   }
+}
+
+
+
+// 1092px to 1242px - 125% screen
+@media (min-width: 1092px) and (max-width: 1241px) {
+  .container {max-width: 1500px !important;}
+  .pad100 {padding-left: 30px !important;padding-right: 30px !important;}
+  h1{font-size: 2.188rem !important;}
+  h2{font-size: 1.563rem !important;}
+  h3{font-size: 1.375rem !important;}
+  h4{font-size: 1.25rem !important;}
+  h5{font-size: 1.063rem !important;}
+  h6{font-size: 0.875rem !important;}
+}
+
+// 1242px to 1366px - 110% screen
+@media (min-width: 1241px) and (max-width: 1366px) {
+  .container {max-width: 1500px !important;}
+  .pad100 {padding-left: 60px !important; padding-right: 60px !important;}
+  h1{font-size: 2.625rem !important;}
+  h2{font-size: 1.875rem !important;}
+  h3{font-size: 1.625rem !important;}
+  h4{font-size: 1.438rem !important;}
+  h5{font-size: 1.188rem !important;}
+  h6{font-size: 0.938rem !important;}
+}
+
+// 1366px to 1518px - 100% screen
+@media (min-width: 1366px) and (max-width: 1517px) {
+  .container {max-width: 1500px !important;}
+  h1{font-size: 3rem !important;}
+  h2{font-size: 2rem !important;}
+  h3{font-size: 1.4rem !important;}
+  h4{font-size: 1.1rem !important;}
+  h5{font-size: 1rem !important;}
+  h6{font-size: 0.938rem !important;}
+}
+
+// 1518px to 1708px - 90% screen
+@media (min-width: 1517px) and (max-width: 1707px) {
+  .container {max-width: 1600px !important;}
+  h1{font-size: 3.3rem !important;}
+  h2{font-size: 2.2rem !important;}
+  h3{font-size: 2rem !important;}
+  h4{font-size: 1.5rem !important;}
+  h5{font-size: 1.2rem !important;}
+  h6{font-size: 1rem !important;}
+}
+
+// 1708px to 1822px - 80% screen
+@media (min-width: 1707px) and (max-width: 1821px) {
+  .container {max-width: 1700px !important;}
+  h1{font-size: 3.9rem !important;}
+  h2{font-size: 2.7rem !important;}
+  h3{font-size: 2.3rem !important;}
+  h4{font-size: 2rem !important;}
+  h5{font-size: 1.3rem !important;}
+  h6{font-size: 1rem !important;}
+}
+
+// 1822px to 2049px - 75% screen
+@media (min-width: 1821px) and (max-width: 2049px) {
+  .container { max-width: 1850px !important;}
+  h1{font-size: 3.8rem  !important;}
+  h2{font-size: 2.7rem !important;}
+  h3{font-size: 2.2rem !important;}
+  h4{font-size: 1.7rem !important;}
+  h5{font-size: 1.1rem !important;}
+  h6{font-size: 1rem !important;}
+}
+
+// 2049px to 2732px - 67% screen
+@media (min-width: 2049px) and (max-width: 2732px) {
+  .container {max-width: 2500px !important;}
+  h1{font-size: 4.2rem !important;}
+  h2{font-size: 2.8rem !important;}
+  h3{font-size: 2.2rem !important;}
+  h4{font-size: 2rem!important;}
+  h5{font-size: 1.6rem !important;}
+  h6{font-size: 1rem !important;}
 }

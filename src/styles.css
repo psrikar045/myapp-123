@@ -89,7 +89,7 @@ a:hover {
 /* Container utility class for consistent max-width and padding */
 .container {
   width: 100%;
-  max-width: 1200px; /* Default max-width, can be adjusted */
+  max-width: 1500px; /* Default max-width, can be adjusted */
   margin-left: auto;
   margin-right: auto;
   padding-left: 1rem;  /* 14px based on new html font-size */
