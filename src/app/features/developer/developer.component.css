@@ -1,14 +1,10 @@
 /* Global Styles */
 * {
-  margin: 0;
-  padding: 0;
   box-sizing: border-box;
 }
-
-.container {
-  max-width: 1200px !important;
-  margin: 0 auto;
-  /* padding: 0 20px; */
+.DeveloperPage {
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 /* Hero Section */
@@ -21,18 +17,29 @@
   text-align: center;
   position: relative;
   overflow: hidden;
-  min-height: 500px;
+  min-height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 45px;
-  border-radius: 40px;
+  border-radius: 16px;
 }
+
+.hero-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+  z-index: 1;
+}
+
 
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: min(680px, 90vw);
   width: 100%;
 }
 
@@ -182,11 +189,11 @@
 .feature-card {
   background: white;
   border-radius: 16px;
-  padding: clamp(20px, 4vw, 30px);
+  padding: 25px 25px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   border: 1px solid #e5e6e8;
-  height: 86%;
+  height: auto;
   display: flex;
   flex-direction: column;
 }
@@ -198,7 +205,7 @@
 
 .feature-content {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: clamp(15px, 3vw, 20px);
   flex: 1;
 }
@@ -267,10 +274,10 @@
 
 /* Large desktop adjustments */
 @media (min-width: 1400px) {
-  .container {
+  /* .container {
     max-width: 1400px;
   }
-  
+   */
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 40px;
@@ -279,21 +286,25 @@
 
 /* Integration Section */
 .integration-section {
-  padding: clamp(50px, 10vh, 80px) clamp(16px, 4vw, 40px);
+  padding: clamp(50px, 10vh, 80px) clamp(16px, 4vw, 0px);
   background: #f9f9f9;
 }
 
 .integration-card {
   /* background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); */
-  background: url('/assets/developer-img/integrateSection.svg');
-  border-radius: 40px;
+  background: url('/assets/developer-img/integrateSection.webp');
+  border-radius: 16px;
   padding: clamp(40px, 8vw, 60px) clamp(20px, 6vw, 40px);
   text-align: center;
   color: white;
-  max-width: 1200px;
   margin: 0 auto;
   height: 460px;
   /* box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .integration-content {
@@ -421,10 +432,12 @@
 
 /* AI Future Section */
 .ai-future-main-section{
-  padding-top: clamp(30px, 6vh, 50px);
+    padding-top: 60px;
+    padding-bottom: 60px;
+    background: #EAF0FF;
 }
 .ai-future-section {
-  background-image: url('/assets/developer-img/aiFuture.png');
+  background-image: url('/assets/developer-img/aiFuture.webp');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -433,9 +446,12 @@
   position: relative;
   overflow: hidden;
   /* max-width: 1200px; */
-  border-radius: 40px;
+  border-radius: 16px;
   margin: 0 auto;
   height: 450px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .ai-future-content {
@@ -537,7 +553,6 @@
 
 .why-choose-icon {
   width: clamp(50px, 8vw, 60px);
-  height: clamp(25px, 4vw, 30px);
   border-radius: 16px;
   display: flex;
   align-items: center;
@@ -546,6 +561,7 @@
   font-size: clamp(20px, 3.5vw, 24px);
   color: #1f2937;
   align-self: flex-start;
+  object-fit: contain;
 }
 
 .why-choose-card-title {
@@ -603,23 +619,21 @@
 }
 
 .capability-item {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #fff;
+    border: 3px solid #BBE9FF;
+    border-radius: 10px;
+    padding: 20px;
 }
 
 .capability-card {
-  /* background: #fef7ed; */
-  border-radius: 20px;
-  /* padding: clamp(30px, 5vw, 40px) clamp(15px, 3vw, 20px); */
-  margin-bottom: 30px;
-  /* position: relative;
-  overflow: hidden; */
-  height: clamp(160px, 25vh, 200px);
-  width: 85%;
-  /* transition: all 0.3s ease;
-  flex-shrink: 0; */
+    width: 100%;
+    object-fit: cover;
+    margin: 0 auto;
+    display: block;
 }
 
 /* .capability-card:hover {
@@ -645,7 +659,7 @@
   background: #ff9a56;
   top: 20%;
   left: 15%;
-  border-radius: 40px;
+  border-radius: 16px;
 }
 
 .capability-shape.shape-2 {
@@ -718,7 +732,7 @@
 }
 
 .capability-content {
-  text-align: left;
+  text-align: center;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -754,7 +768,7 @@
 /* Advanced Features Section */
 .advanced-features-section {
   padding: clamp(40px, 8vh, 80px) clamp(16px, 4vw, 40px);
-  background: white;
+  background: #EAF0FF;
 }
 
 .advanced-features-title {
@@ -803,9 +817,11 @@
 }
 
 .advanced-feature-color-div {
-  height: clamp(120px, 20vh, 144px);
-  position: relative;
-  flex-shrink: 0;
+    height: clamp(190px, 20vh, 144px);
+    position: relative;
+    flex-shrink: 0;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
 }
 
 .advanced-feature-color-div.blue-gradient {
@@ -953,15 +969,9 @@
 
 /* Mobile First - Extra Small devices (phones, 320px and up) */
 @media (max-width: 480px) {
-  .container {
+  /* .container {
     padding: 0 16px;
-  }
-  
-  .hero-section {
-    min-height: 400px;
-    padding: 60px 16px;
-  }
-  
+  }   */
   .features-grid,
   .why-choose-grid,
   .capabilities-grid,
@@ -1065,9 +1075,9 @@
 
 /* Extra large devices (large desktops, 1400px and up) */
 @media (min-width: 1400px) {
-  .container {
+  /* .container {
     max-width: 1400px;
-  }
+  } */
   
   .features-grid {
     grid-template-columns: repeat(2, 1fr);
