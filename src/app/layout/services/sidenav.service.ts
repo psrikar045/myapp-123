@@ -290,7 +290,8 @@ private readonly sidenavVisibleRoutes = [
           {
             id: 'brands-api',
             label: 'Brand Analyzer',
-            route: '/brandApi'
+            route: '/brandApi',
+            icon: 'bi-clipboard2-data',
           },
           // {
           //   id: 'brand-manager',
@@ -383,6 +384,7 @@ private readonly sidenavVisibleRoutes = [
   /**
    * Subscribe to route changes to update active states
    */
+
   private subscribeToRouteChanges(): void {
     this.router.events
       .pipe(

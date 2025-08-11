@@ -2438,3 +2438,10 @@ object.MimgControle {width: 100%;}
   h5{font-size: 1.6rem !important;}
   h6{font-size: 1rem !important;}
 }
+
+/* Confine Bootstrap modals to main content (exclude fixed 72px header) */
+.modal,
+.modal-backdrop {
+  top: 72px !important;
+  height: calc(100vh - 72px) !important;
+}

@@ -88,9 +88,72 @@
       }
     }
     
-    // Hide submenu items completely in collapsed state
+    // Show submenu items as icons in collapsed state
     .sidenav-submenu-wrapper {
-      display: none !important;
+      position: relative;
+      
+      .collapse.collapsed-submenu.show {
+        .sidenav-submenu.collapsed-submenu-list {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+          padding: 8px 0;
+          
+          .sidenav-item {
+            margin-bottom: 4px;
+            
+            .sidenav-item-content {
+              padding: 8px;
+              justify-content: center;
+              min-height: 40px;
+              border-radius: 8px;
+              
+              .sidenav-item-icon-collapsed {
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(74, 80, 224, 0.1);
+                transition: all 0.2s ease;
+                
+                i {
+                  color: var(--sidenav-item-text);
+                  font-size: 14px;
+                }
+                
+                &:hover {
+                  background: rgba(74, 80, 224, 0.2);
+                  transform: scale(1.05);
+                }
+                
+                // Dark theme support
+                [data-bs-theme="dark"] & {
+                  background: rgba(99, 102, 241, 0.15);
+                  
+                  &:hover {
+                    background: rgba(99, 102, 241, 0.25);
+                  }
+                }
+              }
+            }
+            
+            // Active state for child items in collapsed mode
+            &.active .sidenav-item-content .sidenav-item-icon-collapsed {
+              background: linear-gradient(135deg, #4A50E0 0%, #6366f1 100%);
+              
+              i {
+                color: #ffffff;
+              }
+              
+              [data-bs-theme="dark"] & {
+                background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+              }
+            }
+          }
+        }
+      }
     }
   }
 

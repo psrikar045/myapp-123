@@ -35,8 +35,8 @@ import { SidenavService } from '../../../services/sidenav.service';
         </span>
         
         <!-- Collapsed Icon (when sidebar is collapsed) -->
-        <span class="sidenav-item-icon-collapsed" *ngIf="item.icon && collapsed">
-          <i [class]="item.icon" aria-hidden="true"></i>
+        <span class="sidenav-item-icon-collapsed" *ngIf="collapsed">
+          <i [class]="item.icon || getDefaultIcon()" aria-hidden="true"></i>
         </span>
         
         <!-- Label -->
@@ -67,11 +67,13 @@ import { SidenavService } from '../../../services/sidenav.service';
       
       <!-- Children with Bootstrap Collapse -->
       <div class="sidenav-submenu-wrapper" 
-           *ngIf="hasChildren && !collapsed">
+           *ngIf="hasChildren">
         <div class="collapse" 
              [class.show]="item.isExpanded"
+             [class.collapsed-submenu]="collapsed"
              [id]="'submenu-' + item.id">
-          <ul class="sidenav-submenu">
+          <ul class="sidenav-submenu" 
+              [class.collapsed-submenu-list]="collapsed">
             <app-sidenav-item 
               *ngFor="let child of item.children; trackBy: trackByItemId"
               [item]="child"
@@ -137,24 +139,49 @@ export class SidenavItemComponent implements OnInit, OnDestroy {
     return !!(this.item.children && this.item.children.length > 0);
   }
 
-  onItemClick(): void {
-    // Block navigation for submenu items only
-    // if (this.level > 0 && this.item.label !== 'Brands Api' && this.item.label !== 'API Dashboard' && this.item.label !== 'API Keys') {
-    //   return;
-    // }
+  // onItemClick(): void {
+  //   // Block navigation for submenu items only
+  //   // if (this.level > 0 && this.item.label !== 'Brands Api' && this.item.label !== 'API Dashboard' && this.item.label !== 'API Keys') {
+  //   //   return;
+  //   // }
 
-    if (this.item.route) {
-      // Navigate to route
+  //   if (this.item.route) {
+  //     // Navigate to route
+  //     this.sidenavService.navigateToRoute(this.item.route);
+  //   } else if (this.hasChildren) {
+  //     // Toggle expansion
+  //     this.sidenavService.toggleItemExpanded(this.item.id);
+  //   } else if (this.item.action) {
+  //     // Execute custom action
+  //     this.item.action();
+  //   }
+  // }
+onItemClick(): void {
+  if (this.collapsed) {
+    if (this.hasChildren) {
+      // When clicked in collapsed state, just toggle expansion to show child icons
+      this.sidenavService.toggleItemExpanded(this.item.id);
+    } else if (this.item.route) {
+      // Navigate to route for items without children
+      this.sidenavService.navigateToRoute(this.item.route);
+    }
+  } else {
+    // Normal behavior when not collapsed
+    if (this.item.route && !this.hasChildren) {
+      // Navigate to route for leaf items
       this.sidenavService.navigateToRoute(this.item.route);
     } else if (this.hasChildren) {
-      // Toggle expansion
+      // Toggle expansion for parent items
       this.sidenavService.toggleItemExpanded(this.item.id);
+    } else if (this.item.route) {
+      // Navigate to route for parent items that also have routes
+      this.sidenavService.navigateToRoute(this.item.route);
     } else if (this.item.action) {
       // Execute custom action
       this.item.action();
     }
   }
-
+}
   trackByItemId(index: number, item: SidenavItem): string {
     return item.id;
   }
@@ -180,5 +207,14 @@ export class SidenavItemComponent implements OnInit, OnDestroy {
   
   onMouseLeave(): void {
     this.showTooltip = false;
+  }
+  
+  getDefaultIcon(): string {
+    // Provide default icons based on level or item type
+    if (this.level === 0) {
+      return 'bi-circle'; // Parent item default
+    } else {
+      return 'bi-dot'; // Child item default
+    }
   }
 }

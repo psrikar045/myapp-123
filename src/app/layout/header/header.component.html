@@ -11,7 +11,7 @@
     <div class="header-left d-flex align-items-center">
             <!-- Brand/Logo - Always visible -->
       <a class="navbar-brand" (click)="onLogoClick()" style="cursor: pointer;">
-        <img [src]="(logo$ | async)?.src" [alt]="(logo$ | async)?.alt" class="logo-img" loading="lazy">
+        <img [src]="(computedLogo$ | async)?.src" [alt]="(computedLogo$ | async)?.alt" class="logo-img" loading="lazy">
       </a>
       
       <!-- Sidenav Toggle Button for Desktop (authenticated users only) -->
@@ -21,9 +21,9 @@
               *ngIf="authService.isAuthenticated() && (sidenavService.isVisible$ | async)"
               [attr.aria-label]="(sidenavService.config$ | async)?.collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
               [title]="(sidenavService.config$ | async)?.collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
-        <i class="bi-list" 
-           [class.bi-list]="(sidenavService.config$ | async)?.collapsed"
-           [class.bi-x-lg]="!(sidenavService.config$ | async)?.collapsed"
+        <i class="" 
+           [class.bi-chevron-right]="(sidenavService.config$ | async)?.collapsed"
+           [class.bi-chevron-left]="!(sidenavService.config$ | async)?.collapsed"
            style="font-size: 1.25rem;"></i>
       </button>
       

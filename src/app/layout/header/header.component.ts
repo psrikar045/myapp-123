@@ -7,8 +7,8 @@ import { LayoutService } from '../../core/services/layout.service';
 import { SidenavService } from '../services/sidenav.service';
 import { AppThemeService } from '../../core/services/app-theme.service';
 import { AppThemePanelService } from '../../shared/services/app-theme-panel.service';
-import { Observable, Subscription, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, Subscription, Subject, combineLatest } from 'rxjs';
+import { takeUntil, map } from 'rxjs/operators';
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -18,6 +18,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   logo$: Observable<ToolbarLogo>;
+  computedLogo$: Observable<ToolbarLogo>;
   navItems$: Observable<ToolbarNavItem[]>;
   actions$: Observable<ToolbarAction[]>;
   currentRoute: string = '';
@@ -63,6 +64,27 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isDarkMode$ = this.appThemeService.isDarkMode$;
     this.isAdvancedThemeEnabled$ = this.appThemeService.canAccessAdvancedFeatures$;
     this.themeFeatures$ = this.appThemeService.canAccessAdvancedFeatures$;
+    // Create computed logo based on sidenav state
+    this.computedLogo$ = combineLatest([
+      this.toolbarService.logo,
+      this.sidenavService.config$,
+      this.authService.isAuthenticated$,
+      this.sidenavService.isVisible$
+    ]).pipe(
+      map(([originalLogo, sidenavConfig, isAuthenticated, sidenavVisible]) => {
+        // Only show conditional logo when authenticated and sidenav is visible
+        if (isAuthenticated && sidenavVisible) {
+          return {
+            ...originalLogo,
+            src: sidenavConfig.collapsed 
+              ? 'assets/landing/logo icon.png'  // Collapsed state - show icon
+              : 'assets/images/RIVO9 logo.webp' // Expanded state - show full logo
+          };
+        }
+        // When not authenticated or sidenav not visible, use original logo
+        return originalLogo;
+      })
+    );
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.currentRoute = event.urlAfterRedirects;
