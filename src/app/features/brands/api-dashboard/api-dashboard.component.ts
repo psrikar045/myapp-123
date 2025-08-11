@@ -13,7 +13,7 @@ import { ErrorDisplayComponent } from './components/error-display/error-display.
 import { EditApiKeyComponent } from './components/edit-api-key/edit-api-key.component';
 import { ApiDashboardData, DashboardStats, RecentProject } from './models/dashboard.model';
 import { ApiKey } from './models/api-key.model';
-
+import { AuthService } from '../../../core/services/auth.service';
 @Component({
   selector: 'app-api-dashboard',
   standalone: true,
@@ -58,7 +58,8 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
     private errorHandler: ErrorHandlerService,
     private clipboardService: ClipboardService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService // Assuming you have an AuthService to get user info
   ) {}
 
   ngOnInit(): void {
@@ -69,7 +70,8 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
       this.apiKeys = apiKeys;
       this.initializeApiKeyFilters();
     });
-    
+    this.userName = this.authService.userDetails.id; // Fetch username from auth service
+    this.isDarkMode$ = this.themeService.isDarkMode$;
     // Listen for navigation end events to detect when returning to dashboard
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),

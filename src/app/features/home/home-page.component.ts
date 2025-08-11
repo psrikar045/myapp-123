@@ -28,8 +28,10 @@ export class HomePageComponent implements OnInit {
   constructor(private toolbarService: ToolbarService) {
     // Initialize any necessary services or state here
   }
+  userName = 'User'; // Default value, will be updated on init
   ngOnInit(): void {
     // Toolbar state is handled automatically by header component based on auth status
+    this.userName = this.authService.userDetails?.id;
   }
 
   onLogout(): void {
