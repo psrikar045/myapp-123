@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
-import { Subject, takeUntil, forkJoin, Observable, filter } from 'rxjs';
+import { Subject, takeUntil, forkJoin, filter } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
 import { ApiDashboardService } from './services/api-dashboard.service';
@@ -33,8 +33,8 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   // Master-Detail properties
   selectedApiKey: ApiKey | null = null;
   filteredApiKeys: ApiKey[] = [];
-  searchTerm: string = '';
-  statusFilter: string = 'all';
+  searchTerm = '';
+  statusFilter = 'all';
   
   // UI state
   loading = true;
@@ -62,8 +62,6 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.isDarkMode$ = this.themeService.isDarkMode$;
-    
     // Subscribe to API keys updates from the service
     this.apiKeyService.apiKeys$.pipe(
       takeUntil(this.destroy$)
@@ -110,12 +108,11 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   /**
    * Load all dashboard data
    */
-  private loadDashboardData(refresh: boolean = false): void {
+  private loadDashboardData(refresh = false): void {
     this.loading = true;
     this.error = null;
     
-    // Global spinner will be automatically handled by the loading interceptor
-    // No need to manually control it here
+
 
     // Load dashboard stats, recent projects, and API keys in parallel
     forkJoin({
@@ -126,6 +123,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe({
       next: (data) => {
+
         this.stats = data.stats;
         this.recentProjects = data.projects.projects;
         this.apiKeys = data.apiKeys.keys;
@@ -139,7 +137,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading dashboard data:', error);
+
         this.error = this.getErrorMessage(error);
         this.loading = false;
       }
@@ -267,19 +265,20 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Format number for display with commas
+   * Format number for display with commas (always show 0 for empty/null/undefined)
    */
-  formatNumber(num: number): string {
-    if (num == null || isNaN(num)) return '0';
-    return num.toLocaleString();
+  formatNumber(num: number | null | undefined): string {
+    if (num == null || isNaN(num as number) || num === undefined) return '0';
+    return (num as number).toLocaleString();
   }
 
   /**
-   * Get usage percentage for API key
+   * Get usage percentage for API key (always return 0 for empty data)
    */
   getUsagePercentage(apiKey: ApiKey): number {
-    if (!apiKey.usage.requestsToday || !apiKey.usage.remainingToday) return 0;
+    if (!apiKey?.usage?.requestsToday || !apiKey?.usage?.remainingToday) return 0;
     const total = apiKey.usage.requestsToday + apiKey.usage.remainingToday;
+    if (total === 0) return 0;
     return Math.round((apiKey.usage.requestsToday / total) * 100);
   }
 
@@ -829,7 +828,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   /**
    * Get user-friendly error message
    */
-  private getErrorMessage(error: any): string {
+  private getErrorMessage(error: { status?: number; error?: { message?: string } }): string {
     if (error?.status === 401) {
       return 'Authentication required. Please log in again.';
     }

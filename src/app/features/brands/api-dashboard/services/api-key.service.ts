@@ -18,7 +18,8 @@ import {
 } from '../models/rate-limit.model';
 import { 
   SingleApiKeyDashboardResponse, 
-  TransformedApiKeyDashboard 
+  TransformedApiKeyDashboard,
+  ApiResponseWrapper
 } from '../models/dashboard-api.model';
 import { MockDataService } from './mock-data.service';
 import { ApiKeyEncryptionService } from './api-key-encryption.service';
@@ -54,10 +55,7 @@ export class ApiKeyService {
   private apiKeysSubject = new BehaviorSubject<ApiKey[]>([]);
   public apiKeys$ = this.apiKeysSubject.asObservable();
   
-  // Simple cache for API keys
-  private apiKeysCache: { keys: ApiKey[] } | null = null;
-  private cacheTimestamp: number = 0;
-  private readonly CACHE_DURATION = 5000; // 5 seconds only
+  // No caching - always fetch real-time data
 
   constructor(
     private http: HttpClient,
@@ -67,35 +65,15 @@ export class ApiKeyService {
   ) {}
 
   /**
-   * Get all API keys for the current user
+   * Get all API keys for the current user (no caching - always real-time)
    */
   getApiKeys(): Observable<{ keys: ApiKey[] }> {
-    // Check if we have current data in the BehaviorSubject first
-    const currentKeys = this.apiKeysSubject.value;
-    if (currentKeys && currentKeys.length > 0) {
-      // Update cache with current data and return it
-      const result = { keys: currentKeys };
-      this.apiKeysCache = result;
-      this.cacheTimestamp = Date.now();
-      return of(result);
-    }
-    
-    // Check cache if no current data in BehaviorSubject
-    const now = Date.now();
-    if (this.apiKeysCache && (now - this.cacheTimestamp) < this.CACHE_DURATION) {
-      // Update BehaviorSubject with cached data
-      this.apiKeysSubject.next(this.apiKeysCache.keys);
-      return of(this.apiKeysCache);
-    }
-
     // Check if we should use real API data or mock data for API keys only
     if (!environment.useRealApiKeysData) {
       // Use mock data when useRealApiKeysData is false
       const result$ = this.mockDataService.getMockApiKeys().pipe(
         tap(data => {
-          this.apiKeysCache = data;
-          this.cacheTimestamp = now;
-          // Also update the BehaviorSubject with fresh data
+          // Update the BehaviorSubject with fresh data
           this.apiKeysSubject.next(data.keys);
         }),
         catchError(error => {
@@ -106,7 +84,7 @@ export class ApiKeyService {
       return result$;
     }
     
-    // Use real backend API data
+    // Use real backend API data - always fetch fresh data
     const result$ = this.http.get<BackendApiKey[]>(this.apiUrl).pipe(
       map(backendApiKeys => {
         
@@ -155,9 +133,7 @@ export class ApiKeyService {
         return { keys: mappedKeys };
       }),
       tap(data => {
-        this.apiKeysCache = data;
-        this.cacheTimestamp = now;
-        // Also update the BehaviorSubject with fresh data
+        // Update the BehaviorSubject with fresh data
         this.apiKeysSubject.next(data.keys);
       }),
       catchError(error => {
@@ -182,10 +158,6 @@ export class ApiKeyService {
       tap(response => {
         console.log('API key created successfully:', response.id);
         
-        // Invalidate cache and clear BehaviorSubject to force fresh API call
-        this.apiKeysCache = null;
-        this.cacheTimestamp = 0;
-        
         // Force refresh by making a direct API call and updating all subscribers
         this.forceRefreshApiKeys();
       }),
@@ -196,19 +168,13 @@ export class ApiKeyService {
     );
   }
 private forceRefreshApiKeys(): void {
-    // Clear cache and force fresh API call
-    this.apiKeysCache = null;
-    this.cacheTimestamp = 0;
-    
-    const now = Date.now();
+    // Force fresh API call without caching
     
     // Check if we should use real API data or mock data
     if (!environment.useRealApiKeysData) {
       // Use mock data
       this.mockDataService.getMockApiKeys().pipe(
         tap(data => {
-          this.apiKeysCache = data;
-          this.cacheTimestamp = now;
           // Update the BehaviorSubject with fresh data
           this.apiKeysSubject.next(data.keys);
           console.log('Mock API keys force refreshed, new count:', data.keys.length);
@@ -267,8 +233,6 @@ private forceRefreshApiKeys(): void {
           return { keys: mappedKeys };
         }),
         tap(data => {
-          this.apiKeysCache = data;
-          this.cacheTimestamp = now;
           // Update the BehaviorSubject with fresh data
           this.apiKeysSubject.next(data.keys);
           console.log('Real API keys force refreshed, new count:', data.keys.length);
@@ -316,10 +280,7 @@ private forceRefreshApiKeys(): void {
         
         // Update the API keys list with the specific change
         this.updateApiKeys(updatedKeys);
-        
-        // Invalidate cache to force refresh on next getApiKeys() call
-        this.apiKeysCache = null;
-        this.cacheTimestamp = 0;
+      
       }),
       catchError(error => {
         console.error('Error updating API key:', error);
@@ -354,10 +315,6 @@ private forceRefreshApiKeys(): void {
           
           // Update the API keys list with the specific change
           this.updateApiKeys(updatedKeys);
-          
-          // Invalidate cache to force refresh on next getApiKeys() call
-          this.apiKeysCache = null;
-          this.cacheTimestamp = 0;
         }
       }),
       catchError(error => {
@@ -373,12 +330,6 @@ private forceRefreshApiKeys(): void {
   deleteApiKey(id: string): Observable<{ success: boolean; message?: string }> {
     return this.http.delete<{ success: boolean; message?: string }>(`${this.apiUrl}/${id}`).pipe(
       tap(response => {
-        console.log('API key deleted successfully:', response);
-        
-        // Invalidate cache to force refresh on next getApiKeys() call
-        this.apiKeysCache = null;
-        this.cacheTimestamp = 0;
-        
         // Remove the deleted key from the current API keys list
         const currentKeys = this.getCurrentApiKeys();
         const updatedKeys = currentKeys.filter(key => key.id !== id);
@@ -429,9 +380,6 @@ private forceRefreshApiKeys(): void {
    */
   updateApiKeys(keys: ApiKey[]): void {
     this.apiKeysSubject.next(keys);
-    // Also update the cache to keep it in sync
-    this.apiKeysCache = { keys };
-    this.cacheTimestamp = Date.now();
   }
 
   /**
@@ -445,16 +393,8 @@ private forceRefreshApiKeys(): void {
    * Ensure API keys are loaded and return the current data
    * This method prioritizes BehaviorSubject data over cache/API calls
    */
-  ensureApiKeysLoaded(forceRefresh: boolean = false): Observable<{ keys: ApiKey[] }> {
+  ensureApiKeysLoaded(forceRefresh = false): Observable<{ keys: ApiKey[] }> {
     const currentKeys = this.apiKeysSubject.value;
-    
-    // If forcing refresh, clear cache and fetch from API
-    if (forceRefresh) {
-      this.apiKeysCache = null;
-      this.cacheTimestamp = 0;
-      return this.getApiKeys();
-    }
-    
     // If we have current data in BehaviorSubject, return it immediately
     if (currentKeys && currentKeys.length > 0) {
       return of({ keys: currentKeys });
@@ -508,7 +448,7 @@ private forceRefreshApiKeys(): void {
   /**
    * Check if API key is expiring soon
    */
-  isExpiringSoon(apiKey: ApiKey, days: number = 7): boolean {
+  isExpiringSoon(apiKey: ApiKey, days = 7): boolean {
     if (!apiKey.expiresAt) return false;
     
     const expiryDate = new Date(apiKey.expiresAt);
@@ -557,14 +497,15 @@ private forceRefreshApiKeys(): void {
   /**
    * Get API key dashboard data
    */
-  getApiKeyDashboard(apiKeyId: string, refresh: boolean = false): Observable<SingleApiKeyDashboardResponse> {
+  getApiKeyDashboard(apiKeyId: string, refresh = false): Observable<SingleApiKeyDashboardResponse> {
     const headers = this.getAuthHeaders();
-    const dashboardUrl = `${environment.baseApiUrl}/api/v1/dashboard/api-key/${apiKeyId}?refresh=${refresh}`;
+    const dashboardUrl = `${environment.baseApiUrl}/api/v1/dashboard/v2/api-key/${apiKeyId}?refresh=${refresh}`;
     
     console.log('🌐 Making HTTP request to:', dashboardUrl);
     console.log('🌐 Request headers:', headers);
     
-    return this.http.get<SingleApiKeyDashboardResponse>(dashboardUrl, { headers }).pipe(
+    return this.http.get<ApiResponseWrapper<SingleApiKeyDashboardResponse>>(dashboardUrl, { headers }).pipe(
+      map(response => response.data), // Extract data from wrapper
       tap(response => console.log('🌐 HTTP response received:', response)),
       catchError(this.handleError<SingleApiKeyDashboardResponse>('getApiKeyDashboard'))
     );
@@ -578,45 +519,104 @@ private forceRefreshApiKeys(): void {
    * Transform API key dashboard response to match current template structure
    */
   transformApiKeyDashboard(apiResponse: SingleApiKeyDashboardResponse): TransformedApiKeyDashboard {
+    // Calculate daily limit from monthly quota (assuming 30 days per month)
+    const dailyLimit = Math.round((apiResponse.monthlyMetrics?.quotaLimit || 1000) / 30);
+    const remainingToday = Math.max(dailyLimit - (apiResponse.requestsToday || 0), 0);
+    
+    // Calculate usage percentage for monthly metrics
+    const monthlyUsagePercentage = apiResponse.monthlyMetrics?.quotaLimit 
+      ? Math.round(((apiResponse.monthlyMetrics.quotaLimit - apiResponse.monthlyMetrics.remainingQuota) / apiResponse.monthlyMetrics.quotaLimit) * 100)
+      : 0;
+    
+    // Calculate success rate (assuming all calls are successful if no error data)
+    const successRate = apiResponse.monthlyMetrics?.totalCalls 
+      ? Math.round((apiResponse.monthlyMetrics.totalCalls / apiResponse.monthlyMetrics.totalCalls) * 100)
+      : 100;
+    
     return {
       usage: {
         requestsToday: apiResponse.requestsToday || 0,
-        remainingToday: apiResponse.monthlyMetrics?.remainingQuota || 0,
+        requestsYesterday: apiResponse.requestsYesterday || 0,
+        remainingToday: remainingToday,
         requestsThisMonth: apiResponse.monthlyMetrics?.totalCalls || 0,
         lastUsed: apiResponse.lastUsed || 'Never',
-        rateLimitStatus: this.mapRateLimitStatus(apiResponse.rateLimitInfo?.rateLimitStatus || 'ok')
+        rateLimitStatus: 'OK' // Default since rateLimitInfo is not provided
       },
       performance: {
-        averageResponseTime: apiResponse.performanceMetrics?.averageResponseTime || 0,
+        averageResponseTime: apiResponse.performanceMetrics?.avgResponseTime7Days || 0,
         errorRate24h: apiResponse.performanceMetrics?.errorRate24h || 0,
-        uptime: apiResponse.performanceMetrics?.uptime || 100,
-        performanceStatus: apiResponse.performanceMetrics?.performanceStatus || 'OK',
-        lastError: apiResponse.performanceMetrics?.lastError || null,
-        consecutiveSuccessfulCalls: apiResponse.performanceMetrics?.consecutiveSuccessfulCalls || 0
+        uptime: 100, // Default to 100% since not provided
+        performanceStatus: 'OK', // Default since not provided
+        lastError: null, // Default since not provided
+        consecutiveSuccessfulCalls: 0 // Default since not provided
       },
-      monthlyMetrics: apiResponse.monthlyMetrics || {
-        usagePercentage: 0,
-        totalCalls: 0,
-        successfulCalls: 0,
-        failedCalls: 0,
-        quotaLimit: 1000,
-        remainingQuota: 1000,
-        successRate: 100,
-        estimatedDaysToQuotaExhaustion: 30,
-        quotaStatus: 'OK'
+      monthlyMetrics: {
+        usagePercentage: monthlyUsagePercentage,
+        totalCalls: apiResponse.monthlyMetrics?.totalCalls || 0,
+        successfulCalls: apiResponse.monthlyMetrics?.totalCalls || 0, // Assume all successful
+        failedCalls: 0, // Default since not provided
+        quotaLimit: apiResponse.monthlyMetrics?.quotaLimit || 1000,
+        remainingQuota: apiResponse.monthlyMetrics?.remainingQuota || 1000,
+        successRate: successRate,
+        estimatedDaysToQuotaExhaustion: this.calculateDaysToExhaustion(
+          apiResponse.monthlyMetrics?.remainingQuota || 1000,
+          apiResponse.requestsToday || 0
+        ),
+        quotaStatus: this.getQuotaStatus(monthlyUsagePercentage)
       },
-      rateLimitInfo: apiResponse.rateLimitInfo || {
-        tier: 'FREE',
-        currentWindowRequests: 0,
-        windowLimit: 1000,
-        windowResetTime: new Date().toISOString(),
-        rateLimitStatus: 'OK',
-        rateLimitUtilization: 0
+      rateLimitInfo: {
+        tier: 'FREE', // Default since not provided
+        currentWindowRequests: apiResponse.requestsToday || 0,
+        windowLimit: dailyLimit,
+        windowResetTime: this.getNextDayResetTime(),
+        rateLimitStatus: 'OK', // Default since not provided
+        rateLimitUtilization: Math.round(((apiResponse.requestsToday || 0) / dailyLimit) * 100)
       },
-      overallHealthStatus: apiResponse.overallHealthStatus || 'OK',
+      overallHealthStatus: this.calculateOverallHealthStatus(apiResponse),
       todayVsYesterdayChange: apiResponse.todayVsYesterdayChange || 0,
-      pendingRequests: apiResponse.pendingRequests || 0
+      pendingRequests: apiResponse.pendingRequests || 0,
+      status: apiResponse.status || 'active',
+      registeredDomain: apiResponse.registeredDomain || 'N/A'
     };
+  }
+
+  /**
+   * Calculate days to quota exhaustion based on current usage
+   */
+  private calculateDaysToExhaustion(remainingQuota: number, dailyUsage: number): number {
+    if (dailyUsage <= 0) return 999; // Infinite if no usage
+    return Math.ceil(remainingQuota / dailyUsage);
+  }
+
+  /**
+   * Get quota status based on usage percentage
+   */
+  private getQuotaStatus(usagePercentage: number): string {
+    if (usagePercentage >= 90) return 'CRITICAL';
+    if (usagePercentage >= 75) return 'WARNING';
+    return 'OK';
+  }
+
+  /**
+   * Get next day reset time (midnight tomorrow)
+   */
+  private getNextDayResetTime(): string {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    return tomorrow.toISOString();
+  }
+
+  /**
+   * Calculate overall health status based on API response
+   */
+  private calculateOverallHealthStatus(apiResponse: SingleApiKeyDashboardResponse): string {
+    const errorRate = apiResponse.performanceMetrics?.errorRate24h || 0;
+    const usagePercentage = apiResponse.usagePercentage || 0;
+    
+    if (errorRate > 10 || usagePercentage > 90) return 'CRITICAL';
+    if (errorRate > 5 || usagePercentage > 75) return 'WARNING';
+    return 'OK';
   }
 
   /**
@@ -652,10 +652,6 @@ private forceRefreshApiKeys(): void {
         
         // Update the API keys list with the specific change
         this.updateApiKeys(updatedKeys);
-        
-        // Invalidate cache to force refresh on next getApiKeys() call
-        this.apiKeysCache = null;
-        this.cacheTimestamp = 0;
       }),
       catchError(error => {
         console.error('Error updating API key status:', error);
@@ -675,11 +671,6 @@ private forceRefreshApiKeys(): void {
 
     return this.http.post<RegenerateApiKeyResponse>(`${this.apiUrl}/${id}/regenerate`, {}, { headers }).pipe(
       tap(response => {
-        console.log('API key regenerated successfully:', response.id);
-        
-        // Invalidate cache to force refresh on next getApiKeys() call
-        this.apiKeysCache = null;
-        this.cacheTimestamp = 0;
         
         // Update the current API keys list with the regenerated key
         const currentKeys = this.getCurrentApiKeys();

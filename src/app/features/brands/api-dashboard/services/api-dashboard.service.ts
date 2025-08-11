@@ -4,7 +4,7 @@ import { Observable, BehaviorSubject, of, throwError } from 'rxjs';
 import { map, catchError, tap, shareReplay } from 'rxjs/operators';
 import { environment } from '../../../../../environments/environment';
 import { ApiDashboardData, DashboardStats, RecentProject } from '../models/dashboard.model';
-import { UserDashboardCardsResponse, TransformedDashboardStats } from '../models/dashboard-api.model';
+import { UserDashboardCardsResponse, TransformedDashboardStats, ApiResponseWrapper } from '../models/dashboard-api.model';
 import { MockDataService } from './mock-data.service';
 import { AuthService } from '../../../../core/services/auth.service';
 
@@ -17,7 +17,7 @@ export class ApiDashboardService {
   public dashboardData$ = this.dashboardDataSubject.asObservable();
 
   // Cache for dashboard data
-  private dashboardCache: { [key: string]: { data: any; timestamp: number } } = {};
+  private dashboardCache: Record<string, { data: any; timestamp: number }> = {};
   private readonly CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
   constructor(
@@ -69,7 +69,7 @@ export class ApiDashboardService {
   /**
    * Get user dashboard cards from API
    */
-  getUserDashboardCards(refresh: boolean = false): Observable<UserDashboardCardsResponse> {
+  getUserDashboardCards(refresh = false): Observable<UserDashboardCardsResponse> {
     const cacheKey = 'user-dashboard-cards';
     
     // Check cache first if not forcing refresh
@@ -81,48 +81,76 @@ export class ApiDashboardService {
     }
 
     const headers = this.getAuthHeaders();
-    return this.http.get<UserDashboardCardsResponse>(
-      `${this.apiUrl}/user/cards?refresh=${refresh}`,
+    return this.http.get<ApiResponseWrapper<UserDashboardCardsResponse>>(
+      `${this.apiUrl}/v2/user/cards?refresh=${refresh}`,
       { headers }
     ).pipe(
+      map(response => response.data), // Extract data from wrapper
       tap(data => this.setCachedData(cacheKey, data)),
       catchError(this.handleError<UserDashboardCardsResponse>('getUserDashboardCards'))
     );
   }
 
   /**
-   * Transform API response to current dashboard stats format
+   * Transform API response to current dashboard stats format (with null safety)
    */
   private transformToDashboardStats(apiResponse: UserDashboardCardsResponse): DashboardStats {
-    return {
-      apiCalls: {
-        current: apiResponse.totalApiCalls.totalCalls,
-        change: this.formatPercentageChange(apiResponse.totalApiCalls.percentageChange),
-        trend: this.mapTrend(apiResponse.totalApiCalls.trend)
-      },
-      activeProjects: {
-        current: apiResponse.activeDomains.activeDomains,
-        change: this.formatPercentageChange(apiResponse.activeDomains.percentageChange),
-        trend: this.mapTrend(apiResponse.activeDomains.trend)
-      },
-      brandsAdded: {
-        current: apiResponse.domainsAdded.domainsAdded,
-        change: this.formatPercentageChange(apiResponse.domainsAdded.percentageChange),
-        trend: this.mapTrend(apiResponse.domainsAdded.trend)
-      },
-      remainingQuota: {
-        current: apiResponse.remainingQuota.remainingQuota,
-        percentage: Math.round(((apiResponse.remainingQuota.totalQuota - apiResponse.remainingQuota.remainingQuota) / apiResponse.remainingQuota.totalQuota) * 100),
-        total: apiResponse.remainingQuota.totalQuota,
-        resetDate: this.calculateResetDate(apiResponse.remainingQuota.estimatedDaysRemaining)
-      }
+    // Default values for all stats
+    const defaultStats: DashboardStats = {
+      apiCalls: { current: 0, change: '+0%', trend: 'neutral' },
+      activeProjects: { current: 0, change: '+0%', trend: 'neutral' },
+      brandsAdded: { current: 0, change: '+0%', trend: 'neutral' },
+      remainingQuota: { current: 0, percentage: 0, total: 1, resetDate: new Date().toISOString() }
     };
+
+    // API Calls stats
+    if (apiResponse?.totalApiCalls) {
+      defaultStats.apiCalls = {
+        current: apiResponse.totalApiCalls.totalCalls || 0,
+        change: this.formatPercentageChange(apiResponse.totalApiCalls.percentageChange || 0),
+        trend: this.mapTrend(apiResponse.totalApiCalls.trend || 'neutral')
+      };
+    }
+
+    // Active Projects stats
+    if (apiResponse?.activeDomains) {
+      defaultStats.activeProjects = {
+        current: apiResponse.activeDomains.activeDomains || 0,
+        change: this.formatPercentageChange(apiResponse.activeDomains.percentageChange || 0),
+        trend: this.mapTrend(apiResponse.activeDomains.trend || 'neutral')
+      };
+    }
+
+    // Brands Added stats
+    if (apiResponse?.domainsAdded) {
+      defaultStats.brandsAdded = {
+        current: apiResponse.domainsAdded.domainsAdded || 0,
+        change: this.formatPercentageChange(apiResponse.domainsAdded.percentageChange || 0),
+        trend: this.mapTrend(apiResponse.domainsAdded.trend || 'neutral')
+      };
+    }
+
+    // Remaining Quota stats
+    if (apiResponse?.remainingQuota) {
+      const remaining = apiResponse.remainingQuota.remainingQuota || 0;
+      const total = apiResponse.remainingQuota.totalQuota || 1; // Prevent division by zero
+      const percentage = total > 0 ? Math.round(((total - remaining) / total) * 100) : 0;
+      
+      defaultStats.remainingQuota = {
+        current: remaining,
+        percentage: Math.max(0, Math.min(100, percentage)), // Clamp between 0-100
+        total: total,
+        resetDate: this.calculateResetDate(apiResponse.remainingQuota.estimatedDaysRemaining || 30)
+      };
+    }
+
+    return defaultStats;
   }
 
   /**
    * Get dashboard statistics (transformed from API)
    */
-  getDashboardStats(refresh: boolean = false): Observable<DashboardStats> {
+  getDashboardStats(refresh = false): Observable<DashboardStats> {
     return this.getUserDashboardCards(refresh).pipe(
       map(apiResponse => this.transformToDashboardStats(apiResponse)),
       catchError(() => {
@@ -144,7 +172,7 @@ export class ApiDashboardService {
   /**
    * Get complete API dashboard data
    */
-  getApiDashboardData(refresh: boolean = false): Observable<ApiDashboardData> {
+  getApiDashboardData(refresh = false): Observable<ApiDashboardData> {
     return this.getUserDashboardCards(refresh).pipe(
       map(apiResponse => ({
         user: {

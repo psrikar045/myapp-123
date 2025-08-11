@@ -5,7 +5,6 @@ import { Subject, takeUntil } from 'rxjs';
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from '../shared/footer/footer.component';
-import { GlobalSpinnerComponent } from '../core/components/global-spinner/global-spinner.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { SpinnerService } from '../core/services/spinner.service';
 import { LayoutService } from '../core/services/layout.service';
@@ -24,7 +23,6 @@ import { SettingsService } from '../shared/services/settings.service';
     RouterOutlet,
     HeaderComponent,
     FooterComponent,
-    GlobalSpinnerComponent,
     SidenavComponent,
     AppThemePanelComponent
   ],

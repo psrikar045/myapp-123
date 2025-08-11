@@ -217,7 +217,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
         name: formValue.name.trim(),
         description: formValue.description?.trim() || undefined,
         prefix: formValue.prefix?.trim() || undefined,
-        rateLimitTier: formValue.tier?.tier || 'FREE_TIER',
+        rateLimitTier: null,
         scopes: Array.from(this.selectedScopes),
         registeredDomain: formValue.domain?.trim() || undefined,
         environment: formValue.environment?.trim() || undefined

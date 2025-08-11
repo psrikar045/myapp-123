@@ -23,16 +23,16 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   // Data properties
   selectedApiKey: ApiKey | null = null;
   domainApiKeys: ApiKey[] = [];
-  domain: string = '';
+  domain = '';
   
   // Dashboard data
   apiKeyDashboard: TransformedApiKeyDashboard | null = null;
-  dashboardLoading = false;
   dashboardError: string | null = null;
+  dashboardLoading = false;
   
-  // UI state
-  loading = true;
+  // UI state  
   error: string | null = null;
+  loading = false;
   
   // Regenerate popup state
   showRegeneratePopup = false;
@@ -44,9 +44,9 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   showRevokeConfirmation = false;
   
   // Show key state
-  showingFullKey: { [keyId: string]: boolean } = {};
-  decryptedKeys: { [keyId: string]: string } = {};
-  decryptingKeys: { [keyId: string]: boolean } = {};
+  showingFullKey: Record<string, boolean> = {};
+  decryptedKeys: Record<string, string> = {};
+  decryptingKeys: Record<string, boolean> = {};
   
   constructor(
     private route: ActivatedRoute,
@@ -83,7 +83,7 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
     ).subscribe(params => {
       const apiKeyId = params['id'];
       if (apiKeyId) {
-        this.loadApiKeyDetails(apiKeyId);
+        this.loadApiKeyDetailsOptimized(apiKeyId);
       }
     });
   }
@@ -99,14 +99,60 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Load API key details and related domain keys
+   * Load API key details and related domain keys (OPTIMIZED - avoid unnecessary API calls)
+   */
+  private loadApiKeyDetailsOptimized(apiKeyId: string): void {
+    this.error = null;
+    this.loading = true;
+
+    // First check if we already have the API key data in the service
+    const currentApiKeys = this.apiKeyService.getCurrentApiKeys();
+    const existingApiKey = currentApiKeys.find(key => key.id === apiKeyId);
+
+    if (existingApiKey) {
+      // We already have the API key data, no need to call the API keys endpoint again
+      console.log('✅ Using existing API key data, skipping API keys API call');
+      
+      this.selectedApiKey = existingApiKey;
+      this.domain = this.extractDomainFromApiKey(this.selectedApiKey);
+      this.domainApiKeys = [this.selectedApiKey];
+      
+      // Clear cache to force recalculation
+      this._cachedGroupedKeys = null;
+      
+      // Only load dashboard data (real-time) with local loading state
+      this.dashboardLoading = true;
+      this.apiKeyService.getApiKeyDashboard(apiKeyId, true).pipe(
+        takeUntil(this.destroy$)
+      ).subscribe({
+        next: (dashboardData) => {
+          // Transform and set dashboard data
+          this.apiKeyDashboard = this.apiKeyService.transformApiKeyDashboard(dashboardData);
+          this.dashboardLoading = false;
+          this.loading = false;
+          this.cdr.markForCheck();
+        },
+        error: (error) => {
+          console.error('Error loading dashboard data:', error);
+          this.error = 'Failed to load dashboard data.';
+          this.dashboardLoading = false;
+          this.loading = false;
+          this.cdr.markForCheck();
+        }
+      });
+    } else {
+      // We don't have the API key data, need to load it first
+      console.log('⚠️ API key not found in current data, loading from API');
+      this.loadApiKeyDetails(apiKeyId);
+    }
+  }
+
+  /**
+   * Load API key details and related domain keys (FALLBACK - when data not available)
    */
   private loadApiKeyDetails(apiKeyId: string): void {
-    this.loading = true;
     this.error = null;
-
-    // Global spinner will be automatically handled by the loading interceptor
-    // No need to manually control it here
+    this.loading = true;
 
     // Load all keys first, then load dashboard data in sequence
     this.apiKeyService.ensureApiKeysLoaded().pipe(
@@ -132,8 +178,9 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
         // Clear cache to force recalculation
         this._cachedGroupedKeys = null;
         
-        // Load dashboard data for this API key - this will be chained properly
-        return this.apiKeyService.getApiKeyDashboard(apiKeyId, false);
+        // Load dashboard data for this API key - always get fresh data
+        this.dashboardLoading = true;
+        return this.apiKeyService.getApiKeyDashboard(apiKeyId, true);
       })
     ).subscribe({
       next: (dashboardData) => {
@@ -146,8 +193,8 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
       error: (error) => {
         console.error('Error loading API key details or dashboard:', error);
         this.error = 'Failed to load API key details.';
-        this.loading = false;
         this.dashboardLoading = false;
+        this.loading = false;
         this.cdr.markForCheck();
       }
     });
@@ -189,12 +236,11 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   /**
    * Load API key dashboard data (used for refresh functionality)
    */
-  private loadApiKeyDashboard(apiKeyId: string, refresh: boolean = false): void {
+  private loadApiKeyDashboard(apiKeyId: string, refresh = false): void {
     console.log('🚀 Starting API key dashboard load for ID:', apiKeyId, 'refresh:', refresh);
-    this.dashboardLoading = true;
     this.dashboardError = null;
+    this.dashboardLoading = true;
 
-    // Global spinner will be automatically handled by the loading interceptor
     this.apiKeyService.getApiKeyDashboard(apiKeyId, refresh).pipe(
       takeUntil(this.destroy$)
     ).subscribe({
@@ -214,10 +260,11 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Refresh API key dashboard data
+   * Refresh API key dashboard data (always real-time)
    */
   refreshDashboard(): void {
     if (this.selectedApiKey) {
+      console.log('🔄 Refreshing dashboard data for API key:', this.selectedApiKey.id);
       this.loadApiKeyDashboard(this.selectedApiKey.id, true);
     }
   }
@@ -225,7 +272,7 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   /**
    * Get user-friendly error message
    */
-  private getErrorMessage(error: any): string {
+  private getErrorMessage(error: { status?: number; error?: { message?: string } }): string {
     if (error?.status === 401) {
       return 'Authentication required. Please log in again.';
     }
@@ -351,13 +398,12 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
     // Use real API dashboard data if available for today's usage
     if (this.apiKeyDashboard?.usage?.requestsToday !== undefined) {
       const dailyLimit = this.getDailyLimit();
+      if (dailyLimit === 0) return 0;
       return Math.min(Math.round((this.apiKeyDashboard.usage.requestsToday / dailyLimit) * 100), 100);
     }
     
-    // Fallback to API key usage data
-    if (!apiKey.usage?.requestsToday) return 0;
-    const dailyLimit = this.getDailyLimit();
-    return Math.min(Math.round((apiKey.usage.requestsToday / dailyLimit) * 100), 100);
+    // Return 0 if no data available
+    return 0;
   }
 
   /**
@@ -370,8 +416,8 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
       return Math.round(this.apiKeyDashboard.monthlyMetrics.quotaLimit / 30);
     }
     
-    // Fallback to mock daily limit
-    return 1000; // Mock daily limit
+    // Return 0 if no data available
+    return 0;
   }
 
   /**
@@ -383,8 +429,8 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
       return this.apiKeyDashboard.usage.requestsToday;
     }
     
-    // Fallback to API key usage data
-    return this.selectedApiKey?.usage?.requestsToday || 0;
+    // Return 0 if no data available
+    return 0;
   }
 
   /**
@@ -393,7 +439,133 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   getRemainingToday(): number {
     const dailyLimit = this.getDailyLimit();
     const todaysRequests = this.getTodaysRequests();
+    
+    if (dailyLimit === 0) return 0;
     return Math.max(dailyLimit - todaysRequests, 0);
+  }
+
+  /**
+   * Get total requests for current month
+   */
+  getTotalRequestsCurrentMonth(): number {
+    // Use real API dashboard data if available
+    if (this.apiKeyDashboard?.monthlyMetrics?.totalCalls !== undefined) {
+      return this.apiKeyDashboard.monthlyMetrics.totalCalls;
+    }
+    
+    // Return 0 if no data available
+    return 0;
+  }
+
+  /**
+   * Get monthly usage percentage
+   */
+  getMonthlyUsagePercentage(): number {
+    // Use real API dashboard data if available
+    if (this.apiKeyDashboard?.monthlyMetrics?.quotaLimit && this.apiKeyDashboard?.monthlyMetrics?.totalCalls !== undefined) {
+      const percentage = Math.round((this.apiKeyDashboard.monthlyMetrics.totalCalls / this.apiKeyDashboard.monthlyMetrics.quotaLimit) * 100);
+      return Math.min(percentage, 100);
+    }
+    
+    // Fallback calculation
+    return 0;
+  }
+
+  /**
+   * Get monthly quota limit
+   */
+  getMonthlyQuotaLimit(): number {
+    // Use real API dashboard data if available
+    if (this.apiKeyDashboard?.monthlyMetrics?.quotaLimit) {
+      return this.apiKeyDashboard.monthlyMetrics.quotaLimit;
+    }
+    
+    // Return 0 if no data available
+    return 0;
+  }
+
+  /**
+   * Get remaining monthly quota
+   */
+  getRemainingMonthlyQuota(): number {
+    // Use real API dashboard data if available
+    if (this.apiKeyDashboard?.monthlyMetrics?.remainingQuota !== undefined) {
+      return this.apiKeyDashboard.monthlyMetrics.remainingQuota;
+    }
+    
+    // Return 0 if no data available
+    return 0;
+  }
+
+  /**
+   * Get yesterday's requests count
+   */
+  getYesterdaysRequests(): number {
+    // Use real API dashboard data if available
+    if (this.apiKeyDashboard?.usage?.requestsYesterday !== undefined) {
+      return this.apiKeyDashboard.usage.requestsYesterday;
+    }
+    
+    // Return 0 if no data available
+    return 0;
+  }
+
+  /**
+   * Get today vs yesterday change percentage
+   */
+  getTodayVsYesterdayChange(): number {
+    // Use real API dashboard data if available
+    if (this.apiKeyDashboard?.todayVsYesterdayChange !== undefined) {
+      return this.apiKeyDashboard.todayVsYesterdayChange;
+    }
+    
+    // Return 0 if no data available
+    return 0;
+  }
+
+  /**
+   * Get pending requests count
+   */
+  getPendingRequests(): number {
+    // Use real API dashboard data if available
+    if (this.apiKeyDashboard?.pendingRequests !== undefined) {
+      return this.apiKeyDashboard.pendingRequests;
+    }
+    
+    return 0;
+  }
+
+  /**
+   * Get trend direction for today vs yesterday
+   */
+  getTrendDirection(): { direction: string, class: string, icon: string } {
+    const change = this.getTodayVsYesterdayChange();
+    
+    if (change > 0) {
+      return { direction: 'up', class: 'text-success', icon: 'bi-arrow-up' };
+    } else if (change < 0) {
+      return { direction: 'down', class: 'text-danger', icon: 'bi-arrow-down' };
+    } else {
+      return { direction: 'neutral', class: 'text-secondary', icon: 'bi-dash' };
+    }
+  }
+
+  /**
+   * Get API key status
+   */
+  getApiKeyStatus(): string {
+    return this.apiKeyDashboard?.status || this.selectedApiKey?.status || 'ACTIVE';
+  }
+
+  /**
+   * Get last used date/time
+   */
+  getLastUsedDateTime(): string {
+    const dashboardLastUsed = this.apiKeyDashboard?.usage?.lastUsed;
+    const apiKeyLastUsed = this.selectedApiKey?.usage?.lastUsed;
+    const createdAt = this.selectedApiKey?.createdAt;
+    
+    return dashboardLastUsed || apiKeyLastUsed || createdAt || 'Never';
   }
 
   /**
@@ -407,7 +579,16 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
    * Format date
    */
   formatDate(dateString: string): string {
+    if (!dateString) return 'Never';
     return new Date(dateString).toLocaleDateString();
+  }
+
+  /**
+   * Format date and time
+   */
+  formatDateTime(dateString: string | undefined): string {
+    if (!dateString) return 'Never';
+    return new Date(dateString).toLocaleString();
   }
 
   /**
@@ -771,16 +952,16 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
   }
 
   // Cache the grouped API keys to avoid recalculation
-  private _cachedGroupedKeys: { [key: string]: ApiKey[] } | null = null;
+  private _cachedGroupedKeys: Record<string, ApiKey[]> | null = null;
   private _lastDomainApiKeys: ApiKey[] = [];
 
   /**
    * Get API keys grouped by environment (cached)
    */
-  getApiKeysByEnvironment(): { [key: string]: ApiKey[] } {
+  getApiKeysByEnvironment(): Record<string, ApiKey[]> {
     // Only recalculate if the domain API keys have changed
     if (this._cachedGroupedKeys === null || this._lastDomainApiKeys !== this.domainApiKeys) {
-      const grouped: { [key: string]: ApiKey[] } = {
+      const grouped: Record<string, ApiKey[]> = {
         'production': [],
         'development': [],
         'testing': []

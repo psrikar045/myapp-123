@@ -27,10 +27,10 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
   filteredApiKeys: ApiKey[] = [];
   
   // Filter properties
-  domainFilter: string = 'all';
-  tierFilter: string = 'all';
-  environmentFilter: string = 'all';
-  statusFilter: string = 'all';
+  domainFilter = 'all';
+  tierFilter = 'all';
+  environmentFilter = 'all';
+  statusFilter = 'all';
   
   // UI state
   loading = true;

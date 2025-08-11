@@ -71,6 +71,7 @@ export interface ExpirationSettings {
 
 export interface ApiKeyUsage {
   requestsToday: number;
+  requestsYesterday?: number;
   remainingToday: number;
   requestsThisMonth?: number;
   lastUsed: string;
@@ -129,7 +130,7 @@ export interface CreateApiKeyResponse {
   allowedDomains?: string[] | null;
   allowedIps?: string[] | null;
   scopes?: string | string[];
-  rateLimitTier: string;
+  rateLimitTier: any,
   active: boolean; // Backend returns 'active' not 'isActive'
   isActive?: boolean; // Keep for backward compatibility
   expiresAt?: string;

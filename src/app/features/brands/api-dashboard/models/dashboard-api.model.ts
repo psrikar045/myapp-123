@@ -1,5 +1,14 @@
 // API Response Models for Dashboard Integration
 
+// Wrapper interfaces for actual API responses (with success, timestamp, etc.)
+export interface ApiResponseWrapper<T> {
+  data: T;
+  success: boolean;
+  implementation: string;
+  timestamp: string;
+}
+
+// Updated to match actual API response structure
 export interface UserDashboardCardsResponse {
   totalApiCalls: {
     totalCalls: number;
@@ -40,47 +49,27 @@ export interface UserDashboardCardsResponse {
   totalApiKeys: number;
 }
 
+// Updated to match actual API response structure
 export interface SingleApiKeyDashboardResponse {
-  usagePercentageFromMonthly: number;
-  overallHealthStatus: string;
-  apiKeyId: string;
-  apiKeyName: string;
-  registeredDomain: string;
   requestsToday: number;
-  requestsYesterday: number;
-  todayVsYesterdayChange: number;
-  pendingRequests: number;
-  usagePercentage: number;
   lastUsed: string;
+  requestsYesterday: number;
+  pendingRequests: number;
+  performanceMetrics: {
+    avgResponseTime7Days: number;
+    errorRate24h: number;
+  };
+  apiKeyId: string;
+  registeredDomain: string;
+  usagePercentage: number;
+  apiKeyName: string;
+  todayVsYesterdayChange: number;
   status: string;
   monthlyMetrics: {
-    usagePercentage: number;
     totalCalls: number;
-    successfulCalls: number;
-    failedCalls: number;
     quotaLimit: number;
     remainingQuota: number;
-    successRate: number;
-    estimatedDaysToQuotaExhaustion: number;
-    quotaStatus: string;
   };
-  performanceMetrics: {
-    averageResponseTime: number;
-    errorRate24h: number;
-    uptime: number;
-    performanceStatus: string;
-    lastError: string | null;
-    consecutiveSuccessfulCalls: number;
-  };
-  rateLimitInfo: {
-    tier: string;
-    currentWindowRequests: number;
-    windowLimit: number;
-    windowResetTime: string;
-    rateLimitStatus: string;
-    rateLimitUtilization: number;
-  };
-  lastUpdated: string;
 }
 
 // Data transformation interfaces to maintain current template structure
@@ -111,6 +100,7 @@ export interface TransformedDashboardStats {
 export interface TransformedApiKeyDashboard {
   usage: {
     requestsToday: number;
+    requestsYesterday: number;
     remainingToday: number;
     requestsThisMonth: number;
     lastUsed: string;
@@ -146,4 +136,6 @@ export interface TransformedApiKeyDashboard {
   overallHealthStatus: string;
   todayVsYesterdayChange: number;
   pendingRequests: number;
+  status: string;
+  registeredDomain: string;
 }

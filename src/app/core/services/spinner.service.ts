@@ -14,12 +14,10 @@ export class SpinnerService {
   }
 
   show(): void {
-    // console.log('🟢 SpinnerService.show() called - Setting loading to TRUE');
     this.loadingSubject.next(true);
   }
 
   hide(): void {
-    // console.log('🔴 SpinnerService.hide() called - Setting loading to FALSE');
     this.loadingSubject.next(false);
   }
 }

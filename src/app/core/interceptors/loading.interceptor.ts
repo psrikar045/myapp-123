@@ -25,10 +25,10 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
     req.method === 'GET' && req.url.includes('/api/search/suggestions'); // Skip for search suggestions
 
   // Debug logging for API dashboard endpoints
-  if (req.url.includes('/api/v1/dashboard/api-key/')) {
-    console.log('🔄 Loading interceptor - API Key Dashboard request:', req.url);
-    console.log('🔄 Should skip loading:', shouldSkipLoading);
-    console.log('🔄 Active requests before:', activeRequests);
+  if (req.url.includes('/api/v1/dashboard/v2/api-key/') || 
+      req.url.includes('/api/v1/dashboard/v2/user/cards') || 
+      req.url.includes('/api/v1/api-keys')) {
+    console.log('🚀 Loading interceptor - API Dashboard request started:', req.url);
   }
 
   if (shouldSkipLoading) {
@@ -39,7 +39,9 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
   activeRequests++;
   
   // Always show spinner for critical API dashboard endpoints, even if other requests are active
-  const isCriticalDashboardEndpoint = req.url.includes('/api/v1/dashboard/api-key/') || 
+  const isCriticalDashboardEndpoint = req.url.includes('/api/v1/dashboard/v2/api-key/') || 
+                                     req.url.includes('/api/v1/dashboard/v2/user/cards') ||
+                                     req.url.includes('/api/v1/api-keys') ||
                                      req.url.includes('/api/v1/dashboard/stats') ||
                                      req.url.includes('/api/v1/dashboard/recent-projects');
   
@@ -54,8 +56,10 @@ export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
       activeRequests--;
       
       // Debug logging for API dashboard endpoints
-      if (req.url.includes('/api/v1/dashboard/api-key/')) {
-        console.log('🔄 Loading interceptor - API Key Dashboard request completed:', req.url);
+      if (req.url.includes('/api/v1/dashboard/v2/api-key/') || 
+          req.url.includes('/api/v1/dashboard/v2/user/cards') || 
+          req.url.includes('/api/v1/api-keys')) {
+        console.log('🔄 Loading interceptor - API Dashboard request completed:', req.url);
         console.log('🔄 Active requests after:', activeRequests);
       }
       

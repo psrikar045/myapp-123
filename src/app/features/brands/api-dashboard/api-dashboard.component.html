@@ -4,7 +4,7 @@
     
     <!-- Error State -->
     <app-error-display 
-      *ngIf="error && !loading"
+      *ngIf="error"
       type="error"
       title="Failed to Load Dashboard"
       [message]="error"
@@ -14,7 +14,7 @@
     </app-error-display>
 
     <!-- Dashboard Content -->
-    <div *ngIf="!loading && !error">
+    <div *ngIf="!error">
       
       <!-- Welcome Header -->
       <div class="row mb-4">
@@ -24,9 +24,12 @@
               <h1 class="display-6 fw-bold mb-0 text-body-emphasis">Welcome back 👋</h1>
             </div>
             <div class="d-flex gap-2 flex-wrap">
-              <button class="btn btn-outline-primary rounded-pill" (click)="refreshDashboard()">
-                <i class="bi bi-arrow-clockwise me-1"></i>
-                Refresh
+              <button class="btn btn-outline-primary rounded-pill" 
+                      (click)="refreshDashboard()"
+                      [disabled]="loading">
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                <i *ngIf="!loading" class="bi bi-arrow-clockwise me-1"></i>
+                {{ loading ? 'Loading...' : 'Refresh' }}
               </button>
               <button class="btn btn-primary rounded-pill" (click)="createApiKey()">
                 <i class="bi bi-plus-lg me-1"></i>
@@ -46,7 +49,7 @@
             <div class="card-body p-3">
               <h6 class="text-body-secondary mb-1 fw-medium">Total API Calls (last 30 days)</h6>
               <h3 class="fw-bold mb-1 text-body-emphasis">{{ formatNumber(stats.apiCalls.current) }}</h3>
-              <small class="text-success fw-medium">{{ stats.apiCalls.change }}</small>
+              <small class="text-success fw-medium">{{ stats.apiCalls.change || '+0%' }}</small>
             </div>
           </div>
         </div>
@@ -57,7 +60,7 @@
             <div class="card-body p-3">
               <h6 class="text-body-secondary mb-1 fw-medium">Active Domains (projects)</h6>
               <h3 class="fw-bold mb-1 text-body-emphasis">{{ getUniqueDomainCount() }}</h3>
-              <small class="text-success fw-medium">{{ stats.activeProjects.change }}</small>
+              <small class="text-success fw-medium">{{ stats.activeProjects.change || '+0%' }}</small>
             </div>
           </div>
         </div>
@@ -68,7 +71,7 @@
             <div class="card-body p-3">
               <h6 class="text-body-secondary mb-1 fw-medium">Domains Added (this month)</h6>
               <h3 class="fw-bold mb-1 text-body-emphasis">{{ getDomainsAddedThisMonth() }}</h3>
-              <small class="text-success fw-medium">{{ stats.brandsAdded.change }}</small>
+              <small class="text-success fw-medium">{{ stats.brandsAdded.change || '+0%' }}</small>
             </div>
           </div>
         </div>
@@ -79,7 +82,7 @@
             <div class="card-body p-3">
               <h6 class="text-body-secondary mb-1 fw-medium">Remaining Quota</h6>
               <h3 class="fw-bold mb-1 text-body-emphasis">{{ formatNumber(stats.remainingQuota.current) }}</h3>
-              <small class="text-success fw-medium">{{ 100 - stats.remainingQuota.percentage }}% remaining</small>
+              <small class="text-success fw-medium">{{ (100 - stats.remainingQuota.percentage) }}% remaining</small>
             </div>
           </div>
         </div>
@@ -113,7 +116,7 @@
                 </div>
               </div>
               <div class="d-flex justify-content-between">
-                <small class="text-body-secondary">{{ formatNumber(stats.remainingQuota.total - stats.remainingQuota.current) }} used / {{ formatNumber(stats.remainingQuota.total) }} total</small>
+                <small class="text-body-secondary">{{ formatNumber(stats.remainingQuota.total -stats.remainingQuota.current) }} used / {{ formatNumber(stats.remainingQuota.total) }} total</small>
                 <small class="text-body-secondary">{{ formatNumber(stats.remainingQuota.current) }} remaining</small>
               </div>
             </div>

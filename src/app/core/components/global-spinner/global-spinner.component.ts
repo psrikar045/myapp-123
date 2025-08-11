@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Observable, Subscription } from 'rxjs';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -9,7 +9,7 @@ import { SpinnerService } from '../../services/spinner.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="global-spinner-overlay" *ngIf="isLoading$ | async" [@fadeInOut]>
+    <div class="global-spinner-overlay" *ngIf="isLoading">
       <div class="spinner-container">
         <div class="spinner-wrapper">
           <!-- Enhanced Modern Spinner with RIVO9 Branding -->
@@ -327,11 +327,13 @@ import { SpinnerService } from '../../services/spinner.service';
 })
 export class GlobalSpinnerComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
+  isLoading = false;
   private subscription?: Subscription;
 
   constructor(
     private spinnerService: SpinnerService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    private cdr: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {
     this.isLoading$ = this.spinnerService.loading$;
   }
@@ -340,16 +342,19 @@ export class GlobalSpinnerComponent implements OnInit, OnDestroy {
     // Only run in browser environment
     if (isPlatformBrowser(this.platformId)) {
       this.subscription = this.isLoading$.subscribe(loading => {
-        console.log('🎯 GlobalSpinnerComponent received loading state:', loading);
-        if (loading) {
-          console.log('🟢 GlobalSpinnerComponent: SHOWING spinner');
-          // Prevent body scroll when loading
-          document.body.style.overflow = 'hidden';
-        } else {
-          console.log('🔴 GlobalSpinnerComponent: HIDING spinner');
-          // Restore body scroll
-          document.body.style.overflow = '';
-        }
+
+        setTimeout(() => {
+          this.isLoading = loading;
+          
+          if (loading) {
+            // Prevent body scroll when loading
+            document.body.style.overflow = 'hidden';
+          } else {
+            // Restore body scroll
+            document.body.style.overflow = '';
+          }
+          this.cdr.detectChanges();
+        }, 0);
       });
     }
   }
