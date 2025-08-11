@@ -293,6 +293,13 @@ private readonly sidenavVisibleRoutes = [
             route: '/brandApi',
             icon: 'bi-clipboard2-data',
           },
+          {
+            id: 'categories',
+            label: 'Search a Brand',
+            route: '/all-categories',
+            icon: 'bi-bookmark-check-fill',
+          },
+          
           // {
           //   id: 'brand-manager',
           //   label: 'Brand Analyzer',
@@ -355,7 +362,7 @@ private readonly sidenavVisibleRoutes = [
             id: 'My plan',
             label: 'My plan',
             route: '/pricing/my-plan',
-            icon: 'bi-speedometer2'
+            icon: 'bi-award'
           },
           {
             id: 'choose plan',
