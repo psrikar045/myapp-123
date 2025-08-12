@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, PLATFORM_ID, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -32,7 +32,8 @@ interface WizardStep {
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, DatePickerPopupComponent],
   templateUrl: './create-api-key.component.html',
-  styleUrls: ['./create-api-key.component.scss']
+  styleUrls: ['./create-api-key.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CreateApiKeyComponent implements OnInit, OnDestroy {
   private platformId = inject(PLATFORM_ID);
@@ -157,7 +158,8 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
     private themeService: AppThemeService,
     private errorHandler: ErrorHandlerService,
     private clipboardService: ClipboardService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.createForm = this.initializeForm();
   }
@@ -208,6 +210,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
 
     this.loading = true;
     this.error = null;
+    this.cdr.markForCheck();
 
     const formValue = this.createForm.value;
     
@@ -246,6 +249,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
             this.createdApiKey = response.keyValue;
             this.success = true;
             this.loading = false;
+            this.cdr.markForCheck();
             
             // Show success message
             this.errorHandler.showSuccess('API key created successfully! Make sure to copy and save it securely.');
@@ -264,12 +268,14 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
             this.error = error.error?.message || 'Failed to create API key. Please try again.';
             this.errorHandler.showWarning(this.error);
             this.loading = false;
+            this.cdr.markForCheck();
           }
         });
     } catch (error) {
       console.error('Error preparing API key request:', error);
       this.error = 'Invalid form data. Please check your inputs and try again.';
       this.loading = false;
+      this.cdr.markForCheck();
     }
   }
 
@@ -332,6 +338,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
     } else {
       this.selectedScopes.add(scopeKey);
     }
+    this.cdr.markForCheck();
   }
 
   /**
@@ -379,6 +386,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
     } else {
       this.expandedGroups.add(groupName);
     }
+    this.cdr.markForCheck();
   }
 
   /**
@@ -390,6 +398,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
         this.selectedScopes.add(scope.key);
       }
     });
+    this.cdr.markForCheck();
   }
 
   /**
@@ -399,6 +408,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
     group.scopes.forEach(scope => {
       this.selectedScopes.delete(scope.key);
     });
+    this.cdr.markForCheck();
   }
 
   /**
@@ -453,6 +463,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
     this.success = false;
     this.createdApiKey = null;
     this.error = null;
+    this.cdr.markForCheck();
     this.selectedScopes.clear();
     this.createForm.reset();
     this.createForm.patchValue({

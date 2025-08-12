@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ApiKey } from '../../models/api-key.model';
 
@@ -7,7 +7,8 @@ import { ApiKey } from '../../models/api-key.model';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './api-key-details.component.html',
-  styleUrls: ['./api-key-details.component.scss']
+  styleUrls: ['./api-key-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ApiKeyDetailsComponent implements OnInit {
   @Input() apiKey: ApiKey | null = null;
@@ -18,6 +19,8 @@ export class ApiKeyDetailsComponent implements OnInit {
   @Output() regenerateApiKey = new EventEmitter<ApiKey>();
   @Output() copyApiKey = new EventEmitter<string>();
   @Output() toggleApiKeyStatus = new EventEmitter<ApiKey>();
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     // Component initialization

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil, forkJoin, filter } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -19,7 +19,8 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, ErrorDisplayComponent, EditApiKeyComponent],
   templateUrl: './api-dashboard.component.html',
-  styleUrls: ['./api-dashboard.component.scss']
+  styleUrls: ['./api-dashboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ApiDashboardComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
@@ -59,7 +60,8 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
     private clipboardService: ClipboardService,
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthService // Assuming you have an AuthService to get user info
+    private authService: AuthService, // Assuming you have an AuthService to get user info
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -69,6 +71,7 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
     ).subscribe(apiKeys => {
       this.apiKeys = apiKeys;
       this.initializeApiKeyFilters();
+      this.cdr.markForCheck();
     });
     this.userName = this.authService.userDetails.id; // Fetch username from auth service
     this.isDarkMode$ = this.themeService.isDarkMode$;
@@ -91,9 +94,11 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
         this.apiKeyService.ensureApiKeysLoaded(true).subscribe({
           next: (data) => {
             console.log('API keys refreshed on dashboard navigation, count:', data.keys.length);
+            this.cdr.markForCheck();
           },
           error: (error) => {
             console.error('Error refreshing API keys on navigation:', error);
+            this.cdr.markForCheck();
           }
         });
       }, 100);
@@ -137,11 +142,13 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
         this.initializeApiKeyFilters();
         
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: (error) => {
 
         this.error = this.getErrorMessage(error);
         this.loading = false;
+        this.cdr.markForCheck();
       }
     });
   }

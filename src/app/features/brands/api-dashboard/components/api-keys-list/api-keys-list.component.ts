@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -17,7 +17,8 @@ import { ApiKey } from '../../models/api-key.model';
   standalone: true,
   imports: [CommonModule, FormsModule, ErrorDisplayComponent, EditApiKeyComponent],
   templateUrl: './api-keys-list.component.html',
-  styleUrls: ['./api-keys-list.component.scss']
+  styleUrls: ['./api-keys-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ApiKeysListComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
@@ -51,7 +52,8 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
     private apiKeyService: ApiKeyService,
     private errorHandler: ErrorHandlerService,
     private spinnerService: SpinnerService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -62,6 +64,7 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
       this.apiKeys = apiKeys;
       this.initializeFilters();
       this.applyFilters();
+      this.cdr.markForCheck();
     });
     
     this.initializeApiKeys();
@@ -112,12 +115,14 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
           this.applyFilters();
           this.loading = false;
           this.spinnerService.hide();
+          this.cdr.markForCheck();
         },
         error: (error) => {
           console.error('Error loading API keys:', error);
           this.error = 'Failed to load API keys. Please try again.';
           this.loading = false;
           this.spinnerService.hide();
+          this.cdr.markForCheck();
         }
       });
   }
@@ -152,6 +157,7 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
       
       return matchesDomain && matchesTier && matchesEnvironment && matchesStatus;
     });
+    this.cdr.markForCheck();
   }
 
   /**
@@ -187,12 +193,14 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
           this.applyFilters();
           this.loading = false;
           this.spinnerService.hide();
+          this.cdr.markForCheck();
         },
         error: (error) => {
           console.error('Error refreshing API keys:', error);
           this.error = 'Failed to refresh API keys. Please try again.';
           this.loading = false;
           this.spinnerService.hide();
+          this.cdr.markForCheck();
         }
       });
   }

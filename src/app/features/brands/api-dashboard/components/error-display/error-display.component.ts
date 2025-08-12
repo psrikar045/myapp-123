@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppThemeService } from '../../../../../core/services/app-theme.service';
 
@@ -141,7 +141,8 @@ import { AppThemeService } from '../../../../../core/services/app-theme.service'
         }
       }
     }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ErrorDisplayComponent {
   @Input() type: 'error' | 'warning' | 'info' = 'error';
@@ -159,7 +160,10 @@ export class ErrorDisplayComponent {
 
   showDetails: boolean = false;
 
-  constructor(private themeService: AppThemeService) {}
+  constructor(
+    private themeService: AppThemeService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   get alertClass(): string {
     const baseClass = 'alert-';
@@ -197,5 +201,6 @@ export class ErrorDisplayComponent {
 
   toggleDetails(): void {
     this.showDetails = !this.showDetails;
+    this.cdr.markForCheck();
   }
 }

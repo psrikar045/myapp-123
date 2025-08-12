@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
@@ -12,7 +12,8 @@ import { ApiKey, ApiKeyUpdateRequest } from '../../models/api-key.model';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './edit-api-key.component.html',
-  styleUrls: ['./edit-api-key.component.scss']
+  styleUrls: ['./edit-api-key.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
   @Input() apiKey: ApiKey | null = null;
@@ -44,7 +45,8 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
   constructor(
     private fb: FormBuilder,
     private apiKeyService: ApiKeyService,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService,
+    private cdr: ChangeDetectorRef
   ) {
     this.editForm = this.initializeForm();
   }
@@ -321,6 +323,7 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
             this.loading = false;
             this.errorHandler.showSuccess('API key updated successfully!');
             this.onSave.emit(updatedApiKey);
+            this.cdr.markForCheck();
             this.close();
           },
           error: (error) => {
@@ -328,12 +331,14 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
             this.error = error.error?.message || 'Failed to update API key. Please try again.';
             this.errorHandler.showWarning(this.error!);
             this.loading = false;
+            this.cdr.markForCheck();
           }
         });
     } catch (error) {
       console.error('Error preparing API key update request:', error);
       this.error = 'Invalid form data. Please check your inputs and try again.';
       this.loading = false;
+      this.cdr.markForCheck();
     }
   }
 
@@ -352,6 +357,7 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
     this.editForm.reset();
     this.error = null;
     this.loading = false;
+    this.cdr.markForCheck();
   }
 
   /**
