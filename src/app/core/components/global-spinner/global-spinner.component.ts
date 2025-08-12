@@ -354,7 +354,7 @@ export class GlobalSpinnerComponent implements OnInit, OnDestroy {
             document.body.style.overflow = '';
           }
           this.cdr.detectChanges();
-        }, 0);
+        }, 10);
       });
     }
   }

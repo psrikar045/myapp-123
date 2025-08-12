@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, PLATFORM_ID,ChangeDetectorRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -102,6 +102,7 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
+    private cdr: ChangeDetectorRef,
     private utilService: UtilService // Inject UtilService
   ) {
     
@@ -773,6 +774,7 @@ getAllCategories() {
         });
         
         this.isLoadingBrands = false;
+        this.cdr.detectChanges();
         console.log('Brand data loaded from API:', {
           page: this.currentPage,
           totalPages: this.totalPages,
