@@ -624,7 +624,7 @@ body, html, app-root {
   margin-left: auto;
   margin-right: auto;
 } */
- * No colors/logos messages */
+/* No colors/logos messages */
 .no-colors-message, .no-logos-message {
   text-align: center;
   color: #6b7280;
