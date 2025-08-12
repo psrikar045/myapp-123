@@ -78,14 +78,14 @@
       </div>
       <div class="categories-main-layout-content" *ngIf="!isLoadingBrands && filteredCategories.length > 0">
         <!-- Desktop Sidebar -->
-        <aside class="categories-sidebar desktop-sidebar" *ngIf="!isMobile">
+        <aside class="categories-sidebar desktop-sidebar p-0" *ngIf="!isMobile">
           <!-- Sidebar Header -->
-          <div class="sidebar-header">
-            <h3 class="sidebar-title">
+          <div class="sidebar-header p-3">
+            <h3 class="sidebar-title text-center">
               <i class="bi bi-funnel-fill me-2"></i>
               Categories
             </h3>
-            <p class="sidebar-subtitle">Filter by category</p>
+            <p class="sidebar-subtitle text-center mb-0">Filter by category</p>
           </div>
           
           <div *ngFor="let cat of filteredCategories" class="sidebar-category">

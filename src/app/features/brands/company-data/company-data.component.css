@@ -156,7 +156,8 @@ body, html, app-root {
   margin: 48px auto 0 auto;
   max-width: 1440px;
   justify-content: center;
-  align-items: flex-start;
+  /* align-items: flex-start; */
+  align-items: stretch;
   padding-bottom: 40px;
 }
 
@@ -168,7 +169,13 @@ body, html, app-root {
   flex-direction: column;
   background: #fff;
 }
-
+.brand-details-left,
+.brand-details-right {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 100%;
+}
 .brand-details-left {
   flex: 1 1 660px;
   min-width: 540px;
@@ -245,7 +252,8 @@ body, html, app-root {
 }
 .brand-colors {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  /* grid-template-columns: repeat(5, 1fr); */
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
   gap: 12px 16px;
 }
 .brand-color {
@@ -347,6 +355,7 @@ body, html, app-root {
 
 .brand-logos-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 24px;
   margin-top: 10px;
 }
@@ -359,6 +368,7 @@ body, html, app-root {
   flex-direction: column;
   align-items: center;
   min-width: 140px;
+  margin-bottom: 12px;
 }
 .dark-theme .brand-logo-preview {
   background: #2d2d2d;
@@ -381,15 +391,16 @@ body, html, app-root {
 
 .brand-tabs {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   padding: 32px 32px 0 32px;
   margin-bottom: 0;
+  flex-wrap: wrap;
 }
 .brand-tab {
   background: #f7f8fa;
   border: none;
   border-radius: 12px 12px 0 0;
-  padding: 12px 32px 10px 32px;
+  /* padding: 12px 32px 10px 32px; */
   font-size: 1.18rem;
   font-weight: 600;
   color: #183B56;
@@ -397,6 +408,11 @@ body, html, app-root {
   transition: background 0.2s, color 0.2s;
   outline: none;
   letter-spacing: -0.5px;
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  padding: 10px 16px 8px 16px;
+  font-size: 1rem;
 }
 .dark-theme .brand-tab {
   background: #444;
@@ -458,7 +474,7 @@ body, html, app-root {
   color: #b5e890;
 }
 
-@media (max-width: 900px) {
+/* @media (max-width: 900px) {
   .brand-analyzer-content {
     padding: 32px 8px 40px 8px;
   }
@@ -500,7 +516,7 @@ body, html, app-root {
     padding-left: 12px;
     padding-right: 12px;
   }
-}
+} */
 
 /* Error Message Styles */
 .error-message {
@@ -595,7 +611,7 @@ body, html, app-root {
 }
 
 /* Error Message Styles */
-.error-message {
+/* .error-message {
   margin-top: 16px;
   padding: 12px 16px;
   background: #fee2e2;
@@ -607,7 +623,25 @@ body, html, app-root {
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+} */
+ * No colors/logos messages */
+.no-colors-message, .no-logos-message {
+  text-align: center;
+  color: #6b7280;
+  font-style: italic;
+  padding: 20px;
+  font-size: 0.9rem;
 }
+
+/* .dark-theme .no-colors-message, 
+.dark-theme .no-logos-message {
+  color: #9ca3af;
+} */
+ .dark-theme .no-colors-message, 
+.dark-theme .no-logos-message {
+  color: #9ca3af;
+}
+
 
 .dark-theme .error-message {
   background: #7f1d1d;
@@ -616,12 +650,12 @@ body, html, app-root {
 }
 
 /* Animation Selector Styles */
-.animation-selector {
+/* .animation-selector {
   margin-top: 20px;
   text-align: center;
-}
+} */
 
-.animation-toggle-btn {
+/* .animation-toggle-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -636,52 +670,143 @@ body, html, app-root {
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
+} */
 
-.animation-toggle-btn:hover {
+/* .animation-toggle-btn:hover {
   background: rgba(255, 255, 255, 1);
   border-color: rgba(255, 255, 255, 0.5);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-}
+} */
 
-.animation-toggle-btn:active {
+/* .animation-toggle-btn:active {
   transform: translateY(0);
-}
+} */
 
-.dark-theme .animation-toggle-btn {
+/* .dark-theme .animation-toggle-btn {
   background: rgba(31, 41, 55, 0.9);
   border-color: rgba(75, 85, 99, 0.5);
   color: #d1d5db;
-}
+} */
 
-.dark-theme .animation-toggle-btn:hover {
+/* .dark-theme .animation-toggle-btn:hover {
   background: rgba(31, 41, 55, 1);
   border-color: rgba(75, 85, 99, 0.8);
-}
+} */
 
-.toggle-icon {
+/* .toggle-icon {
   font-size: 1.1rem;
-}
+} */
 
-.toggle-text {
+/* .toggle-text {
   font-size: 0.9rem;
   font-weight: 500;
-}
+} */
 
 /* Button Loading State */
-.brand-analyzer-analyze-btn:disabled {
+/* .brand-analyzer-analyze-btn:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   background: #9ca3af;
-}
+} */
 
-.brand-analyzer-input:disabled {
+/* .brand-analyzer-input:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   background: #f3f4f6;
+} */
+
+/* .dark-theme .brand-analyzer-input:disabled {
+  background: #374151;
+} */
+
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .brand-details-row {
+    flex-direction: column;
+    gap: 32px;
+    align-items: stretch;
+  }
+  .brand-details-left,
+  .brand-details-right {
+    min-height: unset;
+  }
+  
+  .brand-details-right {
+    min-width: 500px;
+    max-width: 650px;
+  }
+  
+  .brand-tabs {
+    padding: 24px 24px 0 24px;
+    gap: 4px;
+  }
+  
+  .brand-tab {
+    padding: 8px 12px 6px 12px;
+    font-size: 0.95rem;
+  }
+  
+  .brand-tab-content {
+    margin: 0 24px 24px 24px;
+    padding: 24px 20px 20px 20px;
+  }
 }
 
-.dark-theme .brand-analyzer-input:disabled {
-  background: #374151;
+@media (max-width: 900px) {
+  .brand-analyzer-content {
+    padding: 32px 8px 40px 8px;
+  }
+  .brand-analyzer-title {
+    font-size: 2.5rem;
+  }
+  .brand-analyzer-subtitle {
+    font-size: 1.1rem;
+  }
+  .brand-analyzer-input-row {
+    max-width: 100%;
+    padding-left: 12px;
+    height: 48px;
+  }
+  .brand-analyzer-analyze-btn {
+    padding: 0 18px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .brand-details-right {
+    min-width: auto;
+    max-width: none;
+  }
+  
+  .brand-tabs {
+    padding: 20px 20px 0 20px;
+    gap: 3px;
+  }
+  
+  .brand-tab {
+    padding: 6px 10px 4px 10px;
+    font-size: 0.9rem;
+  }
+  
+  .brand-details-card {
+    min-width: 320px;
+    max-width: 100%;
+  }
+  
+  .brand-details-right, .brand-details-left {
+    min-width: 320px;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .brand-colors {
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  }
+  .brand-logo-preview {
+    min-width: 100px;
+    padding: 10px 8px 8px 8px;
+  }
 }

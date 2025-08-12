@@ -54,7 +54,9 @@ private readonly sidenavVisibleRoutes = [
     '/analytics',      // Analytics pages
     '/account',        // Account pages
     '/pricing/my-plan', // My Plan page (authenticated)
-    '/pricing/choose'   // Choose Plan page (authenticated)
+    '/pricing/choose',   // Choose Plan page (authenticated)
+    '/brands/categories', // Brand categories page   // All Categories page
+    '/search/view'       // Search View page (includes /search/view/:brand)
   ];
 
   // Routes where sidenav should never be visible
