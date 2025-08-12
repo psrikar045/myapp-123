@@ -173,8 +173,8 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
     this.setupScrollListener();
 
     // Add some default scopes for the simplified UI
-    this.selectedScopes.add('READ_BRANDS');
-    this.selectedScopes.add('READ_CATEGORIES');
+    // this.selectedScopes.add('READ_BRANDS');
+    // this.selectedScopes.add('READ_CATEGORIES');
   }
 
   ngOnDestroy(): void {
@@ -311,7 +311,7 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
    * Generate a suggested name
    */
   generateName(): void {
-    const environments = ['dev', 'staging', 'prod'];
+    const environments = ['dev', 'testing', 'prod'];
     const adjectives = ['quick', 'smart', 'secure', 'fast', 'reliable'];
     const nouns = ['api', 'key', 'access', 'token'];
     
