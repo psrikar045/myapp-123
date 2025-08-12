@@ -347,7 +347,7 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
       case 'ACTIVE':
         return 'badge bg-success';
       case 'SUSPENDED':
-        return 'badge bg-secondary';
+        return 'badge bg-warning';
       case 'EXPIRED':
         return 'badge bg-warning';
       case 'REVOKED':
@@ -357,7 +357,7 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
       case 'development':
         return 'badge bg-info';
       case 'testing':
-        return 'badge bg-warning';
+        return 'badge bg-secondary';
       default:
         return 'badge bg-secondary';
     }

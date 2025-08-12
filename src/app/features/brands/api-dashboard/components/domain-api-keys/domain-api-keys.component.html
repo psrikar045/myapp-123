@@ -104,9 +104,11 @@
                 <span [class]="getStatusBadgeClass(selectedApiKey.status)">
                   {{ selectedApiKey.status }}
                 </span>
-                <span class="badge bg-light text-dark border">
+                   <div class="d-flex justify-content-between align-items-center">
+                <span [class]="getStatusBadgeClass(selectedApiKey.environment || 'production')">
                   {{ getEnvironmentDisplayName(selectedApiKey.environment || 'production') }}
                 </span>
+              </div>
               </div>
             </div>
             <div class="col-lg-4 col-md-5 col-12 text-end">

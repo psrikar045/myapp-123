@@ -384,8 +384,8 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
     switch (environment) {
       case 'production':
         return 'Production';
-      case 'staging':
-        return 'Staging';
+      case 'testing':
+        return 'Testing';
       case 'development':
         return 'Development';
       default:
