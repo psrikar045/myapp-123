@@ -54,4 +54,7 @@ export class HomePageComponent implements OnInit {
    navigateToAccountHub(): void {
      this.router.navigate(['/brands/api-dashboard']);
   }
+  // navigateToBrand(){
+  //   this.router.navigate(['/all-categories']);
+  // }
 }
