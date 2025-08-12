@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../../../layout/header/header.component';
@@ -23,7 +23,8 @@ import { PhoneService } from '../../../shared/services/phone.service';
     ChoosePlanComponent
   ],
   templateUrl: './my-profile.component.html',
-  styleUrl: './my-profile.component.scss'
+  styleUrl: './my-profile.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MyProfileComponent implements OnInit, OnDestroy {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
@@ -127,6 +128,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
         this.profileForm.username = response.username || '';
         this.profileForm.emailVerified = response.emailVerified || false;
         this.profileForm.authProvider = response.authProvider || '';
+        this.cdr.markForCheck();
       },
       error: (error: any) => {
         console.error('Error fetching user profile:', error);
@@ -138,6 +140,7 @@ export class MyProfileComponent implements OnInit, OnDestroy {
         this.profile.location = '';
         this.profile.profileCompletion = 0;
         this.profile.avatar = this.defaultAvatarUrl;
+        this.cdr.markForCheck();
       }
     });
   }
@@ -312,6 +315,7 @@ if (this.dobShow) {
  this.authService.userProfileUpdate( updateRequest).subscribe({
       next: (response: any) => {
        this.showToast('Profile update successful!', 'success');
+       this.authService.userDetails.id = response.username; // Update user ID in service
        this.profileForm.updatedAt = response.updatedAt || new Date().toISOString(); // Update timestamp
         // Optionally, re-fetch profile to ensure UI reflects latest state or update form values
         // this.fetchUserProfile(this.userId!);
@@ -389,6 +393,7 @@ if (this.dobShow) {
   // Image Upload Methods
   onAvatarClick() {
     this.showImageModal = true;
+    this.cdr.markForCheck();
   }
 
   // Handle avatar image loading error
@@ -405,6 +410,7 @@ if (this.dobShow) {
   closeImageModal() {
     this.showImageModal = false;
     this.resetImageStates();
+    this.cdr.markForCheck();
   }
 
   resetImageStates() {
@@ -419,17 +425,20 @@ if (this.dobShow) {
     if (this.fileInput && this.fileInput.nativeElement) {
       this.fileInput.nativeElement.value = '';
     }
+    this.cdr.markForCheck();
   }
 
   selectCameraOption() {
     this.showCameraView = true;
     this.showFilePreview = false;
     this.startCamera();
+    this.cdr.markForCheck();
   }
 
   selectUploadOption() {
     this.showFilePreview = true;
     this.showCameraView = false;
+    this.cdr.markForCheck();
     // Force change detection and then trigger file input
     this.cdr.detectChanges();
     setTimeout(() => {
@@ -484,12 +493,14 @@ if (this.dobShow) {
       
       this.capturedImageData = canvas.toDataURL('image/jpeg', 0.8);
       this.stopCamera();
+      this.cdr.markForCheck();
     }
   }
 
   retakePhoto() {
     this.capturedImageData = null;
     this.startCamera();
+    this.cdr.markForCheck();
   }
 
   onFileSelected(event: any) {
@@ -519,6 +530,7 @@ if (this.dobShow) {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.previewUrl = e.target.result;
+        this.cdr.markForCheck();
         // Force change detection to update UI immediately
         this.cdr.detectChanges();
       };
@@ -570,14 +582,17 @@ if (this.dobShow) {
             this.showToast('Profile image updated successfully!', 'success');
           }
           
+          this.cdr.markForCheck();
           this.closeImageModal();
         },
         error: (error: any) => {
           console.error('Error uploading image:', error);
           this.showToast('Failed to upload image. Please try again.', 'error');
+          this.cdr.markForCheck();
         },
         complete: () => {
           this.isUploadingImage = false;
+          this.cdr.markForCheck();
         }
       });
 
