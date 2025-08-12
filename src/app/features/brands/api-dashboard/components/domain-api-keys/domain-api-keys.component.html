@@ -154,7 +154,14 @@
             <div class="col-lg-3 col-md-6 col-12">
               <div class="text-center">
                 <div class="text-body-secondary small mb-1">Last Used</div>
-                <div class="h6 fw-semibold mb-0">{{ formatDateTime(getLastUsedDateTime()) }}</div>
+                <div class="h6 fw-semibold mb-0">
+                  <ng-container *ngIf="getTotalRequestsCurrentMonth() > 0 || getTodaysRequests() > 0; else noLastUsedIcon">
+                    {{ formatDateTime(getLastUsedDateTime()) }}
+                  </ng-container>
+                  <ng-template #noLastUsedIcon>
+                    <i [ngClass]="getTrendDirection().icon" class="me-1"></i>
+                  </ng-template>
+                </div>
               </div>
             </div>
           </div>
@@ -220,9 +227,14 @@
               <div class="text-center">
                 <div class="text-body-secondary small mb-1">API Key Status</div>
                 <div class="h6 fw-semibold mb-0">
-                  <span class="badge" [ngClass]="getStatusBadgeClass(getApiKeyStatus())">
-                    {{ getApiKeyStatus().toUpperCase() }}
-                  </span>
+                  <ng-container *ngIf="getTotalRequestsCurrentMonth() > 0 || getTodaysRequests() > 0; else noStatusIcon">
+                    <span class="badge" [ngClass]="getStatusBadgeClass(getApiKeyStatus())">
+                      {{ getApiKeyStatus().toUpperCase() }}
+                    </span>
+                  </ng-container>
+                  <ng-template #noStatusIcon>
+                    <i [ngClass]="getTrendDirection().icon" class="me-1"></i>
+                  </ng-template>
                 </div>
               </div>
             </div>
