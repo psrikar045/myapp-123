@@ -72,11 +72,11 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
       '2024-12-25'
     ];
     
-    console.log('Testing date formatting for date input:');
-    testDates.forEach(dateStr => {
-      const formatted = this.formatDateForInput(dateStr);
-      console.log(`${dateStr} -> ${formatted}`);
-    });
+    // console.log('Testing date formatting for date input:');
+    // testDates.forEach(dateStr => {
+    //   const formatted = this.formatDateForInput(dateStr);
+    //   console.log(`${dateStr} -> ${formatted}`);
+    // });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -486,11 +486,11 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
           const [, year, month, day] = isoMatch;
           formatted = `${year}-${month}-${day}`;
           
-          console.log('Manual ISO date parsing:', {
-            original: dateString,
-            extracted: { year, month, day },
-            formatted
-          });
+          // console.log('Manual ISO date parsing:', {
+          //   original: dateString,
+          //   extracted: { year, month, day },
+          //   formatted
+          // });
         } else {
           // Fallback to Date parsing
           const date = new Date(dateString);
@@ -516,11 +516,11 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
           const day = String(date.getDate()).padStart(2, '0');
           formatted = `${year}-${month}-${day}`;
           
-          console.log('Local date parsing:', {
-            original: dateString,
-            parsed: date,
-            formatted
-          });
+          // console.log('Local date parsing:', {
+          //   original: dateString,
+          //   parsed: date,
+          //   formatted
+          // });
         }
       }
       

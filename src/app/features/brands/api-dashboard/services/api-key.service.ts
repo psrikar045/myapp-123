@@ -43,6 +43,7 @@ interface BackendApiKey {
   allowedIps: string[];
   allowedDomains: string[];
   rateLimitTier: string;
+  environment?: 'development' | 'staging' | 'production' | 'testing';
   scopes: string[];
   encryptedKeyValue?: string; // Encrypted API key value for frontend decryption
 }
@@ -100,7 +101,7 @@ export class ApiKeyService {
           isActive: backendKey.active ?? backendKey.isActive,
           registeredDomain: backendKey.registeredDomain || undefined,
           tier: backendKey.rateLimitTier,
-          environment: 'production' as 'development' | 'staging' | 'production' | 'testing', // Default to production since backend doesn't provide environment
+          environment: backendKey.environment ?? 'production',
           scopes: backendKey.scopes || [],
           allowedIps: backendKey.allowedIps || [],
           allowedDomains: backendKey.allowedDomains || [],
@@ -152,9 +153,14 @@ export class ApiKeyService {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Accept': 'application/json'
-    });
-
-    return this.http.post<CreateApiKeyResponse>(`${this.apiUrl}/rivo-create-api`, request, { headers }).pipe(
+    });   
+    // return this.http.post<CreateApiKeyResponse>(`${this.apiUrl}/rivo-create-api`, request, { headers }).pipe(
+    // Build the URL with environment parameter if provided
+    let createApiUrl = `${this.apiUrl}/rivo-create-api`;
+    if (request.environment) {
+      createApiUrl += `?environment=${encodeURIComponent(request.environment)}`;
+    }
+    return this.http.post<CreateApiKeyResponse>(createApiUrl, request, { headers }).pipe(
       tap(response => {
         console.log('API key created successfully:', response.id);
         
@@ -200,7 +206,7 @@ private forceRefreshApiKeys(): void {
             isActive: backendKey.active ?? backendKey.isActive,
             registeredDomain: backendKey.registeredDomain || undefined,
             tier: backendKey.rateLimitTier,
-            environment: 'production' as 'development' | 'staging' | 'production' | 'testing',
+            environment: backendKey.environment ?? 'production',
             scopes: backendKey.scopes || [],
             allowedIps: backendKey.allowedIps || [],
             allowedDomains: backendKey.allowedDomains || [],

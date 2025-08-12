@@ -108,6 +108,7 @@ export interface CreateApiKeyRequest {
   name: string;
   description?: string;
   prefix?: string;
+  environment?: 'development' | 'staging' | 'production' | 'testing';
   expiresAt?: string; // ISO string format for LocalDateTime
   allowedIps?: string[];
   allowedDomains?: string[];
