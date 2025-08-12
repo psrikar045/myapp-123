@@ -2023,3 +2023,18 @@ flex: 1; // Take remaining space
     margin: 1rem 0;
   }
 }
+.searchAlign{
+  margin-left: 4px; display: flex; align-items: center; justify-content: center; height: 36px; width: 36px; background: #2563eb; border: none; border-radius: 50%; color: #fff; position: relative;
+    top: 20px;
+    right: 13px;
+}
+@media (max-width: 500px) {
+  .searchAlign {
+    top: 5px !important;
+  }
+}
+@media (min-width: 501px) and (max-width: 768px) {
+  .searchAlign {
+    top: 11px !important;
+  }
+}
