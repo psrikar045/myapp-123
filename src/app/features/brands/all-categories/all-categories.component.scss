@@ -1328,11 +1328,13 @@ flex: 1; // Take remaining space
 @media (max-width: 768px) {
   .categories-title {
     font-size: 2rem;
+    text-align: left;
   }
   
   .categories-desc {
     font-size: 1rem;
-    padding: 0 1rem;
+    // padding: 0 1rem;
+    text-align: left;
   }
   .categories-main-layout-right {
     padding: 1rem; // Further reduce padding on smaller screens
@@ -1366,10 +1368,11 @@ flex: 1; // Take remaining space
   
   .categories-title {
     font-size: 1.75rem;
+    text-align: left;
   }
   
   .categories-search-bar {
-    margin: 0 1rem 2rem;
+    margin: 0 0 2rem;
   }
   .categories-main-layout-right {
     padding: 0.75rem; // Minimal padding on very small screens
