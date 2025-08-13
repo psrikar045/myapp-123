@@ -10,6 +10,27 @@
           <h2 i18n="@@loginTitle">Login</h2>
           <p class="subtitle" i18n="@@loginSubtitle">Login to access your travelwise account</p>
 
+          <!-- Activation Alert (Inline) -->
+          <div *ngIf="showActivationAlert" 
+               class="activation-alert" 
+               [class.success-alert]="activationStatus === 'success'"
+               [class.error-alert]="activationStatus === 'error'"
+               role="alert">
+            <div class="alert-content">
+              <mat-icon class="alert-icon">
+                {{ activationStatus === 'success' ? 'check_circle' : 'error' }}
+              </mat-icon>
+              <span class="alert-message">{{ activationMessage }}</span>
+              <button mat-icon-button 
+                      class="alert-close" 
+                      (click)="closeActivationAlert()" 
+                      type="button"
+                      aria-label="Close alert">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </div>
+
           <div *ngIf="errorMessage" class="error-message" role="alert">
             {{ errorMessage }}
           </div>

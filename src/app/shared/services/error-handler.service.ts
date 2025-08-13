@@ -199,7 +199,7 @@ export class ErrorHandlerService implements OnDestroy {
     const toastElement = document.getElementById(toastId);
     if (toastElement) {
       const toast = new (window as any).bootstrap.Toast(toastElement, {
-        autohide: true,
+        autohide: duration > 0, // Only auto-hide if duration > 0
         delay: duration
       });
       toast.show();

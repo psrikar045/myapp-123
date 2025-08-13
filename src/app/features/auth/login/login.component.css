@@ -184,6 +184,73 @@ mat-form-field {
   text-align: left;
 }
 
+/* Activation Alert Styles */
+.activation-alert {
+  padding: 0.7rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1.25rem;
+  border-left: 3px solid;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  animation: slideDown 0.3s ease-out;
+  text-align: left;
+}
+
+.activation-alert.success-alert {
+  background-color: #e8f5e8;
+  color: #2e7d32;
+  border-left-color: #4caf50;
+}
+
+.activation-alert.error-alert {
+  background-color: #ffebee;
+  color: #c62828;
+  border-left-color: #f44336;
+}
+
+.alert-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.alert-icon {
+  font-size: 1.2rem !important;
+  width: 1.2rem !important;
+  height: 1.2rem !important;
+  margin-top: 0.1rem;
+  flex-shrink: 0;
+}
+
+.alert-message {
+  flex: 1;
+  word-wrap: break-word;
+}
+
+.alert-close {
+  flex-shrink: 0;
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  margin: -0.25rem -0.25rem -0.25rem 0.25rem;
+}
+
+.alert-close mat-icon {
+  font-size: 1rem !important;
+  width: 1rem !important;
+  height: 1rem !important;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .signup-link, .login-link {
   margin-top: 10px; /* Approx 21px. Was 2rem or 1.5rem */
   font-size: 0.85rem; /* Approx 12px. Was 0.9rem */
@@ -395,6 +462,19 @@ mat-form-field {
 .dark-theme h2 { color: var(--dark-theme-text-color, #e0e0e0); }
 .dark-theme .subtitle { color: var(--dark-theme-text-secondary-color, #b0b0b0); }
 .dark-theme .error-message { background-color: #4a1c1c; color: #ffcdd2; }
+
+/* Dark theme activation alert styles */
+.dark-theme .activation-alert.success-alert {
+  background-color: #1b2e1b;
+  color: #81c784;
+  border-left-color: #66bb6a;
+}
+
+.dark-theme .activation-alert.error-alert {
+  background-color: #4a1c1c;
+  color: #ffcdd2;
+  border-left-color: #f44336;
+}
 .dark-theme .signup-link, .dark-theme .login-link { color: var(--dark-theme-text-secondary-color, #b0b0b0); }
 .dark-theme .terms-checkbox span { color: var(--dark-theme-text-secondary-color, #b0b0b0); }
 .dark-theme .divider { color: #777; }

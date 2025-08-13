@@ -31,6 +31,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 
 import { ToolbarService } from '../../../shared/services/toolbar.service';
 import { LayoutService } from '../../../core/services/layout.service';
+import { ErrorHandlerService } from '../../../shared/services/error-handler.service';
 declare var google: any; // Declare google global variable
 // Custom Phone Number Validator
 function phoneNumberValidator(control: AbstractControl): ValidationErrors | null {
@@ -99,6 +100,7 @@ export class LoginComponent implements OnInit, OnDestroy, AfterViewInit {
   private readonly toolbarService = inject(ToolbarService);
   private readonly route = inject(ActivatedRoute);
 public layoutService = inject(LayoutService);
+  private readonly errorHandlerService = inject(ErrorHandlerService);
   // --- Form Definitions ---
   loginForm!: FormGroup<{
     identifier: FormControl<string>;
@@ -113,6 +115,9 @@ public layoutService = inject(LayoutService);
   errorMessage: string = ''; // For login form errors
   isDarkMode = false;
   buttonState: 'normal' | 'loading' = 'normal';
+  activationMessage: string = '';
+  showActivationAlert: boolean = false;
+  activationStatus: 'success' | 'error' | null = null;
 
   // Password visibility toggles
   hideLoginPassword = true;
@@ -187,6 +192,9 @@ public layoutService = inject(LayoutService);
       if (params['register'] === 'true') {
         this.toggleToRegister();
       }
+      
+      // Check for activation query parameters
+      this.checkActivationStatus(params);
     });
 
     if (!this.showRegisterForm) {
@@ -206,6 +214,51 @@ public layoutService = inject(LayoutService);
     this.passwordStrength = result.strength;
     this.passwordStrengthText = result.text;
     this.passwordStrengthColor = result.color;
+  }
+
+  /**
+   * Check for activation status from query parameters
+   * @param params Query parameters from the route
+   */
+  private checkActivationStatus(params: any): void {
+    const activation = params['activation'];
+    const message = params['message'];
+
+    if (activation && message) {
+      this.activationStatus = activation; // 'success' or 'error'
+      this.activationMessage = decodeURIComponent(message);
+      this.showActivationAlert = true;
+
+      // Log for debugging
+      console.log('🎯 Activation status:', activation);
+      console.log('📧 Activation message:', this.activationMessage);
+
+      // Show toast notification using existing ErrorHandlerService
+      if (activation === 'success') {
+        this.errorHandlerService.showSuccess(this.activationMessage, 10000); // 10 seconds
+        // Auto-hide inline alert after 10 seconds
+        setTimeout(() => {
+          this.closeActivationAlert();
+        }, 10000);
+      } else if (activation === 'error') {
+        this.errorHandlerService.showWarning(this.activationMessage, 0); // 0 = no auto-dismiss
+      }
+
+      // Clean URL (remove query parameters)
+      this.router.navigate(['/auth/login'], { replaceUrl: true });
+      
+      this.cdr.markForCheck();
+    }
+  }
+
+  /**
+   * Close the activation alert
+   */
+  closeActivationAlert(): void {
+    this.showActivationAlert = false;
+    this.activationMessage = '';
+    this.activationStatus = null;
+    this.cdr.markForCheck();
   }
 
   startCarousel(): void {
