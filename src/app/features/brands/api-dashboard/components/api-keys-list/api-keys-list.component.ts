@@ -45,9 +45,9 @@ export class ApiKeysListComponent implements OnInit, OnDestroy {
   // Available filter options
   availableDomains: string[] = [];
   availableTiers: string[] = [];
-  availableEnvironments: string[] = ['development', 'staging', 'production'];
-  availableStatuses: string[] = ['ACTIVE', 'EXPIRED', 'REVOKED', 'SUSPENDED'];
-
+  availableEnvironments: string[] = ['development', 'testing', 'production'];
+  availableStatuses: string[] = ['ACTIVE', 'REVOKED'];
+//'EXPIRED', , 'SUSPENDED', 'ALL'
   constructor(
     private apiKeyService: ApiKeyService,
     private errorHandler: ErrorHandlerService,

@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { ToolbarService } from '../../../shared/services/toolbar.service';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-pricing-plans',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './pricing-plans.component.html',
   styleUrl: './pricing-plans.component.scss',
   animations: [
