@@ -61,6 +61,8 @@ export class SearchViewComponent implements OnInit, OnDestroy {
   }
 
   private processSearchResult(rawResult: any): void {
+    console.log(rawResult);
+
     if (!rawResult) {
       console.warn('No search result available');
       this.searchResult = null;
@@ -69,16 +71,14 @@ export class SearchViewComponent implements OnInit, OnDestroy {
 
     // If coming from all-categories, map BrandDataResponse to expected structure
     if (rawResult && !rawResult.Company) {
-      // Try to get logo from assets where assetType is 'logo', then images, then any asset
-      let logoUrl = '';
+      // Use new fallback logic: favicon > icon > logo > LINKEDIN_LOGO > other asset types > images array
+      let logoUrl = this.getBestAssetLogoUrl(rawResult.assets, rawResult.images);
+      
       let bannerUrl = '';
       let fontAssets: any[] = [];
       let imageAssets: any[] = [];
+      
       if (rawResult.assets && rawResult.assets.length > 0) {
-        const logoAsset = rawResult.assets.find((a: any) => a.assetType && a.assetType.toLowerCase() === 'logo');
-        if (logoAsset && logoAsset.originalUrl) {
-          logoUrl = logoAsset.originalUrl;
-        }
         const bannerAsset = rawResult.assets.find((a: any) => a.assetType && a.assetType.toLowerCase() === 'banner');
         if (bannerAsset && bannerAsset.originalUrl) {
           bannerUrl = bannerAsset.originalUrl;
@@ -86,12 +86,7 @@ export class SearchViewComponent implements OnInit, OnDestroy {
         fontAssets = rawResult.assets.filter((a: any) => a.assetType && a.assetType.toLowerCase() === 'font');
         imageAssets = rawResult.assets.filter((a: any) => a.assetType && a.assetType.toLowerCase() === 'image');
       }
-      if (!logoUrl && rawResult.images && rawResult.images.length > 0 && rawResult.images[0].accessUrl) {
-        logoUrl = rawResult.images[0].accessUrl;
-      }
-      if (!logoUrl && rawResult.assets && rawResult.assets.length > 0) {
-        logoUrl = rawResult.assets[0].accessUrl || rawResult.assets[0].originalUrl || '';
-      }
+
       // Map fonts to expected structure for the template
       const fonts = (rawResult.fonts || []).map((f: any) => ({
         ...f,
@@ -244,6 +239,84 @@ export class SearchViewComponent implements OnInit, OnDestroy {
     const keyPart = this.generateLogoLabel(entryKey).toLowerCase();
     return `${companyPart}${keyPart}`;
   }
+  /**
+   * Gets the best logo URL from assets with specific fallback logic
+   * Priority: favicon > icon > logo > LINKEDIN_LOGO > any other asset types > images array
+   */
+  getBestAssetLogoUrl(assets: any[], images?: any[]): string {
+    if (!assets || !Array.isArray(assets)) {
+      console.log('SearchViewComponent: No assets available for logo fallback');
+      // If no assets but images are available, try images fallback
+      if (images && Array.isArray(images) && images.length > 0) {
+        return this.getImageUrlFromImagesArray(images);
+      }
+      return '';
+    }
+
+    console.log('SearchViewComponent: Available asset types:', assets.map(a => a.assetType));
+
+    // Define priority asset types in order
+    const priorityTypes = ['favicon', 'icon', 'logo', 'linkedin_logo'];
+
+    // Priority 1-4: Check priority asset types in order
+    for (const priorityType of priorityTypes) {
+      const asset = assets.find((a: any) => 
+        a.assetType && a.assetType.toLowerCase() === priorityType
+      );
+      if (asset && this.getAssetUrl(asset)) {
+        console.log(`SearchViewComponent: Using ${priorityType} for logo`);
+        return this.getAssetUrl(asset);
+      }
+    }
+
+    // Priority 5: Check for any other asset types (excluding non-visual types)
+    const excludedTypes = ['font', 'banner']; // Types that shouldn't be used as logos
+    const usedTypes = [...priorityTypes, ...excludedTypes];
+    
+    const otherAsset = assets.find((a: any) => 
+      a.assetType && 
+      !usedTypes.includes(a.assetType.toLowerCase()) &&
+      this.getAssetUrl(a)
+    );
+    
+    if (otherAsset) {
+      console.log(`SearchViewComponent: Using other asset type '${otherAsset.assetType}' for logo`);
+      return this.getAssetUrl(otherAsset);
+    }
+
+    // Priority 6: If no assets found, try images array as fallback
+    if (images && Array.isArray(images) && images.length > 0) {
+      console.log('SearchViewComponent: No suitable assets found, trying images array fallback');
+      return this.getImageUrlFromImagesArray(images);
+    }
+
+    console.log('SearchViewComponent: No suitable logo asset or image found');
+    return '';
+  }
+
+  /**
+   * Helper method to get URL from an asset object
+   */
+  private getAssetUrl(asset: any): string {
+    if (!asset) return '';
+    return asset.originalUrl || asset.accessUrl || asset.sourceUrl || '';
+  }
+
+  /**
+   * Helper method to get a valid image URL from the images array
+   */
+  private getImageUrlFromImagesArray(images: any[]): string {
+    for (const image of images) {
+      const imageUrl = this.getImageSource(image);
+      if (imageUrl && this.isValidImageUrl(imageUrl)) {
+        console.log('SearchViewComponent: Using image from images array for logo fallback');
+        return imageUrl;
+      }
+    }
+    console.log('SearchViewComponent: No valid image found in images array');
+    return '';
+  }
+
   hasDisplayableLogos(logoObject: any): boolean {
     if (!logoObject) { return false; }
     return Object.values(logoObject).some(url => this.isValidImageUrl(url));
