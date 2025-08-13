@@ -2038,3 +2038,15 @@ flex: 1; // Take remaining space
     top: 11px !important;
   }
 }
+@media (min-width: 300px) and (max-width: 768px) {
+  .sidebar-header {
+    top: -30px !important;
+  }
+}
+@media (min-width: 300px) and (max-width: 768px) {
+    .mobile-sidebar{
+      &.visible.open{
+        width: 100% !important;
+      }
+    }
+}

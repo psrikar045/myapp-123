@@ -67,12 +67,12 @@
     </div>
 
     <div class="categories-main-layout">
-      <div *ngIf="isLoadingBrands" class="loading-container">
+      <!-- <div *ngIf="isLoadingBrands" class="loading-container">
         <div class="loading-content">
           <span class="loader"></span>
           <p class="loading-text">Loading brands...</p>
         </div>
-      </div>
+      </div> -->
       <div class="categories-main-layout-content" *ngIf="!isLoadingBrands && filteredCategories.length > 0">
         <!-- Desktop Sidebar -->
         <aside class="categories-sidebar desktop-sidebar p-0" *ngIf="!isMobile">
