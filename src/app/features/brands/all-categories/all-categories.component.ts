@@ -736,7 +736,7 @@ getAllCategories() {
       return;
     }
     
-    this.isLoadingBrands = true;
+    // this.isLoadingBrands = true;
     this.authService.getAllBrands(page, this.pageSize).subscribe({
       next: (response: any) => {
         console.log('API Response:', response);
@@ -773,7 +773,7 @@ getAllCategories() {
           return true;
         });
         
-        this.isLoadingBrands = false;
+        // this.isLoadingBrands = false;
         this.cdr.detectChanges();
         console.log('Brand data loaded from API:', {
           page: this.currentPage,

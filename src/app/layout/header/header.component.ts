@@ -229,6 +229,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 login() {
 this.authService.checkAuthStatusAndNavigate();
+// Close mobile menu after login action
+this.closeMobileMenu();
 }
   onNavClick(item: ToolbarNavItem) {
     if (item.label === 'Blog') {
@@ -243,6 +245,9 @@ this.authService.checkAuthStatusAndNavigate();
     } else if (item.route) {
       this.router.navigate([item.route]);
     }
+    
+    // Close mobile menu after navigation
+    this.closeMobileMenu();
   }
 
   toggleProfileDropdown() {
@@ -253,6 +258,8 @@ this.authService.checkAuthStatusAndNavigate();
     event.stopPropagation();
     this.closeProfileDropdown();
     this.router.navigate(['/profile']);
+    // Close mobile menu after navigation
+    this.closeMobileMenu();
   }
   
   closeProfileDropdown() {
@@ -270,6 +277,9 @@ this.authService.checkAuthStatusAndNavigate();
   logout() {
     // Close profile dropdown immediately
     this.closeProfileDropdown();
+    
+    // Close mobile menu
+    this.closeMobileMenu();
     
     // Perform logout
     this.authService.logout();
@@ -293,6 +303,8 @@ this.authService.checkAuthStatusAndNavigate();
   
   onUpgradeClick() {
     this.router.navigate(['/pricing']);
+    // Close mobile menu after navigation
+    this.closeMobileMenu();
   }
 
   onLogoClick() {
@@ -303,6 +315,8 @@ this.authService.checkAuthStatusAndNavigate();
     } else {
       this.router.navigate(['/landing']);
     }
+    // Close mobile menu after logo navigation
+    this.closeMobileMenu();
   }
   
   private isHeroSectionInView(): boolean {
@@ -357,12 +371,40 @@ this.authService.checkAuthStatusAndNavigate();
 
   onGetStartedClick() {
     this.router.navigate(['/login'], { queryParams: { register: 'true' } });
+    // Close mobile menu after navigation
+    this.closeMobileMenu();
   }
 
   toggleSidenav() {
     this.sidenavService.toggleCollapsed();
     
     // Header remains full width - no adjustment needed
+  }
+
+  /**
+   * Close the mobile navigation menu
+   */
+  private closeMobileMenu() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const navbarCollapse = document.getElementById('navbarNav');
+    if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+      const bsCollapse = (window as any).bootstrap?.Collapse?.getInstance(navbarCollapse);
+      if (bsCollapse) {
+        bsCollapse.hide();
+      } else {
+        // Fallback if bootstrap instance is not available
+        navbarCollapse.classList.remove('show');
+        navbarCollapse.setAttribute('aria-expanded', 'false');
+        
+        // Also update the toggler button state
+        const navbarToggler = document.querySelector('.navbar-toggler');
+        if (navbarToggler) {
+          navbarToggler.setAttribute('aria-expanded', 'false');
+          navbarToggler.classList.add('collapsed');
+        }
+      }
+    }
   }
 
   toggleTheme() {
