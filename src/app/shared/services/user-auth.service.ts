@@ -301,14 +301,20 @@ export class UserAuthService {
   // ==================== BRAND DATA ENDPOINTS ====================
 
   /**
-   * Get all brands with pagination
+   * Get all brands with pagination and optional search
    * GET /api/brands/all
    */
-  getAllBrands(page: number = 0, size: number = 20): Observable<any> {
-    const params = new HttpParams()
+  getAllBrands(page: number = 0, size: number = 20, search?: string): Observable<any> {
+    let params = new HttpParams()
       .set('paginated', 'true')
       .set('page', page.toString())
       .set('size', size.toString());
+    
+    // Add search parameter if provided
+    if (search && search.trim()) {
+      params = params.set('search', search.trim());
+    }
+    
     return this.http.get<any>(`${this.baseUrl}/api/brands/all`, { params })
       .pipe(catchError(this.handleError));
   }

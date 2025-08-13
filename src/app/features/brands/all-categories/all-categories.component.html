@@ -19,7 +19,7 @@
         type="text" 
         placeholder="Search brands by name..." 
         [(ngModel)]="searchTerm" 
-        (input)="onSearchInputChange()"
+        (keydown.enter)="onSearch()"
         name="search" 
         autocomplete="off" 
         class="search-input" />
@@ -52,7 +52,7 @@
       
       <!-- Search results count -->
       <div class="search-results-info" *ngIf="searchTerm && searchTerm.trim().length > 0">
-        <span class="results-count">{{ filteredBrands.length }} result{{ filteredBrands.length !== 1 ? 's' : '' }}</span>
+        <span class="results-count">{{ displayedBrands.length }} result{{ displayedBrands.length !== 1 ? 's' : '' }}</span>
       </div>
       
 
@@ -146,9 +146,9 @@
         <div class="categories-main-layout-right">
           <div class="main-card-container">
             <div class="brands-content-wrapper">
-              <ng-container *ngIf="pagedFilteredBrands.length > 0; else noData">
+             <ng-container *ngIf="pagedDisplayedBrands.length > 0; else noData">
                 <section class="brand-cards-grid" [class.with-sidebar]="isMobile && isMobileSidebarOpen">
-                  <div *ngFor="let brand of pagedFilteredBrands" class="brand-card"
+                  <div *ngFor="let brand of pagedDisplayedBrands" class="brand-card"
                     [ngStyle]="{ 'background': getNonWhiteColorWithOpacity(brand, 0.3) }"
                     (click)="goToBrand(brand)">
                     <div class="brand-card-icon">
@@ -189,7 +189,7 @@
             </div>
             
           </div>
-          <div class="pagination-bottom-center-wrapper" *ngIf="pagedFilteredBrands.length > 0 && !isLoadingBrands">
+          <div class="pagination-bottom-center-wrapper" *ngIf="pagedDisplayedBrands.length > 0 && !isLoadingBrands">
                   <!-- Pagination info on the left -->
                   <div class="pagination-info" *ngIf="!isLoadingBrands && totalElements > 0 && !searchTerm">
                     <span class="pagination-details">

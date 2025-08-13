@@ -56,7 +56,9 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
   // Mobile sidebar functionality
   isMobileSidebarOpen = false;
   isMobile = false;
-
+  // Properties for displaying filtered data (updated only on explicit search)
+  displayedBrands: any[] = [];
+  pagedDisplayedBrands: any[] = [];
   // Static brand data for fallback/demo purposes
   allBrands:any = [
     // Education
@@ -123,6 +125,7 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // this.loadBrandData();
+    console.log(this.brandData)
     this.checkScreenSize();
     if (isPlatformBrowser(this.platformId)) {
       window.addEventListener('resize', () => this.checkScreenSize());
@@ -441,13 +444,13 @@ getAllCategories() {
   }
 
   // For filtered brands, we'll use the same data since filtering will be done server-side
-  get pagedFilteredBrands() {
-    if (this.searchTerm && this.searchTerm.trim().length > 0) {
-      // If searching, use client-side filtering on current page data
-      return this.filteredBrands;
-    }
-    return this.allBrands; // Server-side paginated data
-  }
+  // get pagedFilteredBrands() {
+  //   if (this.searchTerm && this.searchTerm.trim().length > 0) {
+  //     // If searching, use client-side filtering on current page data
+  //     return this.filteredBrands;
+  //   }
+  //   return this.allBrands; // Server-side paginated data
+  // }
 
   get pages() {
     return Array.from({ length: this.totalPages }, (_, i) => i + 1);
@@ -494,24 +497,36 @@ getAllCategories() {
     
     return pages;
   }
+  // Method to update displayed brands (called only when search is explicitly triggered)
+  private updateDisplayedBrands() {
+    if (this.isSearchActive && this.searchTerm && this.searchTerm.trim().length > 0) {
+      // Use search results from API when search is active
+      this.displayedBrands = this.brandData || [];
+      this.pagedDisplayedBrands = this.displayedBrands;
+    } else {
+      // Use regular brand data when no search is active
+      this.displayedBrands = this.brandData || [];
+      this.pagedDisplayedBrands = this.allBrands || [];
+    }
+  }
 
   // Enhanced real-time search functionality
-  onSearchInputChange() {
-    // Reset to first page when search changes
-    this.currentPage = 1;
+  // onSearchInputChange() {
+  //   // Reset to first page when search changes
+  //   this.currentPage = 1;
     
-    // Update search state
-    this.isSearchActive = !!(this.searchTerm && this.searchTerm.trim().length > 0);
+  //   // Update search state
+  //   this.isSearchActive = !!(this.searchTerm && this.searchTerm.trim().length > 0);
     
-    // If search is active, we'll use client-side filtering on current page
-    // If search is cleared, reload data from API
-    if (!this.isSearchActive) {
-      this.loadBrandData(0);
-    }
+  //   // If search is active, we'll use client-side filtering on current page
+  //   // If search is cleared, reload data from API
+  //   if (!this.isSearchActive) {
+  //     this.loadBrandData(0);
+  //   }
     
-    // The filtering is handled by the filteredBrands getter automatically
-    // No need to manually filter here as it's reactive
-  }
+  //   // The filtering is handled by the filteredBrands getter automatically
+  //   // No need to manually filter here as it's reactive
+  // }
 
   // Clear search functionality
   clearSearch() {
@@ -522,23 +537,30 @@ getAllCategories() {
     // Reset any search-specific states
     this.searchResults = [];
     
-    // Reload data from API when search is cleared
-    this.loadBrandData(0);
+   // Reload data from API without search parameter (empty search term)
+    this.loadBrandData(0, '');
+
+ 
+    // Clear stored search state
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.setItem('brandsSearchTerm', '');
+    }
   }
 
-  // Legacy search method - now used for category filtering only
+  // Search method - triggers brand search API call
   onSearch() {
-    const term = this.searchTerm.trim().toLowerCase();
-    if (!term) {
-      this.filteredCategories = this.categories;
-    } else {
-      this.filteredCategories = this.categories.filter((cat:any) =>
-        cat.label.toLowerCase().includes(term)
-      );
-    }
-    // Optionally reset selection if not in filtered list
-    if (!this.filteredCategories.some((cat:any) => cat.label === this.selectedCategory)) {
-      this.selectedCategory = this.filteredCategories.length ? this.filteredCategories[0].label : '';
+    // Reset to first page when search is triggered
+    this.currentPage = 1;
+    
+    // Update search state
+    this.isSearchActive = !!(this.searchTerm && this.searchTerm.trim().length > 0);
+    
+    // Trigger API call with current search term
+    this.loadBrandData(0, this.searchTerm);
+    
+    // Store search state for navigation
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.setItem('brandsSearchTerm', this.searchTerm);
     }
   }
 
@@ -728,16 +750,20 @@ getAllCategories() {
   // ==================== NEW BRAND DATA API METHODS ====================
 
   /**
-   * Load brand data from API with pagination
+   * Load brand data from API with pagination and optional search
    */
-  loadBrandData(page: number = 0): void {
+  loadBrandData(page: number = 0, searchTerm?: string): void {
     // Skip API calls during SSR/prerendering
     if (!isPlatformBrowser(this.platformId)) {
       return;
     }
     
-    // this.isLoadingBrands = true;
-    this.authService.getAllBrands(page, this.pageSize).subscribe({
+    this.isLoadingBrands = true;
+    
+    // Use the provided search term or the component's current search term
+    const search = searchTerm !== undefined ? searchTerm : this.searchTerm;
+    
+    this.authService.getAllBrands(page, this.pageSize, search).subscribe({
       next: (response: any) => {
         console.log('API Response:', response);
         
@@ -774,6 +800,8 @@ getAllCategories() {
         });
         
         // this.isLoadingBrands = false;
+        this.isLoadingBrands = false;
+        this.updateDisplayedBrands(); // 
         this.cdr.detectChanges();
         console.log('Brand data loaded from API:', {
           page: this.currentPage,
@@ -782,13 +810,14 @@ getAllCategories() {
           brandsCount: this.allBrands.length
         });
       },
-      error: (error) => {
+error: (error) => {
         console.error('Error loading brand data:', error);
         this.isLoadingBrands = false;
         console.log('Using static brand data due to API error');
         // Keep static brand data as fallback
         this.totalElements = this.allBrands.length;
         this.totalPages = Math.ceil(this.totalElements / this.pageSize);
+        this.updateDisplayedBrands(); // Update displayed brands even in error case
       }
     });
   }

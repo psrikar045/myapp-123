@@ -746,13 +746,14 @@ generateUsername(firstName: string, lastName: string): string {
   // ==================== BRAND DATA METHODS ====================
 
   /**
-   * Get all brands with pagination
+   * Get all brands with pagination and optional search
    * @param page Page number (default: 0)
    * @param size Page size (default: 20)
+   * @param search Optional search term
    * @returns Observable of paginated brand data
    */
-  getAllBrands(page: number = 0, size: number = 20): Observable<any> {
-    return this.userAuthService.getAllBrands(page, size).pipe(
+  getAllBrands(page: number = 0, size: number = 20, search?: string): Observable<any> {
+    return this.userAuthService.getAllBrands(page, size, search).pipe(
       tap((response: any) => console.log('Brands fetched successfully.')),
       catchError(this.handleError)
     );
