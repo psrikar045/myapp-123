@@ -496,3 +496,54 @@
     transform: none;
   }
 } 
+
+/* ============================================================
+   Landing-style pill search bar to match landing page UI
+   ============================================================ */
+.categories-search-bar {
+  display: flex;
+  width: 100%;
+  background: #ffffff;
+  border-radius: 60px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  border: 2px solid rgba(var(--bs-primary-rgb), 0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+  min-height: 60px;
+
+  &:focus-within {
+    border-color: rgba(var(--bs-primary-rgb), 0.3);
+    box-shadow: 0 12px 40px rgba(var(--bs-primary-rgb), 0.15);
+    transform: translateY(-2px);
+  }
+
+  .search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 1.25rem 0 1.25rem 1.5rem;
+    background: transparent;
+  }
+
+  .searchAlign {
+    margin-right: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 40px;
+    background: #2563eb;
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    align-self: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .categories-search-bar {
+    min-height: 55px;
+    .search-input { padding: 1rem 0 1rem 1.25rem; }
+  }
+}

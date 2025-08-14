@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef, ChangeDetectionStrategy, ViewContainerRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { Subject, takeUntil, filter } from 'rxjs';
 
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from '../shared/footer/footer.component';
@@ -43,17 +43,33 @@ export class MainLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
   private authService = inject(AuthService);
   private settingsService = inject(SettingsService);
   private viewContainerRef = inject(ViewContainerRef);
+  private router = inject(Router);
   
   // Layout state
   showHeader$ = this.layoutService.showHeader$;
   showFooter$ = this.layoutService.showFooter$;
   isThemePanelOpen$ = this.appThemePanelService.isOpen$;
   currentTheme = 'light';
+  isSearchPage = false;
   
   // Sidenav state - now handled via observables in template
 
   
   ngOnInit(): void {
+    // Subscribe to route changes to detect search page
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((event: NavigationEnd) => {
+        this.isSearchPage = event.url === '/search' || event.url.startsWith('/search?');
+        this.cdr.detectChanges();
+      });
+
+    // Check initial route
+    this.isSearchPage = this.router.url === '/search' || this.router.url.startsWith('/search?');
+
     // Subscribe to theme changes with setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
     this.appThemeService.isDarkMode$
       .pipe(takeUntil(this.destroy$))

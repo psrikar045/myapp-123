@@ -17,7 +17,7 @@
             {{ heroSubheadline }}
           </p>
           <div class="hero-search-container mb-4 fade-in-up" style="animation-delay: 0.4s;">
-            <form class="hero-search-form position-relative" autocomplete="off">
+            <!-- <form class="hero-search-form position-relative" autocomplete="off">
               <div class="input-group input-group-lg shadow-lg">
                 <span class="input-group-text bg-white border-end-0">
                   <svg width="24" height="24" fill="none" stroke="#B0B7C3" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
@@ -37,7 +37,32 @@
                   <i class="bi bi-search"></i>
                 </button>
               </div>
-            </form>
+            </form> -->
+          <div class="categories-search-bar">
+              <!-- <span class="search-icon">
+                <!-- <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="10" cy="10" r="7.5" stroke="#b0b7c3" stroke-width="2"/>
+                  <line x1="16.3536" y1="16.6464" x2="20" y2="20.2929" stroke="#b0b7c3" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </span> -->
+              <input 
+                type="text"
+                class="search-input"
+                placeholder="Search brands by name..."
+                (focus)="goToSearch()"
+                (keydown.enter)="goToSearch()"
+                aria-label="Search brands by name"/>
+              <button 
+                type="button"
+                class="send-search-btn searchAlign"
+                (click)="goToSearch()"
+                aria-label="Search">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="7"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </button>
+            </div>
           </div>
           <div class="hero-rating-container fade-in-up" style="animation-delay: 0.6s;">
               <div class="row align-items-center g-3">

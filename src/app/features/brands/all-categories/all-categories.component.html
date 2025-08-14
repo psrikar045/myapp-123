@@ -8,13 +8,12 @@
       Explore and filter the world's most popular digital products, platforms, and creative tools by category and subcategory—all in one place.
     </p>
     <div class="categories-search-bar">
-      <span class="search-icon">
-        <!-- SVG as before -->
+      <!-- <span class="search-icon">
         <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="10" cy="10" r="7.5" stroke="#b0b7c3" stroke-width="2"/>
           <line x1="16.3536" y1="16.6464" x2="20" y2="20.2929" stroke="#b0b7c3" stroke-width="2" stroke-linecap="round"/>
         </svg>
-      </span>
+      </span> -->
       <input 
         type="text" 
         placeholder="Search brands by name..." 
@@ -147,8 +146,8 @@
           <div class="main-card-container">
             <div class="brands-content-wrapper">
              <ng-container *ngIf="pagedDisplayedBrands.length > 0; else noData">
-                <section class="brand-cards-grid" [class.with-sidebar]="isMobile && isMobileSidebarOpen">
-                  <div *ngFor="let brand of pagedDisplayedBrands" class="brand-card"
+                <section class="brand-cards-grid" #gridContainer [class.with-sidebar]="isMobile && isMobileSidebarOpen">
+                  <div *ngFor="let brand of pagedDisplayedBrands" #brandCard class="brand-card"
                     [ngStyle]="{ 'background': getNonWhiteColorWithOpacity(brand, 0.3) }"
                     (click)="goToBrand(brand)">
                     <div class="brand-card-icon">
@@ -189,7 +188,7 @@
             </div>
             
           </div>
-          <div class="pagination-bottom-center-wrapper" *ngIf="pagedDisplayedBrands.length > 0 && !isLoadingBrands">
+          <div class="pagination-bottom-center-wrapper" #paginationWrapper *ngIf="pagedDisplayedBrands.length > 0 && !isLoadingBrands">
                   <!-- Pagination info on the left -->
                   <div class="pagination-info" *ngIf="!isLoadingBrands && totalElements > 0 && !searchTerm">
                     <span class="pagination-details">

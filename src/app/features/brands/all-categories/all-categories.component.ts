@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, PLATFORM_ID,ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, PLATFORM_ID,ChangeDetectorRef, ElementRef, ViewChild, AfterViewInit  } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -25,7 +25,7 @@ interface SubCategory {
   templateUrl: './all-categories.component.html',
   styleUrl: './all-categories.component.scss'
 })
-export class AllCategoriesComponent implements OnInit, OnDestroy {
+export class AllCategoriesComponent implements OnInit, OnDestroy, AfterViewInit {
   private platformId = inject(PLATFORM_ID);
   
   // Make Math available in template
@@ -52,6 +52,12 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
   totalPages = 0;
   isLastPage = false;
   isFirstPage = true;
+// Dynamic grid measurement
+  @ViewChild('gridContainer') gridContainerRef?: ElementRef<HTMLElement>;
+  @ViewChild('brandCard') brandCardRef?: ElementRef<HTMLElement>;
+  @ViewChild('paginationWrapper') paginationWrapperRef?: ElementRef<HTMLElement>;
+  private resizeObserver?: ResizeObserver;
+  private lastComputedPageSize?: number;
 
   // Mobile sidebar functionality
   isMobileSidebarOpen = false;
@@ -122,13 +128,17 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
       console.error('Error in AllCategoriesComponent constructor:', error);
     }
   }
-
+private windowResizeHandler = () => {
+    this.checkScreenSize();
+    this.scheduleRecalculatePageSize();
+  };
   ngOnInit() {
     // this.loadBrandData();
     console.log(this.brandData)
     this.checkScreenSize();
     if (isPlatformBrowser(this.platformId)) {
-      window.addEventListener('resize', () => this.checkScreenSize());
+      // window.addEventListener('resize', () => this.checkScreenSize());
+      window.addEventListener('resize', this.windowResizeHandler);
     }
     
     // Subscribe to query parameters
@@ -172,11 +182,90 @@ export class AllCategoriesComponent implements OnInit, OnDestroy {
       }
     });
   }
-
+ngAfterViewInit(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+    // Observe container size changes for dynamic page size calculation
+    const container = this.gridContainerRef?.nativeElement;
+    if (container && 'ResizeObserver' in window) {
+      this.resizeObserver = new ResizeObserver(() => {
+        this.scheduleRecalculatePageSize();
+      });
+      this.resizeObserver.observe(container);
+    }
+    // Initial calculation after view init
+    setTimeout(() => this.recalculatePageSizeAndReloadIfNeeded(), 0);
+  }
+  // ngOnDestroy() {
+  //   if (isPlatformBrowser(this.platformId)) {
+  //     window.removeEventListener('resize', () => this.checkScreenSize());
+  //   }
+  // }
   ngOnDestroy() {
     if (isPlatformBrowser(this.platformId)) {
-      window.removeEventListener('resize', () => this.checkScreenSize());
+      window.removeEventListener('resize', this.windowResizeHandler);
     }
+    if (this.resizeObserver && this.gridContainerRef?.nativeElement) {
+      this.resizeObserver.unobserve(this.gridContainerRef.nativeElement);
+      this.resizeObserver.disconnect();
+    }
+  }
+
+  private recalcDebounce?: number | null;
+  private scheduleRecalculatePageSize() {
+    if (!isPlatformBrowser(this.platformId)) return;
+    if (this.recalcDebounce) {
+      window.clearTimeout(this.recalcDebounce as any);
+    }
+    this.recalcDebounce = window.setTimeout(() => {
+      this.recalculatePageSizeAndReloadIfNeeded();
+    }, 100);
+  }
+
+  private getComputedRows(): number {
+    const grid = this.gridContainerRef?.nativeElement;
+    const card = this.brandCardRef?.nativeElement;
+    const pagination = this.paginationWrapperRef?.nativeElement;
+    if (!grid || !card) {
+      const viewportHeight = window.innerHeight || 900;
+      const estimatedCardHeight = 180;
+      const estimatedGap = 20;
+      const rows = Math.max(1, Math.floor((viewportHeight - 320) / (estimatedCardHeight + estimatedGap)));
+      return rows;
+    }
+    const gridStyles = window.getComputedStyle(grid);
+    const gridGap = parseFloat(gridStyles.rowGap || '0');
+    const cardRect = card.getBoundingClientRect();
+    const gridRect = grid.getBoundingClientRect();
+    const viewportBottom = pagination ? pagination.getBoundingClientRect().top : window.innerHeight;
+    const availableHeight = Math.max(0, viewportBottom - gridRect.top);
+    const singleHeight = cardRect.height + gridGap;
+    const rows = Math.max(1, Math.floor(availableHeight / singleHeight));
+    return rows;
+  }
+
+  private recalculatePageSize(): number {
+    // Always 4 columns on desktop layout per design
+    const columns = 4;
+    const rows = this.getComputedRows();
+    const newPageSize = Math.max(4, columns * rows);
+    return newPageSize;
+  }
+
+  private recalculatePageSizeAndReloadIfNeeded() {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const newSize = this.recalculatePageSize();
+    if (this.lastComputedPageSize === newSize) return;
+    const oldFirstItemIndex = (this.currentPage - 1) * this.pageSize;
+    this.pageSize = newSize;
+    this.lastComputedPageSize = newSize;
+    this.totalPages = Math.max(1, Math.ceil(this.totalElements / this.pageSize));
+    // Keep the first visible index stable so content shift is minimized
+    const newPage = Math.floor(oldFirstItemIndex / this.pageSize) + 1;
+    if (newPage !== this.currentPage) {
+      this.currentPage = Math.min(Math.max(1, newPage), this.totalPages);
+    }
+    // Reload current page with new page size (0-based for API)
+    this.loadBrandData(this.currentPage - 1);
   }
 
   /**
@@ -803,6 +892,7 @@ getAllCategories() {
         this.isLoadingBrands = false;
         this.updateDisplayedBrands(); // 
         this.cdr.detectChanges();
+        this.scheduleRecalculatePageSize();
         console.log('Brand data loaded from API:', {
           page: this.currentPage,
           totalPages: this.totalPages,

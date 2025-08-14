@@ -152,6 +152,8 @@
   transition: all 0.3s ease;
   position: relative;
   min-height: 60px; // Increased height
+  flex-direction: row;
+  align-items: center;
   
   &:focus-within {
     border-color: rgba(var(--bs-primary-rgb), 0.3);
@@ -176,6 +178,7 @@
     font-size: 1.2rem; // Larger font
     background: transparent;
     font-weight: 400;
+    padding: 1rem 0 1rem 1.75rem;
     
     &::placeholder {
       color: #94a3b8;
@@ -1343,11 +1346,13 @@ flex: 1; // Take remaining space
 
   
   .brand-cards-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    // grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
     
     &.with-sidebar {
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      // grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
     }
   }
   
@@ -2027,8 +2032,9 @@ flex: 1; // Take remaining space
   }
 }
 .searchAlign{
-  margin-left: 4px; display: flex; align-items: center; justify-content: center; height: 36px; width: 36px; background: #2563eb; border: none; border-radius: 50%; color: #fff; position: relative;
-    top: 20px;
+  margin-left: 4px; display: flex; align-items: center; justify-content: center; height: 36px; width: 36px; background: #2563eb; border: none; border-radius: 50%; color: #fff; 
+  position: relative;
+    // top: 20px;
     right: 13px;
 }
 @media (max-width: 500px) {

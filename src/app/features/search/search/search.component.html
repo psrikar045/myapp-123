@@ -17,7 +17,7 @@
       
       <!-- Search Bar -->
       <div class="search-bar-container">
-        <div class="search-input-wrapper" [class.focused]="isSearchFocused">
+        <!-- <div class="search-input-wrapper" [class.focused]="isSearchFocused">
           <input type="text" 
                  class="search-input" 
                  [(ngModel)]="searchDomainNameOrUrl"
@@ -31,8 +31,30 @@
           <div class="search-icon" (click)="findBrandInfo($event)">
             <i class="bi bi-search"></i>
           </div>
+        </div> -->
+        <div class="categories-search-bar">
+          <input
+            type="text"
+            class="search-input"
+            [(ngModel)]="searchDomainNameOrUrl"
+            (keydown)="handleKeyDown($event)"
+            (focus)="onSearchFocus()"
+            (blur)="onSearchBlur()"
+            placeholder="Enter website URL"
+            [disabled]="isLoading"
+            [class.loading]="isLoading"
+            aria-label="Search for brand information" />
+          <button
+            type="button"
+            class="send-search-btn searchAlign"
+            (click)="findBrandInfo($event)"
+            aria-label="Search">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="7"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
         </div>
-        
         <!-- Error Message -->
         <div class="error-message" *ngIf="errorMessage">
           <i class="bi bi-exclamation-triangle-fill"></i>

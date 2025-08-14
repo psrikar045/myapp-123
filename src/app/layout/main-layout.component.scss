@@ -64,6 +64,12 @@ app-sidenav, .sidenav {
   z-index: 1;
   transition: margin-left 0.3s ease, width 0.3s ease;
   
+  // Remove header padding for search page
+  &.no-header-padding {
+    padding-top: 0;
+    min-height: 100vh;
+  }
+  
   // Default state - no sidenav, full width
   margin-left: 0;
   width: 100%;
@@ -184,6 +190,12 @@ app-sidenav, .sidenav {
     margin-left: 0;
     width: 100%;
     padding-top: 72px;
+    
+    // Remove header padding for search page on mobile too
+    &.no-header-padding {
+      padding-top: 0;
+      min-height: 100vh;
+    }
   }
   
   .navbar.with-sidenav-expanded,
@@ -197,6 +209,12 @@ app-sidenav, .sidenav {
 @media screen and (min-resolution: 120dpi), 
        screen and (-webkit-min-device-pixel-ratio: 1.25) {
   .content-wrapper {
+    // Remove header padding for search page at zoom levels
+    &.no-header-padding {
+      padding-top: 0;
+      min-height: 100vh;
+    }
+    
     &.with-sidenav {
       @include media-breakpoint-up(lg) {
         &.sidenav-expanded {
@@ -236,6 +254,12 @@ app-sidenav, .sidenav {
 @media screen and (min-resolution: 192dpi),
        screen and (-webkit-min-device-pixel-ratio: 2) {
   .content-wrapper {
+    // Remove header padding for search page at high zoom levels
+    &.no-header-padding {
+      padding-top: 0;
+      min-height: 100vh;
+    }
+    
     &:not(.with-sidenav) {
       margin-left: 0;
       width: 100%;

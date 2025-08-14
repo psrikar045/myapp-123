@@ -17,6 +17,7 @@
          [class.sidenav-collapsed]="(sidenavService.isVisible$ | async) && !(sidenavService.isOverlayMode$ | async) && (sidenavService.config$ | async)?.collapsed"
          [class.sidenav-expanded]="(sidenavService.isVisible$ | async) && !(sidenavService.isOverlayMode$ | async) && !(sidenavService.config$ | async)?.collapsed"
          [class.sidenav-overlay-active]="(sidenavService.isVisible$ | async) && (sidenavService.isOverlayMode$ | async)"
+         [class.no-header-padding]="isSearchPage"
          (click)="onContentWrapperClick($event)">
       
       <!-- Main Content Area -->
