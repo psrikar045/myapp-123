@@ -345,8 +345,8 @@
     // Mobile API prefix input
     .input-group {
       .form-control[formControlName="prefix"] {
-        min-width: 100px;
-        max-width: 150px;
+        // min-width: 100px;
+        // max-width: 150px;
         font-size: 0.9rem;
       }
     }
