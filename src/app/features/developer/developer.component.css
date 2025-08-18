@@ -1177,3 +1177,8 @@
     color: black !important;
   }
 }
+@media(max-width: 768px) {
+ .section-title,.capabilities-subtitle,.section-subtitle,.capabilities-title {
+  text-align: left;
+ }
+}

@@ -302,6 +302,30 @@ export class LayoutService implements OnDestroy {
         showFooter: false,
         containerClass: 'container-fluid',
         headerType: 'default'
+      },
+      '/brandApi': {
+        showHeader: true,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'default'
+      },
+      '/all-categories': {
+        showHeader: true,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'default'
+      },
+      '/pricing/choose': {
+        showHeader: true,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'default'
+      },
+      '/pricing/my-plan': {
+        showHeader: true,
+        showFooter: false,
+        containerClass: 'container-fluid',
+        headerType: 'default'
       }
     };
 
