@@ -160,7 +160,7 @@
                       <!-- Environment -->
                       <td class="py-3">
                         <span class="badge" 
-                              [class]="apiKey.environment === 'production' ? 'bg-success' : 
+                              [class]="apiKey.environment === 'production' ? 'bg-warning' : 
                                        apiKey.environment === 'testing' ? 'bg-secondary' : 'bg-info'">
                           {{ getEnvironmentDisplayName(apiKey.environment) }}
                         </span>

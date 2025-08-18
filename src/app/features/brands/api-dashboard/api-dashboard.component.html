@@ -178,8 +178,7 @@
                         </td>
                         <td class="py-3">
                           <span class="badge" 
-                                [class.bg-success]="apiKey.environment === 'production'"
-                                [class.bg-warning]="apiKey.environment === 'staging'"
+                                [class.bg-warning]="apiKey.environment === 'production'"
                                 [class.bg-info]="apiKey.environment === 'development'"
                                 [class.bg-secondary]="apiKey.environment === 'testing'"
                                 [class.text-dark]="apiKey.environment !== 'production'">

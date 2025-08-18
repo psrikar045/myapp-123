@@ -306,6 +306,7 @@
           <div class="blog-sidebar-container">
             
             <!-- Popular Posts -->
+          <!-- (click)="navigateToBlogDetailsFromSidebar(cat.id || i)" -->
             <div class="sidebar-section card border-0 shadow-sm mb-4">
               <div class="card-header bg-white border-bottom-0 py-3">
                 <h4 class="fw-bold mb-0">Popular Posts</h4>
@@ -314,12 +315,9 @@
                 <div class="popular-post-item border-bottom p-3" 
                      *ngFor="let cat of displayedSidebarCategories; let i = index; let last = last"
                      [class.border-bottom-0]="last"
-                     (click)="navigateToBlogDetailsFromSidebar(cat.id || i)"
                      style="cursor: pointer;"
                      role="button"
-                     tabindex="0"
-                     (keydown.enter)="navigateToBlogDetailsFromSidebar(cat.id || i)"
-                     (keydown.space)="navigateToBlogDetailsFromSidebar(cat.id || i)">
+                     tabindex="0">
                   <div class="d-flex">
                     <div class="popular-post-content flex-grow-1">
                       <h5 class="fw-semibold mb-1">{{ cat.title }}</h5>

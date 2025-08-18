@@ -353,7 +353,7 @@ export class DomainApiKeysComponent implements OnInit, OnDestroy {
       case 'REVOKED':
         return 'badge bg-danger';
       case 'production':
-        return 'badge bg-success';
+        return 'badge bg-warning';
       case 'development':
         return 'badge bg-info';
       case 'testing':
