@@ -288,7 +288,7 @@
                       <i *ngIf="!isDecryptingKey(selectedApiKey)" 
                          [class]="isShowingFullKey(selectedApiKey) ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
                     </button>
-                    <button class="btn btn-outline-primary btn-sm"
+                    <button class="btn btn-outline-primary btn-sm squared-pill"
                      [disabled]="isApiKeyRevoked(selectedApiKey)"
                             (click)="copyApiKey(selectedApiKey)"
                             title="Copy to clipboard">

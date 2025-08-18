@@ -335,7 +335,7 @@ if (this.dobShow) {
   }
 
   goToResetPassword() {
-    this.router.navigate(['/forgot-password'], { queryParams: { mode: 'profile' } });
+    this.router.navigate(['/auth/forgot-password'], { queryParams: { mode: 'profile' } });
   }
 
   // Method to handle upgrade button click from my-plan component
