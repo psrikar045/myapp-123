@@ -872,17 +872,36 @@
     }
   }
 }
+@media (max-width: 768px) {
+  .sidenav{
+    &.collapsed {
+      width: 0px !important;
+    }
+  }
+}
+
+@media (max-width: 992px) and (orientation: landscape) {
+  .sidenav{
+    &.collapsed {
+      width: 0px !important;
+    }
+  }
+}
 
 @include media-breakpoint-down(md) {
   .sidenav {
-    width: 100vw;
-    max-width: 320px;
+    width: 264px !important;
+    max-width: 264px !important;
     top: 0; // Use full height on mobile too
     height: 100vh;
 
     &.collapsed {
-      width: var(--sidenav-width-collapsed);
+      width: 0px !important;
     }
+  }
+
+  .sidenav-footer{
+    background: var(--sidenav-bg);
   }
 
   .sidenav-user-info {

@@ -796,7 +796,21 @@
     }
   }
 }
+@media(max-width: 768px) and (orientation: landscape) {
+  .api-dashboard {
+        .api-keys-thead-container{
+        width: 100% !important;
+      }
+  }
+}
 
+@media (max-width: 575.98px) {
+    .api-dashboard {
+        .api-keys-thead-container{
+        width: 492px !important;
+      }
+  }
+}
 // High contrast mode support
 @media (prefers-contrast: high) {
   .api-dashboard {

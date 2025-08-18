@@ -69,10 +69,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.toolbarService.logo,
       this.sidenavService.config$,
       this.authService.isAuthenticated$,
-      this.sidenavService.isVisible$
+      this.sidenavService.isVisible$,
+       // ]).pipe(
+    //   map(([originalLogo, sidenavConfig, isAuthenticated, sidenavVisible]) => {
+    //     // Only show conditional logo when authenticated and sidenav is visible
+      this.layoutService.isMobileOrTablet$
     ]).pipe(
-      map(([originalLogo, sidenavConfig, isAuthenticated, sidenavVisible]) => {
-        // Only show conditional logo when authenticated and sidenav is visible
+      map(([originalLogo, sidenavConfig, isAuthenticated, sidenavVisible, isMobile]) => {
+        // Mobile view: always show full RIVO9 logo centered
+        if (isMobile) {
+          return { ...originalLogo, src: 'assets/images/RIVO9 logo.webp' };
+        }
+        // Desktop: conditional (icon when collapsed, full when expanded)
+   
         if (isAuthenticated && sidenavVisible) {
           return {
             ...originalLogo,

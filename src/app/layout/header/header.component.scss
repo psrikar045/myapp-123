@@ -638,7 +638,120 @@
     justify-content: center;
   }
 }
+@media (max-width: 992px) and (orientation: landscape) {
+  .navbar-brand {
+    position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 0 !important;
+  }
 
+  .sidenav-toggle-btn.mobile-menu-toggle {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+
+  &:hover,
+    &:focus,
+    &:active,
+    &:focus:not(:focus-visible),
+    &.btn-link,
+    &.btn-link:hover,
+    &.btn-link:focus,
+    &.btn-link:active {
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      outline: none !important;
+      text-decoration: none !important;
+    }
+   
+  i {
+    font-size: 1.5rem !important; // Same size as navbar-toggler
+    transition: color 0.3s ease;
+    
+    &.text-dark {
+      color: var(--bs-dark) !important;
+    }
+    
+    &.text-primary {
+      color: var(--bs-primary) !important;
+    }
+  }
+  
+  // Dark theme support
+  [data-bs-theme="dark"] & {
+    i {
+      &.text-dark {
+        color: var(--bs-light) !important;
+      }
+      
+      &.text-primary {
+        color: var(--bs-primary) !important;
+      }
+    }
+  }
+}
+}
+
+@media (max-width: 768px) {
+  // Mobile-specific adjustments can go here if needed
+.navbar-brand {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      margin: 0 !important;
+    }
+
+.sidenav-toggle-btn.mobile-menu-toggle {
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+
+  &:hover,
+    &:focus,
+    &:active,
+    &:focus:not(:focus-visible),
+    &.btn-link,
+    &.btn-link:hover,
+    &.btn-link:focus,
+    &.btn-link:active {
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      outline: none !important;
+      text-decoration: none !important;
+    }
+   
+  i {
+    font-size: 1.5rem !important; // Same size as navbar-toggler
+    transition: color 0.3s ease;
+    
+    &.text-dark {
+      color: var(--bs-dark) !important;
+    }
+    
+    &.text-primary {
+      color: var(--bs-primary) !important;
+    }
+  }
+  
+  // Dark theme support
+  [data-bs-theme="dark"] & {
+    i {
+      &.text-dark {
+        color: var(--bs-light) !important;
+      }
+      
+      &.text-primary {
+        color: var(--bs-primary) !important;
+      }
+    }
+  }
+}
+}
 /* Extra Small Mobile (max-width: 375px) */
 @media (max-width: 375px) {
   .navbar-brand img {

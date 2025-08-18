@@ -8,8 +8,25 @@
      [attr.data-bs-theme]="currentTheme" id="HeaderStyle">
   <div class="container-fluid px-lg-5 px-md-4 px-3">
     <!-- Left Section: Logo and Sidenav Toggle -->
-    <div class="header-left d-flex align-items-center">
-            <!-- Brand/Logo - Always visible -->
+    <div class="header-left d-flex align-items-center justify-content-between">
+      
+      <!-- Sidenav Toggle Button for Mobile (authenticated users only) -->
+      <button class="btn btn-link sidenav-toggle-btn mobile-menu-toggle d-lg-none m-0" 
+              type="button" 
+              (click)="toggleSidenav()" 
+              *ngIf="authService.isAuthenticated()" 
+              aria-label="Toggle sidebar navigation">
+        <i class="bi-list"
+           [class.text-dark]="(sidenavService.config$ | async)?.collapsed"
+           [class.text-primary]="!(sidenavService.config$ | async)?.collapsed"></i>
+        <i [class.text-dark]="(sidenavService.config$ | async)?.collapsed"
+           [class.text-primary]="!(sidenavService.config$ | async)?.collapsed"
+           [class.bi-chevron-right]="(sidenavService.config$ | async)?.collapsed"
+           [class.bi-chevron-left]="!(sidenavService.config$ | async)?.collapsed"
+        ></i>
+      </button>
+      
+      <!-- Brand/Logo - Always visible -->
       <a class="navbar-brand" (click)="onLogoClick()" style="cursor: pointer;">
         <img [src]="(computedLogo$ | async)?.src" [alt]="(computedLogo$ | async)?.alt" class="logo-img" loading="lazy">
       </a>
@@ -28,13 +45,13 @@
       </button>
       
       <!-- Sidenav Toggle Button for Mobile (authenticated users only) -->
-      <button class="btn btn-link sidenav-toggle-btn mobile-menu-toggle d-lg-none me-2" 
+      <!-- <button class="btn btn-link sidenav-toggle-btn mobile-menu-toggle d-lg-none me-2" 
               type="button" 
               (click)="toggleSidenav()" 
               *ngIf="authService.isAuthenticated()" 
               aria-label="Toggle sidebar navigation">
         <i class="bi-list" style="font-size: 1.5rem;"></i>
-      </button>
+      </button> -->
 
 
     </div>

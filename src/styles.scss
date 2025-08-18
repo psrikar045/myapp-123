@@ -140,6 +140,18 @@
   // Sidebar Width Variables (Default: Normal)
   --sidebar-width-expanded: 280px;
   --sidebar-width-collapsed: 72px;
+  // Sidenav variables
+  --sidenav-bg: #ffffff;
+  --sidenav-bg-secondary: #f8f9fa;
+  --sidenav-border: #e9ecef;
+  --sidenav-text: #374151;
+  --sidenav-text-muted: #6b7280;
+  --sidenav-shadow: 0 0 28px 0 rgba(0, 0, 0, 0.08);
+  --sidenav-header-height: 72px; // Match main header height for logo alignment
+  --sidenav-user-height: 80px;
+  --sidenav-environment-height: 60px;
+  --sidenav-footer-height: 80px;
+  --sidenav-z-index: 1040;
 }
 
 // Font Size Configurations
