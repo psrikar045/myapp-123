@@ -1287,7 +1287,9 @@
    ============================================================================ */
 
 .modal {
-  z-index: 99999; /* Updated to match modal popup */
+  z-index: 100000 !important; /* Ensure modal sits above backdrop and override global */
+  background: transparent; /* Ensure the modal itself doesn't have an unintended background */
+  opacity: 1; /* Ensure the modal is fully opaque */
   
   &.show {
     animation: fadeIn 0.3s ease-out;
@@ -1296,6 +1298,8 @@
   .modal-dialog {
     margin: 2rem auto;
     max-width: 600px;
+    backdrop-filter: none !important; /* Ensure no backdrop filter affects the dialog */
+    background: transparent !important; /* Ensure the dialog itself has no background */
     
     @media (max-width: 767.98px) {
       margin: 1rem;
@@ -1304,6 +1308,7 @@
   }
   
   .modal-content {
+    background-color: white !important; // Force white background for the modal content
     border: none;
     border-radius: 16px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
@@ -1358,7 +1363,7 @@
 }
 
 .modal-backdrop {
-  z-index: 99998; /* Just below modal */
+  z-index: 99999 !important; /* Just below modal; ensure ordering over global defaults */
   background-color: rgba(0, 0, 0, 0.6);
   
   &.show {
