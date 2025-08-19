@@ -10,7 +10,7 @@ body, html, app-root {
 
 .container {
   flex: 1 0 auto;
-  margin-top: 70px;
+  /* margin-top: 70px; */
 }
 
 .footer-container {
