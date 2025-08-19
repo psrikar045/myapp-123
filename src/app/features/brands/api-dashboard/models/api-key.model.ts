@@ -102,6 +102,7 @@ export interface ApiKey {
   lastUsedAt?: string; // LocalDateTime from backend
   revokedAt?: string; // LocalDateTime from backend
   status: 'ACTIVE' | 'EXPIRED' | 'REVOKED' | 'SUSPENDED';
+  defaultKey?: boolean; // Indicates if this is the primary/default API key
 }
 
 export interface CreateApiKeyRequest {
@@ -114,6 +115,7 @@ export interface CreateApiKeyRequest {
   allowedDomains?: string[];
   rateLimitTier?: 'BASIC' | 'STANDARD' | 'PREMIUM' | 'ENTERPRISE' | 'UNLIMITED';
   scopes?: string[];
+  defaultKey?: boolean; // Allow setting as default key during creation
 }
 
 export interface CreateApiKeyResponse {
@@ -137,6 +139,7 @@ export interface CreateApiKeyResponse {
   expiresAt?: string;
   createdAt: string;
   lastUsedAt?: string;
+  defaultKey?: boolean; // Indicates if this is the primary/default API key
 }
 
 export interface RegenerateApiKeyResponse {
@@ -165,4 +168,5 @@ export interface ApiKeyUpdateRequest {
   allowedIps?: string[];
   allowedDomains?: string[];
   rateLimitTier?: string;
+  defaultKey?: boolean; // Allow updating the default key status
 }

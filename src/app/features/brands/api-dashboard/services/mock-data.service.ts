@@ -123,7 +123,8 @@ export class MockDataService {
         createdAt: '2024-01-01T00:00:00Z',
         updatedAt: '2023-11-15T08:30:00Z',
         lastUsedAt: '2023-11-15T08:30:00Z',
-        status: 'ACTIVE'
+        status: 'ACTIVE',
+        defaultKey: true // This is the primary API key
       },
       // mycompany.com domain - Staging
       {

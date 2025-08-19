@@ -46,6 +46,7 @@ interface BackendApiKey {
   environment?: 'development' | 'staging' | 'production' | 'testing';
   scopes: string[];
   encryptedKeyValue?: string; // Encrypted API key value for frontend decryption
+  defaultKey?: boolean; // Indicates if this is the primary/default API key
 }
 
 @Injectable({
@@ -128,7 +129,8 @@ export class ApiKeyService {
           updatedAt: backendKey.updatedAt || undefined,
           lastUsedAt: backendKey.lastUsedAt || undefined,
           revokedAt: backendKey.revokedAt || undefined,
-          status: this.determineApiKeyStatus(backendKey)
+          status: this.determineApiKeyStatus(backendKey),
+          defaultKey: backendKey.defaultKey || false // Map the defaultKey property from backend
         }));
         
         return { keys: mappedKeys };
@@ -233,7 +235,8 @@ private forceRefreshApiKeys(): void {
             updatedAt: backendKey.updatedAt || undefined,
             lastUsedAt: backendKey.lastUsedAt || undefined,
             revokedAt: backendKey.revokedAt || undefined,
-            status: this.determineApiKeyStatus(backendKey)
+            status: this.determineApiKeyStatus(backendKey),
+            defaultKey: backendKey.defaultKey || false // Map the defaultKey property from backend
           }));
           
           return { keys: mappedKeys };
