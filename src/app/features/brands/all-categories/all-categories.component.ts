@@ -47,7 +47,7 @@ export class AllCategoriesComponent implements OnInit, OnDestroy, AfterViewInit 
   
   // Pagination properties
   currentPage = 1;
-  pageSize = 12; // Changed from 10 to 12 as requested
+  pageSize = 0; // Dynamic - calculated based on container height
   totalElements = 0;
   totalPages = 0;
   isLastPage = false;
@@ -106,6 +106,8 @@ export class AllCategoriesComponent implements OnInit, OnDestroy, AfterViewInit 
   // Enhanced search functionality
   private searchResults: any[] = [];
   private isSearchActive = false;
+  private hasInitialLoad = false;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -119,26 +121,47 @@ export class AllCategoriesComponent implements OnInit, OnDestroy, AfterViewInit 
     
     // Restore previous state if returning from search-view
     this.restorePreviousState();
-    
-    // Then try to load from API
-    try {
-      this.loadBrandData(this.currentPage - 1); // Convert to 0-based for API
-      this.getAllCategories();
-    } catch (error) {
-      console.error('Error in AllCategoriesComponent constructor:', error);
-    }
   }
 private windowResizeHandler = () => {
     this.checkScreenSize();
     this.scheduleRecalculatePageSize();
+    this.syncContainerHeights();
   };
+
+  private syncContainerHeights() {
+    if (!isPlatformBrowser(this.platformId)) return;
+    
+    setTimeout(() => {
+      const sidebar = document.querySelector('.categories-sidebar') as HTMLElement;
+      const mainContent = document.querySelector('.categories-main-layout-right') as HTMLElement;
+      
+      if (sidebar && mainContent && !this.isMobile) {
+        const sidebarHeight = sidebar.offsetHeight;
+        const viewportHeight = window.innerHeight;
+        const headerHeight = 200; // Approximate header height
+        const minHeight = Math.max(sidebarHeight, viewportHeight - headerHeight);
+        
+        mainContent.style.minHeight = `${minHeight}px`;
+        mainContent.style.height = 'auto';
+      }
+    }, 100);
+  }
   ngOnInit() {
-    // this.loadBrandData();
-    console.log(this.brandData)
     this.checkScreenSize();
     if (isPlatformBrowser(this.platformId)) {
-      // window.addEventListener('resize', () => this.checkScreenSize());
       window.addEventListener('resize', this.windowResizeHandler);
+    }
+    
+    // Load initial data only once
+    if (!this.hasInitialLoad) {
+      this.hasInitialLoad = true;
+      this.getAllCategories();
+      // Delay initial load until page size is calculated
+      setTimeout(() => {
+        if (this.pageSize > 0) {
+          this.loadBrandData(this.currentPage - 1);
+        }
+      }, 300);
     }
     
     // Subscribe to query parameters
@@ -184,16 +207,33 @@ private windowResizeHandler = () => {
   }
 ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId)) return;
-    // Observe container size changes for dynamic page size calculation
-    const container = this.gridContainerRef?.nativeElement;
-    if (container && 'ResizeObserver' in window) {
+    
+    // Observe main container for size changes
+    const mainContainer = document.querySelector('.categories-main-layout-right');
+    if (mainContainer && 'ResizeObserver' in window) {
       this.resizeObserver = new ResizeObserver(() => {
         this.scheduleRecalculatePageSize();
+        this.syncContainerHeights();
       });
-      this.resizeObserver.observe(container);
+      this.resizeObserver.observe(mainContainer);
     }
-    // Initial calculation after view init
-    setTimeout(() => this.recalculatePageSizeAndReloadIfNeeded(), 0);
+    
+    // Initial calculations after view init
+    setTimeout(() => {
+      this.initializeDynamicPageSize();
+      this.syncContainerHeights();
+    }, 200);
+  }
+  
+  private initializeDynamicPageSize(): void {
+    const newPageSize = this.calculateDynamicPageSize();
+    if (newPageSize !== this.pageSize) {
+      this.pageSize = newPageSize;
+      this.lastComputedPageSize = newPageSize;
+      if (this.hasInitialLoad) {
+        this.loadBrandData(0);
+      }
+    }
   }
   // ngOnDestroy() {
   //   if (isPlatformBrowser(this.platformId)) {
@@ -221,51 +261,66 @@ ngAfterViewInit(): void {
     }, 100);
   }
 
-  private getComputedRows(): number {
-    const grid = this.gridContainerRef?.nativeElement;
-    const card = this.brandCardRef?.nativeElement;
+  private calculateDynamicPageSize(): number {
+    if (!isPlatformBrowser(this.platformId)) return 12;
+    
+    const mainContainer = document.querySelector('.categories-main-layout-right') as HTMLElement;
+    const brandsWrapper = document.querySelector('.brands-content-wrapper') as HTMLElement;
     const pagination = this.paginationWrapperRef?.nativeElement;
-    if (!grid || !card) {
-      const viewportHeight = window.innerHeight || 900;
-      const estimatedCardHeight = 180;
-      const estimatedGap = 20;
-      const rows = Math.max(1, Math.floor((viewportHeight - 320) / (estimatedCardHeight + estimatedGap)));
-      return rows;
-    }
-    const gridStyles = window.getComputedStyle(grid);
-    const gridGap = parseFloat(gridStyles.rowGap || '0');
-    const cardRect = card.getBoundingClientRect();
-    const gridRect = grid.getBoundingClientRect();
-    const viewportBottom = pagination ? pagination.getBoundingClientRect().top : window.innerHeight;
-    const availableHeight = Math.max(0, viewportBottom - gridRect.top);
-    const singleHeight = cardRect.height + gridGap;
-    const rows = Math.max(1, Math.floor(availableHeight / singleHeight));
-    return rows;
+    
+    if (!mainContainer || !brandsWrapper) return 12;
+    
+    const containerHeight = mainContainer.clientHeight;
+    const paginationHeight = pagination ? pagination.offsetHeight : 80;
+    const wrapperPadding = 64; // Account for padding
+    const availableHeight = containerHeight - paginationHeight - wrapperPadding;
+    
+    // Card dimensions
+    const cardHeight = 130;
+    const cardGap = 28;
+    const columns = this.getColumnsForScreenSize();
+    
+    // Calculate rows that fit
+    const rows = Math.max(1, Math.floor(availableHeight / (cardHeight + cardGap)));
+    
+    return Math.max(4, columns * rows);
+  }
+  
+  private getColumnsForScreenSize(): number {
+    if (!isPlatformBrowser(this.platformId)) return 4;
+    
+    const width = window.innerWidth;
+    if (width <= 480) return 1;
+    if (width <= 768) return 2;
+    if (width <= 992) return 3;
+    return 4;
   }
 
   private recalculatePageSize(): number {
-    // Always 4 columns on desktop layout per design
-    const columns = 4;
-    const rows = this.getComputedRows();
-    const newPageSize = Math.max(4, columns * rows);
-    return newPageSize;
+    return this.calculateDynamicPageSize();
   }
 
   private recalculatePageSizeAndReloadIfNeeded() {
     if (!isPlatformBrowser(this.platformId)) return;
+    
     const newSize = this.recalculatePageSize();
-    if (this.lastComputedPageSize === newSize) return;
+    if (this.lastComputedPageSize === newSize || newSize === 0) return;
+    
     const oldFirstItemIndex = (this.currentPage - 1) * this.pageSize;
     this.pageSize = newSize;
     this.lastComputedPageSize = newSize;
     this.totalPages = Math.max(1, Math.ceil(this.totalElements / this.pageSize));
-    // Keep the first visible index stable so content shift is minimized
+    
+    // Keep the first visible index stable
     const newPage = Math.floor(oldFirstItemIndex / this.pageSize) + 1;
     if (newPage !== this.currentPage) {
       this.currentPage = Math.min(Math.max(1, newPage), this.totalPages);
     }
-    // Reload current page with new page size (0-based for API)
-    this.loadBrandData(this.currentPage - 1);
+    
+    // Only reload if initialized and not loading
+    if (this.hasInitialLoad && !this.isLoadingBrands && this.pageSize > 0) {
+      this.loadBrandData(this.currentPage - 1);
+    }
   }
 
   /**
@@ -422,11 +477,15 @@ setDefaultCategories() {
     this.filteredCategories = this.categories;
   }
 
-getAllCategories() {
-    // Skip API calls during SSR/prerendering
-    if (!isPlatformBrowser(this.platformId)) {
+  private categoriesLoaded = false;
+
+  getAllCategories() {
+    // Skip API calls during SSR/prerendering or if already loaded
+    if (!isPlatformBrowser(this.platformId) || this.categoriesLoaded) {
       return;
     }
+    
+    this.categoriesLoaded = true;
     
     this.authService.categoryFetch().subscribe({
       next : (response: any) => {
@@ -452,7 +511,7 @@ getAllCategories() {
       error: (error) => {
         console.error('Error fetching categories:', error);
         console.log('Using default categories due to API error');
-        // Default categories are already set, so no need to do anything
+        this.categoriesLoaded = false; // Allow retry on error
       }
     });
   }
@@ -626,10 +685,11 @@ getAllCategories() {
     // Reset any search-specific states
     this.searchResults = [];
     
-   // Reload data from API without search parameter (empty search term)
-    this.loadBrandData(0, '');
-
- 
+    // Reload data from API without search parameter only if pageSize is set
+    if (this.pageSize > 0) {
+      this.loadBrandData(0, '');
+    }
+    
     // Clear stored search state
     if (isPlatformBrowser(this.platformId)) {
       sessionStorage.setItem('brandsSearchTerm', '');
@@ -644,8 +704,10 @@ getAllCategories() {
     // Update search state
     this.isSearchActive = !!(this.searchTerm && this.searchTerm.trim().length > 0);
     
-    // Trigger API call with current search term
-    this.loadBrandData(0, this.searchTerm);
+    // Trigger API call with current search term only if pageSize is set
+    if (this.pageSize > 0) {
+      this.loadBrandData(0, this.searchTerm);
+    }
     
     // Store search state for navigation
     if (isPlatformBrowser(this.platformId)) {
@@ -655,16 +717,18 @@ getAllCategories() {
 
   // Update selectCategory to handle navigation
   selectCategory(category: string) {
+    if (this.selectedCategory === category) return; // Prevent unnecessary calls
+    
     this.selectedCategory = category;
-    this.expandedCategory = category; // Expand the selected category in side nav
+    this.expandedCategory = category;
     this.currentPage = 1;
     this.selectedSubCategory = '';
-    // Keep search term but reset page to show filtered results for new category
-    // this.searchTerm = ''; // Commented out to maintain search across categories
     this.filteredCategories = this.categories;
 
-    // Load first page of data for new category
-    this.loadBrandData(0);
+    // Load first page of data for new category only if not loading
+    if (!this.isLoadingBrands) {
+      this.loadBrandData(0);
+    }
 
     // Update URL with the selected category
     if (category !== 'All') {
@@ -675,7 +739,6 @@ getAllCategories() {
         queryParamsHandling: 'merge'
       });
     } else {
-      // Remove category parameter when 'All' is selected
       this.router.navigate([], {
         relativeTo: this.route,
         queryParams: {},
@@ -685,7 +748,7 @@ getAllCategories() {
   }
 
   selectPage(page: number) {
-    if (page !== this.currentPage && page >= 1 && page <= this.totalPages) {
+    if (page !== this.currentPage && page >= 1 && page <= this.totalPages && this.pageSize > 0) {
       this.currentPage = page;
       // Load data for the new page (convert to 0-based for API)
       this.loadBrandData(page - 1);
@@ -732,23 +795,35 @@ getAllCategories() {
 
   // When a subcategory is clicked, filter by it
   goToSubCategory(sub: string) {
-    if (this.selectedCategory === 'All') {
+    if (this.selectedCategory === 'All' || this.selectedSubCategory === sub) {
       this.selectedSubCategory = '';
       return;
     }
+    
     this.selectedSubCategory = sub;
-    this.currentPage = 1; // Reset to first page when changing subcategory
-    this.loadBrandData(0); // Load first page of data for new subcategory
+    this.currentPage = 1;
+    
+    // Load first page of data for new subcategory only if not loading
+    if (!this.isLoadingBrands) {
+      this.loadBrandData(0);
+    }
   }
 
   // Enhanced toggle category accordion with search preservation
   toggleCategoryAccordion(category: string) {
+    const wasExpanded = this.expandedCategory === category;
+    const wasSelected = this.selectedCategory === category;
+    
     if (category === 'All') {
-      this.expandedCategory = this.expandedCategory === 'All' ? '' : 'All';
-      this.selectedCategory = 'All';
-      this.selectedSubCategory = '';
-      this.currentPage = 1;
-      this.loadBrandData(0); // Load first page of all brands
+      this.expandedCategory = wasExpanded ? '' : 'All';
+      if (!wasSelected) {
+        this.selectedCategory = 'All';
+        this.selectedSubCategory = '';
+        this.currentPage = 1;
+        if (!this.isLoadingBrands) {
+          this.loadBrandData(0);
+        }
+      }
       // Remove category from URL
       this.router.navigate([], {
         relativeTo: this.route,
@@ -756,18 +831,22 @@ getAllCategories() {
         queryParamsHandling: 'merge'
       });
     } else {
-      this.expandedCategory = this.expandedCategory === category ? '' : category;
-      this.selectedCategory = category;
-      this.selectedSubCategory = '';
-      this.currentPage = 1;
-      this.loadBrandData(0); // Load first page of category brands
-      // Update URL with selected category
-      const routeCategory = category.toLowerCase().replace(/\s+/g, '-');
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: { category: routeCategory },
-        queryParamsHandling: 'merge'
-      });
+      this.expandedCategory = wasExpanded ? '' : category;
+      if (!wasSelected) {
+        this.selectedCategory = category;
+        this.selectedSubCategory = '';
+        this.currentPage = 1;
+        if (!this.isLoadingBrands) {
+          this.loadBrandData(0);
+        }
+        // Update URL with selected category
+        const routeCategory = category.toLowerCase().replace(/\s+/g, '-');
+        this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: { category: routeCategory },
+          queryParamsHandling: 'merge'
+        });
+      }
     }
   }
 
@@ -842,8 +921,8 @@ getAllCategories() {
    * Load brand data from API with pagination and optional search
    */
   loadBrandData(page: number = 0, searchTerm?: string): void {
-    // Skip API calls during SSR/prerendering
-    if (!isPlatformBrowser(this.platformId)) {
+    // Skip API calls during SSR/prerendering or if already loading
+    if (!isPlatformBrowser(this.platformId) || this.isLoadingBrands) {
       return;
     }
     
@@ -888,11 +967,10 @@ getAllCategories() {
           return true;
         });
         
-        // this.isLoadingBrands = false;
         this.isLoadingBrands = false;
-        this.updateDisplayedBrands(); // 
+        this.updateDisplayedBrands();
         this.cdr.detectChanges();
-        this.scheduleRecalculatePageSize();
+        
         console.log('Brand data loaded from API:', {
           page: this.currentPage,
           totalPages: this.totalPages,
@@ -900,14 +978,14 @@ getAllCategories() {
           brandsCount: this.allBrands.length
         });
       },
-error: (error) => {
+      error: (error) => {
         console.error('Error loading brand data:', error);
         this.isLoadingBrands = false;
         console.log('Using static brand data due to API error');
         // Keep static brand data as fallback
         this.totalElements = this.allBrands.length;
         this.totalPages = Math.ceil(this.totalElements / this.pageSize);
-        this.updateDisplayedBrands(); // Update displayed brands even in error case
+        this.updateDisplayedBrands();
       }
     });
   }
