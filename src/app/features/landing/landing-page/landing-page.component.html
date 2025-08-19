@@ -128,13 +128,19 @@
     </div>
     <div class="row g-4">
       <div class="col-lg-3 col-md-6 col-12 " *ngFor="let feature of features; let i = index">
-        <div class="card h-100 border-0 shadow-sm hover-lift rivo9-feature-card" [ngClass]="'rivo9-card-' + i">
+        <div class="card h-100 border-0 shadow-sm hover-lift rivo9-feature-card" 
+             [ngClass]="'rivo9-card-' + i"
+             (click)="navigateToFeature(feature.route)"
+             style="cursor: pointer;">
           <div class="card-body text-center p-4">
             <div class="feature-icon mb-3">
               <i [class]="feature.icon" class=""></i>
             </div>
             <h5 class="card-title fw-bold mb-3">{{ feature.title }}</h5>
-            <p class="card-text pt-2">{{ feature.description }} </p>
+            <p class="card-text pt-2">
+              {{ feature.description }} 
+              <i class="bi bi-arrow-right ms-1"></i>
+            </p>
           </div>
         </div>
       </div>

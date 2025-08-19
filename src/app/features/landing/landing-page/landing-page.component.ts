@@ -35,22 +35,26 @@ export class LandingPageComponent implements OnInit, OnDestroy {
     {
       icon: 'bi bi-lightning-charge',
       title: 'Lightning Fast',
-      description: 'Learn More'
+      description: 'Learn More',
+      route: '/login'
     },
     {
       icon: 'bi bi-shield-check',
       title: 'Always Accurate',
-      description: 'Learn More'
+      description: 'Learn More',
+      route: '/search'
     },
     {
       icon: 'bi bi-code-slash',
       title: 'Developer Friendly',
-      description: 'Learn More'
+      description: 'Learn More',
+      route: '/developer'
     },
     {
       icon: 'bi bi-palette',
       title: 'Rich Brand Data',
-      description: 'Learn More'
+      description: 'Learn More',
+      route: '/brands'
     },
   ];
 
@@ -522,6 +526,10 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
   goToSearch() {
     this.router.navigate(['/search']);
+  }
+
+  navigateToFeature(route: string): void {
+    this.router.navigate([route]);
   }
 
   testimonials = [
