@@ -5,7 +5,8 @@
 .categories-bg {
   background: linear-gradient(135deg, #f8faff 0%, #ffffff 50%, #f0f4ff 100%);
   min-height: 100vh;
-  padding: 3rem 0 2rem;
+  height: 100%;
+  padding: 3rem 0 0; /* Removed bottom padding */
   display: flex;
   flex-direction: column;
   position: relative;
@@ -28,14 +29,16 @@
   }
 }
 
-// Mobile Categories Toggle Button
+// Mobile Header: Categories button only
 .mobile-categories-toggle {
   display: none;
-  margin-bottom: 2rem;
-  text-align: center;
-  
+  margin-bottom: 1rem;
+  align-items: center;
+  justify-content: flex-start; /* Changed from flex-end to flex-start to align to the left */
+  gap: 1rem;
+
   @media (max-width: 991px) {
-    display: block;
+    display: flex;
   }
   
   .btn {
@@ -68,6 +71,7 @@
   max-width: 1600px; // Increased from 1200px
   margin: 0 auto;
   padding: 0 2rem; // Increased padding for better spacing
+  min-height: 100vh; // Ensure it fills the viewport height
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -178,7 +182,7 @@
     font-size: 1.2rem; // Larger font
     background: transparent;
     font-weight: 400;
-    padding: 1rem 0 1rem 1.75rem;
+    padding: 1rem 0 1rem 2rem; // extra left space before placeholder
     
     &::placeholder {
       color: #94a3b8;
@@ -291,7 +295,7 @@
     }
     
     input {
-      padding: 1.25rem 0;
+      padding: 1.25rem 0 1.25rem 2rem; // keep left space on mobile
       font-size: 1.1rem;
       
       &::placeholder {
@@ -327,7 +331,7 @@
     }
     
     input {
-      padding: 1rem 0;
+      padding: 1rem 0 1rem 2rem; // keep left space on very small screens
       font-size: 1rem;
     }
     
@@ -367,11 +371,12 @@
   // align-items: flex-start;
   align-items: stretch;
   margin-top: 2rem;
-  min-height: 60vh; // Ensure minimum height
+  min-height: calc(100vh - 200px); /* Taller to fill more of the screen */
+  height: 100%; /* Fill available height */
   
   @media (max-width: 1200px) {
     gap: 1.5rem;
-    min-height: 65vh;
+    min-height: calc(100vh - 180px);
   }
   
   @media (max-width: 768px) {
@@ -386,7 +391,8 @@
   gap: 2.5rem; // Adjusted gap for better balance with wider sidebar
   width: 100%;
   flex: 1;
-  min-height: 0; // Allow flex items to shrink
+  min-height: 100%; // Fill available height
+  height: 100%; // Fill available height
   align-items: stretch; // Ensure both containers have equal heights
   flex-wrap: nowrap;
   @media (max-width: 991px) {
@@ -412,10 +418,13 @@
   top: 2rem;
   flex: 0 0 280px;
   background-color: #fff;
-  height: fit-content;
-  max-height: calc(100vh - 4rem);
+  height: calc(100vh - 4rem); /* Fixed height to fill the viewport */
+  min-height: 100%; /* Ensure it's at least as tall as its content */
   z-index: 10;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0; /* Remove any bottom margin */
   // Custom scrollbar
   &::-webkit-scrollbar {
     width: 6px;
@@ -437,12 +446,12 @@
 }
 
 .sidebar-header {
-position: sticky;
+  position: sticky;
   top: 0;
   background: #ffffff;
   backdrop-filter: blur(10px); // Add blur effect for better separation
   z-index: 20;
-  margin: -2rem -2rem 2rem -2rem; // Extend to full width of sidebar including padding
+  margin: -2rem -2rem 1.5rem -2rem; // Reduced bottom margin
   padding: 2rem 2rem 1.5rem 2rem; // Add padding back to maintain spacing
   border-bottom: 2px solid rgba(var(--bs-primary-rgb), 0.1);
   
@@ -458,6 +467,7 @@ position: sticky;
     opacity: 1;
     transition: opacity 0.3s ease;
     pointer-events: none;
+  }
   
   .sidebar-title {
     font-size: 1.3rem;
@@ -482,14 +492,16 @@ position: sticky;
     text-align: center;
   }
 }
-}
 .sidebar-category {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   // Add extra spacing for the first category to prevent overlap with sticky header
   &:first-child {
-    margin-top: 0.5rem;
+    margin-top: 0.25rem;
   }
-
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .sidebar-category-btn {
@@ -508,7 +520,7 @@ position: sticky;
   justify-content: space-between;
   align-items: center;
   position: relative;
-  margin-bottom: 0.5rem; // Increased margin for better spacing
+  margin-bottom: 0.25rem; // Reduced margin to minimize gaps
   
   // Add subtle gradient background
   &::before {
@@ -1292,18 +1304,39 @@ position: sticky;
     min-height: calc(100vh - 300px);
   }
   
-  // Mobile sidebar positioning
+  // Mobile sidebar drawer positioning and animation
   .mobile-sidebar {
-    display: none; // Hidden by default
-    
-    // Only show when both visible (mobile) AND open
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0; /* Extend to bottom of screen */
+    height: 100vh; /* Full viewport height */
+    height: 100vh;
+    background: #fff;
+    display: block; // Manage visibility with transform
+    min-width: 280px;
+    width: 80vw;
+    max-width: 320px;
+    box-shadow: 8px 0 24px rgba(0, 0, 0, 0.12);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1001; // Above overlay
+    border-radius: 0 12px 12px 0;
+    overflow-y: auto;
+
+    // Slide in when both visible (mobile) AND open
     &.visible.open {
-      display: block; // Show when mobile AND open
-      min-width: 280px;
-      width: 280px;
-      flex-shrink: 0; // Don't shrink
-      margin-bottom: 1rem;
+      transform: translateX(0);
     }
+  }
+  
+  // Dim background when sidebar is open
+  .mobile-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(1px);
+    z-index: 1000;
   }
   
   // Adjust brand cards grid when sidebar is open
@@ -2073,20 +2106,24 @@ position: sticky;
   }
 }
 .searchAlign{
-  margin-left: 4px; display: flex; align-items: center; justify-content: center; height: 36px; width: 36px; background: #2563eb; border: none; border-radius: 50%; color: #fff; 
-  position: relative;
-    // top: 20px;
-    right: 13px;
+  margin-left: 4px;
+  margin-right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  width: 36px;
+  background: #2563eb;
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  position: static; // rely on flex centering, no manual offsets
 }
 @media (max-width: 500px) {
-  .searchAlign {
-    top: 5px !important;
-  }
+  .searchAlign { top: 0 !important; }
 }
 @media (min-width: 501px) and (max-width: 768px) {
-  .searchAlign {
-    top: 11px !important;
-  }
+  .searchAlign { top: 0 !important; }
 }
 @media (min-width: 300px) and (max-width: 768px) {
   .sidebar-header {

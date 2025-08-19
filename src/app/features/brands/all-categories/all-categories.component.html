@@ -29,9 +29,7 @@
     type="button"
     (click)="clearSearch()"
     title="Clear search"
-    style="margin-left: 4px; margin-right: 4px; display: flex; align-items: center; justify-content: center; height: 36px; width: 36px;  border: none; border-radius: 50%;    position: relative;
-    right: 14px;
-    top: 20px;">
+    aria-label="Clear search">
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M13.5 4.5L4.5 13.5" stroke="#6b7280" stroke-width="2" stroke-linecap="round"/>
       <path d="M4.5 4.5L13.5 13.5" stroke="#6b7280" stroke-width="2" stroke-linecap="round"/>
@@ -42,7 +40,8 @@
     class="send-search-btn searchAlign" 
     type="button"
     (click)="onSearch()"
-    title="Send search">
+    title="Send search"
+    aria-label="Send search">
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M2 16L16 9L2 2V7L11 9L2 11V16Z" fill="currentColor"/>
     </svg>
@@ -57,7 +56,7 @@
 
     </div>
     
-    <!-- Mobile Categories Button -->
+    <!-- Mobile Header: Categories button only -->
     <div class="mobile-categories-toggle" *ngIf="isMobile">
       <button class="btn btn-primary d-flex align-items-center gap-2" (click)="toggleMobileSidebar()">
         <i class="bi bi-list"></i>
@@ -105,6 +104,9 @@
             </div>
           </div>
         </aside>
+
+        <!-- Overlay shown when mobile sidebar is open -->
+        <div class="mobile-overlay" *ngIf="isMobile && isMobileSidebarOpen" (click)="closeMobileSidebar()"></div>
 
         <!-- Mobile Sidebar -->
         <aside class="categories-sidebar mobile-sidebar" 
