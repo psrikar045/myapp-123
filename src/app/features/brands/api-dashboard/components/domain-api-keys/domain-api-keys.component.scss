@@ -362,11 +362,33 @@ color: white !important;
 color: white !important;
 }
 .brdrShowKey{
-  border: 1px solid #c0eac0;
+  border: 1px solid #69f369;
+  background: #ffffff;
+    color: #00581c;
 }
 .brdrRevoke{
-  border: 1px solid #efc8c8
+  border: 1px solid #f61b1b;
+  color: rgb(239, 5, 5);
 }
 .brdrRegenerate{
   border: 1px solid #ecd8b2;
+}
+.brdrCopyKey{
+  border: 1px solid rgb(135, 135, 243);
+    color: #1e0875;
+}
+.brdrCopyKey:hover{
+  // border: 1px solid rgb(5, 5, 147);
+    // color: #1e0875;
+    background-color: rgb(52, 52, 236);
+}
+.brdrShowKey:hover{
+    // color: #1e0875;
+    background-color: rgb(15, 127, 45);
+}
+.btnRefresh:hover{
+  background-color: rgb(111, 108, 161);
+}
+.btnRefresh{
+  border: 1px solid rgb(111, 108, 161);
 }
