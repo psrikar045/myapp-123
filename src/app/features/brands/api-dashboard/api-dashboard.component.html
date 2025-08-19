@@ -299,7 +299,7 @@
                 </button>
                 <button class="btn btn-outline-danger btn-sm" 
                         (click)="showDeleteConfirmationDialog(selectedApiKey)"
-                        [disabled]="deleting">
+                        [disabled]="deleting || (selectedApiKey.defaultKey === true)">
                   <span *ngIf="deleting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                   {{ deleting ? 'Deleting...' : 'Delete' }}
                 </button>

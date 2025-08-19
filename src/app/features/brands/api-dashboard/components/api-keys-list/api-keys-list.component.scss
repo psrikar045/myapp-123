@@ -57,6 +57,11 @@
     }
   }
 
+  // Disabled delete buttons should not interact on hover
+  .btn[disabled] {
+    pointer-events: none;
+  }
+
   // Cursor pointer utility
   .cursor-pointer {
     cursor: pointer;
@@ -293,4 +298,8 @@ color: white !important;
     line-height: 1.2 !important;
     margin-bottom: 0rem !important;
     letter-spacing: 0rem !important;
+}
+.filterTop{
+  top: 27px;
+  position: relative;
 }

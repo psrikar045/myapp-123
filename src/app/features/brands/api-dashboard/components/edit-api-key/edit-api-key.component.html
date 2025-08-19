@@ -109,7 +109,8 @@
                     class="form-check-input" 
                     type="checkbox" 
                     id="isActive" 
-                    formControlName="isActive">
+                    formControlName="isActive"
+                    [disabled]="apiKey.defaultKey === true">
                   <label class="form-check-label" for="isActive">
                     <span *ngIf="editForm.get('isActive')?.value" class="text-success">
                       <i class="bi bi-check-circle me-1"></i>Active
@@ -118,6 +119,9 @@
                       <i class="bi bi-x-circle me-1"></i>Revoked
                     </span>
                   </label>
+                  <div *ngIf="apiKey.defaultKey === true" class="form-text text-body-secondary mt-1">
+                    <i class="bi bi-info-circle me-1"></i>Status cannot be changed for the primary key.
+                  </div>
                 </div>
               </div>
 

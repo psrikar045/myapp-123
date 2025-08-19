@@ -439,6 +439,12 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
   showDeleteConfirmationDialog(apiKey: ApiKey): void {
     if (!apiKey || this.deleting) return;
 
+    // Prevent delete for primary/default key
+    if (apiKey.defaultKey === true) {
+      this.errorHandler.showWarning('Primary API key cannot be deleted.');
+      return;
+    }
+
     Swal.fire({
       title: 'Delete API Key',
       text: 'Are you sure you want to delete this API key?',
@@ -466,6 +472,12 @@ export class ApiDashboardComponent implements OnInit, OnDestroy {
    */
   deleteApiKey(apiKey: ApiKey): void {
     if (!apiKey || this.deleting) return;
+
+    // Prevent delete for primary/default key (double safety)
+    if (apiKey.defaultKey === true) {
+      this.errorHandler.showWarning('Primary API key cannot be deleted.');
+      return;
+    }
 
     this.deleting = true;
 

@@ -362,6 +362,11 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       font-weight: 600;
       letter-spacing: 0.025em;
+
+      // Disabled delete buttons should not interact on hover
+      &[disabled] {
+        pointer-events: none;
+      }
       
       &.btn-primary {
         background: linear-gradient(135deg, var(--bs-primary) 0%, rgba(var(--bs-primary-rgb), 0.8) 100%);

@@ -174,6 +174,15 @@ export class EditApiKeyComponent implements OnInit, OnDestroy, OnChanges {
     console.log('Populating form with data:', formData);
     
     this.editForm.patchValue(formData);
+
+    // Disable/enable status toggle based on default key
+    const isDefault = this.apiKey.defaultKey === true;
+    const isActiveCtrl = this.editForm.get('isActive');
+    if (isDefault) {
+      isActiveCtrl?.disable({ emitEvent: false });
+    } else {
+      isActiveCtrl?.enable({ emitEvent: false });
+    }
     
     // Force change detection for the expiration date field
     this.editForm.get('expiresAt')?.updateValueAndValidity();
