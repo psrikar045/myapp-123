@@ -538,9 +538,12 @@ position: sticky;
   }
   
   &.active {
-    background: linear-gradient(135deg, var(--bs-primary) 0%, #6366f1 100%);
-    color: white;
-    box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.3);
+    // background: linear-gradient(135deg, var(--bs-primary) 0%, #6366f1 100%);
+    // color: white;
+    // box-shadow: 0 4px 12px rgba(var(--bs-primary-rgb), 0.3);
+    background: linear-gradient(135deg, var(--bs-primary, #6366f1) 0%, #6366f1 100%) !important;
+    color: white !important;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
     transform: translateX(4px);
     
     &::before {

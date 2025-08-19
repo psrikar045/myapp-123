@@ -88,7 +88,8 @@
             <button class="sidebar-category-btn"
               [class.active]="cat.label === selectedCategory"
               [class.expanded]="cat.label === expandedCategory"
-              (click)="toggleCategoryAccordion(cat.label)">
+              (click)="toggleCategoryAccordion(cat.label)"
+              [attr.data-category]="cat.label">
               {{ cat.label }}
               <span class="accordion-arrow" [class.open]="cat.label === expandedCategory">
                 <i class="bi bi-chevron-down"></i>

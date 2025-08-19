@@ -138,7 +138,9 @@ export class SidenavItemComponent implements OnInit, OnDestroy {
   get hasChildren(): boolean {
     return !!(this.item.children && this.item.children.length > 0);
   }
-
+get hasActiveChildren(): boolean {
+    return this.hasChildren && this.item.children!.some(child => child.isActive);
+  }
   // onItemClick(): void {
   //   // Block navigation for submenu items only
   //   // if (this.level > 0 && this.item.label !== 'Brands Api' && this.item.label !== 'API Dashboard' && this.item.label !== 'API Keys') {
@@ -168,15 +170,21 @@ onItemClick(): void {
   } else {
     // Normal behavior when not collapsed
     if (this.item.route && !this.hasChildren) {
-      // Navigate to route for leaf items
+      // Navigate to route for leaf items (no children)
+      this.sidenavService.navigateToRoute(this.item.route);
+    } else if (this.item.route && this.hasChildren) {
+      // For items with both route and children (like Dashboard)
+      // Navigate to the route and close all dropdowns
       this.sidenavService.navigateToRoute(this.item.route);
     } else if (this.hasChildren) {
-      // Toggle expansion for parent items
+      // Toggle expansion for parent items (only children, no route)
       this.sidenavService.toggleItemExpanded(this.item.id);
-    } else if (this.item.route) {
-      // Navigate to route for parent items that also have routes
-      this.sidenavService.navigateToRoute(this.item.route);
-    } else if (this.item.action) {
+    } 
+    // else if (this.item.route) {
+    //   // Navigate to route for parent items that also have routes
+    //   this.sidenavService.navigateToRoute(this.item.route);
+    // } 
+    else if (this.item.action) {
       // Execute custom action
       this.item.action();
     }

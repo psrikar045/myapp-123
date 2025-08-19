@@ -146,9 +146,10 @@
           </button>
 
           <!-- Get Started Button -->
+             <!-- [routerLink]="['/login']" 
+                  [queryParams]="{ register: 'true' }"  -->
           <button *ngIf="action.type === 'get-started'" 
-                  [routerLink]="['/login']" 
-                  [queryParams]="{ register: 'true' }" 
+                (click)="onGetStartedClick()"
                   class="btn btn-primary header-btn header-btn-primary d-flex align-items-center">
             {{ action.label }}
             <i class="bi bi-arrow-right ms-2"></i>

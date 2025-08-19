@@ -379,7 +379,7 @@ this.closeMobileMenu();
   }
 
   onGetStartedClick() {
-    this.router.navigate(['/login'], { queryParams: { register: 'true' } });
+    this.router.navigate(['/auth/login'], { queryParams: { register: 'true' } });
     // Close mobile menu after navigation
     this.closeMobileMenu();
   }

@@ -55,7 +55,8 @@ private readonly sidenavVisibleRoutes = [
     '/account',        // Account pages
     '/pricing/my-plan', // My Plan page (authenticated)
     '/pricing/choose',   // Choose Plan page (authenticated)
-    '/brands/categories', // Brand categories page   // All Categories page
+    '/brands/categories', // Brand categories page 
+    '/all-categories' , // All Categories page
     '/search/view'       // Search View page (includes /search/view/:brand)
   ];
 
@@ -298,7 +299,7 @@ private readonly sidenavVisibleRoutes = [
           {
             id: 'categories',
             label: 'Search a Brand',
-            route: '/all-categories',
+            route: '/brands/categories',
             icon: 'bi-bookmark-check-fill',
           },
           
