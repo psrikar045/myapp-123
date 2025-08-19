@@ -365,7 +365,10 @@
 
       // Disabled delete buttons should not interact on hover
       &[disabled] {
-        pointer-events: none;
+         pointer-events: none;
+        background-color: #d1d1d1 !important;
+        color: black !important;
+        border: none !important;
       }
       
       &.btn-primary {
@@ -1292,4 +1295,10 @@ color: white !important;
     border-color: #dc3545 !important;
     color: #dc3545 !important;
   }
+}
+.btn:disabled{
+      pointer-events: none;
+      background-color: #d1d1d1 !important;
+      color: black !important;
+      border: none !important;
 }

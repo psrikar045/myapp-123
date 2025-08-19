@@ -108,6 +108,12 @@
   &:hover {
     transform: translateY(-1px);
   }
+   &[disabled] {
+        pointer-events: none;
+        background-color: #d1d1d1 !important;
+        color: black;
+        border: none !important;
+      }
 }
 
 // Responsive adjustments
@@ -391,4 +397,7 @@ color: white !important;
 }
 .btnRefresh{
   border: 1px solid rgb(111, 108, 161);
+}
+.btn{
+  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1) !important;
 }

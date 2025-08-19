@@ -303,3 +303,9 @@ color: white !important;
   top: 27px;
   position: relative;
 }
+.btn:disabled{
+      pointer-events: none;
+      background-color: #d1d1d1 !important;
+      color: black !important;
+      border: none !important;
+}
