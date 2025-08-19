@@ -1,10 +1,10 @@
 import { Injectable, inject, OnDestroy } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { map, shareReplay, takeUntil } from 'rxjs/operators';
-import { Observable, BehaviorSubject, Subject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject ,combineLatest} from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-
+import { AuthService } from './auth.service';
 export interface LayoutConfig {
   showHeader: boolean;
   showFooter: boolean;
@@ -18,6 +18,7 @@ export interface LayoutConfig {
 export class LayoutService implements OnDestroy {
   private breakpointObserver = inject(BreakpointObserver);
   private router = inject(Router);
+  private authService = inject(AuthService);
   private destroy$ = new Subject<void>();
   
   // Layout state management
@@ -30,10 +31,26 @@ export class LayoutService implements OnDestroy {
     headerType: 'default'
   });
   
-  // Public observables
+  // // Public observables
+  // public showHeader$ = this.showHeaderSubject.asObservable();
+  // public showFooter$ = this.showFooterSubject.asObservable();
+  // public layoutConfig$ = this.layoutConfigSubject.asObservable();
+    // Public observables
   public showHeader$ = this.showHeaderSubject.asObservable();
-  public showFooter$ = this.showFooterSubject.asObservable();
+  // Combine route-based footer visibility with authentication state
+  public showFooter$ = combineLatest([
+    this.showFooterSubject.asObservable(),
+    this.authService.isAuthenticated$
+  ]).pipe(
+    map(([routeShowFooter, isAuthenticated]) => {
+      // Hide footer if user is authenticated, regardless of route
+      return routeShowFooter && !isAuthenticated;
+    }),
+    shareReplay(1)
+  );
   public layoutConfig$ = this.layoutConfigSubject.asObservable();
+
+  // Predefined breakpoints from Angular Material
 
   // Predefined breakpoints from Angular Material
   // You can customize these as needed.
@@ -244,7 +261,7 @@ export class LayoutService implements OnDestroy {
       },
       '/brands': {
         showHeader: true,
-        showFooter: false,
+        showFooter: true,
         containerClass: 'container-fluid',
         headerType: 'default'
       },
@@ -299,7 +316,7 @@ export class LayoutService implements OnDestroy {
       },
       '/search/view': {
         showHeader: true,
-        showFooter: false,
+        showFooter: true,
         containerClass: 'container-fluid',
         headerType: 'default'
       },

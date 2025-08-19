@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { FooterComponent } from '../../../../shared/footer/footer.component';
+
 import { AppThemeService } from '../../../../core/services/app-theme.service';
 import { Subscription } from 'rxjs';
 import { UtilService } from '../../../../shared/services/util.service';
@@ -12,7 +12,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-search-view',
   standalone: true,
-  imports: [CommonModule, FooterComponent],
+  imports: [CommonModule],
   templateUrl: './search-view.component.html',
   styleUrl: './search-view.component.scss'
 })
