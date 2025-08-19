@@ -303,13 +303,13 @@ color: white !important;
     }
     
     // Mobile layout - CSS Grid with proper spacing
-    @media (max-width: 767px) {
+    @media (max-width: 768px) {
       width: 100%;
-      display: grid;
+      display: flex;
       grid-template-columns: repeat(6, 1fr); // 6 columns for better control
       grid-template-rows: auto auto;
       gap: 0.5rem;
-      margin-left: calc(0.5rem + 0.5rem); // gap-2 + icon width 
+      margin-left: calc(1rem + 1rem); // gap-3 + icon width 
       padding-right: 2rem;
 
       

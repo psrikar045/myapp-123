@@ -6,7 +6,7 @@
      [class.navbar-dark]="currentTheme === 'dark'"
      [attr.data-header-type]="headerType"
      [attr.data-bs-theme]="currentTheme" id="HeaderStyle">
-  <div class="container-fluid px-lg-5 px-md-4 px-3">
+  <div class="container px-lg-5 px-md-4 px-3 pad100">
     <!-- Left Section: Logo and Sidenav Toggle -->
     <div class="header-left d-flex align-items-center justify-content-between">
       
@@ -26,6 +26,18 @@
         ></i>
       </button>
       
+      <!-- Mobile Menu Toggle for landing/unauthenticated -->
+      <button class="navbar-toggler d-lg-none me-2"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+              *ngIf="showNavigation && !authService.isAuthenticated()">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
       <!-- Brand/Logo - Always visible -->
       <a class="navbar-brand" (click)="onLogoClick()" style="cursor: pointer;">
         <img [src]="(computedLogo$ | async)?.src" [alt]="(computedLogo$ | async)?.alt" class="logo-img" loading="lazy">
@@ -56,17 +68,46 @@
 
     </div>
 
-    <!-- Mobile Menu Toggle Button -->
-    <button class="navbar-toggler" 
-            type="button" 
-            data-bs-toggle="collapse" 
-            data-bs-target="#navbarNav" 
-            aria-controls="navbarNav" 
-            aria-expanded="false" 
-            aria-label="Toggle navigation"
-            *ngIf="showNavigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <!-- Right-side Mobile Actions (auth only, non-landing) -->
+    <div class=" d-flex align-items-center d-lg-none  m-0"
+         *ngIf="authService.isAuthenticated() && !isLanding">
+      <!-- Upgrade Icon -->
+      <button class="btn-sm w-auto px-1 py-0 rounded-circle bg-light border-primary "
+              type="button"
+              (click)="onUpgradeClick()"
+              aria-label="Upgrade">
+        <i class="bi bi-currency-dollar text-primary fs-5"></i>
+      </button>
+
+      <!-- Profile Icon with Dropdown -->
+      <div class=" w-auto p-2 d-flex align-items-center justify-content-center"
+      id="mobileProfileDropdown"
+      type="button"
+      data-bs-toggle="dropdown"
+      data-bs-auto-close="outside"
+      aria-expanded="false"
+      aria-label="Profile menu">
+      <img [src]="profileAvatarUrl" alt="User Avatar" class="profile-avatar">
+    </div>
+    <!-- <div class=" navbar-nav mx-auto "> -->
+      <ng-container >
+        <ul class="dropdown-menu dropdown-menu-end profile-dropdown me-2" aria-labelledby="mobileProfileDropdown">
+          <li *ngIf="!currentRoute.startsWith('/profile')">
+            <a class="dropdown-item d-flex align-items-center" href="#" (click)="goToProfile($event)">
+              <i class="bi bi-person-circle me-2"></i>
+              <span>My Profile</span>
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item d-flex align-items-center" href="#" (click)="logout(); $event.preventDefault()">
+              <i class="bi bi-box-arrow-right me-2"></i>
+              <span>Logout</span>
+            </a>
+          </li>
+        </ul>
+        </ng-container>
+      <!-- </div> -->
+    </div>
 
     <!-- Navigation Menu -->
     <div class="collapse navbar-collapse" id="navbarNav" *ngIf="showNavigation">

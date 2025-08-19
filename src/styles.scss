@@ -1018,6 +1018,15 @@ a {
   }
 }
 
+// SweetAlert2 toast size normalization (match mobile view)
+.swal2-container .swal2-popup.swal2-toast {
+  font-size: 0.9rem !important; // same as mobile body font-size
+  // line-height: 1.4;
+}
+.swal2-container .swal2-popup.swal2-toast .swal2-title {
+  font-size: inherit !important;
+}
+
 // ============================================================================
 // DARK THEME VARIABLES
 // ============================================================================
@@ -2199,13 +2208,14 @@ app-date-picker-popup {
 
   // landingpage Start
  .MrowColumnReverse { flex-direction: column-reverse !important;}
- .pad100 {padding-left: 25px !important;padding-right: 25px !important;}
+ .pad100 {padding-left: 15px !important;padding-right: 15px !important;}
  .MTextAlign{text-align: left !important;}
  .Mpt-0{padding-top: 0px !important;}
  .Mmt-10{margin-top: 10px !important;}
  #Mmb-0{margin-bottom: 0px !important;}
  .Mpb-0{padding-bottom: 0px !important;}
  .Mmb-20{margin-bottom: 20px !important;}
+ .Mmb-30{padding-top: 30px !important;padding-bottom: 30px !important;}
  .company-logo {max-width: 100%;}
  .mSection1{padding-top: 20px !important;padding-bottom: 0px !important;}
  .mSection2{padding-top: 20px !important;padding-bottom: 20px !important;}

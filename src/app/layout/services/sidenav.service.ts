@@ -57,7 +57,8 @@ private readonly sidenavVisibleRoutes = [
     '/pricing/choose',   // Choose Plan page (authenticated)
     '/brands/categories', // Brand categories page 
     '/all-categories' , // All Categories page
-    '/search/view'       // Search View page (includes /search/view/:brand)
+    '/search/view',       // Search View page (includes /search/view/:brand)
+    '/profile'      // Profile page
   ];
 
   // Routes where sidenav should never be visible
