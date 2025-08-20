@@ -296,12 +296,14 @@
                   View
                 </button>
                 <button class="btn btn-outline-secondary btn-sm" (click)="editApiKey(selectedApiKey)">
+                  <i class="bi bi-pencil"></i>
                   Edit
                 </button>
                 <button class="btn btn-outline-danger btn-sm" 
                         (click)="showDeleteConfirmationDialog(selectedApiKey)"
                         [disabled]="deleting || (selectedApiKey.defaultKey === true)">
                   <span *ngIf="deleting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  <i *ngIf="!deleting" class="bi bi-trash"></i>
                   {{ deleting ? 'Deleting...' : 'Delete' }}
                 </button>
               </div>
