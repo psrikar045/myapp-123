@@ -303,6 +303,12 @@ color: white !important;
   top: 27px;
   position: relative;
 }
+@media (max-width: 1200px) {
+  .filterTop{
+    top: 0px;
+    position: relative;
+  }
+}
 .btn:disabled{
       pointer-events: none;
       background-color: #d1d1d1 !important;
