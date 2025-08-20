@@ -321,6 +321,10 @@ input, textarea, select, button {
   padding-left: 30px !important;
   padding-right: 30px !important;
 }
+.pad30 {
+  padding-left: 30px !important;
+  padding-right: 30px !important;
+}
 
 // Container width utilities for different screen sizes
 .container {
@@ -399,6 +403,10 @@ h6, .h6 {
     padding-left: 40px !important;
     padding-right: 40px !important;
   }
+  .pad30 {
+    padding-left: 30px !important;
+    padding-right: 30px !important;
+  }
   
   h1, .h1 { 
     font-size: 2.188rem; // 35px
@@ -430,6 +438,10 @@ h6, .h6 {
   .pad100 {
     padding-left: 60px !important;
     padding-right: 60px !important;
+  }
+  .pad30 {
+    padding-left: 30px !important;
+    padding-right: 30px !important;
   }
   
   h1, .h1 { 
@@ -1215,6 +1227,13 @@ body {
   @include media-breakpoint-down(md) {
     padding-left: var(--spacing-md);
     padding-right: var(--spacing-md);
+  }
+}
+
+.pad30 {
+  @include media-breakpoint-up(lg) {
+  padding-left: 30px !important;
+    padding-right: 30px !important;
   }
 }
 
@@ -2209,6 +2228,7 @@ app-date-picker-popup {
   // landingpage Start
  .MrowColumnReverse { flex-direction: column-reverse !important;}
  .pad100 {padding-left: 15px !important;padding-right: 15px !important;}
+ .pad30 {padding-left: 25px !important;padding-right: 25px !important;}
  .MTextAlign{text-align: left !important;}
  .Mpt-0{padding-top: 0px !important;}
  .Mmt-10{margin-top: 10px !important;}
@@ -2398,6 +2418,7 @@ object.MimgControle {width: 100%;}
 @media (min-width: 1092px) and (max-width: 1241px) {
   .container {max-width: 1500px !important;}
   .pad100 {padding-left: 30px !important;padding-right: 30px !important;}
+  .pad30 {padding-left: 30px !important;padding-right: 30px !important;}
   h1{font-size: 2.188rem !important;}
   h2{font-size: 1.563rem !important;}
   h3{font-size: 1.375rem !important;}
@@ -2410,6 +2431,7 @@ object.MimgControle {width: 100%;}
 @media (min-width: 1241px) and (max-width: 1366px) {
   .container {max-width: 1500px !important;}
   .pad100 {padding-left: 60px !important; padding-right: 60px !important;}
+  .pad30 {padding-left: 30px !important;padding-right: 30px !important;}
   h1{font-size: 2.625rem !important;}
   h2{font-size: 1.875rem !important;}
   h3{font-size: 1.625rem !important;}

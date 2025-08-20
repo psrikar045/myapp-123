@@ -6,6 +6,7 @@
   min-height: calc(100vh - 72px);
   background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
   padding-top: 2rem;
+  padding-bottom: 2rem;
   position: relative;
   z-index: 1; // Ensure proper layering
   transition: all 0.3s ease; // Smooth transitions for sidenav changes
@@ -126,7 +127,7 @@
 
 // Welcome Header
 .welcome-header {
-  margin-bottom: 2rem;
+  // margin-bottom: 2rem;
   
   h1 {
     color: #1a1a1a;

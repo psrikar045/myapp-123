@@ -10,7 +10,7 @@
 </div>
 
 <!-- Main Content -->
-<div *ngIf="!error && selectedApiKey" class="container-fluid px-lg-4 px-md-3 px-2 py-4 pad100 Mmb-30">
+<div *ngIf="!error && selectedApiKey" class="container-fluid px-lg-4 px-md-3 px-2 py-4 pad30 Mmb-30">
   
  <!-- Header -->
   <div class="row mb-4">
@@ -95,15 +95,15 @@
     <div class="col-12">
       <div class="card border-0 shadow-sm bg-body">
         <div class="card-body p-4">
-          <div class="row align-items-center g-3 g-md-0 flex-md-nowrap">
-            <div class="col-lg-8 col-md-7 col-12 flex-grow-1 min-w-0">
+          <div class="row align-items-center justify-content-between">
+            <div class="col-lg-8 col-md-7 col-12 w-auto">
               <div class="d-flex align-items-center mb-3">
-                <div class="bg-primary bg-opacity-10 rounded-3 p-3 me-3 flex-shrink-0">
+                <div class="bg-primary bg-opacity-10 rounded-3 p-3 me-3 ">
                   <i class="bi bi-shield-lock text-primary fs-4"></i>
                 </div>
                 <div>
-                  <h3 class="fw-bold mb-1 text-body-emphasis text-truncate">{{ selectedApiKey.name }}</h3>
-                  <p class="text-body-secondary mb-0 text-truncate">{{ getTierDisplayName(selectedApiKey.tier) }}  • Domain: {{ domain }}</p>
+                  <h3 class="fw-bold mb-1 text-body-emphasis">{{ selectedApiKey.name }}</h3>
+                  <p class="text-body-secondary mb-0">{{ getTierDisplayName(selectedApiKey.tier) }}  • Domain: {{ domain }}</p>
                 </div>
               </div>
               <div class="d-flex flex-wrap gap-3">
@@ -117,13 +117,13 @@
               </div>
               </div>
             </div>
-            <div class="col-lg-4 col-md-5 col-12 text-start text-md-end flex-shrink-0">
-              <div class="d-flex flex-row flex-sm-column justify-content-start align-items-start align-items-sm-end gap-3 gap-sm-0">
+            <div class="col-lg-4 col-md-5 col-12 text-start text-md-end w-auto">
+              <div class="d-flex flex-row flex-sm-column justify-content-start align-items-start align-items-sm-end gap-3 gap-sm-0 mt-2 mt-sm-0">
                 <div class="d-flex flex-column align-items-start align-items-sm-end">
                   <span class="text-body-secondary small mb-1">Created</span>
                   <span class="fw-semibold text-nowrap">{{ formatDate(selectedApiKey.createdAt) }}</span>
                 </div>
-                <div class="d-flex flex-column align-items-start align-items-sm-end mt-sm-2">
+                <div class="d-flex flex-column align-items-start align-items-sm-end mt-0 mt-sm-2">
                   <span class="text-body-secondary small mb-1">Expires</span>
                   <span class="fw-semibold text-nowrap">{{ selectedApiKey.expiresAt ? formatDate(selectedApiKey.expiresAt) : 'Never' }}</span>
                 </div>
