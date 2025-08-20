@@ -407,6 +407,10 @@ h6, .h6 {
     padding-left: 30px !important;
     padding-right: 30px !important;
   }
+  .pad-auth {
+    padding-left: 17px !important;
+    padding-right: 17px !important;
+  }
   
   h1, .h1 { 
     font-size: 2.188rem; // 35px
@@ -442,6 +446,10 @@ h6, .h6 {
   .pad30 {
     padding-left: 30px !important;
     padding-right: 30px !important;
+  }
+  .pad-auth {
+    padding-left: 17px !important;
+    padding-right: 17px !important;
   }
   
   h1, .h1 { 
@@ -1227,6 +1235,13 @@ body {
   @include media-breakpoint-down(md) {
     padding-left: var(--spacing-md);
     padding-right: var(--spacing-md);
+  }
+}
+
+.pad-auth {
+  @include media-breakpoint-up(lg) {
+    padding-left: 17px !important;
+    padding-right: 17px !important;
   }
 }
 
@@ -2228,6 +2243,7 @@ app-date-picker-popup {
   // landingpage Start
  .MrowColumnReverse { flex-direction: column-reverse !important;}
  .pad100 {padding-left: 15px !important;padding-right: 15px !important;}
+ .pad-auth {padding-left: 15px !important;padding-right: 15px !important;}
  .pad30 {padding-left: 25px !important;padding-right: 25px !important;}
  .MTextAlign{text-align: left !important;}
  .Mpt-0{padding-top: 0px !important;}
