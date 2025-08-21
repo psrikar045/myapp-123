@@ -538,9 +538,25 @@ private readonly sidenavVisibleRoutes = [
           isActive = currentRoute === item.route || currentRoute === '/home' || currentRoute === '/';
         } else {
           // For other routes, use startsWith but ensure it's a proper path match
+          // Also treat query parameters as a valid continuation so items remain active on URLs like /path?query=...
+          const nextChar = currentRoute.charAt(item.route.length);
           isActive = currentRoute === item.route || 
                     (currentRoute.startsWith(item.route) && 
-                     (currentRoute.charAt(item.route.length) === '/' || currentRoute.length === item.route.length));
+                     (nextChar === '/' || nextChar === '?' || currentRoute.length === item.route.length));
+        }
+      }
+
+      // Special case: keep 'Search a Brand' highlighted when navigating to a brand detail from categories
+      // Only activate when the route is /search/view... and has query param from=brands
+      if (!isActive && item.route === '/brands/categories') {
+        const qIndex = currentRoute.indexOf('?');
+        const path = qIndex >= 0 ? currentRoute.substring(0, qIndex) : currentRoute;
+        if (path.startsWith('/search/view')) {
+          const query = qIndex >= 0 ? currentRoute.substring(qIndex + 1) : '';
+          const params = new URLSearchParams(query);
+          if (params.get('from') === 'brands') {
+            isActive = true;
+          }
         }
       }
       

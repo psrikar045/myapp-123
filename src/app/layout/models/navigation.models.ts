@@ -3,6 +3,7 @@ export interface SidenavItem {
   label: string;
   icon?: string;
   route?: string;
+  alternativeRoutes?: string[]; // Additional routes that should also activate this item
   children?: SidenavItem[];
   badge?: SidenavBadge;
   isExpanded?: boolean;

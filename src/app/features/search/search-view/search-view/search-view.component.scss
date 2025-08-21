@@ -177,6 +177,7 @@
   transition: all 0.3s ease;
   background-color: #fff;
   border: 1px solid #e1e1e1;
+  overflow: hidden; /* Ensure the image stays inside the circle */
 
   &:hover {
     transform: scale(1.05);
@@ -192,8 +193,8 @@
 }
 
 .banner-logo {
-  // width: 72px;
-  // height: 72px;
+  width: 82px;
+  height: 82px;
   object-fit: contain;
   filter: drop-shadow(0 2px 12px rgba(37, 99, 235, 0.2));
   background: transparent;
@@ -201,6 +202,7 @@
   box-shadow: none;
   position: static;
   transition: transform 0.3s ease;
+  //border-radius: 50%; /* keep image corners rounded to match circle */
 
   @media (max-width: 900px) {
     width: 36px;
@@ -591,8 +593,9 @@
 }
 
 .banner-logo {
-  background-color: #ffffff !important;
-  border: 1.5px solid #e0e0e0 !important;
+  //background-color: #ffffff !important;
+  //border: 1.5px solid #e0e0e0 !important;
+  object-fit: contain;
   
   .logo-labels {
     color: #000000 !important;

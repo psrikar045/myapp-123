@@ -1,10 +1,10 @@
 /* Base Modal Styles */
 .search-modal-overlay {
   position: fixed;
-  top: 72px; /* start below header */
+  top: 0; /* cover full viewport */
   left: 0;
   width: 100vw;
-  height: calc(100vh - 72px); /* exclude header height */
+  height: 100vh; /* full height */
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
