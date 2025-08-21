@@ -28,13 +28,12 @@
   to { opacity: 1; }
 }
 
-// Enhanced API Keys Table Body Scrolling
-.api-keys-tbody-container {
+// Enhanced API Keys Table Container Scrolling
+.api-keys-table-container {
   // Default state - no scrolling
   &.scrollable {
     max-height: 387px; // Height for approximately 5 rows
     overflow-y: auto;
-    border-top: 1px solid rgba(var(--bs-border-color-rgb), 0.2);
     
     // Enhanced Custom Scrollbar for Webkit browsers (Chrome, Safari, Edge)
     &::-webkit-scrollbar {
@@ -96,29 +95,7 @@
       outline: 2px solid rgba(var(--bs-primary-rgb), 0.5);
       outline-offset: 2px;
     }
-    
-    // Ensure table columns align with header
-    table {
-      table-layout: fixed;
-      width: 100%;
-      
-      // Match column widths with header table
-      td:nth-child(1) { width: 20%; }
-      td:nth-child(2) { width: 25%; }
-      td:nth-child(3) { width: 15%; }
-      td:nth-child(4) { width: 15%; }
-      td:nth-child(5) { width: 25%; }
-    }
   }
-}
-
-// Ensure header table has matching column widths
-.table-responsive > table:first-child {
-  thead th:nth-child(1) { width: 20%; }
-  thead th:nth-child(2) { width: 16%; }
-  thead th:nth-child(3) { width: 15%; }
-  thead th:nth-child(4) { width: 15%; }
-  thead th:nth-child(5) { width: 22%; }
 }
 
 .api-dashboard {
