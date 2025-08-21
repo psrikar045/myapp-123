@@ -30,10 +30,7 @@
     class="clear-search-btn" 
     type="button"
     (click)="clearSearch()"
-    title="Clear search"
-    style="margin-left: 4px; margin-right: 4px; display: flex; align-items: center; justify-content: center; height: 36px; width: 36px;  border: none; border-radius: 50%;    position: relative;
-    right: 14px;
-    top: 20px;">
+    title="Clear search">
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M13.5 4.5L4.5 13.5" stroke="#6b7280" stroke-width="2" stroke-linecap="round"/>
       <path d="M4.5 4.5L13.5 13.5" stroke="#6b7280" stroke-width="2" stroke-linecap="round"/>
@@ -86,11 +83,13 @@
             <p class="sidebar-subtitle text-center mb-0">Filter by category</p>
           </div>
           <div class="sidebar-scroll">
-            <div *ngFor="let cat of filteredCategories" class="sidebar-category">
+            <div *ngFor="let cat of filteredCategories" class="sidebar-category" role="button" tabindex="0"
+                 (click)="toggleCategoryAccordion(cat.label)"
+                 (keydown.enter)="toggleCategoryAccordion(cat.label)"
+                 (keydown.space)="toggleCategoryAccordion(cat.label)">
               <button class="sidebar-category-btn"
                 [class.active]="cat.label === selectedCategory"
                 [class.expanded]="cat.label === expandedCategory"
-                (click)="toggleCategoryAccordion(cat.label)"
                 [attr.data-category]="cat.label">
                 {{ cat.label }}
                 <span class="accordion-arrow" [class.open]="cat.label === expandedCategory">
@@ -101,7 +100,7 @@
                 <button *ngFor="let sub of subCategoryMap[cat.label]"
                   class="sidebar-subcategory-btn"
                   [class.active]="selectedSubCategory === sub.name"
-                  (click)="goToSubCategory(sub.name)">
+                  (click)="$event.stopPropagation(); goToSubCategory(sub.name)">
                   {{ sub.name }}
                 </button>
               </div>
@@ -124,11 +123,13 @@
               <i class="bi bi-x-lg"></i>
             </button>
           </div>
-          <div *ngFor="let cat of filteredCategories" class="sidebar-category">
+          <div *ngFor="let cat of filteredCategories" class="sidebar-category" role="button" tabindex="0"
+               (click)="toggleCategoryAccordion(cat.label)"
+               (keydown.enter)="toggleCategoryAccordion(cat.label)"
+               (keydown.space)="toggleCategoryAccordion(cat.label)">
             <button class="sidebar-category-btn"
               [class.active]="cat.label === selectedCategory"
-              [class.expanded]="cat.label === expandedCategory"
-              (click)="toggleCategoryAccordion(cat.label)">
+              [class.expanded]="cat.label === expandedCategory">
               {{ cat.label }}
               <span class="accordion-arrow" [class.open]="cat.label === expandedCategory">
                 <i class="bi bi-chevron-down"></i>
@@ -138,7 +139,7 @@
               <button *ngFor="let sub of subCategoryMap[cat.label]"
                 class="sidebar-subcategory-btn"
                 [class.active]="selectedSubCategory === sub.name"
-                (click)="goToSubCategory(sub.name); closeMobileSidebar()">
+                (click)="$event.stopPropagation(); goToSubCategory(sub.name); closeMobileSidebar()">
                 {{ sub.name }}
               </button>
             </div>

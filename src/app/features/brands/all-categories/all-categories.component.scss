@@ -189,35 +189,45 @@
 
   // Enhanced clear search button
   .clear-search-btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     background: transparent;
     border: none;
-    padding: 0.5rem;
+    padding: 0.25rem; // tighter padding keeps circle centered in the input height
     cursor: pointer;
     color: #6b7280;
     transition: all 0.2s ease;
     border-radius: 50%;
-    margin-right: 0.5rem;
-    min-width: 36px;
+    margin: 0 0.25rem 0 0.25rem; // balanced spacing both sides
+    width: 36px; // fixed circle size
     height: 36px;
+    flex: 0 0 auto; // don’t stretch
+
+    // Keep the button visually centered against the input line-height
+    position: relative;
+    top: 0; // rely on flex alignment from parent
 
     &:hover {
       background: rgba(107, 114, 128, 0.1);
       color: #374151;
-      transform: scale(1.1);
+      transform: scale(1.05);
     }
     
     &:active {
-      transform: scale(0.95);
+      transform: scale(0.97);
     }
     
     svg {
       width: 18px;
       height: 18px;
+      display: block;
     }
   }
+
+  // Ensure the bar aligns items vertically
+  display: flex;
+  align-items: center;
 
   // Search results info
   .search-results-info {
@@ -2071,21 +2081,20 @@ position: sticky;
     margin: 1rem 0;
   }
 }
-.searchAlign{
-  margin-left: 4px; display: flex; align-items: center; justify-content: center; height: 36px; width: 36px; background: #2563eb; border: none; border-radius: 50%; color: #fff; 
-  position: relative;
-    // top: 20px;
-    right: 13px;
-}
-@media (max-width: 500px) {
-  .searchAlign {
-    top: 5px !important;
-  }
-}
-@media (min-width: 501px) and (max-width: 768px) {
-  .searchAlign {
-    top: 11px !important;
-  }
+.searchAlign {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  margin-left: 8px;
+  margin-right: 6px;
+  position: static; /* rely on flex alignment, no manual offsets */
+  flex: 0 0 auto;
 }
 @media (min-width: 300px) and (max-width: 768px) {
   .sidebar-header {
