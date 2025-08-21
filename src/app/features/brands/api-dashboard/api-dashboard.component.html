@@ -163,10 +163,12 @@
                         <td class="py-3">
                           <div class="d-flex align-items-center">
                             <i class="bi bi-globe2 text-primary me-2"></i>
+                            <div class="d-flex flex-column">
                             <span class="fw-medium text-body-emphasis">{{ getDomainFromApiKey(apiKey) }}</span>
                             <span *ngIf="apiKey.defaultKey" class="badge bg-primary text-white rounded-pill px-2 py-1 ms-2" style="font-size: 0.7rem;">
                               primary
                             </span>
+                            </div>
                           </div>
                         </td>
                         <td class="py-3">
