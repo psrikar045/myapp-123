@@ -268,8 +268,8 @@
               <div class="mb-4">
                 <div class="row g-3">
                    <div class="col-6 mt-2">
-                    <div class="text-body-secondary small">Domain</div>
-                    <div class="fw-semibold d-flex align-items-center gap-2">
+                    <div class="text-body-secondary fw-bold small">Domain</div>
+                    <div class="d-flex flex-column align-items-start gap-1">
                       {{ getDomainFromApiKey(selectedApiKey) }}
                       <span *ngIf="selectedApiKey.defaultKey" class="badge bg-primary text-white rounded-pill px-2 py-1" style="font-size: 0.6rem;">
                         primary
@@ -277,16 +277,16 @@
                     </div>
                   </div>
                   <div class="col-6 mt-2">
-                    <div class="text-body-secondary small">Key Name</div>
-                    <div class="fw-semibold font-monospace small">{{ selectedApiKey.maskedKey }}</div>
+                    <div class="text-body-secondary small fw-bold">Key Name</div>
+                    <div class="font-monospace small">{{ selectedApiKey.maskedKey }}</div>
                   </div>
                   <div class="col-6">
-                    <div class="text-body-secondary small">Tier</div>
-                    <div class="fw-semibold">{{ getTierDisplayName(selectedApiKey.tier) }}</div>
+                    <div class="text-body-secondary small fw-bold">Tier</div>
+                    <div class="">{{ getTierDisplayName(selectedApiKey.tier) }}</div>
                   </div>
                   <div class="col-6">
-                    <div class="text-body-secondary small">Expiry Date</div>
-                    <div class="fw-semibold">{{ selectedApiKey.expiresAt ? formatDate(selectedApiKey.expiresAt) : 'Never' }}</div>
+                    <div class="text-body-secondary small fw-bold">Expiry Date</div>
+                    <div class="">{{ selectedApiKey.expiresAt ? formatDate(selectedApiKey.expiresAt) : 'Never' }}</div>
                   </div>                
                 </div>
               </div>
