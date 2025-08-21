@@ -340,3 +340,10 @@ app-sidenav, .sidenav {
     z-index: -1040 !important;
   }
 }
+
+//When search modal or any modal is open, place header below overlay
+.main-layout:has(.search-modal-overlay) .main-header,
+.main-layout:has(.modal.show) .main-header {
+  z-index: 0 !important;
+  pointer-events: none; // prevent clicks on header while modal is active
+}

@@ -85,24 +85,26 @@
             </h3>
             <p class="sidebar-subtitle text-center mb-0">Filter by category</p>
           </div>
-          <div *ngFor="let cat of filteredCategories" class="sidebar-category">
-            <button class="sidebar-category-btn"
-              [class.active]="cat.label === selectedCategory"
-              [class.expanded]="cat.label === expandedCategory"
-              (click)="toggleCategoryAccordion(cat.label)"
-              [attr.data-category]="cat.label">
-              {{ cat.label }}
-              <span class="accordion-arrow" [class.open]="cat.label === expandedCategory">
-                <i class="bi bi-chevron-down"></i>
-              </span>
-            </button>
-            <div class="sidebar-subcategories" *ngIf="cat.label === expandedCategory && cat.label !== 'All' && subCategoryMap[cat.label]">
-              <button *ngFor="let sub of subCategoryMap[cat.label]"
-                class="sidebar-subcategory-btn"
-                [class.active]="selectedSubCategory === sub.name"
-                (click)="goToSubCategory(sub.name)">
-                {{ sub.name }}
+          <div class="sidebar-scroll">
+            <div *ngFor="let cat of filteredCategories" class="sidebar-category">
+              <button class="sidebar-category-btn"
+                [class.active]="cat.label === selectedCategory"
+                [class.expanded]="cat.label === expandedCategory"
+                (click)="toggleCategoryAccordion(cat.label)"
+                [attr.data-category]="cat.label">
+                {{ cat.label }}
+                <span class="accordion-arrow" [class.open]="cat.label === expandedCategory">
+                  <i class="bi bi-chevron-down"></i>
+                </span>
               </button>
+              <div class="sidebar-subcategories" *ngIf="cat.label === expandedCategory && cat.label !== 'All' && subCategoryMap[cat.label]">
+                <button *ngFor="let sub of subCategoryMap[cat.label]"
+                  class="sidebar-subcategory-btn"
+                  [class.active]="selectedSubCategory === sub.name"
+                  (click)="goToSubCategory(sub.name)">
+                  {{ sub.name }}
+                </button>
+              </div>
             </div>
           </div>
         </aside>

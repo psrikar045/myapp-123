@@ -408,7 +408,6 @@
   border-radius: 16px;
   padding: 2rem;
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
   border: 1px solid rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 2rem;
@@ -417,24 +416,18 @@
   height: fit-content;
   max-height: calc(100vh - 4rem);
   z-index: 10;
-  overflow-x: hidden;
-  // Custom scrollbar
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
+  overflow: hidden; /* prevent the whole sidebar from scrolling */
 
-  &::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 3px;
-  }
+  .sidebar-scroll {
+    max-height: calc(100vh - 4rem - 120px); /* sidebar max - approx header height */
+    overflow-y: auto; /* only the list scrolls */
+    padding-right: 0.5rem;
 
-  &::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 3px;
-
-    &:hover {
-      background: #a8a8a8;
-    }
+    /* custom scrollbar */
+    &::-webkit-scrollbar { width: 6px; }
+    &::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 3px; }
+    &::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 3px; }
+    &::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
   }
 }
 
@@ -488,6 +481,9 @@ position: sticky;
 }
 .sidebar-category {
   margin-bottom: 0.5rem;
+  padding-left: 5px;
+  padding-right: 5px;
+  
   // Add extra spacing for the first category to prevent overlap with sticky header
   &:first-child {
     margin-top: 0.5rem;

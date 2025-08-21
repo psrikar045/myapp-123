@@ -571,12 +571,15 @@ private readonly sidenavVisibleRoutes = [
         );
         
         if (hasActiveChild) {
+          // Always expand when a child is active
           updatedItem.isExpanded = true;
-          // For collapsed state: if child is active, mark parent as active too
-          // This ensures the parent icon shows as active when collapsed
-          if (!updatedItem.isActive) {
-            updatedItem.isActive = true;
-            updatedItem.isParentActive = true; // Flag to distinguish parent vs direct active
+          // Do NOT mark the parent as active (no selection highlight) when a child is active
+          // Keep a lightweight flag if UI needs to style expanded parents differently
+          if (updatedItem.isActive && updatedItem.isParentActive) {
+            // preserve if something explicitly set it earlier
+          } else {
+            updatedItem.isActive = false;
+            updatedItem.isParentActive = false;
           }
         }
       }
