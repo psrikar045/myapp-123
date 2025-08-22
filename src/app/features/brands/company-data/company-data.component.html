@@ -1,10 +1,10 @@
 
 
-<div class="container" [class.dark-theme]="isDarkMode">
-  <div class="brand-analyzer-hero">
+<div class="container MobilePadding" [class.dark-theme]="isDarkMode">
+  <div class="brand-analyzer-hero Mmt-0 Mbp-60">
     <div class="brand-analyzer-content">
       <h1 class="brand-analyzer-title">Company Brand Analyzer</h1>
-      <p class="brand-analyzer-subtitle">
+      <p class="brand-analyzer-subtitle Mmb-20">
         Enter a website URL to extract and visualize its brand identity.
       </p>
       <div 
@@ -16,7 +16,7 @@
           [(ngModel)]="websiteUrl"
           [disabled]="isLoading" (keydown.enter)="onAnalyzeClick()" />
         <button 
-          class="brand-analyzer-analyze-btn" 
+          class="brand-analyzer-analyze-btn Mmt-10" 
           (click)="onAnalyzeClick()"
           [disabled]="isLoading">
           {{ isLoading ? 'Analyzing...' : 'Analyze' }}
@@ -43,102 +43,108 @@
   </div>
 
   <ng-container *ngIf="showBrandDetails">
-    <div class="brand-details-row">
-      <!-- Left Card -->
-      <div class="brand-details-card brand-details-left">
-        <div class="brand-header">
-          <img src="{{ searchResult?.Logo?.Logo }}" alt="{{ searchResult?.Company?.Name }} Logo" class="brand-logo" />
-          <div>
-            <div class="brand-name">{{ searchResult?.Company?.Name }}</div>
-            <div class="brand-desc">{{ searchResult?.Company?.Description }}</div>
-          </div>
-        </div>
-        <div class="brand-section">
-          <div class="brand-section-title">Fill Color</div>
-          <div class="brand-colors">
-            <!-- <div class="brand-color" style="background:#1555DB"><span>#1555DB</span><span>Primary</span></div>
-            <div class="brand-color" style="background:#37BFFA"><span>#37BFFA</span><span>Secondary</span></div> -->
-            <ng-container *ngFor="let color of searchResult?.Colors">
-              <div class="brand-color" [style.color]="color.brightness > 186 ? '#000' : '#fff'"
-                 [style.background-color]="color.hex">
-                <span>{{ color.hex }}</span>
-                <span *ngIf="color.name && color.name !== ''"  [style.color]="color.brightness > 186 ? '#000' : '#fff'" >
-                  {{ color.name }}
-                </span>
+    <div class="container">
+      <div class="brand-details-row Mmt-30 Mpb-0">
+        <!-- Left Card -->
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="brand-details-card brand-details-left">
+            <div class="brand-header">
+              <img src="{{ searchResult?.Logo?.Logo }}" alt="{{ searchResult?.Company?.Name }} Logo" class="brand-logo" />
+              <div>
+                <div class="brand-name">{{ searchResult?.Company?.Name }}</div>
+                <div class="brand-desc">{{ searchResult?.Company?.Description }}</div>
               </div>
-            </ng-container>
+            </div>
+            <div class="brand-section">
+              <div class="brand-section-title">Fill Color</div>
+              <div class="brand-colors">
+                <!-- <div class="brand-color" style="background:#1555DB"><span>#1555DB</span><span>Primary</span></div>
+                <div class="brand-color" style="background:#37BFFA"><span>#37BFFA</span><span>Secondary</span></div> -->
+                <ng-container *ngFor="let color of searchResult?.Colors">
+                  <div class="brand-color" [style.color]="color.brightness > 186 ? '#000' : '#fff'"
+                    [style.background-color]="color.hex">
+                    <span>{{ color.hex }}</span>
+                    <span *ngIf="color.name && color.name !== ''"  [style.color]="color.brightness > 186 ? '#000' : '#fff'" >
+                      {{ color.name }}
+                    </span>
+                  </div>
+                </ng-container>
 
-            <div *ngIf="!searchResult?.Colors || searchResult?.Colors.length === 0" class="no-colors-message">
-              No specific colors found.
-            </div>
-          </div>
-        </div>
-        <!-- this section will added in future enhancements -->
-        <!-- <div class="brand-section">
-          <div class="brand-section-title">Typography</div>
-          <table class="brand-typography-table">
-            <thead>
-              <tr><th>Scale Category</th><th>Typeface</th><th>Font</th><th>Size</th><th>Spacing</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>H1</td><td>HK Grotesk</td><td>Bold</td><td>66pt</td><td>1.5</td></tr>
-              <tr><td>H2</td><td>HK Grotesk</td><td>Bold</td><td>40pt</td><td>1.5</td></tr>
-              <tr><td>H3</td><td>HK Grotesk</td><td>Bold</td><td>32pt</td><td>1.5</td></tr>
-              <tr><td>H4</td><td>HK Grotesk</td><td>Bold</td><td>24pt</td><td>1.5</td></tr>
-              <tr><td>H5</td><td>HK Grotesk</td><td>Bold</td><td>18pt</td><td>1.5</td></tr>
-              <tr><td>H6</td><td>HK Grotesk</td><td>Bold</td><td>16pt</td><td>1.5</td></tr>
-              <tr><td>Paragraph 1</td><td>Open sans</td><td>Regular</td><td>16pt</td><td>1.5</td></tr>
-              <tr><td>Paragraph 2</td><td>Open sans</td><td>Regular</td><td>14pt</td><td>1.5</td></tr>
-              <tr><td>ICON</td><td>Font Awesome</td><td>Regular</td><td>16pt</td><td>1.5</td></tr>
-            </tbody>
-          </table>
-        </div> -->
-        <div class="brand-section">
-          <div class="brand-section-title">Logo's</div>
-          <div class="brand-logos-row">
-            <ng-container *ngFor="let entry of getLogoEntries(searchResult?.Logo)">
-              <div *ngIf="isValidImageUrl(entry.value)" class="brand-logo-preview">
-                <img [src]="entry.value" [alt]="generateAltText(searchResult?.Company?.Name, entry.key)" />
-                <div>{{ generateLogoLabel(entry.key) }}</div>
+                <div *ngIf="!searchResult?.Colors || searchResult?.Colors.length === 0" class="no-colors-message">
+                  No specific colors found.
+                </div>
               </div>
-            </ng-container>
-        
-            <div *ngIf="!hasDisplayableLogos(searchResult?.Logo)" class="no-logos-message">
-              No displayable logos found.
+            </div>
+            <!-- this section will added in future enhancements -->
+            <!-- <div class="brand-section">
+              <div class="brand-section-title">Typography</div>
+              <table class="brand-typography-table">
+                <thead>
+                  <tr><th>Scale Category</th><th>Typeface</th><th>Font</th><th>Size</th><th>Spacing</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>H1</td><td>HK Grotesk</td><td>Bold</td><td>66pt</td><td>1.5</td></tr>
+                  <tr><td>H2</td><td>HK Grotesk</td><td>Bold</td><td>40pt</td><td>1.5</td></tr>
+                  <tr><td>H3</td><td>HK Grotesk</td><td>Bold</td><td>32pt</td><td>1.5</td></tr>
+                  <tr><td>H4</td><td>HK Grotesk</td><td>Bold</td><td>24pt</td><td>1.5</td></tr>
+                  <tr><td>H5</td><td>HK Grotesk</td><td>Bold</td><td>18pt</td><td>1.5</td></tr>
+                  <tr><td>H6</td><td>HK Grotesk</td><td>Bold</td><td>16pt</td><td>1.5</td></tr>
+                  <tr><td>Paragraph 1</td><td>Open sans</td><td>Regular</td><td>16pt</td><td>1.5</td></tr>
+                  <tr><td>Paragraph 2</td><td>Open sans</td><td>Regular</td><td>14pt</td><td>1.5</td></tr>
+                  <tr><td>ICON</td><td>Font Awesome</td><td>Regular</td><td>16pt</td><td>1.5</td></tr>
+                </tbody>
+              </table>
+            </div> -->
+            <div class="brand-section">
+              <div class="brand-section-title">Logo's</div>
+              <div class="brand-logos-row">
+                <ng-container *ngFor="let entry of getLogoEntries(searchResult?.Logo)">
+                  <div *ngIf="isValidImageUrl(entry.value)" class="brand-logo-preview">
+                    <img [src]="entry.value" [alt]="generateAltText(searchResult?.Company?.Name, entry.key)" />
+                    <div>{{ generateLogoLabel(entry.key) }}</div>
+                  </div>
+                </ng-container>
+            
+                <div *ngIf="!hasDisplayableLogos(searchResult?.Logo)" class="no-logos-message">
+                  No displayable logos found.
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-      <!-- Right Card -->
-      <div class="brand-details-card brand-details-right">
-        <div class="brand-tabs">
-          <button *ngFor="let tab of tabs; let i = index" class="brand-tab" [class.active]="activeTab === i"
-            (click)="setActiveTab(i)">{{ tab }}</button>
-        </div>
-        <div class="brand-tab-content">
-          <ng-container [ngSwitch]="activeTab">
-            <ng-container *ngSwitchCase="0">
-              <!-- <pre>{{ searchResult?.Company | json }}</pre> -->
-              <ngx-json-viewer [json]="searchResult?.Company" [expanded]="false"></ngx-json-viewer>
-            </ng-container>
-            <ng-container *ngSwitchCase="1">
-              <ngx-json-viewer [json]="searchResult?.Logo" [expanded]="false"></ngx-json-viewer>
-            </ng-container>
-            <ng-container *ngSwitchCase="2">
-              <ngx-json-viewer [json]="searchResult?.Colors" [expanded]="false"></ngx-json-viewer>
-            </ng-container>
-            <ng-container *ngSwitchCase="3">
-              <ngx-json-viewer [json]="searchResult?.Fonts" [expanded]="false"></ngx-json-viewer>
-            </ng-container>
-            <ng-container *ngSwitchCase="4">
-              <ngx-json-viewer [json]="searchResult?.Images" [expanded]="false"></ngx-json-viewer>
-            </ng-container>
-            <ng-container *ngSwitchDefault>
-              <div
-                style="font-size:1.5rem; color:#2563eb; text-align:center; padding:80px 0; font-weight:600;">
-                Development in progress</div>
-            </ng-container>
-          </ng-container>
+        <!-- Right Card -->
+        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+          <div class="brand-details-card brand-details-right">
+            <div class="brand-tabs Mp-0 Mm-0">
+              <button *ngFor="let tab of tabs; let i = index" class="brand-tab" [class.active]="activeTab === i"
+                (click)="setActiveTab(i)">{{ tab }}</button>
+            </div>
+            <div class="brand-tab-content Mp-0 Mm-0">
+              <ng-container [ngSwitch]="activeTab">
+                <ng-container *ngSwitchCase="0">
+                  <!-- <pre>{{ searchResult?.Company | json }}</pre> -->
+                  <ngx-json-viewer [json]="searchResult?.Company" [expanded]="false"></ngx-json-viewer>
+                </ng-container>
+                <ng-container *ngSwitchCase="1">
+                  <ngx-json-viewer [json]="searchResult?.Logo" [expanded]="false"></ngx-json-viewer>
+                </ng-container>
+                <ng-container *ngSwitchCase="2">
+                  <ngx-json-viewer [json]="searchResult?.Colors" [expanded]="false"></ngx-json-viewer>
+                </ng-container>
+                <ng-container *ngSwitchCase="3">
+                  <ngx-json-viewer [json]="searchResult?.Fonts" [expanded]="false"></ngx-json-viewer>
+                </ng-container>
+                <ng-container *ngSwitchCase="4">
+                  <ngx-json-viewer [json]="searchResult?.Images" [expanded]="false"></ngx-json-viewer>
+                </ng-container>
+                <ng-container *ngSwitchDefault>
+                  <div
+                    style="font-size:1.5rem; color:#2563eb; text-align:center; padding:80px 0; font-weight:600;">
+                    Development in progress</div>
+                </ng-container>
+              </ng-container>
+            </div>
+          </div>
         </div>
       </div>
     </div>

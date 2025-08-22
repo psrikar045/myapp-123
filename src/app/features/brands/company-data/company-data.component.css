@@ -164,7 +164,7 @@ body, html, app-root {
 .brand-details-card {
   border-radius: 24px;
   box-shadow: 0 4px 32px rgba(37,99,235,0.10);
-  padding: 36px 36px 32px 36px;
+  padding: 25px !important;
   display: flex;
   flex-direction: column;
   background: #fff;
@@ -178,8 +178,8 @@ body, html, app-root {
 }
 .brand-details-left {
   flex: 1 1 660px;
-  min-width: 540px;
-  max-width: 660px;
+  /* min-width: 540px;
+  max-width: 660px; */
   background: #fff;
 }
 
@@ -190,8 +190,8 @@ body, html, app-root {
 
 .brand-details-right {
   flex: 1 1 760px;
-  min-width: 600px;
-  max-width: 760px;
+  /* min-width: 600px;
+  max-width: 760px; */
   background: #fff;
   border-radius: 24px;
   box-shadow: 0 4px 32px rgba(37,99,235,0.10);
@@ -391,8 +391,8 @@ body, html, app-root {
 
 .brand-tabs {
   display: flex;
-  gap: 6px;
-  padding: 32px 32px 0 32px;
+  gap: 5px;
+  padding: 0px 0px 0 0px;
   margin-bottom: 0;
   flex-wrap: wrap;
 }
@@ -430,7 +430,7 @@ body, html, app-root {
   background: #fff;
   border-radius: 0 0 24px 24px;
   box-shadow: 0 2px 8px rgba(37,99,235,0.08);
-  margin: 0 32px 32px 32px;
+  margin: 0px;
   padding: 32px 24px 24px 24px;
   min-height: 520px;
   overflow-x: auto;
@@ -733,10 +733,10 @@ body, html, app-root {
     min-height: unset;
   }
   
-  .brand-details-right {
+  /* .brand-details-right {
     min-width: 500px;
     max-width: 650px;
-  }
+  } */
   
   .brand-tabs {
     padding: 24px 24px 0 24px;
@@ -756,7 +756,7 @@ body, html, app-root {
 
 @media (max-width: 900px) {
   .brand-analyzer-content {
-    padding: 32px 8px 40px 8px;
+    padding: 20px 20px;
   }
   .brand-analyzer-title {
     font-size: 2.5rem;
@@ -765,14 +765,17 @@ body, html, app-root {
     font-size: 1.1rem;
   }
   .brand-analyzer-input-row {
-    max-width: 100%;
-    padding-left: 12px;
-    height: 48px;
+         max-width: 100%;
+        padding-left: 12px;
+        height: 48px;
+        display: inline;
   }
   .brand-analyzer-analyze-btn {
-    padding: 0 18px;
-    height: 40px;
-    font-size: 1rem;
+         padding: 0px;
+        height: 40px;
+        font-size: 1rem;
+        width: 100%;
+        margin: 0px;
   }
   
   .brand-details-right {
@@ -796,7 +799,7 @@ body, html, app-root {
   }
   
   .brand-details-right, .brand-details-left {
-    min-width: 320px;
+    /* min-width: 320px; */
     max-width: 100%;
   }
 }
