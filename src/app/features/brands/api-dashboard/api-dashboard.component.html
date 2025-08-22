@@ -290,16 +290,16 @@
               </div>
 
               <!-- Action Buttons -->
-              <div class="d-grid gap-2">
-                <button class="btn btn-outline-primary btn-sm squared-pill" (click)="viewApiKeyFullDetails(selectedApiKey)">
+              <div class="d-flex d-md-grid gap-2">
+                <button class="btn btn-outline-primary btn-sm squared-pill w-100" (click)="viewApiKeyFullDetails(selectedApiKey)">
                    <i class="bi bi-eye"></i>
                   View
                 </button>
-                <button class="btn btn-outline-secondary btn-sm" (click)="editApiKey(selectedApiKey)">
+                <button class="btn btn-outline-secondary btn-sm w-100" (click)="editApiKey(selectedApiKey)">
                   <i class="bi bi-pencil"></i>
                   Edit
                 </button>
-                <button class="btn btn-outline-danger btn-sm" 
+                <button class="btn btn-outline-danger btn-sm w-100" 
                         (click)="showDeleteConfirmationDialog(selectedApiKey)"
                         [disabled]="deleting || (selectedApiKey.defaultKey === true)">
                   <span *ngIf="deleting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
