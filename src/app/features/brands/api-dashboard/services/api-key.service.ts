@@ -154,7 +154,8 @@ export class ApiKeyService {
   createApiKey(request: CreateApiKeyRequest): Observable<CreateApiKeyResponse> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Accept': 'application/json'
+      'Accept': 'application/json',
+      'X-Suppress-Error-Toast': 'true' // Prevent global notifier for this request
     });   
     // return this.http.post<CreateApiKeyResponse>(`${this.apiUrl}/rivo-create-api`, request, { headers }).pipe(
     // Build the URL with environment parameter if provided

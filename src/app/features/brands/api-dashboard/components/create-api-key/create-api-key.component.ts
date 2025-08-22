@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
+import Swal from 'sweetalert2';
 import { addDays } from 'date-fns';
 
 
@@ -265,8 +266,30 @@ export class CreateApiKeyComponent implements OnInit, OnDestroy {
           },
           error: (error) => {
             console.error('Error creating API key:', error);
-            this.error = error.error?.message || 'Failed to create API key. Please try again.';
-            this.errorHandler.showWarning(this.error);
+            const serverMessage =
+              (typeof error.error === 'string' && error.error) ||
+              (error.error?.error ?? undefined) ||
+              (error.error?.message ?? undefined) ||
+              (error.error?.errorMessage ?? undefined) ||
+              'Failed to create API key. Please try again.';
+            this.error = serverMessage;
+            // Show compact SweetAlert with small inline icon and title; no technical details
+            const safeMessage = String(serverMessage).replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m] as string));
+            Swal.fire({
+              width: 380,
+              padding: '0.75rem',
+              showConfirmButton: true,
+              confirmButtonText: 'OK',
+              icon: undefined, // we render our own small icon inline
+              title: undefined as any,
+              html: `
+                <div style="display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600;margin-bottom:6px;">
+                  <i class="bi bi-exclamation-octagon-fill" style="color:#dc3545;font-size:18px;"></i>
+                  <span>Failed to create API key</span>
+                </div>
+                <div style="font-size:14px;line-height:1.4;">${safeMessage}</div>
+              `
+            });
             this.loading = false;
             this.cdr.markForCheck();
           }

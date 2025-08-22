@@ -27,9 +27,15 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       } else {
         // Server-side error
         switch (error.status) {
-          case 400:
-            errorMessage = error.error?.message || 'Bad Request - Please check your input';
+          case 400: {
+            const serverMessage =
+              (typeof error.error === 'string' && error.error) ||
+              (error.error?.error ?? undefined) ||
+              (error.error?.message ?? undefined) ||
+              (error.error?.errorMessage ?? undefined);
+            errorMessage = serverMessage || 'Bad Request - Please check your input';
             break;
+          }
           case 401:
             errorMessage = 'Your session has expired. Please log in again.';
             shouldRedirect = true;
@@ -68,11 +74,15 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
       // Show error to user (except for 401 which will redirect)
       if (!shouldRedirect) {
-        errorHandler.showError(errorMessage, {
-          status: error.status,
-          url: req.url,
-          timestamp: new Date()
-        });
+        // Allow per-request suppression for custom UI flows (e.g., SweetAlert)
+        const suppressToast = req.headers.get('X-Suppress-Error-Toast') === 'true';
+        if (!suppressToast) {
+          errorHandler.showError(errorMessage, {
+            status: error.status,
+            url: req.url,
+            timestamp: new Date()
+          });
+        }
       }
 
       // Handle authentication errors
