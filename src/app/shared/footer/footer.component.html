@@ -6,7 +6,7 @@
   </button>
   <div class="container pad100">
     <div class="row g-4">
-      <div class="col-lg-4 col-md-6 col-12 Mmb-10">
+      <div class="col-lg-4 col-md-6 col-12 ">
         <div class="footer-section">
           <div class="mb-3">
             <img src="assets/images/Footer_logo.webp"  alt="Company Logo"  class="img-fluid" style="max-height: 50px;object-fit: contain;">
@@ -15,7 +15,7 @@
           <div class="d-flex gap-2 mb-3">
             <a *ngFor="let social of socialLinks" [href]="social.url"  target="_blank"  rel="noopener"
                class="btn btn-outline-light btn-sm rounded-circle d-flex align-items-center justify-content-center"
-               style="width: 40px; height: 40px;"> <i [class]="social.iconClass"></i>
+               style="width: 30px; height: 30px;"> <i [class]="social.iconClass"></i>
             </a>
           </div>
           <p class="text-light small mb-0" style="opacity: 0.7;">{{ copyright }}</p>
@@ -23,11 +23,11 @@
       </div>
       <div class="col-lg-4 col-md-6 col-12 Mmb-0">
         <div class="footer-section">
-          <h6 class="text-uppercase fw-bold mb-3">Top Brand Categories</h6>
+          <h6 class="text-uppercase fw-bold mb-2">Top Brand Categories</h6>
           <div class="row">
             <div class="col-6">
               <ul class="list-unstyled">
-                <li *ngFor="let cat of brandCategories.slice(0,6)" class="mb-2">
+                <li *ngFor="let cat of brandCategories.slice(0,7)" class="mb-1">
                   <a [href]="'/all-categories?category=' + cat.route"  (click)="navigateToCategory(cat, $event)" 
                      class="text-light text-decoration-none footer-link" style="opacity: 0.8;">
                     {{ cat.name }}
@@ -37,7 +37,7 @@
             </div>
             <div class="col-6">
               <ul class="list-unstyled">
-                <li *ngFor="let cat of brandCategories.slice(6)" class="mb-2">
+                <li *ngFor="let cat of brandCategories.slice(6)" class="mb-1">
                   <a [href]="'/all-categories?category=' + cat.route" 
                      (click)="navigateToCategory(cat, $event)" 
                      class="text-light text-decoration-none footer-link" style="opacity: 0.8;">
@@ -49,11 +49,13 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-2 col-md-6 col-12 Mmb-10 Mmt-10">
+     <!-- <div class="row"> -->
+      <div class="col-6 col-lg-2 tabWidth">
+        <!-- <div class="col-lg-2 col-md-6 col-6 Mmb-10 Mmt-10"> -->
         <div class="footer-section">
-          <h6 class="text-uppercase fw-bold mb-3">For Developers</h6>
+          <h6 class="text-uppercase fw-bold mb-1">For Developers</h6>
           <ul class="list-unstyled">
-            <li *ngFor="let link of developerLinks" class="mb-2">
+            <li *ngFor="let link of developerLinks" class="mb-1">
               <a *ngIf="link.route" [routerLink]="link.route" 
                  class="text-light text-decoration-none footer-link" style="opacity: 0.8;">
                 {{ link.label }}
@@ -61,12 +63,14 @@
             </li>
           </ul>
         </div>
+      <!-- </div> -->
       </div>
-      <div class="col-lg-2 col-md-6 col-12 Mmt-0">
+      <div class="col-6 col-lg-2 tabWidth">
+      <!-- <div class="col-lg-2 col-md-6 col-6 Mmt-0"> -->
         <div class="footer-section">
-          <h6 class="text-uppercase fw-bold mb-3">Company</h6>
+          <h6 class="text-uppercase fw-bold mb-2">Company</h6>
           <ul class="list-unstyled Mmb-0">
-            <li *ngFor="let link of companyLinks" class="mb-2">
+            <li *ngFor="let link of companyLinks" class="mb-1">
               <a *ngIf="link.route" 
                  [routerLink]="link.route" 
                  class="text-light text-decoration-none footer-link" style="opacity: 0.8;">
@@ -75,9 +79,11 @@
             </li>
           </ul>
         </div>
-      </div>
+      <!-- </div> -->
+    </div>     
+    <!-- </div> -->
     </div>
-    <hr class="my-4 border-secondary">
+    <hr class="my-2 border-secondary">
     <div class="row align-items-center">
       <div class="col-md-6 col-12 text-center text-md-start">
         <p class="text-light small mb-0" style="opacity: 0.7;">
