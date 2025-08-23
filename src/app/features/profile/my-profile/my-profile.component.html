@@ -1,6 +1,6 @@
 
 
-<div class="profile-page-bg">
+<div class="profile-page-bg p-3">
   <div class="container-fluid">
     <div class="profile-wrapper">
       <!-- Enhanced Profile Banner -->
@@ -10,8 +10,8 @@
             <!-- Loading Skeleton -->
             <div class="row align-items-center" *ngIf="isProfileLoading">
               <div class="col-lg-4 col-md-5 col-12">
-                <div class="profile-main-info d-flex align-items-center">
-                  <div class="profile-avatar-container me-4">
+                <div class="profile-main-info d-flex flex-row align-items-center justify-content-between w-100">
+                  <div class="profile-avatar-container me-3 me-md-4">
                     <div class="skeleton-avatar"></div>
                   </div>
                   <div class="profile-basic-info">
@@ -34,8 +34,8 @@
             <div class="row align-items-center" *ngIf="!isProfileLoading">
               <!-- Left Side: Avatar and Basic Info -->
               <div class="col-lg-4 col-md-5 col-12">
-                <div class="profile-main-info d-flex align-items-center">
-                  <div class="profile-avatar-container me-4" (click)="onAvatarClick()" style="cursor: pointer;">
+                <div class="profile-main-info d-flex flex-row align-items-center justify-content-between w-100">
+                  <div class="profile-avatar-container me-3 me-md-4" (click)="onAvatarClick()" style="cursor: pointer;">
                     <img [src]="profile.avatar || defaultAvatarUrl" 
                          alt="Profile" 
                          class="profile-avatar-img" 
