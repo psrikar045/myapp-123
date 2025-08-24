@@ -383,6 +383,7 @@
   border-radius: 12px;
   padding: 0.5rem 0;
   margin-top: 0.5rem;
+  z-index: 1200; /* ensure it appears above header and content */
   
   .dropdown-item {
     padding: 0.75rem 1.25rem;
@@ -983,7 +984,7 @@
       width: 100% !important;
       max-width: 100% !important;
       box-sizing: border-box !important;
-      overflow: hidden !important;
+      overflow: visible !important; /* allow dropdowns/menus to overflow header container */
       padding-left: 1rem !important;
       padding-right: 1rem !important;
     }
