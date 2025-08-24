@@ -1032,29 +1032,29 @@
   }
 }
 
-/* Medium devices (tablets, 769px and up) */
+/* Medium devices (tablets, 769px–1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
-  .features-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .why-choose-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
+  /* Hero */
+  .hero-section { margin: 20px; text-align: left; }
+  .hero-content { max-width: 720px; margin: 0 auto; }
+  .hero-subtitle { max-width: 640px; margin-left: 0; }
+
+  /* Two-column grids */
+  .features-grid,
+  .why-choose-grid,
   .capabilities-grid,
   .advanced-features-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: clamp(16px, 2.5vw, 24px);
   }
-  
-  .tech-icons-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-  
-  .shape-1, .shape-2, .shape-3, .shape-4 {
-    opacity: 0.6;
-    transform: scale(0.8);
-  }
+
+  /* Integration */
+  .integration-card { height: 380px; justify-content: center; padding: 40px 32px; text-align: center; }
+  .integration-content { width: 100%; max-width: 640px; margin: 0 auto; text-align: center; }
+
+  /* Tech icons */
+  .tech-icons-grid { grid-template-columns: repeat(4, 1fr); }
+  .hero-subtitle{margin-left: 0 !important;}
 }
 
 /* Large devices (desktops, 1025px and up) */
