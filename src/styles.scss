@@ -321,9 +321,13 @@ input, textarea, select, button {
   padding-left: 30px !important;
   padding-right: 30px !important;
 }
-.pad30 {
-  padding-left: 30px !important;
-  padding-right: 30px !important;
+.pad25 {
+  padding-left: 25px !important;
+  padding-right: 25px !important;
+}
+.Mmb-30{
+  padding-top: 30px !important;
+  padding-bottom: 30px !important;
 }
 
 // Container width utilities for different screen sizes
@@ -403,9 +407,13 @@ h6, .h6 {
     padding-left: 40px !important;
     padding-right: 40px !important;
   }
-  .pad30 {
-    padding-left: 30px !important;
-    padding-right: 30px !important;
+  .pad25 {
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+  }
+  .Mmb-30{
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
   }
   .pad-auth {
     padding-left: 17px !important;
@@ -443,9 +451,13 @@ h6, .h6 {
     padding-left: 60px !important;
     padding-right: 60px !important;
   }
-  .pad30 {
-    padding-left: 30px !important;
-    padding-right: 30px !important;
+  .pad25 {
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+  }
+  .Mmb-30{
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
   }
   .pad-auth {
     padding-left: 17px !important;
@@ -1245,10 +1257,10 @@ body {
   }
 }
 
-.pad30 {
+.pad25 {
   @include media-breakpoint-up(lg) {
-  padding-left: 30px !important;
-    padding-right: 30px !important;
+    padding-left: 25px !important;
+    padding-right: 25px !important;
   }
 }
 
@@ -2244,7 +2256,7 @@ app-date-picker-popup {
  .MrowColumnReverse { flex-direction: column-reverse !important;}
  .pad100 {padding-left: 15px !important;padding-right: 15px !important;}
  .pad-auth {padding-left: 15px !important;padding-right: 15px !important;}
- .pad30 {padding-left: 20px !important;padding-right: 20px !important;}
+ .pad25 {padding-left: 20px !important;padding-right: 20px !important;}
  .MTextAlign{text-align: left !important;}
  .Mpt-0{padding-top: 0px !important;}
  .Mmt-10{margin-top: 10px !important;}
@@ -2446,7 +2458,8 @@ object.MimgControle {width: 100%;}
 @media (min-width: 1092px) and (max-width: 1241px) {
   .container {max-width: 1500px !important;}
   .pad100 {padding-left: 30px !important;padding-right: 30px !important;}
-  .pad30 {padding-left: 30px !important;padding-right: 30px !important;}
+  .pad25 {padding-left: 25px !important;padding-right: 25px !important;}
+  .Mmb-30{padding-top: 30px !important;padding-bottom: 30px !important;}
   h1{font-size: 2.188rem !important;}
   h2{font-size: 1.563rem !important;}
   h3{font-size: 1.375rem !important;}
@@ -2459,7 +2472,8 @@ object.MimgControle {width: 100%;}
 @media (min-width: 1241px) and (max-width: 1366px) {
   .container {max-width: 1500px !important;}
   .pad100 {padding-left: 60px !important; padding-right: 60px !important;}
-  .pad30 {padding-left: 30px !important;padding-right: 30px !important;}
+  .pad25 {padding-left: 25px !important;padding-right: 25px !important;}
+  .Mmb-30{padding-top: 30px !important;padding-bottom: 30px !important;}
   h1{font-size: 2.625rem !important;}
   h2{font-size: 1.875rem !important;}
   h3{font-size: 1.625rem !important;}

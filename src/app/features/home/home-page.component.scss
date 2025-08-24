@@ -10,6 +10,8 @@
   position: relative;
   z-index: 1; // Ensure proper layering
   transition: all 0.3s ease; // Smooth transitions for sidenav changes
+  overflow-x: hidden;
+  overflow-y: scroll;
   
   @media (max-width: 767.98px) {
     padding-top: 0px;

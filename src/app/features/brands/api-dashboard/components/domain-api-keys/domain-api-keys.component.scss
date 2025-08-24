@@ -2,6 +2,11 @@
   max-width: 1200px;
 }
 
+.container-fluid {
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
 .environment-section {
   .api-key-card {
     background: #ffffff;

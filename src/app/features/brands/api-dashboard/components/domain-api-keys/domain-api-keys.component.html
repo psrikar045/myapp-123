@@ -10,7 +10,7 @@
 </div>
 
 <!-- Main Content -->
-<div *ngIf="!error && selectedApiKey" class="container-fluid px-lg-4 px-md-3 px-2 py-4 pad30 Mmb-30">
+<div *ngIf="!error && selectedApiKey" class="container-fluid px-lg-4 px-md-3 px-2 pad25 Mmb-30">
   
  <!-- Header -->
   <div class="row mb-4">
@@ -385,7 +385,7 @@
   </div>
 
   <!-- Scopes and Permissions -->
-  <div class="row mb-4" *ngIf="selectedApiKey.scopes && selectedApiKey.scopes.length > 0">
+  <div class="row mb-1" *ngIf="selectedApiKey.scopes && selectedApiKey.scopes.length > 0">
     <div class="col-12">
       <div class="card border-0 shadow-sm bg-body">
         <div class="card-body p-4">
