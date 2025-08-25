@@ -218,11 +218,11 @@ ngAfterViewInit(): void {
       this.resizeObserver.observe(mainContainer);
     }
     
-    // Initial calculations after view init
+    // Initial calculations after view init with shorter delay
     setTimeout(() => {
       this.initializeDynamicPageSize();
       this.syncContainerHeights();
-    }, 200);
+    }, 100);
   }
   
   private initializeDynamicPageSize(): void {
@@ -262,38 +262,51 @@ ngAfterViewInit(): void {
   }
 
   private calculateDynamicPageSize(): number {
-    if (!isPlatformBrowser(this.platformId)) return 12;
+    if (!isPlatformBrowser(this.platformId)) return 8;
     
-    const mainContainer = document.querySelector('.categories-main-layout-right') as HTMLElement;
-    const brandsWrapper = document.querySelector('.brands-content-wrapper') as HTMLElement;
-    const pagination = this.paginationWrapperRef?.nativeElement;
+    const width = window.innerWidth;
     
-    if (!mainContainer || !brandsWrapper) return 12;
+    // Use fixed smaller page sizes to prevent excessive scrolling
+    if (width <= 576) {
+      return 6; // 3 rows of 2 columns for mobile
+    }
+    if (width <= 768) {
+      return 8; // 2 rows of 4 columns for small tablet
+    }
+    if (width <= 992) {
+      return 9; // 3 rows of 3 columns for tablet
+    }
     
-    const containerHeight = mainContainer.clientHeight;
-    const paginationHeight = pagination ? pagination.offsetHeight : 80;
-    const wrapperPadding = 64; // Account for padding
-    const availableHeight = containerHeight - paginationHeight - wrapperPadding;
-    
-    // Card dimensions
-    const cardHeight = 130;
-    const cardGap = 28;
-    const columns = this.getColumnsForScreenSize();
-    
-    // Calculate rows that fit
-    const rows = Math.max(1, Math.floor(availableHeight / (cardHeight + cardGap)));
-    
-    return Math.max(4, columns * rows);
+    // Desktop - limit to prevent excessive scrolling
+    return 12; // 3 rows of 4 columns for desktop
   }
   
   private getColumnsForScreenSize(): number {
     if (!isPlatformBrowser(this.platformId)) return 4;
     
     const width = window.innerWidth;
-    if (width <= 480) return 1;
-    if (width <= 768) return 2;
+    if (width <= 480) return 2;
+    if (width <= 768) return 4;
     if (width <= 992) return 3;
     return 4;
+  }
+  
+  private getCardHeightForScreenSize(): number {
+    if (!isPlatformBrowser(this.platformId)) return 130;
+    
+    const width = window.innerWidth;
+    if (width <= 480) return 110;
+    if (width <= 768) return 120;
+    return 130;
+  }
+  
+  private getCardGapForScreenSize(): number {
+    if (!isPlatformBrowser(this.platformId)) return 28;
+    
+    const width = window.innerWidth;
+    if (width <= 480) return 16;
+    if (width <= 768) return 20;
+    return 28;
   }
 
   private recalculatePageSize(): number {
