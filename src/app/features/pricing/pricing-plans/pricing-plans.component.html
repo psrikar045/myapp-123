@@ -51,8 +51,8 @@
              [class.highlighted]="plan.highlight">
           
           <!-- Most Popular Badge -->
-          <div class="most-popular-badge" *ngIf="plan.mostPopular">
-            <span>Most Popular</span>
+          <div class="position-absolute top-0 start-50 translate-middle" *ngIf="plan.mostPopular">
+            <span class="most-popular-badge badge px-3 py-2">Most Popular</span>
           </div>
           
           <!-- Plan Header -->

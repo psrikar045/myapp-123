@@ -891,12 +891,18 @@
   .billing-toggle {
     display: flex;
     align-items: center;
+    flex-wrap: nowrap;              // prevent wrapping on smaller screens
     gap: 1rem;
     background: #f3f4f6;
     border-radius: 12px;
     padding: 0.5rem;
     
     .toggle-label {
+      display: inline-flex;           // keep text and badge on the same line
+      align-items: center;            // vertical centering with toggle text
+      gap: 0.5rem;                    // consistent spacing between text and badge
+      white-space: nowrap;            // prevent wrapping on small widths
+      line-height: 1;                 // tighter vertical rhythm
       padding: 0.75rem 1.5rem;
       border-radius: 8px;
       font-weight: 500;
@@ -905,6 +911,15 @@
       transition: all 0.3s ease;
       position: relative;
       
+      // Responsive fine-tuning for the badge alignment
+      @media (max-width: 576px) {
+        padding: 0.6rem 1rem;       // slightly tighter on very small screens
+        gap: 0.4rem;                // reduce space between text and badge
+      }
+      @media (min-width: 577px) and (max-width: 991.98px) {
+        gap: 0.5rem;                // keep spacing consistent on tablets
+      }
+      
       &.active {
         background: #ffffff;
         color: #1f2937;
@@ -912,12 +927,15 @@
       }
       
       .save-badge {
+        display: inline-flex;         // align content inside badge
+        align-items: center;
+        line-height: 1;
         background: #10b981;
         color: white;
         font-size: 0.75rem;
         padding: 0.25rem 0.5rem;
         border-radius: 12px;
-        margin-left: 0.5rem;
+        margin-left: 0;               // spacing handled by gap
         font-weight: 600;
       }
     }
