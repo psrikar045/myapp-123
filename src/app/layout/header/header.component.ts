@@ -48,6 +48,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   profileAvatarUrl: string = 'assets/landing/user.webp';
   private avatarSubscription: Subscription | undefined;
+  // Expose auth observable for template (avoids SSR flicker)
+  public isAuthenticated$!: Observable<boolean>;
+
   constructor(
     private toolbarService: ToolbarService,
     public authService: AuthService,
@@ -64,6 +67,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.isDarkMode$ = this.appThemeService.isDarkMode$;
     this.isAdvancedThemeEnabled$ = this.appThemeService.canAccessAdvancedFeatures$;
     this.themeFeatures$ = this.appThemeService.canAccessAdvancedFeatures$;
+
+    // Initialize auth observable after DI is ready
+    this.isAuthenticated$ = this.authService.isAuthenticated$;
+
     // Create computed logo based on sidenav state
     this.computedLogo$ = combineLatest([
       this.toolbarService.logo,
@@ -80,8 +87,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (isMobile) {
           return { ...originalLogo, src: 'assets/images/RIVO9 logo.webp' };
         }
-        // Desktop: conditional (icon when collapsed, full when expanded)
-   
+        // Desktop: conditional (icon when collapsed, full when expanded)   
         if (isAuthenticated && sidenavVisible) {
           return {
             ...originalLogo,
@@ -94,6 +100,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         return originalLogo;
       })
     );
+
+    // Keep route-related UI in sync
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.currentRoute = event.urlAfterRedirects;
@@ -116,7 +124,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Subscribe to authentication state
+    // Immediately set toolbar based on current auth (prevents refresh flicker)
+    if (this.authService.isAuthenticated()) {
+      this.toolbarService.setLoggedInToolbar();
+    } else {
+      this.toolbarService.setLoggedOutToolbar();
+    }
+
+    // React to authentication changes
     this.authService.isAuthenticated$
       .pipe(takeUntil(this.destroy$))
       .subscribe(isAuthenticated => {
@@ -126,7 +141,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.toolbarService.setLoggedOutToolbar();
         }
       });
- this.isMobile$ = this.layoutService.isMobileOrTablet$
+
+    this.isMobile$ = this.layoutService.isMobileOrTablet$;
+
     // Subscribe to profile avatar changes
     this.toolbarService.profileAvatar
       .pipe(takeUntil(this.destroy$))
@@ -151,7 +168,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // Subscribe to sidenav config changes - no positioning adjustments needed since header is now full width
     this.sidenavService.config$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(config => {
+      .subscribe(() => {
         // Header remains full width regardless of sidenav state
       });
 

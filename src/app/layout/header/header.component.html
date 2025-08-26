@@ -6,10 +6,10 @@
      [class.navbar-dark]="currentTheme === 'dark'"
      [attr.data-header-type]="headerType"
      [attr.data-bs-theme]="currentTheme" id="HeaderStyle">
-  <div [class.container]="!authService.isAuthenticated()"
-       [class.container-fluid]="authService.isAuthenticated()"
-       [class.pad100]="!authService.isAuthenticated()"
-       [class.pad-auth]="authService.isAuthenticated()">
+  <div [class.container]="!(isAuthenticated$ | async)"
+       [class.container-fluid]="(isAuthenticated$ | async)"
+       [class.pad100]="!(isAuthenticated$ | async)"
+       [class.pad-auth]="(isAuthenticated$ | async)">
     <!-- Left Section: Logo and Sidenav Toggle -->
     <div class="header-left d-flex align-items-center justify-content-between">
       

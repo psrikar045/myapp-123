@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../../core/services/auth.service';
 
 export interface ToolbarLogo {
   src: string;
@@ -57,7 +58,7 @@ export class ToolbarService {
   navItems = this.navItems$.asObservable();
   actions = this.actions$.asObservable();
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private authService: AuthService) {
     // Listen to route changes to detect auth pages
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
@@ -69,8 +70,22 @@ export class ToolbarService {
                        this.currentRoute.includes('/login') || 
                        this.currentRoute.includes('/signup') || 
                        this.currentRoute.includes('/reset-password');
-      
-      // console.log('Route changed:', this.currentRoute, 'isAuthPage:', this.isAuthPage);
+    });
+
+    // Initialize toolbar immediately based on current auth state
+    if (this.authService.isAuthenticated()) {
+      this.setLoggedInToolbar();
+    } else {
+      this.setLoggedOutToolbar();
+    }
+
+    // React to future auth state changes
+    this.authService.isAuthenticated$.subscribe(isAuthed => {
+      if (isAuthed) {
+        this.setLoggedInToolbar();
+      } else {
+        this.setLoggedOutToolbar();
+      }
     });
   }
   setProfileHeaderOnly() {
