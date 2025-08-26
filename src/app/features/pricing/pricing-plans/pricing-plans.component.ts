@@ -113,7 +113,7 @@ export class PricingPlansComponent implements OnInit {
     {
       name: 'Pro',
       price: () => '$20',
-      period: () => '/mo',
+      period: () => '/month',
       billingDetails: () => 'Billed yearly at $240',
       description: () => 'Best for growing businesses',
       features: [
